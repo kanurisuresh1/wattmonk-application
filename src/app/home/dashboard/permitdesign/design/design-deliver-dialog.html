@@ -1,0 +1,18 @@
+<h1 mat-dialog-title>Confirm</h1>
+<div mat-dialog-content>
+  <p>Would you like to add comments?</p>
+  <mat-form-field appearance="fill" class="fullwidth">
+    <mat-label>comments</mat-label>
+    <textarea
+      style="height: 200px"
+      matInput
+      [formControl]="deliverycommentscontrol"
+    ></textarea>
+  </mat-form-field>
+</div>
+<mat-dialog-actions align="end">
+  <button mat-raised-button class="greybutton" (click)="onNoClick()">
+    Cancel
+  </button>
+  <button mat-raised-button (click)="onSubmit()">Submit</button>
+</mat-dialog-actions>

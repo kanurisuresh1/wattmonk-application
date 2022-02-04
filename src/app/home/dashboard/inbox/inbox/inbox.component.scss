@@ -1,0 +1,28 @@
+.inboxplaceholder {
+  height: 80vh;
+}
+
+.bigbutton {
+  font-size: 1em;
+}
+
+.comingsoonimage {
+  position: absolute;
+  bottom: 34%;
+  left: 34%;
+  width: 30%;
+}
+
+.comingsoontext {
+  position: absolute;
+  left: 43%;
+  top: 30%;
+}
+::ng-deep .cometchat-conversation-screen-conatiner {
+  height: 100% !important;
+}
+
+.searchbutton {
+  background-color: #edc773;
+  border-radius: 7px;
+}

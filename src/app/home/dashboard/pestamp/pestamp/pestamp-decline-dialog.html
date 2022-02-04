@@ -1,0 +1,98 @@
+<!-- <div *ngIf="isLoading" class="overlay">
+  <mat-progress-bar class="commonprogressbar" mode="indeterminate"></mat-progress-bar>
+  </div> -->
+<!-- <div *ngIf="isLoading" class="overlay">
+    <mat-card class="spinnercard" align-items-center>
+        <div class="row">
+            <div class="col-3">
+                <mat-progress-spinner diameter="50" color="primary" mode="indeterminate" strokeWidth="5">
+                </mat-progress-spinner>
+            </div>
+            <div class="col">
+                <h4 class="spinnertext">{{loadingmessage}}</h4>
+            </div>
+        </div>
+    </mat-card>
+  </div> -->
+<div *ngIf="isLoading" class="progress-loader">
+  <div id="pause" class="d-flex align-items-center justify-content-center">
+    <div
+      id="spinner"
+      style="background: #fff; padding: 35px; border-radius: 5px"
+      class="row"
+    >
+      <div class="loading-message bkgg col-9">{{loadingmessage}}</div>
+      <div class="col-3" style="top: 5px">
+        <div class="snippet" data-title=".dot-pulse">
+          <div class="stage">
+            <div class="dot-pulse"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<h3 mat-dialog-title>Confirm with reason!!</h3>
+<div mat-dialog-content>
+  <mat-form-field appearance="fill" class="fullwidth">
+    <mat-label style="font-size: 20px">Reason</mat-label>
+    <textarea
+      class="mt-2"
+      style="height: 100px"
+      matInput
+      [formControl]="declinereason"
+      required
+    ></textarea>
+    <mat-error *ngIf="declinereason.invalid"
+      >"Field input is required."</mat-error
+    >
+  </mat-form-field>
+  <p>Upload Attachment</p>
+  <div class="row architectureuploadrow">
+    <div class="col align-items-center architectureuploadcol">
+      <div
+        class="multiple-dropzone fullwidth"
+        ngx-dropzone
+        [multiple]="true"
+        (change)="onAttachmentFileSelect($event)"
+      >
+        <ngx-dropzone-label>
+          <div>
+            <img class="addimage" src="../../../../../assets/add.svg" />
+            <h5>Drag and drop or click to browse.</h5>
+          </div>
+        </ngx-dropzone-label>
+        <div *ngFor="let f of attachmentfiles">
+          {{ f.type }}
+          <ngx-dropzone-preview
+            *ngIf="!f.isImage"
+            class="imagepreview"
+            ngProjectAs="ngx-dropzone-preview"
+            [file]="f"
+            [removable]="true"
+            (removed)="onAttachmentFileRemove(f)"
+          >
+            <ngx-dropzone-label class="previewlabel"
+              >{{ f.name }} ({{ f.type }})</ngx-dropzone-label
+            >
+          </ngx-dropzone-preview>
+          <ngx-dropzone-image-preview
+            *ngIf="f.isImage"
+            class="imagepreview"
+            ngProjectAs="ngx-dropzone-preview"
+            [file]="f"
+            [removable]="true"
+            (removed)="onAttachmentFileRemove(f)"
+          >
+          </ngx-dropzone-image-preview>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<mat-dialog-actions align="end">
+  <button mat-raised-button class="greybutton" (click)="onNoClick()">
+    Cancel
+  </button>
+  <button mat-raised-button (click)="onSubmit()" required>Submit</button>
+</mat-dialog-actions>

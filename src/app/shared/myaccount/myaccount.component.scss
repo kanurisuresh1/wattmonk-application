@@ -1,0 +1,121 @@
+.dropdown-menu:after {
+  content: "";
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  transition: opacity 0.15s ease-in-out;
+  opacity: 0;
+  visibility: hidden;
+  background-color: rgba(0, 0, 0, 0.3);
+  pointer-events: none;
+}
+.dropdown-menu.show .myprofile-content {
+  position: fixed;
+  z-index: 12;
+  background-color: white;
+}
+.dropdown-menu.show:after {
+  z-index: 10;
+  opacity: 1;
+  visibility: visible;
+  position: fixed;
+}
+.myprofile-content {
+  width: 29vw;
+  height: 91vh;
+}
+.userHeader {
+  background: #edc773;
+}
+.userHeader .info {
+  padding: 0px 11px;
+  padding-top: 10px;
+  font-size: 17px;
+  font-weight: 600;
+}
+.userHeader .profileIcons {
+  padding: 0px 0px 15px 0px;
+  width: 7%;
+  display: flex;
+  text-align: center;
+  justify-content: center;
+  font-weight: 650;
+  background-color: #edc773;
+}
+
+.userHeader .image {
+  background-color: #e0f6ff;
+}
+.photo {
+  border-radius: 18%;
+  background: #fff;
+  letter-spacing: 2px;
+  transition: all 0.3s linear;
+}
+.photo img {
+  width: 100%;
+  height: inherit;
+}
+.photo p {
+  text-align: center;
+  // padding-top: 10px;
+}
+.title {
+  font-size: 12px;
+  font-weight: 600;
+  color: rgb(0 0 0 / 54%);
+}
+.subtitle {
+  margin: 0px 0px 10px 0px;
+  font-size: 12px;
+  font-weight: 600;
+  color: black;
+}
+hr.solid {
+  border-top: 1.5px solid #bbb;
+  margin: -9px -2px -10px 0px;
+}
+.addcash {
+  width: 84%;
+  border: none;
+  background-color: #edc773;
+  border-radius: 4px;
+  color: black;
+}
+.logoutButton {
+  width: 84%;
+  border: none;
+  background-color: rgba(237, 199, 115, 0.26);
+  border-radius: 4px;
+  color: black;
+}
+.userDetails {
+  padding: 15px 30px;
+}
+.walletDetails {
+  padding: 5px 30px;
+}
+.sidebarButtons {
+  text-align: center;
+}
+.cursor {
+  cursor: pointer;
+}
+
+@media only screen and (max-width: 1400px) {
+  .subtitle {
+    margin: 0px 0px 2px 0px;
+  }
+}
+
+@media only screen and (max-height: 740px) {
+  .myprofile-content {
+    padding-bottom: 20px;
+    overflow-y: scroll;
+  }
+}
+
+.myprofile-content::-webkit-scrollbar {
+  display: none;
+}

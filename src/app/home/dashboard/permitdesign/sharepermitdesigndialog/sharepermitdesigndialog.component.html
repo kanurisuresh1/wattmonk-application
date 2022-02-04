@@ -1,0 +1,95 @@
+<div *ngIf="isLoading" class="overlay">
+  <mat-card class="spinnercard" align-items-center>
+    <div class="row">
+      <div class="col-3">
+        <mat-progress-spinner
+          diameter="50"
+          color="primary"
+          mode="indeterminate"
+          strokeWidth="5"
+        >
+        </mat-progress-spinner>
+      </div>
+      <div class="col d-flex align-items-center">
+        <h4 class="spinnertext mb-0">{{ loadingmessage }}</h4>
+      </div>
+    </div>
+  </mat-card>
+</div>
+<div class="row">
+  <div class="col-11">
+    <h4 class="dialogformtitle">Select the email ids</h4>
+  </div>
+  <div class="col-1">
+    <button mat-icon-button (click)="onCloseClick()">
+      <img class="dialogclose" src="../../../../../assets/close.svg" />
+    </button>
+  </div>
+</div>
+<label class="selectall">
+  <input
+    type="checkbox"
+    name="selectall"
+    [value]="TeamData"
+    (change)="selectAll($event)"
+  />&nbsp;&nbsp; Select All
+</label>
+<div mat-dialog-content class="sharedialog">
+  <mat-list class="matlist">
+    <mat-list-item
+      [ngClass]="[i % 2 == 0 ? 'itemcard even' : 'itemcard odd']"
+      *ngFor="let item of example; let i = index"
+    >
+      <input
+        type="checkbox"
+        [(ngModel)]="item.checked"
+        style="margin-bottom: 10px"
+      />
+      <p class="listitem1">&nbsp;&nbsp;{{ item.firstname | titlecase }}</p>
+      <p class="listitem1">{{ item.lastname }}</p>
+      <p class="listitem1">({{ item.email }})</p>
+    </mat-list-item>
+  </mat-list>
+</div>
+<div style="padding-top: 16px">
+  <textarea
+    id="inputemails"
+    style="width: 95%; height: 60px; word-wrap: break-word"
+    type="email"
+    multiple
+    placeholder="john@gmail.com,troy@gmail.com"
+  ></textarea>
+</div>
+<div class="row">
+  <div class="col">
+    <mat-checkbox [(ngModel)]="attachdesignfile"
+      >Attach Design File</mat-checkbox
+    >
+  </div>
+</div>
+<div class="row">
+  <button mat-raised-button class="sendButton" (click)="SendMail()">
+    Send
+  </button>
+</div>
+
+<!-- <form #f="ngForm" (ngSubmit)="onSubmit(f)">
+<mat-list-item class="primary-imenu-item" role="listitem">
+    <mat-form-field class="select-form">  
+    <mat-select
+        placeholder="Emails"
+        name="Emails"
+        class="filter-select" 
+        multiple 
+        #emailsSelect="ngModel"
+         ngModel >
+        <mat-option disabled="disabled" class="filter-option">
+            <input type="checkbox"(click)="selectAll(checkAll.checked, emailsSelect, teamMember)" #checkAll>
+            {{Emails}}
+        </mat-option> 
+        <mat-option >{{data.design.email}}</mat-option>
+    </mat-select>
+    </mat-form-field>
+</mat-list-item>
+<button mat-button>Submit</button>
+</form> -->

@@ -1,0 +1,77 @@
+<div class="container">
+  <div class="row">
+    <div class="col-8">
+      <h4 class="dialogformtitle wr">Bank Account</h4>
+    </div>
+
+    <div class="col-4">
+      <button mat-icon-button (click)="onCloseClick()" class="float-right">
+        <img class="dialogclose" src="../../../../../assets/close.svg" />
+      </button>
+    </div>
+  </div>
+
+  <div class="row mt-2">
+    <div class="hrow col-12">
+      <h5 class="pb-2 m-0"><b> Recommended for India</b></h5>
+    </div>
+  </div>
+  <div class="row p-3">
+    <div class="col-3">
+      <img
+        class="image-responsive"
+        width="40%"
+        src="../../../../../assets/localbank.png"
+        alt="..."
+      />
+    </div>
+    <div class="col-6">
+      <h5><b>Direct to local Bank(INR)</b></h5>
+      <ul>
+        <li>$0.99 USD per withdraw</li>
+        <li>Deposit to your local bank account in INR</li>
+      </ul>
+    </div>
+    <div class="col-3">
+      <!-- <button type="button" class="btn btn-success button-paypal" (click)="bankDetails()" >Set Up</button> -->
+      <button mat-raised-button class="button-paypal" (click)="bankDetails()">
+        Set Up
+      </button>
+    </div>
+  </div>
+
+  <div class="row mt-2">
+    <div class="hrow col-12">
+      <h5 class="pb-2 m-0"><b>Also Available</b></h5>
+    </div>
+  </div>
+  <div class="row p-3">
+    <div class="col-3">
+      <img
+        class="image-responsive"
+        width="70%"
+        src="../../../../../assets/paypal.png"
+        alt="..."
+      />
+    </div>
+    <div class="col-6">
+      <h5><b> Paypal</b></h5>
+      <ul>
+        <li>$2 USD Upwork withdraw fee</li>
+        <li>
+          Paypal may charge
+          <span class="text-success">additional fees</span> for sending and
+          withdrawing funds.<span class="text-success"
+            >Don't have a Paypal account?</span
+          >
+        </li>
+        <li>Set Up will take you to Paypal</li>
+      </ul>
+    </div>
+    <div class="col-3">
+      <button mat-raised-button class="button-paypal" (click)="paypaldetails()">
+        Set Up
+      </button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,815 @@
+<div class="main-content">
+  <div class="container" style="padding: 0px">
+    <div class="designreportcard dropdown-card">
+      <mat-form-field appearance="outline">
+        <input
+          matInput
+          placeholder="Search"
+          [(ngModel)]="searcharchive"
+          (keydown.enter)="searchinputArchives()"
+          autocomplete="off"
+        />
+        <span style="position: relative; top: -3px; margin-right: 7px" matSuffix
+          ><img
+            src="../../../../../assets/search.svg"
+            width="15px"
+            height="15px"
+            *ngIf="!searcharchive.length"
+          />
+          <img
+            src="../../../../../assets/close (1).svg"
+            width="15px"
+            height="14px"
+            style="cursor: pointer"
+            (click)="clearinputfields()"
+            class="cursor"
+            *ngIf="searcharchive.length"
+          />
+        </span>
+      </mat-form-field>
+      <button
+        mat-raised-button
+        style="float: right"
+        (click)="openCustomerProbabilityForm()"
+      >
+        + Customer Probability
+      </button>
+    </div>
+
+    <div *ngIf="iscustomerdesignslistloading" style="padding: 5px 15px">
+      <div *ngFor="let number of skeletonArray; let i = index">
+        <div
+          class="row"
+          style="
+            background-color: rgb(241, 240, 240);
+            border-radius: 5px;
+            margin-bottom: 10px;
+          "
+        >
+          <div class="col-8">
+            <div class="row">
+              <div class="col-6">
+                <p style="margin-top: 20px" class="name-skeleton">Name</p>
+                <ngx-skeleton-loader
+                  [theme]="{
+                    'margin-top': '10px',
+                    'margin-bottom': '0px',
+                    'border-radius': '5px',
+                    height: '6px',
+                    width: '50%',
+                    'background-color': 'rgb(224, 222, 222)'
+                  }"
+                >
+                </ngx-skeleton-loader>
+
+                <p class="name-skeleton">Phone</p>
+                <ngx-skeleton-loader
+                  [theme]="{
+                    'margin-top': '0px',
+                    'border-radius': '4px',
+                    'margin-bottom': '0px',
+                    height: '6px',
+                    'background-color': 'rgb(224, 222, 222)',
+                    width: '25%'
+                  }"
+                >
+                </ngx-skeleton-loader>
+                <p class="name-skeleton">Email</p>
+                <ngx-skeleton-loader
+                  [theme]="{
+                    'margin-top': '1px',
+                    'border-radius': '4px',
+                    'margin-bottom': '0px',
+                    height: '6px',
+                    'background-color': 'rgb(224, 222, 222)',
+                    width: '50%'
+                  }"
+                >
+                </ngx-skeleton-loader>
+
+                <p class="name-skeleton">Address</p>
+                <ngx-skeleton-loader
+                  [theme]="{
+                    'margin-top': '0px',
+                    'border-radius': '4px',
+                    'margin-bottom': '0px',
+                    height: '6px',
+                    'background-color': 'rgb(224, 222, 222)',
+                    width: '50%'
+                  }"
+                >
+                </ngx-skeleton-loader>
+
+                <br />
+                <ngx-skeleton-loader
+                  [theme]="{
+                    'margin-top': '2px',
+                    'border-radius': '4px',
+                    'margin-bottom': '10px',
+                    height: '6px',
+                    'background-color': 'rgb(224, 222, 222)',
+                    width: '25%'
+                  }"
+                >
+                </ngx-skeleton-loader>
+              </div>
+              <div class="col-6" style="margin-top: 4%">
+                <div>
+                  <span style="font-weight: 600; color: darkgray"
+                    >This customer Probability score have been calculated
+                    considering many multiple factors mainly.</span
+                  >
+                </div>
+                <div class="row" style="margin-top: 5%">
+                  <div class="col-12">
+                    <span class="city-skeleton">
+                      <ngx-skeleton-loader
+                        [theme]="{
+                          'margin-top': '10px',
+                          'border-radius': '4px',
+                          'margin-bottom': '0px',
+                          height: '10px',
+                          'background-color': 'rgb(224, 222, 222)',
+                          width: '10px',
+                          'margin-right': '4px'
+                        }"
+                      >
+                      </ngx-skeleton-loader
+                      >City
+                    </span>
+                    <span style="margin-left: 4%" class="city-skeleton">
+                      <ngx-skeleton-loader
+                        [theme]="{
+                          'margin-top': '10px',
+                          'border-radius': '4px',
+                          'margin-bottom': '0px',
+                          height: '10px',
+                          'background-color': 'rgb(224, 222, 222)',
+                          width: '10px',
+                          'margin-left': '10%'
+                        }"
+                      >
+                      </ngx-skeleton-loader>
+                      State
+                    </span>
+                  </div>
+                  <div class="col-12" style="margin-top: 2%">
+                    <span class="city-skeleton">
+                      <ngx-skeleton-loader
+                        [theme]="{
+                          'margin-top': '10px',
+                          'border-radius': '4px',
+                          'margin-bottom': '0px',
+                          height: '10px',
+                          'background-color': 'rgb(224, 222, 222)',
+                          width: '10px',
+                          'margin-right': '4px'
+                        }"
+                      >
+                      </ngx-skeleton-loader
+                      >Zip postal
+                    </span>
+                    <span class="city-skeleton">
+                      <ngx-skeleton-loader
+                        [theme]="{
+                          'margin-top': '10px',
+                          'border-radius': '4px',
+                          'margin-bottom': '0px',
+                          height: '10px',
+                          'background-color': 'rgb(224, 222, 222)',
+                          width: '10px',
+                          'margin-left': '10%'
+                        }"
+                      >
+                      </ngx-skeleton-loader>
+                      Other
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row" style="padding: 15px 0px">
+              <div class="col">
+                <ngx-skeleton-loader
+                  [theme]="{
+                    'margin-top': '4px',
+                    'border-radius': '4px',
+                    height: '30px',
+                    width: '15%',
+                    'background-color': 'rgb(224, 222, 222)'
+                  }"
+                >
+                </ngx-skeleton-loader>
+                <ngx-skeleton-loader
+                  [theme]="{
+                    'margin-top': '4px',
+                    'margin-left': '8px',
+                    'border-radius': '4px',
+                    height: '30px',
+                    width: '15%',
+                    'background-color': 'rgb(224, 222, 222)'
+                  }"
+                >
+                </ngx-skeleton-loader>
+                <ngx-skeleton-loader
+                  [theme]="{
+                    'margin-top': '4px',
+                    'margin-left': '8px',
+                    'border-radius': '4px',
+                    height: '30px',
+                    width: '15%',
+                    'background-color': 'rgb(224, 222, 222)'
+                  }"
+                >
+                </ngx-skeleton-loader>
+                <ngx-skeleton-loader
+                  [theme]="{
+                    'margin-top': '4px',
+                    'margin-left': '8px',
+                    'border-radius': '4px',
+                    height: '30px',
+                    width: '15%',
+                    'background-color': 'rgb(224, 222, 222)'
+                  }"
+                >
+                </ngx-skeleton-loader>
+              </div>
+            </div>
+          </div>
+          <div class="col-4" style="align-self: center">
+            <div>
+              <canvas #doughnutCanvas></canvas>
+              <div
+                class="center-text"
+                style="line-height: 1.1; text-align: center"
+              >
+                <ngx-skeleton-loader
+                  [theme]="{
+                    'margin-top': '0px',
+                    'border-radius': '4px',
+                    'margin-bottom': '0px',
+                    height: '6px',
+                    'background-color': 'rgb(224, 222, 222)',
+                    width: '80%'
+                  }"
+                >
+                </ngx-skeleton-loader>
+                <label style="margin: 0px; font-size: 11px; font-weight: 600"
+                  ><span
+                    >Customer <br />
+                    Probability</span
+                  ></label
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      *ngIf="!iscustomerdesignslistloading && allcustomerslist.length"
+      style="padding: 5px 0px"
+    >
+      <div
+        infiniteScroll
+        [infiniteScrollDistance]="0.5"
+        [scrollWindow]="false"
+        [infiniteScrollThrottle]="100"
+        (scrolled)="onScroll()"
+        class="designlistitems-viewport"
+      >
+        <div *ngFor="let customers of allcustomerslist; let i = index">
+          <div
+            class="row"
+            style="
+              background-color: #fff;
+              border-radius: 5px;
+              margin-bottom: 10px;
+              margin-right: 0px;
+              margin-left: 0px;
+            "
+          >
+            <div class="col-8">
+              <div class="row">
+                <div class="col-6" *ngIf="!showdetails || cardindex != i">
+                  <!-- <p style="margin-top: 20px;" class="name-skeleton">Name</p> -->
+                  <p style="margin-top: 6%" class="name">
+                    {{ (customers?.name | titlecase) || defaultvalue }}
+                  </p>
+                  <!-- <p class="name-skeleton">Phone</p> -->
+                  <p>
+                    <a
+                      class="text-decoration-none text-dark"
+                      href="tel:{{ customers.phone }}"
+                      ><span class="name">{{
+                        customers?.phone || defaultvalue
+                      }}</span></a
+                    >
+                  </p>
+                  <!-- <p class="name-skeleton">Email</p> -->
+                  <p>
+                    <a
+                      class="h6 text-decoration-none text-dark"
+                      href="mailto:{{ customers.email }}"
+                      ><span class="name">{{
+                        customers.email || defaultvalue
+                      }}</span></a
+                    >
+                  </p>
+
+                  <!-- <p class="name-skeleton" >Address</p> -->
+                  <p>
+                    <a
+                      class="text-decoration-none text-dark"
+                      href="https://maps.google.com/?q={{ customers.address }}"
+                      target="_blank"
+                      (click)="$event.stopPropagation()"
+                      ><span class="name">{{
+                        customers.address || defaultvalue
+                      }}</span></a
+                    >
+                  </p>
+
+                  <a class="anchor" (click)="showhidedetails('show', i)"
+                    ><u>View more Details</u></a
+                  >
+                </div>
+
+                <div class="col-6" *ngIf="showdetails && cardindex == i">
+                  <div class="row" style="margin-top: 20px">
+                    <div class="col">
+                      <h5 style="font-weight: bold; font-size: 16px">
+                        Personal Details
+                      </h5>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-6">
+                      <p class="labels">Customer Name</p>
+                      <p class="name">
+                        {{ (customers.name | titlecase) || defaultvalue }}
+                      </p>
+                    </div>
+                    <div class="col-6">
+                      <p class="labels">Phone</p>
+                      <p>
+                        <a
+                          class="text-decoration-none text-dark"
+                          href="tel:{{ customers.phone }}"
+                          ><span class="name">{{
+                            customers.phone || defaultvalue
+                          }}</span></a
+                        >
+                      </p>
+                    </div>
+                  </div>
+                  <p class="labels">Email Address</p>
+                  <p>
+                    <a
+                      class="h6 text-decoration-none text-dark"
+                      href="mailto:{{ customers.email }}"
+                      ><span class="name">{{
+                        customers.email || defaultvalue
+                      }}</span></a
+                    >
+                  </p>
+
+                  <!-- <p class="labels" >Address</p>
+                  <p>
+                    <a class="text-decoration-none text-dark" href="https://maps.google.com/?q={{customers.address}}"
+                      target="_blank" (click)="$event.stopPropagation()"><span
+                        class="name">{{customers.address}}</span></a>
+                  </p> -->
+                </div>
+
+                <div class="vl" *ngIf="!showdetails || cardindex != i"></div>
+                <div class="col-5">
+                  <ng-container *ngIf="!showdetails || cardindex != i">
+                    <div style="margin-top: 6%">
+                      <span style="font-weight: 600"
+                        >This Customer Probability score have been calculated
+                        considering many multiple factors mainly.</span
+                      >
+                    </div>
+                    <div class="row" style="margin-top: 5%">
+                      <!-- <ng-container *ngFor="let probability of customers.probability;let i = index"> -->
+                      <div class="col-12">
+                        <span class="ft">
+                          <small class="dot"></small> &nbsp;{{
+                            customers.probability[0]?.cc
+                          }}</span
+                        >
+                        <span style="margin-left: 10%" class="ft">
+                          <small
+                            class="dot"
+                            style="background-color: #f9ba48"
+                          ></small
+                          >&nbsp; {{ customers.probability[1]?.cc }}</span
+                        >
+                      </div>
+                      <div class="col-12" style="margin-top: 2%">
+                        <span class="ft">
+                          <small
+                            class="dot"
+                            style="background-color: #edc773"
+                          ></small
+                          >&nbsp; {{ customers.probability[2]?.cc }}</span
+                        >
+                        <span class="ft" style="margin-left: 10%">
+                          <small
+                            class="dot"
+                            style="background-color: #fb4b40"
+                          ></small
+                          >&nbsp; {{ customers.probability[3]?.cc }}</span
+                        >
+                      </div>
+                      <!-- </ng-container> -->
+                    </div>
+                  </ng-container>
+
+                  <ng-container *ngIf="showdetails && cardindex == i">
+                    <div class="row" style="margin-top: 20px">
+                      <div class="col">
+                        <h5 style="font-weight: bold; font-size: 16px">
+                          Address Details
+                        </h5>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-6">
+                        <p class="labels">Address</p>
+                        <p>
+                          <a
+                            class="text-decoration-none text-dark"
+                            href="https://maps.google.com/?q={{
+                              customers.address
+                            }}"
+                            target="_blank"
+                            (click)="$event.stopPropagation()"
+                            ><span class="name">{{
+                              customers?.address || defaultvalue
+                            }}</span></a
+                          >
+                        </p>
+                      </div>
+                      <div class="col-6">
+                        <p class="labels">County</p>
+                        <p class="name">
+                          {{ (customers?.county | titlecase) || defaultvalue }}
+                        </p>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-4">
+                        <p class="labels">City</p>
+                        <p class="name">
+                          {{ (customers?.city | titlecase) || defaultvalue }}
+                        </p>
+                      </div>
+                      <div class="col-4">
+                        <p class="labels">Zip Code</p>
+                        <p class="name">
+                          {{ customers?.zipcode || defaultvalue }}
+                        </p>
+                      </div>
+                      <div class="col-4">
+                        <p class="labels">State</p>
+                        <p class="name">
+                          {{ (customers?.state | titlecase) || defaultvalue }}
+                        </p>
+                      </div>
+                    </div>
+                  </ng-container>
+                </div>
+              </div>
+
+              <div class="row" *ngIf="showdetails && cardindex == i">
+                <div class="col-9">
+                  <div class="row" style="margin-top: 20px">
+                    <div class="col">
+                      <h5 style="font-weight: bold; font-size: 16px">
+                        Solar Details
+                      </h5>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-6">
+                      <p class="labels">Proposed Solar Capacity (kW)</p>
+                      <p class="name">
+                        {{ customers?.solarcapacity || defaultvalue }}
+                      </p>
+                    </div>
+                    <div class="col-6">
+                      <p class="labels">Estimated Annual Production (kWh)</p>
+                      <p class="name">
+                        {{ customers?.annualprod || defaultvalue }}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-6">
+                      <p class="labels">Number of Roofs</p>
+                      <p class="name">
+                        {{
+                          customers?.numberofroofs != null
+                            ? customers?.numberofroofs
+                            : defaultvalue
+                        }}
+                      </p>
+                    </div>
+                    <div class="col-6">
+                      <p class="labels">Number of Detached Buildings</p>
+                      <p class="name">
+                        {{
+                          customers?.numberofdetachbuildings != null
+                            ? customers?.numberofdetachbuildings
+                            : defaultvalue
+                        }}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-6">
+                      <p class="labels">Solar Array Area (sq ft)</p>
+                      <p class="name">
+                        {{ customers?.solararrayarea || defaultvalue }}
+                      </p>
+                    </div>
+                    <div class="col-6">
+                      <p class="labels">Contract Type</p>
+                      <p class="name">
+                        {{ customers?.contracttype || defaultvalue }}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-3">
+                  <div class="row" style="height: 90%"></div>
+                  <a
+                    class="anchor"
+                    (click)="showhidedetails('hide', i)"
+                    *ngIf="showdetails && cardindex == i"
+                    ><u>View less Details</u></a
+                  >
+                </div>
+              </div>
+
+              <div class="row" style="padding-top: 50px; padding-bottom: 35px">
+                <div class="col">
+                  <button
+                    mat-raised-button
+                    class="action-buttons"
+                    (click)="openDesignsForms('siteassessment', customers)"
+                    *ngIf="
+                      !customers.isassessmentraised &&
+                      usersettings.visibilityprelim
+                    "
+                  >
+                    <img
+                      src="../../../../../assets/prelim1.svg"
+                      class="img"
+                    />&nbsp;Request Site Assessment
+                  </button>
+                  <button
+                    mat-raised-button
+                    class="prominentbutton action-buttons request-raised"
+                    *ngIf="
+                      customers.isassessmentraised &&
+                      usersettings.visibilityprelim
+                    "
+                  >
+                    Assessment Request Raised
+                  </button>
+
+                  <button
+                    mat-raised-button
+                    class="action-buttons"
+                    (click)="openDesignsForms('salesproposal', customers)"
+                    *ngIf="
+                      !customers.isproposalraised &&
+                      usersettings.visibilityprelim
+                    "
+                  >
+                    <img
+                      src="../../../../../assets/permit.svg"
+                      class="img"
+                    />&nbsp;Request Sales Proposal
+                  </button>
+                  <button
+                    mat-raised-button
+                    class="prominentbutton action-buttons request-raised"
+                    *ngIf="
+                      customers.isproposalraised &&
+                      usersettings.visibilityprelim
+                    "
+                  >
+                    Proposal Request Raised
+                  </button>
+                  <button
+                    mat-raised-button
+                    class="action-buttons"
+                    (click)="openDesignsForms('survey', customers)"
+                    *ngIf="
+                      !customers.issurveyraised && usersettings.visibilitysurvey
+                    "
+                  >
+                    <img
+                      src="../../../../../assets/sidebarsurvey.svg"
+                      class="img"
+                    />&nbsp;Request Survey
+                  </button>
+                  <button
+                    mat-raised-button
+                    class="prominentbutton action-buttons request-raised"
+                    *ngIf="
+                      customers.issurveyraised && usersettings.visibilitysurvey
+                    "
+                  >
+                    Survey Request Raised
+                  </button>
+                  <button
+                    mat-raised-button
+                    class="action-buttons"
+                    (click)="openDesignsForms('permit', customers)"
+                    *ngIf="
+                      !customers.ispermitraised && usersettings.visibilitypermit
+                    "
+                  >
+                    <img
+                      src="../../../../../assets/permit.svg"
+                      class="img"
+                    />&nbsp;Request Permit
+                  </button>
+                  <button
+                    mat-raised-button
+                    class="prominentbutton action-buttons request-raised"
+                    *ngIf="
+                      customers.ispermitraised && usersettings.visibilitypermit
+                    "
+                  >
+                    Permit Request Raised
+                  </button>
+                </div>
+              </div>
+            </div>
+            <!-- <div class="col-1">
+            <div class="vl" *ngIf="showdetails && cardindex == i"></div>
+          </div> -->
+
+            <div
+              class="col-4"
+              [ngClass]="!showdetails || cardindex != i ? 'cl-1' : 'cl'"
+              style="margin-top: 20px; margin-bottom: 30px"
+            >
+              <div
+                *ngIf="
+                  customers.phone != null &&
+                  customers.email != null &&
+                  customers.name != null &&
+                  customers.address != null
+                "
+              >
+                <button
+                  mat-icon-button
+                  style="float: right"
+                  (click)="openeditform(customers, i)"
+                >
+                  <img
+                    class="dialogclose"
+                    src="../../../../../assets/edit.svg"
+                  />
+                </button>
+                <div
+                  style="margin-left: 15%"
+                  *ngIf="showdetails && cardindex == i"
+                >
+                  <div style="width: 98%">
+                    <span style="font-weight: 600"
+                      >This Customer Probability score have been calculated
+                      considering many multiple factors mainly.</span
+                    >
+                  </div>
+                  <div class="row" style="margin-top: 5%">
+                    <div class="col-12">
+                      <span class="ft">
+                        <small class="dot"></small> &nbsp;{{
+                          customers.probability[0]?.cc
+                        }}</span
+                      >
+                      <span style="margin-left: 10%" class="ft">
+                        <small
+                          class="dot"
+                          style="background-color: #f9ba48"
+                        ></small
+                        >&nbsp; {{ customers.probability[1]?.cc }}</span
+                      >
+                    </div>
+                    <div class="col-12" style="margin-top: 2%">
+                      <span class="ft">
+                        <small
+                          class="dot"
+                          style="background-color: #edc773"
+                        ></small
+                        >&nbsp; {{ customers.probability[2]?.cc }}</span
+                      >
+                      <span class="ft" style="margin-left: 10%">
+                        <small
+                          class="dot"
+                          style="background-color: #fb4b40"
+                        ></small
+                        >&nbsp; {{ customers.probability[3]?.cc }}</span
+                      >
+                    </div>
+                  </div>
+                </div>
+
+                <canvas
+                  #doughnutCanvas1
+                  [ngStyle]="
+                    showdetails && cardindex == i
+                      ? { 'margin-top': '10%' }
+                      : { 'margin-top': '6%' }
+                  "
+                ></canvas>
+
+                <div
+                  style="line-height: 1.1; text-align: center"
+                  [ngClass]="
+                    showdetails && cardindex == i ? 'ct' : 'center-text'
+                  "
+                >
+                  <label class="percentage"
+                    >{{ customers.probabilityscore }}%</label
+                  >
+                  <label style="margin: 0px; font-size: 10px; font-weight: 600"
+                    ><span
+                      >Customer <br />
+                      Probability</span
+                    ></label
+                  >
+                </div>
+              </div>
+              <div
+                *ngIf="
+                  customers.phone == null ||
+                  customers.email == null ||
+                  customers.name == null ||
+                  customers.address == null
+                "
+              >
+                <div
+                  [ngClass]="
+                    !showdetails || cardindex != i
+                      ? 'center-text'
+                      : 'missing-details'
+                  "
+                  style="line-height: 1.1; text-align: center"
+                >
+                  <label style="font-weight: 600; font-size: 12px"
+                    >Some details are missing. For generating probability,
+                    please enter details.</label
+                  >
+                  <label style="margin: 0px; font-size: 10px; font-weight: 600"
+                    ><a
+                      (click)="openeditform(customers, i)"
+                      class="anchor-action"
+                      >Generate Probability</a
+                    ></label
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <mat-spinner
+          *ngIf="scrolling"
+          style="position: absolute; left: 49%; bottom: 1%"
+          [diameter]="25"
+        ></mat-spinner>
+      </div>
+    </div>
+    <div
+      *ngIf="!iscustomerdesignslistloading && allcustomerslist.length == 0"
+      style="padding: 5px 15px; margin-top: 10%"
+    >
+      <!-- <p>No Data Exists !</p> -->
+      <div class="">
+        <div class="col-12 d-flex justify-content-center">
+          <img src="../../../../../assets/nodata.svg" width="10%" />
+        </div>
+        <div class="col-12 text-center">
+          <h2 class="mb-0" style="margin: 10px 0px; font-weight: 600">
+            No Data Exists !
+          </h2>
+          <h5 style="margin: 10px 0px; font-weight: 600">
+            This section will show the list of all your end customers with their
+            details,<br />
+            Customer Probability chances score & action buttons.
+          </h5>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

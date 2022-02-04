@@ -1,0 +1,119 @@
+<div class="main-content detaildesignbottomfilter">
+  <div class="container">
+    <div class="row pt-3">
+      <div class="pl-4" style="width: 95%">
+        <div class="row">
+          <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-3 pl-3 pr-0">
+            <div class="row">
+              <div class="col-10 pr-0 mr-0">
+                <p class="h4 text-warning">{{ data.filename }}</p>
+                <p style="height: 5rem">{{ data.address }}</p>
+                <div class="">
+                  <p>
+                    <span
+                      style="font-size: 12px"
+                      class="bg-dark rounded text-white p-2"
+                      >{{ data.mountingtype }}</span
+                    >
+                  </p>
+                  <img
+                    src="../../../../../assets/double-tick.svg"
+                    width="11px"
+                    height="12px"
+                  />
+                  <span class="green-font-small ml-1">Delivered</span>
+                  <p class="font-small text-secondary mb-0">
+                    {{ data.expecteddeliverydate }}
+                  </p>
+                </div>
+              </div>
+              <div class="col-1">
+                <img
+                  src="../../../../../assets/dashed-line.jpg"
+                  width="10px"
+                  height="auto"
+                />
+              </div>
+            </div>
+          </div>
+          <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12">
+            <div class="row">
+              <div class="col-10">
+                <div class="col-12 pl-0">
+                  <p class="h4 font-weight-bold">Design Details</p>
+                </div>
+                <div class="col-12">
+                  <div class="row d-flex justify-content-between">
+                    <p>Design User</p>
+                    <p class="font-weight-bold">{{ data.designuser }}</p>
+                  </div>
+                  <div class="row d-flex justify-content-between">
+                    <p>Prod Date</p>
+                    <p class="font-weight-bold">{{ data.designenddate }}</p>
+                  </div>
+                  <div class="row d-flex justify-content-between">
+                    <p>Start/End Time</p>
+                    <p class="font-weight-bold">
+                      {{ data.designstarttime }}/{{ data.designendtime }}
+                    </p>
+                  </div>
+                  <div class="row mt-5 d-flex justify-content-between">
+                    <p class="h6 font-weight-bold">Total Time</p>
+                    <p class="h6 font-weight-bold">
+                      {{ data.totaldesigntime }}
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div class="col-1">
+                <img
+                  src="../../../../../assets/dashed-line.jpg"
+                  width="10px"
+                  height="auto"
+                />
+              </div>
+            </div>
+          </div>
+          <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 pl-0 pr-2">
+            <div class="col-10 pl-0">
+              <div class="col-12 pl-0">
+                <p class="h4 font-weight-bold w-75">QC Details</p>
+              </div>
+              <div class="col-12">
+                <div class="row d-flex justify-content-between">
+                  <p>Design User</p>
+                  <p class="font-weight-bold">{{ data.qcuser }}</p>
+                </div>
+                <div class="row d-flex justify-content-between">
+                  <p>Prod Date</p>
+                  <p class="font-weight-bold">{{ data.qcenddate }}</p>
+                </div>
+                <div class="row d-flex justify-content-between">
+                  <p>Start/End Time</p>
+                  <p class="font-weight-bold">
+                    {{ data.qcstarttime }}/{{ data.qcendtime }}
+                  </p>
+                </div>
+                <div class="row d-flex justify-content-between">
+                  <p>Error Count</p>
+                  <p class="font-weight-bold">{{ data.qcfailurecount }}</p>
+                </div>
+                <div class="row mt-2 pt-2 d-flex justify-content-between">
+                  <p class="h6 font-weight-bold">Total Time</p>
+                  <p class="h6 font-weight-bold">{{ data.totalqctime }}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="d-flex justify-content-center cursor"
+        style="width: 5%"
+        (click)="onCloseClick()"
+      >
+        <img src="../../../../../assets/close.svg" width="15px" height="15px" />
+      </div>
+    </div>
+  </div>
+</div>

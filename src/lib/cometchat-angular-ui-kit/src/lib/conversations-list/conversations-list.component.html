@@ -1,0 +1,45 @@
+<div>
+  <div class="cometchat-conversation-list-header-text-container">
+    <p class="cometchat-conversation-list-header-text">Channels</p>
+  </div>
+  <!-- <input class="cometchat-groups-search-input" type="text" placeholder="Search" [(ngModel)]="searchChats" /> -->
+</div>
+<div
+  class="cometchat-conversation-list-container"
+  (scroll)="onScroll($event)"
+  [ngStyle]="isunreadmessage ? { height: '41vh' } : { height: '72vh' }"
+>
+  <ul
+    *ngIf="conversations?.length > 0"
+    class="cometchat-conversation-list-decoration"
+    (scroll)="onScroll($event)"
+  >
+    <li
+      *ngFor="let conversation of conversations | filter: searchChats"
+      (click)="onConversationClick(conversation)"
+    >
+      <cometchat-conversation-view
+        *ngIf="conversation"
+        [selected]="
+          conversation.conversationId === selectedConversation?.conversationId
+        "
+        conversation="{{ JSONParser.stringify(conversation) }}"
+        [showbadge]="false"
+      ></cometchat-conversation-view>
+
+      <div
+        class="cometchat-conversation-list-seperator"
+        *ngIf="conversation"
+      ></div>
+    </li>
+  </ul>
+
+  <div
+    *ngIf="conversations?.length == 0"
+    class="cometchat-conversation-list-decorator-message-container"
+  >
+    <p class="cometchat-conversation-list-decorator-message">
+      {{ decoratorMessage }}
+    </p>
+  </div>
+</div>

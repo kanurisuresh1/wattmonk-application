@@ -1,0 +1,222 @@
+.cometchat-conversation-list-container::-webkit-scrollbar {
+  display: none;
+}
+
+.cometchat-embedded-sidebar {
+  width: 400px !important;
+  height: 100%;
+}
+
+.cometchat-conversation-name .cometchat-conversation-text {
+  white-space: initial !important;
+}
+
+.cometchat-conversation-list-decoration {
+  list-style: none;
+  padding-inline-start: 0px;
+  width: 100%;
+}
+
+.cometchat-conversation-list-container {
+  overflow: auto;
+  height: 100%;
+  overflow-y: auto;
+  height: 25vh;
+}
+
+.cometchat-conversation-list-seperator {
+  border-bottom: 1px solid #eee;
+  margin-left: 45px;
+  margin-bottom: 5px;
+}
+
+.cometchat-conversation-list-header-text-container {
+  min-height: 60px;
+  max-height: 60px;
+  display: flex;
+}
+
+.cometchat-conversation-list-header-text {
+  font-size: 15px;
+  font-weight: 600;
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
+.cometchat-conversation-list-search-input,
+.cometchat-conversation-list-search-input:active,
+.cometchat-conversation-list-search-input:focus {
+  width: 97%;
+  box-sizing: border-box;
+  border: 2px solid #ccc;
+  border-radius: 10px;
+  font-size: 16px;
+  background-color: #ddd;
+  background-position: 10px 10px;
+  background-repeat: no-repeat;
+  padding: 7px;
+  outline: none;
+}
+
+.cometchat-conversation-list-decorator-message-container {
+  height: 50%;
+  overflow: hidden;
+  max-width: 100%;
+  display: flex;
+}
+
+.cometchat-conversation-list-decorator-message {
+  margin: auto;
+  color: #aaa;
+  font-size: 24px;
+  font-weight: 600;
+}
+.topcontainer {
+  margin-bottom: 5px;
+}
+.search {
+  flex: 0 0 40%;
+
+  &__input {
+    font-family: inherit;
+    font-size: inherit;
+    color: black;
+    background-color: white;
+    border: none;
+    outline: none;
+    padding: 0.7em 0.7em;
+    border-radius: 10px;
+    width: 95%;
+    transition: all 0.2s;
+
+    &:focus {
+      outline: none;
+      width: 95%;
+      background-color: white;
+    }
+  }
+}
+
+.cometchat-groups-search-input,
+.cometchat-groups-search-input:active,
+.cometchat-groups-search-input:focus {
+  max-width: 100%;
+  width: 96%;
+  margin: 16px 0px;
+  border-radius: 5px;
+  font-size: 12px;
+  padding: 8px;
+  padding-left: 27px;
+  outline: none;
+  white-space: initial;
+  word-wrap: break-word;
+  text-overflow: initial;
+  border: 0px;
+}
+.cometchat-conversation-item {
+  display: flex;
+  background: transparent;
+  padding: 8px;
+  overflow: hidden;
+  max-width: calc(100% - 10px);
+  width: calc(100% - 10px);
+  display: flex;
+}
+
+.cometchat-conversation-avatar {
+  margin-top: auto;
+  margin-bottom: auto;
+}
+.conversationSelected {
+  background: #edc773;
+}
+
+.cometchat-conversation-item:hover {
+  background: darken(#fff, $amount: 10%);
+  cursor: pointer;
+}
+
+.cometchat-conversation-item-details {
+  margin-top: auto;
+  margin-bottom: auto;
+  padding-left: 10px;
+  text-transform: capitalize;
+  color: #333;
+  max-width: 75%;
+  width: 75%;
+}
+
+.cometchat-conversation-name,
+.cometchat-conversation-text {
+  margin: 3px;
+  white-space: initial;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cometchat-conversation-name {
+  text-transform: capitalize;
+  font-weight: 600;
+  color: #141414;
+  display: flex;
+  font-size: 12px;
+}
+
+.cometchat-conversation-text {
+  color: #888;
+  font-weight: 400;
+  font-size: 12px;
+  max-width: 80%;
+}
+
+.cometchat-conversation-item-container {
+  display: flex;
+}
+
+.cometchat-conversation-unread-count {
+  margin-left: auto;
+  margin-top: auto;
+  margin-bottom: auto;
+}
+.status-indicator {
+  position: relative;
+  right: 10px;
+  bottom: -10px;
+}
+
+.badge-class {
+  border-radius: 15px;
+  max-width: 40px;
+  max-height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 15px;
+  min-height: 14px;
+  padding: 2px;
+  width: max-content;
+  height: max-content;
+  margin: auto;
+  font-size: 12px;
+  font-family: "";
+  font-family: "Montserrat", sans-serif;
+}
+
+.avatar {
+  height: 28px;
+  height: 28px;
+  max-height: 28px;
+  max-width: 28px;
+  overflow: hidden;
+  min-width: 28px;
+  min-height: 28px;
+}
+
+.avatar {
+  img {
+    max-width: 100%;
+    max-height: 100%;
+    min-width: 100%;
+    max-width: 100%;
+  }
+}

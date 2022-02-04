@@ -1,0 +1,408 @@
+/* .data-content{
+    margin-left: 16px;
+} */
+.teamoverviewbutton {
+  width: 200px;
+  /* height: 137px; */
+  margin: 2px 4px 7px 4px;
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 3px 3px 10px 0 #f8f8f8;
+  background-color: #ffffff;
+}
+
+.overviewsectionicon {
+  align-self: center;
+  width: 30px;
+}
+.overviewcount {
+  text-align: -webkit-right;
+  font-size: 24px;
+  font-weight: 600;
+}
+.overviewheading {
+  text-align: -webkit-right;
+  font-family: Montserrat;
+  font-size: 11px;
+  font-weight: 500;
+}
+
+.detailsection {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  padding: 0px;
+  height: 600px;
+  overflow-y: hidden;
+  align-content: flex-start;
+}
+
+.detailsection:hover {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  padding: 0px;
+  height: 600px;
+  overflow-y: scroll;
+  align-content: flex-start;
+}
+.statisticssection table {
+  width: 100%;
+}
+
+.statisticssection .col {
+  padding-left: 0;
+}
+
+.statisticssection .header {
+  padding-left: 0;
+}
+.statisticssection {
+  overflow-wrap: anywhere;
+}
+span img {
+  cursor: pointer;
+}
+
+.placeholder {
+  position: absolute;
+  left: 34%;
+  top: 50%;
+  max-width: 290px;
+  text-align: -webkit-center;
+}
+
+.placeholderlogo {
+  font-size: 40px;
+  color: rgba(51, 51, 51, 0.2);
+}
+.placholderheading {
+  margin-bottom: 0;
+  padding-top: 20px;
+  padding-left: 30px;
+  font-family: Montserrat;
+  font-size: 16px;
+  font-weight: 600;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.23;
+  letter-spacing: normal;
+  /* text-align: left; */
+  color: #474747;
+}
+.placeholdercontent {
+  padding-left: 20px;
+  font-family: Montserrat;
+  font-size: 11px;
+  font-weight: 600;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.23;
+  letter-spacing: normal;
+  /* text-align: left; */
+  color: #8c8b8b;
+}
+
+.groupplaceholder {
+  top: 50%;
+  max-width: 290px;
+  text-align: center;
+}
+.dashboard {
+  position: absolute;
+  left: 43%;
+  top: 30%;
+}
+
+$mat-header-row-height: 56px;
+$mat-row-height: 48px;
+$mat-row-horizontal-padding: 24px;
+
+.mat-table {
+  width: 100%;
+}
+
+.mat-header-row {
+  min-height: $mat-header-row-height;
+}
+
+.mat-row {
+  min-height: $mat-row-height;
+}
+
+.mat-row,
+.mat-header-row {
+  display: flex;
+  border-bottom-width: 1px;
+  border-bottom-style: solid;
+  align-items: center;
+  padding: 0 $mat-row-horizontal-padding;
+  box-sizing: border-box;
+
+  // Workaround for https://goo.gl/pFmjJD in IE 11. Adds a pseudo
+  // element that will stretch the row the correct height. See:
+  // https://connect.microsoft.com/IE/feedback/details/802625
+  &::after {
+    display: inline-block;
+    min-height: inherit;
+    content: "";
+  }
+}
+
+.mat-cell,
+.mat-header-cell {
+  flex: 1;
+  overflow: hidden;
+  word-wrap: break-word;
+}
+
+table tr.mat-header-row {
+  background: #e6e6e6;
+}
+
+table th.mat-header-cell {
+  color: #000;
+  font-size: 13px;
+  font-weight: 400;
+}
+::ng-deep .mat-paginator {
+  padding-bottom: 4% !important;
+}
+
+.selctedbackground {
+  background-color: #edc773 !important;
+}
+.unselctedbackground {
+  background-color: white;
+}
+
+.groupphoto {
+  width: 40px;
+  height: 40px;
+  text-align: center;
+  background-color: #edc773;
+  border-radius: 50%;
+  box-shadow: 0 5px 15px -8px rgb(0 0 0 / 24%), 0 8px 10px -5px rgb(0 0 0 / 20%);
+  color: black;
+  font-weight: 500;
+  font-size: 14px;
+  padding-top: 10px;
+  margin-right: 5px;
+}
+
+.photo {
+  width: 50px;
+  height: 50px;
+  text-align: center !important;
+  background-color: #f0f0f0;
+  border-radius: 50%;
+  box-shadow: 0 5px 15px -8px rgba(0, 0, 0, 0.24),
+    0 8px 10px -5px rgba(0, 0, 0, 0.2);
+}
+
+.photo p {
+  color: black;
+  font-weight: 500;
+  font-size: 16px;
+  padding-top: 15px;
+  text-align: center !important;
+}
+.photo span {
+  color: black;
+  background-color: #edc773;
+  /* margin-left: 43px; */
+  display: grid;
+  border: none;
+  /* padding-top: 2px; */
+  align-items: center;
+  margin-top: 2px;
+}
+.search {
+  flex: 0 0 40%;
+  display: flex;
+
+  &__button {
+    border: none;
+    background-color: #f9ba48;
+    border-radius: 5px;
+
+    &:focus {
+      outline: none;
+    }
+
+    &:active {
+      transform: translateY(2px);
+    }
+  }
+
+  &__icon {
+    height: 1.5rem;
+    width: 1.5rem;
+  }
+}
+.input {
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 500;
+  color: inherit;
+  background-color: white;
+  border: none;
+  outline: none;
+  padding: 0.4em 1em;
+  border-radius: 5px;
+  width: 100%;
+  transition: all 0.2s;
+
+  .focus {
+    outline: none;
+    width: 100%;
+    background-color: #dbdada;
+  }
+}
+.addmember {
+  color: #f9ba48;
+}
+
+.membercard {
+  background-color: white;
+  border-radius: 7px;
+  border-color: white;
+  margin-top: 0px;
+  margin-bottom: 10px;
+  font-size: smaller;
+  font-weight: 500;
+  /* padding-left: 8px; */
+  padding: 10px;
+  word-break: break-all;
+}
+.membercard-title {
+  margin: 8px 10px 1px 0;
+  font-family: Montserrat;
+  font-size: 14px;
+  font-weight: 600;
+  font-stretch: normal;
+  font-style: normal;
+  letter-spacing: normal;
+  text-align: left;
+  color: #4f4f4f;
+}
+
+.membercard-content {
+  margin: 1px 10px 10px 0;
+  font-family: Montserrat;
+  font-size: 11px;
+  font-weight: 500;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.22;
+  letter-spacing: normal;
+  text-align: left;
+  color: #edc773;
+}
+.membercard-footer {
+  margin: 0px 5px 3px 0px;
+  font-family: Montserrat;
+  font-size: 11px;
+  font-weight: 600;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.19;
+  letter-spacing: normal;
+  text-align: left;
+  color: #474747;
+}
+.headers {
+  font-weight: 600;
+}
+
+.scroller {
+  width: 100%;
+  max-height: 96%;
+  overflow-y: hidden;
+  overflow-x: hidden;
+}
+
+.scroller:hover {
+  width: 100%;
+  max-height: 96%;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+.groupcontainer {
+  background-color: white;
+  padding: 10px;
+  border-radius: 10px;
+}
+// .groupcontainer:hover{
+//     background-color:#EDC773;
+
+//   .moreoption{
+//     display: unset;
+//   }
+//   .groupphoto{
+//     background-color: white;
+//   }
+// }
+
+/* width */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+.moreoption {
+  padding-left: 7px;
+  padding-right: 7px;
+  cursor: pointer;
+}
+/* Track */
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #979797;
+  border-radius: 10px;
+}
+
+.cardscroller {
+  max-height: 400px;
+  overflow-y: scroll;
+}
+
+.badge-overview {
+  margin-top: 10px;
+}
+
+.sidebar-spacing {
+  padding: 5px;
+}
+.teambadge {
+  color: #edc773;
+}
+
+.memebers-height {
+  height: 42vh;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.members-height-full {
+  height: 57vh;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+::ng-deep .dialog-container-custom {
+  mat-dialog-container {
+    // padding: 0;
+    background: white !important;
+  }
+}
+
+// @media not all and (min-resolution:.001dpcm) {
+//   @supports (-webkit-appearance:none) {
+//     .mat-badge-medium.mat-badge-overlap.mat-badge-after .mat-badge-content{
+//       margin-top: -50px !important;
+//       // right:30px !important;
+//       left:-36px;
+//     }
+//   }
+// }

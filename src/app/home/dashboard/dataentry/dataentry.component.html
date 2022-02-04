@@ -1,0 +1,39 @@
+<div class="main-content">
+  <div class="container">
+    <div class="row">
+      <div class="rounded workstatusbar">
+        <mat-button-toggle-group
+          #group="matButtonToggleGroup"
+          [(value)]="selectedToggleButtonVal"
+          (change)="onTabChange(group.value)"
+          class="bg-white"
+        >
+          <mat-button-toggle value="modulemake">Module Make</mat-button-toggle>
+          <span style="font-size: 26px; padding-top: 8px; font-weight: 300"
+            >|</span
+          >
+          <mat-button-toggle value="modulemodel"
+            >Module Model</mat-button-toggle
+          >
+          <span style="font-size: 26px; padding-top: 8px; font-weight: 300"
+            >|</span
+          >
+          <mat-button-toggle value="invertermake"
+            >Inverter Make</mat-button-toggle
+          >
+          <span style="font-size: 26px; padding-top: 8px; font-weight: 300"
+            >|</span
+          >
+          <mat-button-toggle value="invertermodel"
+            >Inverter Model</mat-button-toggle
+          >
+        </mat-button-toggle-group>
+      </div>
+    </div>
+  </div>
+
+  <app-modulemakeentry *ngIf="ismodulemaketab"></app-modulemakeentry>
+  <app-modulemodelentry *ngIf="ismodulemodeltab"></app-modulemodelentry>
+  <app-invertermakeentry *ngIf="isinvertermaketab"></app-invertermakeentry>
+  <app-invertermodelentry *ngIf="isinvertermodeltab"></app-invertermodelentry>
+</div>

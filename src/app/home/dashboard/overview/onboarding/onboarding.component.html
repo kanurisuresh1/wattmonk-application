@@ -1,0 +1,681 @@
+<div *ngIf="isLoading" class="overlay">
+  <mat-card class="spinnercard" align-items-center>
+    <div class="row">
+      <div class="col-3">
+        <mat-progress-spinner diameter="50" color="primary" mode="indeterminate" strokeWidth="5"></mat-progress-spinner>
+      </div>
+      <div class="col">
+        <h4 class="spinnertext">{{ loadingmessage }}</h4>
+      </div>
+    </div>
+  </mat-card>
+</div>
+<div class="main-content adminoverview" *ngIf="clientSuperAdmin && !loggedInUser.isonboardingcompleted">
+  <div class="row ml-3 mr-2">
+    <div style="overflow-y: auto; height: 85vh; overflow-x: hidden" class="col-8 mt-4"
+      *ngIf="this.stepper.selectedIndex == 0">
+      <div class="row">
+        <form class="dashboardform logincard" [formGroup]="requiredinformationform">
+          <div class="col">
+            <h3 class="h3">Welcome! Let's help you get started.</h3>
+            <h5 style="font-weight: 600">
+              Please fill-in below mentioned details, to help you serve better.
+            </h5>
+            <!--<div class="form-group">
+                <div class="row">
+                  <div class="col-8 form-field">
+                    <h5 class="mb-0">Personal Address*</h5>
+                    <mat-form-field class="fullwidth" appearance="outline" >
+                      <input matInput placeholder="Enter a location" [formControl]="personaladdress" maxlength='250' 
+                      matGoogleMapsAutocomplete
+                      country="us"
+                      (onAutocompleteSelected)="onAutocompleteSelected($event,'personaladdress')"
+                      (onLocationSelected)="onPersonalAddressSelected($event)" required>
+                      <mat-error *ngIf="personaladdress.invalid">{{getErrorMessage(personaladdress)}}</mat-error>
+                    </mat-form-field>
+                  </div>
+                </div>
+              </div>-->
+            <div class="row pt-3">
+              <div class="col">
+                <p class="h5">Account Type</p>
+                <mat-radio-group name="usertype" [(ngModel)]="selectedStatus" [formControl]="usertype"
+                  (change)="radioChange($event)" aria-label="Select an option">
+                  <div class="row">
+                    <div class="col-2">
+                      <mat-radio-button value="company">
+                        <h5 class="mb-0">Company</h5>
+                      </mat-radio-button>
+                    </div>
+                    <!-- <div class="col-2">
+                        <mat-radio-button value="individual"><h5 class="mb-0">Individual</h5></mat-radio-button>
+                      </div> -->
+                  </div>
+                </mat-radio-group>
+              </div>
+            </div>
+            <div class="row pt-3">
+              <div class="col">
+                <p class="h5">Payment Mode</p>
+                <mat-radio-group name="payment" [formControl]="payment" (change)="radioChange($event)"
+                  aria-label="Select an option">
+                  <div class="row">
+                    <div class="col-2">
+                      <mat-radio-button value="true" [checked]="true">
+                        <h5 class="mb-0">Prepaid</h5>
+                      </mat-radio-button>
+                    </div>
+                    <div class="col-2">
+                      <mat-radio-button value="false" [disabled]="true">
+                        <h5 class="mb-0">Postpaid</h5>
+                      </mat-radio-button>
+                    </div>
+                  </div>
+                </mat-radio-group>
+                <h5 class="pt-2 ml-3" style="font-size: 12px">
+                  <span style="color: #f9ba48; font-weight: 700; margin-left: -15px">Note: </span>If you want to change
+                  payment mode from prepaid to postpaid,
+                  then please contact Wattmonk Team.
+                </h5>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-8">
+                <p class="h5 mt-3" *ngIf="usertype.value == 'company'">
+                  Company details
+                </p>
+                <div class="form-group">
+                  <div class="row">
+                    <div class="col-6" *ngIf="usertype.value == 'company'">
+                      <h5 class="mb-0">Company Name*</h5>
+                      <mat-form-field appearance="outline" class="fullwidth logincard">
+                        <input matInput [formControl]="company" maxlength="80" required placeholder="eg .abcde" />
+                        <mat-error *ngIf="company.invalid">{{
+                          getErrorMessage(company)
+                          }}</mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div class="col-6" *ngIf="usertype.value == 'company'">
+                      <h5 class="mb-0">Lic No.*</h5>
+                      <mat-form-field appearance="outline" class="fullwidth">
+                        <input matInput type="tel" maxlength="20" min="3" [formControl]="registrationnumber" required
+                          placeholder="eg. 875434256" />
+                        <mat-error *ngIf="registrationnumber.invalid">{{ getErrorMessage(registrationnumber) }}
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-0" *ngIf="usertype.value == 'company'">
+                  <h5 class="mb-0">Company Address*</h5>
+                  <mat-form-field class="fullwidth" appearance="outline">
+                    <input matInput [formControl]="companyaddress" placeholder="Enter a location" maxlength="250"
+                      required matGoogleMapsAutocomplete country="us" (onAutocompleteSelected)="
+                        onAutocompleteSelected($event, 'companyaddress')
+                      " (onLocationSelected)="onCompanyAddressSelected($event)" />
+                    <mat-error *ngIf="companyaddress.invalid">{{
+                      getErrorMessage(companyaddress)
+                      }}</mat-error>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="col-3 mt-3" *ngIf="usertype.value == 'company'">
+                <mat-label class="ml-3" style="font-size: 12px; font-weight: 600; color: #464646">Upload Company Logo
+                </mat-label>
+                <div ngx-dropzone class="dropzone" [multiple]="false" (change)="uploadFile($event)">
+                  <ngx-dropzone-label>
+                    <div class="">
+                      <img class="" src="../../../../../assets/upload.svg" />
+                      <h6 class="companylogoplaceholdertext">
+                        Drag & Drop files here
+                      </h6>
+                    </div>
+                  </ngx-dropzone-label>
+                  <div *ngIf="logoUploaded">
+                    <ngx-dropzone-image-preview class="imagepreview" [file]="logo" [removable]="true"
+                      ngProjectAs="ngx-dropzone-preview" (removed)="removeUploadFile()">
+                    </ngx-dropzone-image-preview>
+                  </div>
+                </div>
+                <!-- <div class="avatar-upload">
+                    <div class="avatar-edit">
+                      <input [formControl]="userlogo" type='file' id="imageUpload" accept=".png, .jpg, .jpeg"
+                        #fileInput (change)="uploadFile($event)" />
+                    </div>
+                    <div class="avatar-preview logo-upload">
+                      <div class="avatar-preview1" [ngStyle]="logouploadbutton ? {'display': 'block'} : {'display': 'none'}">
+                        
+                        <div class="mr-2 mt-3">
+                          <img class="companylogoplaceholder" src="../../../../../assets/upload.svg">
+                          <h6 class="companylogoplaceholdertext">Drag & Drop files here</h6>
+                        </div>
+                        <button mat-raised-button (click)="fileInput.click()">Choose file</button>
+                        </div>
+                        <button mat-icon-button (click)="Deleteuploadedlogo($event)" class="float-right">
+                          <img class="dialogclose" src="../../../../../assets/close.svg" />
+                        </button>
+                        <div id="imagePreview" [style.backgroundImage]="'url('+ imageUrl +')'" [ngStyle]="!logouploadbutton ? {'display': 'block'} : {'display': 'none'}">
+                        </div>
+                      </div>
+                  </div> -->
+              </div>
+              <!-- <h5 class="pt-2 ml-3" style="font-size:12px;"><span style="color: #f9ba48;font-weight: 600;">Note: </span>If you want to change payment mode from prepaid to postpaid, then please contact Wattmonk Team.</h5> -->
+            </div>
+          </div>
+        </form>
+      </div>
+      <mat-dialog-actions align="end">
+        <button mat-raised-button class="float-right" (click)="onUpdateUserInformation($event)"
+          style="box-shadow: none">
+          Save
+        </button>
+      </mat-dialog-actions>
+    </div>
+    <div style="overflow-y: auto; height: 85vh; overflow-x: hidden" class="col-8 pr-0 pl-4 mt-4"
+      *ngIf="this.stepper.selectedIndex == 1">
+      <form class="dashboardform logincard" [formGroup]="accountsettingform">
+        <div class="col-12 p-3 pt-4 border shadow-sm rounded cardstyle">
+          <p class="h5">Preferred Services</p>
+          <div class="col-0">
+            <h5 style="font-size: 12px; font-weight: 600">
+              Please select your preferred Service according to which your
+              platform will be customized
+            </h5>
+            <h6 class="setting__wroning">
+              *You can anytime go to settings page from the
+              <span><img style="background-color: #f7f3ea; width: 2%"
+                  src="../../../../../assets/baseline_setting.png" /></span>
+              icon available in the top right corner of your dashboard to make
+              changes.
+            </h6>
+          </div>
+          <div class="col-0">
+            <button type="button" [formControl]="userSettingVisibilityPrelim" style="margin-right: 30px"
+              (click)="changeState('Sales Proposal')" [ngClass]="{ whitebtn: !hideprelim, yellowbtn: hideprelim }">
+              <mat-icon>{{
+                !hideprelim ? "visibility_off" : "visibility"
+                }}</mat-icon>Sales Proposal
+            </button>
+            <button type="button" [formControl]="userSettingVisiblitySurvey" style="margin-right: 30px"
+              (click)="changeState('Survey')" [ngClass]="{ whitebtn: !hidesurvey, yellowbtn: hidesurvey }">
+              <mat-icon>{{
+                !hidesurvey ? "visibility_off" : "visibility"
+                }}</mat-icon>
+              Survey
+            </button>
+            <button type="button" [formControl]="userSettingVisiblityPermit" style="margin-right: 30px"
+              (click)="changeState('Permit')" [ngClass]="{ whitebtn: !hidepermit, yellowbtn: hidepermit }">
+              <mat-icon>{{
+                !hidepermit ? "visibility_off" : "visibility"
+                }}</mat-icon>
+              Permit
+            </button>
+            <button type="button" [formControl]="userSettingVisiblityPeStamp" style="margin-right: 30px"
+              (click)="changeState('PeStamp')" [ngClass]="{ whitebtn: !hidepestamp, yellowbtn: hidepestamp }">
+              <mat-icon>{{
+                !hidepestamp ? "visibility_off" : "visibility"
+                }}</mat-icon>
+              PE Stamps
+            </button>
+          </div>
+        </div>
+        <div class="col-12 mt-3 pr-0 pl-0">
+          <div class="col-12 p-3 pt-4 border shadow-sm rounded cardstyle">
+            <p class="h5">Preferred Services Name</p>
+            <form class="form-group logincard">
+              <div class="row">
+                <div class="col-4" *ngIf="hideprelim">
+                  <h5 class="mb-0">Sales Proposal</h5>
+                  <mat-form-field appearance="outline">
+                    <input matInput placeholder="eg.Rename name to xyz" autocomplete="off"
+                      [formControl]="userSettingnameprelim" />
+                  </mat-form-field>
+                </div>
+                <div class="col-4" *ngIf="hidesurvey">
+                  <h5 class="mb-0">Survey</h5>
+                  <mat-form-field appearance="outline">
+                    <input matInput placeholder="eg.Rename name to xyz" autocomplete="off"
+                      [formControl]="userSettingnamesurvey" />
+                  </mat-form-field>
+                </div>
+                <div class="col-4" *ngIf="hidepermit">
+                  <h5 class="mb-0">Permit</h5>
+                  <mat-form-field appearance="outline">
+                    <input matInput placeholder="eg.Rename name to xyz" autocomplete="off"
+                      [formControl]="userSettingnamePermit" />
+                  </mat-form-field>
+                </div>
+                <div class="col-4" *ngIf="hidepestamp">
+                  <h5 class="mb-0">PEStamp</h5>
+                  <mat-form-field appearance="outline">
+                    <input matInput placeholder="eg.Rename name to xyz" autocomplete="off"
+                      [formControl]="userSettingnamePEStamp" />
+                  </mat-form-field>
+                </div>
+                <div class="col-4">
+                  <h5 class="mb-0">Dashboard</h5>
+                  <mat-form-field appearance="outline">
+                    <input matInput placeholder="eg.Rename name to xyz" autocomplete="off"
+                      [formControl]="userSettingnameDashboard" />
+                  </mat-form-field>
+                </div>
+                <div class="col-4" *ngIf="currentUser.user.usertype != 'individual'">
+                  <h5 class="mb-0">Team</h5>
+                  <mat-form-field appearance="outline">
+                    <input matInput placeholder="eg.Rename name to xyz" autocomplete="off"
+                      [formControl]="userSettingnameTeam" />
+                  </mat-form-field>
+                </div>
+                <div class="col-4">
+                  <h5 class="mb-0">Inbox</h5>
+                  <mat-form-field appearance="outline">
+                    <input matInput placeholder="eg.Rename name to xyz" autocomplete="off"
+                      [formControl]="userSettingnameInbox" />
+                  </mat-form-field>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </form>
+      <div class="col-12 mt-3 pr-0 pl-0">
+        <div class="col-12 p-3 pt-4 border shadow-sm rounded cardstyle">
+          <p class="h5">Notifications</p>
+          <form>
+            <div class="row">
+              <div class="col-3">
+                <h5 style="font-weight: 600">Receive Updates</h5>
+              </div>
+              <div class="col-2">
+                <!--<mat-slide-toggle [color]="color" [formControl]="designcompletedemail"
+                      (change)="togglebutton($event, 'designcompletedemail')" (click)="toggle()">
+                    </mat-slide-toggle>-->
+                <mat-slide-toggle [color]="color" (change)="toggle($event)"></mat-slide-toggle>
+              </div>
+            </div>
+            <div class="row" *ngIf="show">
+              <div class="col-6">
+                <h4 class="notificationheader">Events</h4>
+              </div>
+              <div class="col-3">
+                <h4 class="notificationheader text-center">Mails</h4>
+              </div>
+              <div class="col-3">
+                <h4 class="notificationheader text-center">Notifications</h4>
+              </div>
+            </div>
+            <div class="row mt-2" *ngIf="show">
+              <div class="col">
+                <div style="height: 1px; background-color: #a5a9abaa"></div>
+              </div>
+            </div>
+            <div class="row" style="padding-top: 10px" *ngIf="show">
+              <div class="col-6">
+                <h4 style="font-size: 12px; font-weight: 400">
+                  Design Generated
+                </h4>
+              </div>
+              <div class="col-3 text-center">
+                <mat-slide-toggle [color]="color" [formControl]="requestgeneratedemail"
+                  (change)="togglebutton($event, 'requestgeneratedemail')">
+                </mat-slide-toggle>
+              </div>
+              <div class="col-3 text-center">
+                <mat-slide-toggle [color]="color" [formControl]="requestgeneratednotification" (change)="
+                    togglebutton($event, 'requestgeneratednotification')
+                  ">
+                </mat-slide-toggle>
+              </div>
+            </div>
+
+            <div class="row" style="padding-top: 10px" *ngIf="show">
+              <div class="col-6">
+                <h4 style="font-size: 12px; font-weight: 400">
+                  Design Acknowledgement (Accept/On Hold)
+                </h4>
+              </div>
+              <div class="col-3 text-center">
+                <mat-slide-toggle [color]="color" [formControl]="requestacknowledgementemail"
+                  (change)="togglebutton($event, 'requestacknowledgementemail')"></mat-slide-toggle>
+              </div>
+              <div class="col-3 text-center">
+                <mat-slide-toggle [color]="color" [formControl]="requestacknowledgementnotification" (change)="
+                    togglebutton($event, 'requestacknowledgementnotification')
+                  "></mat-slide-toggle>
+              </div>
+            </div>
+            <div class="row" style="padding-top: 10px" *ngIf="show">
+              <div class="col-6">
+                <h4 style="font-size: 12px; font-weight: 400">
+                  Design In-Designing
+                </h4>
+              </div>
+              <div class="col-3 text-center">
+                <mat-slide-toggle [color]="color" [formControl]="requestindesigningemail"
+                  (change)="togglebutton($event, 'requestindesigningemail')">
+                </mat-slide-toggle>
+              </div>
+              <div class="col-3 text-center">
+                <mat-slide-toggle [color]="color" [formControl]="requestindesigningnotification" (change)="
+                    togglebutton($event, 'requestindesigningnotification')
+                  ">
+                </mat-slide-toggle>
+              </div>
+            </div>
+            <div class="row" style="padding-top: 10px" *ngIf="show">
+              <div class="col-6">
+                <h4 style="font-size: 12px; font-weight: 400">
+                  Design Completed
+                </h4>
+              </div>
+              <div class="col-3 text-center">
+                <mat-slide-toggle [color]="color" [formControl]="designcompletedemail"
+                  (change)="togglebutton($event, 'designcompletedemail')">
+                </mat-slide-toggle>
+              </div>
+              <div class="col-3 text-center">
+                <mat-slide-toggle [color]="color" [formControl]="designcompletednotification"
+                  (change)="togglebutton($event, 'designcompletednotification')">
+                </mat-slide-toggle>
+              </div>
+            </div>
+            <div class="row" style="padding-top: 10px" *ngIf="show">
+              <div class="col-6">
+                <h4 style="font-size: 12px; font-weight: 400">
+                  Design In-Review
+                </h4>
+              </div>
+              <div class="col-3 text-center">
+                <mat-slide-toggle [color]="color" [formControl]="designmovedtoqcemail"
+                  (change)="togglebutton($event, 'designmovedtoqcemail')"></mat-slide-toggle>
+              </div>
+              <div class="col-3 text-center">
+                <mat-slide-toggle [color]="color" [formControl]="designmovedtoqcnotification"
+                  (change)="togglebutton($event, 'designmovedtoqcnotification')"></mat-slide-toggle>
+              </div>
+            </div>
+            <div class="row" style="padding-top: 10px" *ngIf="show">
+              <div class="col-6">
+                <h4 style="font-size: 12px; font-weight: 400">
+                  Design Review Passed.
+                </h4>
+              </div>
+              <div class="col-3 text-center">
+                <mat-slide-toggle [color]="color" [formControl]="designreviewpassedemail"
+                  (change)="togglebutton($event, 'designreviewpassedemail')">
+                </mat-slide-toggle>
+              </div>
+              <div class="col-3 text-center">
+                <mat-slide-toggle [color]="color" [formControl]="designreviewpassednotification" (change)="
+                    togglebutton($event, 'designreviewpassednotification')
+                  ">
+                </mat-slide-toggle>
+              </div>
+            </div>
+            <div class="row" style="padding-top: 10px" *ngIf="show">
+              <div class="col-6">
+                <h4 style="font-size: 12px; font-weight: 400">
+                  Design Review Failed
+                </h4>
+              </div>
+              <div class="col-3 text-center">
+                <mat-slide-toggle [color]="color" [formControl]="designreviewfailedemail"
+                  (change)="togglebutton($event, 'designreviewfailedemail')"></mat-slide-toggle>
+              </div>
+              <div class="col-3 text-center">
+                <mat-slide-toggle [color]="color" [formControl]="designreviewfailednotification" (change)="
+                    togglebutton($event, 'designreviewfailednotification')
+                  "></mat-slide-toggle>
+              </div>
+            </div>
+            <div class="row" style="padding-top: 10px" *ngIf="show">
+              <div class="col-6">
+                <h4 style="font-size: 12px; font-weight: 400">
+                  Design Delivered
+                </h4>
+              </div>
+              <div class="col-3 text-center">
+                <mat-slide-toggle [color]="color" [formControl]="designdeliveredemail"
+                  (change)="togglebutton($event, 'designdeliveredemail')"></mat-slide-toggle>
+              </div>
+              <div class="col-3 text-center">
+                <mat-slide-toggle [color]="color" [formControl]="designdeliverednotification"
+                  (change)="togglebutton($event, 'designdeliverednotification')"></mat-slide-toggle>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col mt-4">
+          <button mat-raised-button class="float-right" (click)="saveData($event)" style="box-shadow: none"
+            type="submit">
+            Save
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="col-8 pr-0 pl-4 mt-4" *ngIf="this.stepper.selectedIndex == 2 && usertype.value == 'company'">
+      <div class="row">
+        <div class="col-md-9 col-lg-9">
+          <div class="row">
+            <div class="col-9"></div>
+            <div class="col-3 float-right">
+              <button mat-raised-button (click)="openAddTeamMemberDialog()">
+                Add Team Members
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="teamMembers.length == 0">
+        <div class="placeholdermsg">
+          <mat-icon class="placeholderlogo">sentiment_very_dissatisfied</mat-icon><br />
+          <h4 class="placeholdertext">Yet to break the ice</h4>
+        </div>
+      </div>
+      <div class="row mt-4">
+        <div class="col-md-9 col-lg-9">
+          <div class="row" style="max-height: 70vh; overflow-x: hidden; overflow-y: auto">
+            <div class="col-md-4 col-sm-6 col-xs-12" *ngFor="let user of teamMembers; let i = index"
+              style="padding-right: 0px">
+              <div class="membercard">
+                <div class="row">
+                  <div class="col-9">
+                    <div class="photo" *ngIf="user.logo != null">
+                      <span *ngIf="user.activejobs != null" matBadge="{{ user.activejobs }}" matBadgePosition="after">
+                      </span>
+                      <img style="
+                          width: inherit;
+                          height: inherit;
+                          border-radius: inherit;
+                        " src="{{ user.logo.url }}" />
+                    </div>
+                    <div *ngIf="user.logo == null" class="photo">
+                      <div>
+                        <span *ngIf="user.activejobs != null" matBadge="{{ user.activejobs }}" matBadgePosition="after">
+                        </span>
+                        <p>
+                          {{
+                          this.genericService.getInitials(
+                          user.firstname,
+                          user.lastname
+                          )
+                          }}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-3" style="padding-left: 0px; padding-right: 0px">
+                    <span>
+                      <img style="width: 13px; cursor: pointer" (click)="openEditTeamMemberDialog(user)"
+                        src="../../../../../assets/editnew.svg" />
+                      <span style="padding-left: 7px; cursor: pointer">
+                        <img style="width: 13px" (click)="openConfirmationDialog(user)"
+                          src="../../../../../assets/blockuser.svg" /></span></span>
+                  </div>
+                </div>
+                <div class="row mt-1">
+                  <div class="col-12 membercard-title">
+                    {{ user.firstname | titlecase }} {{ user.lastname }}
+                  </div>
+                  <div class="col-12 membercard-content">
+                    {{ user.role.displayname }}
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-12 membercard-footer">
+                    <img src="../../../../../assets/Email.svg" />
+                    {{ user.email }}
+                  </div>
+                  <div class="col-12 membercard-footer" *ngIf="user.phone != null">
+                    <img src="../../../../../assets/call.svg" />
+                    {{ user.phone }}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row mt-2">
+        <div class="col-8 float-left mt-2">
+          <button style="font-size: 15px; font-weight: 700" mat-button type="submit" (click)="move($event, 3)">
+            Skip
+          </button>
+        </div>
+        <div class="col-4 float-right" [ngStyle]="
+            teamMembers.length
+              ? { visibility: 'visible' }
+              : { visibility: 'hidden' }
+          ">
+          <button mat-raised-button (click)="move($event, 3)">Next</button>
+        </div>
+      </div>
+    </div>
+    <div class="col-8 pr-0 pl-4 mt-4" *ngIf="
+        (this.stepper.selectedIndex == 3 && usertype.value == 'company') ||
+        (this.stepper.selectedIndex == 2 && usertype.value == 'individual')
+      ">
+      <div class="col-12 mt-3 pr-0 pl-0" *ngIf="payment.value == 'true'">
+        <div class="col-12 border shadow-sm cardstyle">
+          <mat-card class="shadow-none" style="background-color: #fbf9f4">
+            <p class="payment-text">
+              Recharge your wallet right now with more than
+              <span style="font-weight: bold">$1000</span> and get an additional
+              benefit of <span style="font-weight: bold">$100</span>.
+            </p>
+            <div class="row">
+              <div class="col-8">
+                <button style="background-color: #edc773; box-shadow: none" mat-raised-button
+                  (click)="openAddMoneyToWalletDialog()">
+                  Recharge Wallet
+                </button>
+              </div>
+              <div class="col-4">
+                <p>
+                  Current Wallet Balance<br /><span style="font-weight: bold">${{
+                    loggedInUser.amount != null ? loggedInUser.amount : 0.0
+                    }}</span>
+                </p>
+                <img src="../../../../../assets/Wallet.svg" class="wallet_img" />
+              </div>
+            </div>
+          </mat-card>
+        </div>
+      </div>
+      <div class="col-12 mt-3 pr-0 pl-0">
+        <div class="col-12 border shadow-sm cardstyle">
+          <div>
+            <mat-card class="shadow-none" style="background-color: #fbf9f4">
+              <p class="mt-3">
+                You are all set. Go ahead and start creating your design
+                requests.
+              </p>
+              <button mat-raised-button (click)="openAddDesignDialog($event)" *ngIf="addprelim"
+                style="box-shadow: none">
+                +Site Assessment
+              </button>
+              <button class="ml-2" mat-raised-button (click)="openAddPrelimProposalDialog()" *ngIf="addprelim"
+                style="box-shadow: none">
+                +Sales Proposal
+              </button>
+              <button class="ml-2" *ngIf="!this.genericService.specificclient && addpermit" mat-raised-button
+                (click)="openAutocadDialog($event)" style="box-shadow: none">
+                +{{ displayname.namepermit }} Design
+              </button>
+              <button class="ml-2" *ngIf="this.genericService.specificclient && addpermit" mat-raised-button
+                (click)="openAutocadDialog($event)" style="box-shadow: none">
+                + Design
+              </button>
+            </mat-card>
+          </div>
+        </div>
+      </div>
+      <div class="float-left mt-2">
+        <button style="font-size: 15px; font-weight: 700" mat-button type="submit" (click)="redirectToDashboard()">
+          Skip
+        </button>
+      </div>
+    </div>
+    <div class="col-4">
+      <mat-vertical-stepper fxLayout="column" class="ml-2 float-left" style="background-color: #fbf9f4"
+        [linear]="isLinear" #stepper (selectionChange)="selectionChange($event)">
+        <mat-step state="Account" [stepControl]="requiredinformationform" [completed]="isFirstStepDone">
+          <ng-template matStepLabel>
+            <div class="col-12" style="color: black">Step 1</div>
+            <div class="col-12 stepper__title">
+              Account Information
+            </div>
+          </ng-template>
+        </mat-step>
+        <mat-step state="Setting" [stepControl]="accountsettingform" [completed]="isSecondStepDone">
+          <ng-template matStepLabel>
+            <div class="col-12" style="color: black">Step 2</div>
+            <div class="col-12 stepper__title">
+              Account Setting
+            </div>
+          </ng-template>
+        </mat-step>
+        <mat-step state="Team" *ngIf="usertype.value == 'company'">
+          <ng-template matStepLabel>
+            <div class="col-12" style="color: black">Step 3</div>
+            <div class="col-12 stepper__title">
+              Build your own team
+            </div>
+          </ng-template>
+        </mat-step>
+        <mat-step state="Team" *ngIf="usertype.value == 'individual'">
+          <ng-template matStepLabel>
+            <div class="col-12" style="color: black">Step 3</div>
+            <div class="col-12 stepper__title">
+              Send Design Request
+            </div>
+          </ng-template>
+        </mat-step>
+        <mat-step state="DesignReq" *ngIf="usertype.value == 'company'">
+          <ng-template matStepLabel>
+            <div class="col-12" style="color: black">Step 4</div>
+            <div class="col-12 stepper__title">
+              Send Design Request
+            </div>
+          </ng-template>
+        </mat-step>
+
+        <ng-template matStepperIcon="Account">
+          <mat-icon svgIcon="account" class="maticon"></mat-icon>
+        </ng-template>
+        <ng-template matStepperIcon="Setting">
+          <mat-icon svgIcon="setting" class="maticon"></mat-icon>
+        </ng-template>
+        <ng-template matStepperIcon="Team">
+          <mat-icon svgIcon="team" class="maticon"></mat-icon>
+        </ng-template>
+        <ng-template matStepperIcon="DesignReq">
+          <mat-icon svgIcon="designReq" class="maticon"></mat-icon>
+        </ng-template>
+        <!-- Replace icon mat-step -->
+      </mat-vertical-stepper>
+    </div>
+  </div>
+</div>

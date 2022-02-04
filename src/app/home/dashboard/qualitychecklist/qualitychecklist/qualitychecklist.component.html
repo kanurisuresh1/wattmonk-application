@@ -1,0 +1,164 @@
+<div class="main-content" *ngIf="isCheckList">
+  <div class="container d-flex align-items-center" style="height: 69vh">
+    <div class="col-12">
+      <div class="d-flex justify-content-center">
+        <img src="../../../../../assets/comingsoon.png" width="30%" />
+      </div>
+      <h2 class="text-center">Coming Soon</h2>
+      <h5 style="text-align: center">
+        Soon your checklist will have all the required data insights. Stay
+        tuned!!
+      </h5>
+    </div>
+  </div>
+</div>
+<div class="main-content" *ngIf="!isCheckList">
+  <div class="container-fluid d-flex justify-content-end designreportcard">
+    <div class="col-12 pt-4">
+      <div class="row d-flex justify-content-between">
+        <div class="col-3" style="visibility:hidden">
+          <mat-form-field appearance="outline" style="width: 100%;">
+            <div class="row">
+              <div class="col">
+                <input matInput placeholder="search by company name" [ngModel]="searchdata"
+                  (ngModelChange)="filterusers($event)" />
+              </div>
+              <div style="margin-right: 15px" [ngStyle]="
+                  hidesearchicon
+                    ? { visibility: 'hidden' }
+                    : { visibility: 'visible' }
+                ">
+                <img src="../../../../../assets/search.svg" width="15px" height="15px" />
+              </div>
+            </div>
+          </mat-form-field>
+        </div>
+        <div class="col-9 d-flex justify-content-end align-items-start">
+          <div class="col-7">
+            <nav mat-tab-nav-bar class="cust-mat-tab-nav-bar">
+              <a mat-tab-link *ngFor="let link of links" (click)="onTabChange(link)" [active]="activeLink == link.value"
+                [disabled]="link.disabled"> {{link.name}} </a>
+            </nav>
+          </div>
+          <div class="col-2">
+            <button class="primarymatbutton" mat-raised-button (click)="openAddChecklistDialog()">
+              + Add
+            </button>
+          </div>
+
+
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="container-fluid fixed-height mt-4">
+    <div class="col-12" *ngIf="isoverviewloading">
+      <div class="row" *ngIf="!placeholder">
+        <div class="col-xl-3 col-md-4 col-sm-12 mb-3" *ngFor="let number of [0, 1, 2]">
+          <div class="col-12 skeletoncard pl-3 py-3 mr-3 mb-3">
+            <div class="row mb-3">
+              <div class="col-6">
+                <ngx-skeleton-loader class="d-block" [theme]="{
+                    'border-radius': '5px',
+                    'background-color': '#DBDAD9',
+                    height: '8px',
+                    width: '80%',
+                    'margin-bottom': '0px'
+                  }">
+                </ngx-skeleton-loader>
+              </div>
+              <div class="col-6 d-flex justify-content-end pt-2">
+                <img src="../../../../../assets/disable-Edit.svg" width="15px" height="15px" class="mr-2" />
+                <img src="../../../../../assets/delete.svg" width="15px" height="15px" />
+              </div>
+            </div>
+            <ngx-skeleton-loader class="d-block" [theme]="{
+                'border-radius': '5px',
+                'background-color': '#DBDAD9',
+                height: '8px',
+                width: '15%',
+                'margin-top': '40px',
+                'margin-bottom': '0px'
+              }">
+            </ngx-skeleton-loader>
+            <div class="row">
+              <div class="col-6">
+                <ngx-skeleton-loader class="d-block" [theme]="{
+                    'border-radius': '5px',
+                    'background-color': '#DBDAD9',
+                    height: '8px',
+                    width: '60%',
+                    'margin-bottom': '0px'
+                  }">
+                </ngx-skeleton-loader>
+              </div>
+              <div class="col-6">
+                <ngx-skeleton-loader class="d-block" [theme]="{
+                    'border-radius': '5px',
+                    'background-color': '#DBDAD9',
+                    height: '8px',
+                    width: '60%',
+                    'margin-bottom': '0px',
+                    'margin-left': '40px'
+                  }">
+                </ngx-skeleton-loader>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-12 " *ngIf="!isoverviewloading">
+      <div class="qualitylistScroll" infiniteScroll [infiniteScrollDistance]="0.5" [scrollWindow]="false"
+        [infiniteScrollThrottle]="100" (scrolled)="onScroll()">
+        <div class="row">
+          <div class="col-12 d-flex justify-content-center align-items-center"
+            *ngIf="placeholder && qualitychecklistdata.length == 0">
+            <img src="../../../../../assets/Report-Work Status Placholder.jpg" width="500px" height="312px" alt="" />
+          </div>
+          <div class="col-xl-3 col-md-4 col-sm-12 float-left" *ngFor="let user of checklistfilterdata; let i =index">
+            <div class="col-12 detail-card bg-white mb-3 p-1" style=" border-radius: 8px;">
+              <div class="card-body" style="padding: 10px 10px 10px 10px;">
+                <div class="row">
+                  <div class="col-8">
+                    <p class="card-title capitalize mb-0" style="font-weight: 600; word-break: break-all">
+                      {{ user.clientname }}
+                    </p>
+                  </div>
+                  <div class="col-4 d-flex justify-content-end">
+                    <img src="../../../../../assets/editnew.svg" width="15px" height="15px"
+                      (click)="editClientCheckList(user)" class="cursor-pointer mr-2" matTooltip="Edit"
+                      [matTooltipPosition]="'below'" />
+                    <img src="../../../../../assets/deletenew.svg" width="15px" height="15px" (click)="
+                      deleteClientCheckList(
+                        user.id,
+                        user.clientname,
+                        user.clientid.id
+                      )
+                    " class="cursor-pointer" matTooltip="Delete" [matTooltipPosition]="'below'" />
+                  </div>
+                </div>
+                <div class="mt-10" style="margin-top: 40px">
+                  <p style="font-weight: 500">
+                    {{ user.criteriascount != null ? user.criteriascount : 0 }}
+                  </p>
+                </div>
+                <div class="row mt-10">
+                  <div class="col-4" style="color: #757575; font-size: 12px">
+                    Criteria
+                  </div>
+                  <div class="col-8 d-flex justify-content-end">
+                    <p class="mb-0" style="font-weight: 600; font-size: 12px">
+                      {{ user.updated_at | date: "d MMMM y" }}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <mat-spinner *ngIf="scrolling" style="position: absolute; left: 49%; bottom: 1% " [diameter]="35"></mat-spinner>
+      </div>
+    </div>
+  </div>
+</div>

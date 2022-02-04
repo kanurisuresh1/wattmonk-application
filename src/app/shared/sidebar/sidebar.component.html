@@ -1,0 +1,307 @@
+<div class="sidebar">
+  <div class="sidebar-wrapper sideBar">
+    <div class="user">
+      <img style="height: 35px; width: 40px" src="../../../assets/wattMonk_whiteTone.svg" />
+    </div>
+    <div class="w-100" style="margin-top: 10px" *ngIf="issidebarloading">
+      <div class="stepper d-flex flex-column col-15" *ngFor="let number of [0, 1, 2]">
+        <div class="d-flex">
+          <div class="col activitycol mt-2 ml-0 mr-0" style="background-color: #edc773">
+            <div class="d-flex justify-content-center">
+              <ngx-skeleton-loader class="d-block" [theme]="{
+                  'border-radius': '5px',
+                  'background-color': '#EDDBB2',
+                  height: '25px',
+                  width: '30px',
+                  'margin-top': '5px'
+                }">
+              </ngx-skeleton-loader>
+            </div>
+
+            <ngx-skeleton-loader class="d-block" [theme]="{
+                'border-radius': '5px',
+                'background-color': '#EDDBB2',
+                height: '8px',
+                width: '100%'
+              }">
+            </ngx-skeleton-loader>
+          </div>
+        </div>
+      </div>
+    </div>
+    <ul class="nav" style="margin-bottom: 70%">
+      <li routerLinkActive="active" *ngFor="let menuitem of menuItems" class="nav-item">
+        <a [routerLink]="[menuitem.path]" (click)="handleSidebarRouteClick(menuitem)"
+          *ngIf="menuitem.type === 'link' && menuitem.title == 'Customer'" class="nav-link"
+          joyrideStep="prelimhighlight" stepPosition="right" [prevTemplate]="prevButton" title="Customer Probability"
+          text="Consolidated dashboard for all your site assessment and sales proposal requests with real-time status tracking.">
+          <img class="material-icons" style="height: 15px; width: 15px" src="../../assets/{{ menuitem.icontype }}" />
+          <p>{{ menuitem.title }}</p>
+        </a>
+        <a [routerLink]="[menuitem.path]" (click)="handleSidebarRouteClick(menuitem)"
+          *ngIf="menuitem.type === 'link' && menuitem.title == 'Prelim'" class="nav-link" joyrideStep="prelimhighlight"
+          stepPosition="right" [prevTemplate]="prevButton" title="Site Assessments & Sales Proposals"
+          text="Consolidated dashboard for all your site assessment and sales proposal requests with real-time status tracking.">
+          <img class="material-icons" src="../../assets/{{ menuitem.icontype }}" />
+          <p>
+            {{ menuitem.title }}
+            <span class="matBadge" *ngIf="!isClient && newprelimscounts > 0">{{
+              newprelimscounts
+              }}</span>
+            <span class="matBadge" *ngIf="!isClient && newprelimscounts > 99">99+</span>
+          </p>
+        </a>
+        <a [routerLink]="[menuitem.path]" (click)="handleSidebarRouteClick(menuitem)" *ngIf="
+            menuitem.type === 'link' &&
+            (menuitem.title == 'Permit' || menuitem.title == 'Design')
+          " class="nav-link" joyrideStep="permithighlight" stepPosition="right" [prevTemplate]="prevButton"
+          title="Permit" [text]="[joyridetext]">
+          <img class="material-icons" src="../../assets/{{ menuitem.icontype }}" />
+          <p>
+            {{ menuitem.title }}
+            <span class="matBadge" *ngIf="!isClient && newpermitscounts > 0">{{
+              newpermitscounts
+              }}</span>
+            <span class="matBadge" *ngIf="!isClient && newpermitscounts > 99">99+</span>
+          </p>
+        </a>
+        <a [routerLink]="[menuitem.path]" (click)="handleSidebarRouteClick(menuitem)"
+          *ngIf="menuitem.type === 'link' && menuitem.title == 'PEStamp'" class="nav-link"
+          joyrideStep="pestamphighlight" stepPosition="right" [prevTemplate]="prevButton" title="PE Stamps"
+          text="Consolidated dashboard for all your PE Stamp requests with real-time status tracking.">
+          <img class="material-icons" src="../../assets/{{ menuitem.icontype }}" />
+          <p>
+            {{ menuitem.title }}
+            <span class="matBadge" *ngIf="!isClient && newpestampcounts > 0">{{
+              newpestampcounts
+              }}</span>
+            <span class="matBadge" *ngIf="!isClient && newpestampcounts > 99">99+</span>
+          </p>
+        </a>
+        <a [routerLink]="[menuitem.path]" (click)="handleSidebarRouteClick(menuitem)"
+          *ngIf="menuitem.type === 'link' && menuitem.title === 'Inbox'" class="nav-link" joyrideStep="inboxhighlight"
+          stepPosition="right" [prevTemplate]="prevButton" title="Stay Connected"
+          text="Consolidated dashboard for your group and individual chats.">
+          <img class="material-icons" src="../../assets/{{ menuitem.icontype }}" />
+          <p>
+            {{ menuitem.title }}
+            <span class="matBadge" *ngIf="genericService.totalcountsforallgroups > 0">{{
+              genericService.totalcountsforallgroups }}</span>
+            <span class="matBadge" *ngIf="genericService.totalcountsforallgroups > 99">99+</span>
+          </p>
+        </a>
+        <a [routerLink]="[menuitem.path]" (click)="handleSidebarRouteClick(menuitem)"
+          *ngIf="menuitem.type === 'link' && menuitem.title === 'Survey'" class="nav-link" joyrideStep="surveyhighlight"
+          stepPosition="right" [prevTemplate]="prevButton" title="Surveys"
+          text="Consolidated dashboard for all your survey requests with real-time status tracking.">
+          <img class="material-icons" src="../../assets/{{ menuitem.icontype }}" />
+          <p>{{ menuitem.title }}</p>
+        </a>
+        <a [routerLink]="[menuitem.path]" (click)="handleSidebarRouteClick(menuitem)" *ngIf="
+            menuitem.type === 'link' &&
+            menuitem.title === 'Team' &&
+            (loggedinUser.role.id === 6 ||
+              loggedinUser.role.id === 7 ||
+              loggedinUser.role.id === 4 ||
+              loggedinUser.role.id === 5 ||
+              loggedinUser.role.id === pesuperadminroleid || loggedinUser.role.id === successmanagerroleid) &&
+            loggedinUser.parent.usertype === 'company'
+          " class="nav-link" joyrideStep="teamhighlight" stepPosition="right" [prevTemplate]="prevButton" title="Team"
+          text="Build your team by adding new users and assigning them required roles.">
+          <img class="material-icons" src="../../assets/{{ menuitem.icontype }}" />
+          <p>{{ menuitem.title }}</p>
+        </a>
+        <!-- <a [routerLink]="[menuitem.path]" (click)="handleSidebarRouteClick(menuitem)"  *ngIf="menuitem.type === 'link' && menuitem.title === 'Apps' && (loggedinUser.role.id === 6 || loggedinUser.role.id === 7)&& loggedinUser.parent.usertype==='company'" class="nav-link"
+                joyrideStep="apphighlight" stepPosition="right" [prevTemplate]="prevButton" title="Apps" text="Apps allows you to use wattmonk's system with the help of APIs.">
+                    <img class="material-icons" src="../../assets/{{menuitem.icontype}}">
+                     <p>{{menuitem.title}}
+        
+                    </p>
+                </a> -->
+        <a [routerLink]="[menuitem.path]" (click)="handleSidebarRouteClick(menuitem)" *ngIf="
+            menuitem.type === 'link' &&
+            menuitem.title === 'Coupons' &&
+            loggedinUser.role.id === 4
+          " class="nav-link" joyrideStep="couponshighlight" stepPosition="right" [prevTemplate]="prevButton"
+          title="Coupons">
+          <img class="material-icons" src="../../assets/{{ menuitem.icontype }}" />
+          <p>{{ menuitem.title }}</p>
+        </a>
+        <!-- <a [routerLink]="[menuitem.path]" (click)="handleSidebarRouteClick(menuitem)"  *ngIf="menuitem.type === 'link' && menuitem.title === 'Qualitycheck' &&   (loggedinUser.role.id === roles.TeamHead || loggedinUser.role.id === roles.Admin || loggedinUser.role.id === roles.SuperAdmin)" class="nav-link"
+                joyrideStep="checklisthighlight" stepPosition="right" [prevTemplate]="prevButton" title="Checklist">
+                    <img class="material-icons" src="../../assets/{{menuitem.icontype}}">
+                     <p>{{menuitem.title}}
+        
+                    </p>
+                </a> -->
+        <a [routerLink]="[menuitem.path]" (click)="handleSidebarRouteClick(menuitem)" *ngIf="
+            menuitem.type === 'link' &&
+            menuitem.title === 'Report' &&
+            (loggedinUser.parent.id === 232 || loggedinUser.role.id === 4)
+          " class="nav-link" joyrideStep="reporthighlight" stepPosition="right" [prevTemplate]="prevButton"
+          title="Report">
+          <img class="material-icons" src="../../assets/{{ menuitem.icontype }}" />
+          <p>{{ menuitem.title }}</p>
+        </a>
+
+        <a [routerLink]="[menuitem.path]" (click)="handleSidebarRouteClick(menuitem)" *ngIf="
+            menuitem.type === 'link' &&
+            menuitem.title === 'Broadcast' &&
+            (loggedinUser.parent.id === 232 || loggedinUser.role.id === 4)
+          " class="nav-link" joyrideStep="announcementhighlight" stepPosition="right" [prevTemplate]="prevButton"
+          title="Broadcast">
+          <img class="material-icons" src="../../assets/{{ menuitem.icontype }}" />
+          <p>{{ menuitem.title }}</p>
+        </a>
+
+        <a [routerLink]="[menuitem.path]" (click)="handleSidebarRouteClick(menuitem)" *ngIf="
+            menuitem.type === 'link' &&
+            menuitem.title === 'Clients' &&
+            (loggedinUser.parent.id === 232 || loggedinUser.role.id === 4)
+          " class="nav-link" joyrideStep="clienthighlight" stepPosition="right" [prevTemplate]="prevButton"
+          title="Clients">
+          <img class="material-icons" src="../../assets/{{ menuitem.icontype }}" />
+          <p>{{ menuitem.title }}</p>
+        </a>
+        <a [routerLink]="[menuitem.path]" (click)="handleSidebarRouteClick(menuitem)" *ngIf="
+            menuitem.type === 'link' &&
+            menuitem.title === 'Statistics' &&
+            (loggedinUser.parent.id === 232 || loggedinUser.role.id === 4)
+          " class="nav-link" joyrideStep="statisticshiglight" stepPosition="right" [prevTemplate]="prevButton"
+          title="Statistics">
+          <img class="material-icons" src="../../assets/{{ menuitem.icontype }}" />
+          <p>{{ menuitem.title }}</p>
+        </a>
+        <!-- <a [routerLink]="[menuitem.path]"  (click)="handleSidebarRouteClick(menuitem)"  *ngIf="menuitem.type==='link' && menuitem.title==='Qualitycheck'" joyrideStep="checklisthighlight" stepPosition="right" [prevTemplate]="prevButton" class="nav-link" title="CheckList">
+                    <img class="material-icons" src="./../assets/{{menuitem.icontype}}">
+                    <p>{{ menuitem.title}}</p>
+                </a> -->
+
+        <a [routerLink]="[menuitem.path]" (click)="handleSidebarRouteClick(menuitem)"
+          *ngIf="menuitem.type === 'link' && menuitem.title === 'Archive'" class="nav-link"
+          joyrideStep="dashboardhighlight" stepPosition="right" [nextTemplate]="nextButton" title="Archive"
+          text="Here you get an overview of all your requests, along with those that needs your attention.">
+          <img class="material-icons" src="../../assets/{{ menuitem.icontype }}" />
+          <p>{{ menuitem.title }}</p>
+        </a>
+        <a [routerLink]="[menuitem.path]" (click)="handleSidebarRouteClick(menuitem)"
+          *ngIf="menuitem.type === 'link' && menuitem.title === 'Orders' " class="nav-link"
+          joyrideStep="dashboardhighlight" stepPosition="right" [nextTemplate]="nextButton" title="Orders"
+          text="Here you get an overview of all your requests, along with those that needs your attention.">
+          <img class="material-icons" src="../../assets/{{menuitem.icontype}}">
+          <p>{{menuitem.title}}</p>
+        </a>
+
+        <a [routerLink]="[menuitem.path]" (click)="handleSidebarRouteClick(menuitem)"
+          *ngIf="menuitem.type === 'link' && menuitem.title === 'Checklist / Guidelines'" class="nav-link"
+          joyrideStep="dashboardhighlight" stepPosition="right" [nextTemplate]="nextButton"
+          title="Checklist / Guidelines"
+          text="Here you get an overview of all your requests, along with those that needs your attention.">
+          <img class="material-icons" src="../../assets/{{menuitem.icontype}}">
+          <p style="line-height: 12px; margin-top: 9px; white-space: break-spaces; text-align: center;">
+            {{menuitem.title}}</p>
+        </a>
+
+        <!-- <a [routerLink]="[menuitem.path]" (click)="handleSidebarRouteClick(menuitem)"
+          *ngIf="displayDasboardMenu(menuitem)" class="nav-link" joyrideStep="dashboardhighlight" stepPosition="right"
+          [nextTemplate]="nextButton" title="Dashboard"
+          text="Here you get an overview of all your requests, along with those that needs your attention.">
+          <img class="material-icons" src="../../assets/{{menuitem.icontype}}">
+          <p>{{menuitem.title}}</p>
+        </a> -->
+
+        <!-- <a
+          [routerLink]="[menuitem.path]"
+          (click)="handleSidebarRouteClick(menuitem)"
+          *ngIf="menuitem.type === 'link' && menuitem.title === 'Orders'"
+          class="nav-link"
+          joyrideStep="dashboardhighlight"
+          stepPosition="right"
+          [nextTemplate]="nextButton"
+          title="Orders"
+          text="Here you get an overview of all your requests, along with those that needs your attention."
+        >
+          <img
+            class="material-icons"
+            src="../../assets/{{ menuitem.icontype }}"
+          />
+          <p>{{ menuitem.title }}</p>
+        </a> -->
+
+        <a [routerLink]="[menuitem.path]" (click)="handleSidebarRouteClick(menuitem)"
+          *ngIf="displayDasboardMenu(menuitem)" class="nav-link" joyrideStep="dashboardhighlight" stepPosition="right"
+          [nextTemplate]="nextButton" title="Dashboard"
+          text="Here you get an overview of all your requests, along with those that needs your attention.">
+          <img class="material-icons" src="../../assets/{{ menuitem.icontype }}" />
+          <p>{{ menuitem.title }}</p>
+        </a>
+
+        <a [routerLink]="[menuitem.path]" (click)="handleSidebarRouteClick(menuitem)"
+          *ngIf="menuitem.type === 'link' && menuitem.title === 'Entries'" class="nav-link"
+          joyrideStep="dashboardhighlight" stepPosition="right" [nextTemplate]="nextButton" title="Entries"
+          text="Here you get an overview of all your requests, along with those that needs your attention.">
+          <img class="material-icons" src="../../assets/{{ menuitem.icontype }}" />
+          <p>{{ menuitem.title }}</p>
+        </a>
+      </li>
+      <!-- <li routerLinkActive="active" class="nav-item">
+           
+            </li> -->
+
+      <!-- <li routerLinkActive="active" class="nav-item">
+                <a [routerLink]="[ withrawalItem.path]"  (click)="handleSidebarRouteClick(withrawalItem)"  *ngIf="loggedinUser.role.id === 4" class="nav-link">
+                    <img class="material-icons" src="./../assets/{{withrawalItem.icontype}}">
+                    <p>{{ withrawalItem.title}}</p>
+                </a>
+
+            </li> -->
+
+      <!-- <li routerLinkActive="active" class="nav-item">
+
+                <a [routerLink]="[couponsItem.path]" (click)="handleSidebarRouteClick(couponsItem)" *ngIf="loggedinUser.role.id === 4" class="nav-link">
+                    <img class="material-icons" src="../../assets/{{couponsItem.icontype}}">
+                    <p>{{couponsItem.title}}</p>
+                </a>
+
+            </li> -->
+      <!-- <li routerLinkActive="active" class="nav-item">
+
+                <a [routerLink]="[pestampItem.path]" (click)="handleSidebarRouteClick(pestampItem)" *ngIf="loggedinUser.role.id === 3 && loggedinUser.parent.id !=232" class="nav-link">
+                    <img class="material-icons" src="./../assets/{{pestampItem.icontype}}">
+                    <p>{{pestampItem.title}}</p>
+                </a>
+
+            </li> -->
+      <!-- <li routerLinkActive="active" class="nav-item">
+                <a [routerLink]="[ transactionItem.path]" (click)="handleSidebarRouteClick( transactionItem)" *ngIf="(loggedinUser.role.id === 6 )&& loggedinUser.usertype==='company'" class="nav-link">
+                    <img class="material-icons" src="./../assets/{{ transactionItem.icontype}}">
+                    <p>{{ transactionItem.title}}</p>
+                </a>
+
+            </li> -->
+
+      <!-- <li routerLinkActive="active" class="nav-item">
+                <a [routerLink]="[teamItem.path]" (click)="handleSidebarRouteClick(teamItem)" *ngIf="(loggedinUser.role.id === 6 || loggedinUser.role.id === 7 )&& loggedinUser.parent.usertype==='company'" class="nav-link" joyrideStep="teamhighlight" stepPosition="right" [prevTemplate]="prevButton" title="Team" text="Build your team by adding new users and assigning them required roles.">
+                    <img class="material-icons" src="../../assets/{{teamItem.icontype}}">
+                    <p>{{teamItem.title}}</p>
+                </a>
+            </li> -->
+    </ul>
+  </div>
+</div>
+
+<ng-template #nextButton>
+  <button mat-raised-button style="font-size: 12px; color: #000; background-color: #fff">
+    Next
+  </button>
+</ng-template>
+<ng-template #prevButton>
+  <button mat-raised-button style="font-size: 12px; color: #000; background-color: #fff">
+    Previous
+  </button>
+</ng-template>
+<ng-template #doneButton>
+  <button mat-raised-button style="font-size: 12px; color: #000; background-color: #fff">
+    Done
+  </button>
+</ng-template>

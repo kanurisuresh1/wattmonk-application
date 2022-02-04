@@ -1,0 +1,226 @@
+<!-- <div *ngIf="isLoading" class="overlay">
+  <mat-progress-bar class="commonprogressbar" mode="indeterminate"></mat-progress-bar>
+</div> -->
+<div class="fullscreen loginbackground">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-xs-10 col-sm-8 col-md-8 col-lg-6">
+        <div class="row brandrow">
+          <p>
+            <img src="../../../assets/wattmonklogo.png" width="40px" />WattMonk
+          </p>
+        </div>
+        <div class="row">
+          <div class="col">
+            <mat-card class="registercard mat-elevation-z7">
+              <mat-card-header>
+                <mat-card-title>Create your WattMonk account</mat-card-title>
+              </mat-card-header>
+              <mat-card-content>
+                <form
+                  class="registerform"
+                  [formGroup]="registerForm"
+                  (keydown.enter)="onRegister()"
+                >
+                  <div class="row">
+                    <div class="col">
+                      <div class="form-group">
+                        <p>First Name*</p>
+                        <mat-form-field class="fullwidth" appearance="outline">
+                          <input
+                            matInput
+                            placeholder="eg. john"
+                            [formControl]="firstname"
+                          />
+                          <mat-error *ngIf="firstname.invalid">{{
+                            getErrorMessage(firstname)
+                          }}</mat-error>
+                        </mat-form-field>
+                      </div>
+                    </div>
+                    <div class="col">
+                      <div class="form-group">
+                        <p>Last Name*</p>
+                        <mat-form-field class="fullwidth" appearance="outline">
+                          <input
+                            matInput
+                            placeholder="eg. doe"
+                            [formControl]="lastname"
+                            required
+                          />
+                          <mat-error *ngIf="lastname.invalid">{{
+                            getErrorMessage(lastname)
+                          }}</mat-error>
+                        </mat-form-field>
+                      </div>
+                    </div>
+                    <div class="col">
+                      <div class="form-group">
+                        <p>Email*</p>
+                        <mat-form-field class="fullwidth" appearance="outline">
+                          <input
+                            matInput
+                            placeholder="eg. pat@example.com"
+                            [formControl]="workemail"
+                          />
+                          <mat-error *ngIf="workemail.invalid">{{
+                            getErrorMessage(workemail)
+                          }}</mat-error>
+                        </mat-form-field>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col">
+                      <div class="form-group">
+                        <p>Phone Number*</p>
+                        <mat-form-field class="fullwidth" appearance="outline">
+                          <input
+                            matInput
+                            placeholder="eg. 98775534220"
+                            [formControl]="phone"
+                            (keypress)="NumbersOnly($event)"
+                          />
+                          <mat-error *ngIf="phone.invalid">{{
+                            getErrorMessage(phone)
+                          }}</mat-error>
+                        </mat-form-field>
+                      </div>
+                    </div>
+                    <div class="col">
+                      <div class="form-group">
+                        <!-- <p>Country*</p>
+                        <mat-form-field class="fullwidth" appearance="outline">
+                          <input type="text" matInput [matAutocomplete]="auto" [formControl]="countrycontrol">
+                          <mat-error *ngIf="countrycontrol.invalid">{{getErrorMessage(countrycontrol)}}</mat-error>
+                          <mat-autocomplete #auto="matAutocomplete">
+                            <mat-option *ngFor="let country of filteredOptions | async" [value]="country.country"
+                              (onSelectionChange)="setSelectedCountry(country)">{{country.country}}</mat-option>
+                          </mat-autocomplete>
+                        </mat-form-field>
+                         -->
+
+                        <p class="mb-0">Country*</p>
+                        <mat-form-field appearance="outline" class="fullwidth">
+                          <mat-select
+                            [formControl]="countrycontrol"
+                            style="font-size: 0.8em"
+                            disableOptionCentering
+                          >
+                            <mat-option
+                              *ngFor="let country of filteredOptions | async"
+                              [value]="country"
+                            >
+                              {{ country.country }}</mat-option
+                            >
+                          </mat-select>
+                          <mat-error *ngIf="countrycontrol.invalid">{{
+                            getErrorMessage(countrycontrol)
+                          }}</mat-error>
+                        </mat-form-field>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-lg-7">
+                      <div class="form-group">
+                        <mat-checkbox
+                          #agreementcheckbox
+                          class="mediumtext"
+                          [formControl]="agreement"
+                          (change)="OnAgreeTerms(agreementcheckbox)"
+                          required
+                          >I agree to platform's
+                          <a
+                            href=" https://www.wattmonk.net/service-agreement "
+                            tabindex="-1"
+                            style="color: #edc773"
+                            >Terms</a
+                          >
+                          and
+                          <a
+                            href="https://www.wattmonk.net/privacy-policy"
+                            tabindex="-1"
+                            style="color: #edc773"
+                            >Privacy policy</a
+                          >
+                        </mat-checkbox>
+                        <mat-error
+                          style="font-size: 0.66em"
+                          *ngIf="agreement.invalid && display"
+                        >
+                          {{ getErrorMessage(agreement) }}
+                        </mat-error>
+                      </div>
+                    </div>
+                  </div>
+                </form>
+              </mat-card-content>
+              <mat-card-actions>
+                <div class="form-group">
+                  <button
+                    type="submit"
+                    mat-raised-button
+                    (click)="onRegister()"
+                    class="fullwidth"
+                  >
+                    Sign up
+                  </button>
+                </div>
+              </mat-card-actions>
+            </mat-card>
+          </div>
+        </div>
+        <div class="row mt-3">
+          <div class="col">
+            <p class="registrationtext">
+              Already registered?
+              <a class="actionlink" [routerLink]="['/auth/login']">Sign in</a>
+            </p>
+          </div>
+        </div>
+      </div>
+      <!-- <div class="col-4">
+        <mat-card class="blockcard">
+          <img class="blockimages float-left" style="margin-top: 17px;" src="../../../assets/no-credit-card-allowed.png">
+          <h5 class="" style="margin: 10px;">Absolutely Free No hidden charges, No credit card required.</h5>
+        </mat-card>
+        <mat-card class="blockcard">
+          <img class="clockimages float-left" style="margin-top: 17px;" src="../../../assets/clock (1).png">
+          <h5 class="" style="margin: 10px;" >Instant & Easy Get access instantly. No downloads required.</h5>
+        </mat-card>
+        <mat-card class="blockcard">
+          <img class="infinityimages pt-2 float-left" style="margin-top: 17px;" src="../../../assets/infinity.png">
+          <h5 class="" style="margin: 10px;" >Unlimited Features Access all the features of the platform.</h5>
+        </mat-card>
+        <mat-card class="blockcard">
+          <img class="cloudimages float-left" style="margin-top: 17px;" src="../../../assets/cloud-storage.png">
+          <h5 class="" style="margin: 10px;">Your data Enjoy your free trial with your own company's data.</h5>
+        </mat-card>
+      </div> -->
+    </div>
+    <div class="row footerrow fullwidth">
+      <div class="col text-center">
+        <span class="mt-2"
+          >&copy; 2020 WattMonk Private Limited. All Rights Reserved. and
+          "Service Agreement"</span
+        >
+        <div class="row justify-content-center">
+          <a
+            href="https://www.wattmonk.com/privacy-policy"
+            target="_blank"
+            class="greyactionlink"
+            style="border-right: 1px solid #697386"
+            >Privacy Policy</a
+          >
+          <a
+            href="https://www.wattmonk.com/service-agreement"
+            target="_blank"
+            class="greyactionlink"
+            >Terms & Agreement</a
+          >
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,656 @@
+<!-- <div *ngIf="isLoading" class="overlay">
+  <mat-progress-bar class="commonprogressbar" mode="indeterminate"></mat-progress-bar>
+</div> -->
+<!-- <div *ngIf="isLoading " class="progress-loader">
+  <div id="pause" class="d-flex align-items-center justify-content-center">
+    <div id="spinner" style="background: #fff;padding: 35px;border-radius: 5px;" class="row">
+        <div class="loading-message bkgg col-9">Please wait</div>
+        <div class="col-3" style="top: 5px;">
+          <div class="snippet" data-title=".dot-pulse">
+            <div class="stage">
+              <div class="dot-pulse"></div>
+            </div>
+          </div>
+        </div>
+    </div>
+  </div>
+  </div> -->
+<div class="main-content">
+  <!-- filter and search bar -->
+  <div class="designreportcard dropdown-card" style="height: 50px">
+    <div
+      *ngIf="
+        !isoverviewloading &&
+        (this.allArchives.length || isfilterdata || issearchdata)
+      "
+    >
+      <mat-form-field appearance="outline">
+        <input
+          matInput
+          placeholder="Search"
+          [(ngModel)]="searcharchive"
+          (keydown.enter)="searchinputArchives('tablesearch', $event)"
+        />
+        <span style="position: relative; top: -3px; margin-right: 7px" matSuffix
+          ><img
+            src="../../../../../assets/search.svg"
+            width="15px"
+            height="15px"
+            *ngIf="!searcharchive.length"
+          />
+          <img
+            src="../../../../../assets/close (1).svg"
+            width="15px"
+            height="14px"
+            (click)="clearinputfields('tablesearch')"
+            class="cursor"
+            *ngIf="searcharchive.length"
+          />
+        </span>
+      </mat-form-field>
+
+      <mat-select
+        #matselect
+        [multiple]="false"
+        class="form-control filtermenu"
+        panelClass="archivefilter archivecheckbox"
+        placeholder="Filter"
+        style="border: 0px; width: 7rem"
+      >
+        <div class="col-12 d-flex px-0">
+          <div class="col-6">
+            <div class="col-12">
+              <p class="heading mb-0">Archive Option</p>
+              <div class="d-flex justify-content-between">
+                <mat-option
+                  *ngFor="let item of archiveTypeOption; let i = index"
+                  (click)="this.matselect.open()"
+                  style="cursor: default !important"
+                >
+                  <span class="content greycolor mb-0">{{ item.name }}</span>
+                  <mat-checkbox
+                    type="checkbox"
+                    (change)="filtercheckboxvalues('archive option', i)"
+                    [checked]="item.checked"
+                    class="ml-2"
+                  ></mat-checkbox>
+                </mat-option>
+              </div>
+            </div>
+            <hr class="line" />
+            <div class="col-12 mt-3">
+              <p class="heading mb-0">Task status</p>
+              <div class="d-flex justify-content-between">
+                <mat-option
+                  *ngFor="let item of taskStatusOption; let i = index"
+                  (click)="this.matselect.open()"
+                  style="cursor: default !important"
+                >
+                  <span class="content greycolor mb-0 mr-2">{{
+                    item.name
+                  }}</span>
+                  <mat-checkbox
+                    type="checkbox"
+                    (change)="filtercheckboxvalues('status', i)"
+                    [checked]="item.checked"
+                  ></mat-checkbox>
+                </mat-option>
+              </div>
+            </div>
+            <hr class="line" />
+            <div class="col-12 mt-3" style="height: 97px">
+              <p class="heading mb-0">Task Type</p>
+              <div
+                class="row d-flex justify-content-between mr-0"
+                style="margin-left: 1px"
+              >
+                <mat-option
+                  *ngFor="let item of taskTypeOption; let i = index"
+                  (click)="this.matselect.open()"
+                  style="cursor: default !important"
+                >
+                  <span class="content greycolor mb-0">{{ item.name }}</span>
+                  <mat-checkbox
+                    type="checkbox"
+                    class="ml-2"
+                    [checked]="item.checked"
+                    (change)="filtercheckboxvalues('type', i)"
+                  ></mat-checkbox>
+                </mat-option>
+              </div>
+            </div>
+            <hr class="line" />
+            <div class="col-12 mt-3">
+              <p class="heading mb-0">Date</p>
+              <div class="d-flex pt-2">
+                <div class="col-6 d-flex px-0">
+                  <div class="col-3 px-0">
+                    <img
+                      src="../../../../../assets/calendar.svg"
+                      width="25px"
+                      (click)="frompicker.open()"
+                      class="cursor mt-2"
+                    />
+                    <mat-form-field appearance="none">
+                      <input
+                        matInput
+                        [max]="today"
+                        [matDatepicker]="frompicker"
+                        style="display: none"
+                        (dateChange)="calenderValue('startdate', $event.value)"
+                      />
+                      <mat-datepicker #frompicker></mat-datepicker>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-9 px-0">
+                    <p class="content greycolor mb-0">From Date</p>
+                    <p class="content greycolor mb-0">{{ fromDate }}</p>
+                  </div>
+                </div>
+                <div class="col-6 d-flex px-0">
+                  <div class="col-3 px-0">
+                    <img
+                      src="../../../../../assets/calendar.svg"
+                      width="25px"
+                      (click)="picker.open()"
+                      class="cursor mt-2"
+                    />
+                    <mat-form-field appearance="none">
+                      <input
+                        matInput
+                        [max]="today"
+                        [min]="fromDate"
+                        [matDatepicker]="picker"
+                        style="display: none"
+                        (dateChange)="calenderValue('enddate', $event.value)"
+                      />
+                      <mat-datepicker #picker></mat-datepicker>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-9 px-0">
+                    <p class="content greycolor mb-0">To Date</p>
+                    <p class="content greycolor mb-0">{{ toDate }}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="col-12" *ngIf="loggedInUser.parent.id == 232">
+              <p class="heading mb-0">Company Name</p>
+              <mat-form-field appearance="outline" class="fullwidth">
+                <input
+                  matInput
+                  placeholder="search company"
+                  [(ngModel)]="searchcompany"
+                  (keydown.Enter)="searchinputArchives('company', $event)"
+                  (keydown)="$event.stopPropagation()"
+                />
+                <img
+                  src="../../../../../assets/close (1).svg"
+                  width="15px"
+                  height="14px"
+                  matSuffix
+                  (click)="clearinputfields('designer')"
+                  style="position: relative; top: -5px"
+                  *ngIf="searchcompany.length"
+                  class="cursor"
+                />
+              </mat-form-field>
+              <div
+                infiniteScroll
+                [infiniteScrollDistance]="0.5"
+                [scrollWindow]="false"
+                [infiniteScrollThrottle]="100"
+                (scrolled)="oncompanyScroll()"
+                class="w-100 overflow mb-2"
+                *ngIf="companyList.length"
+              >
+                <mat-option
+                  *ngFor="let item of companyList; let i = index"
+                  (click)="this.matselect.open()"
+                  style="cursor: default !important"
+                >
+                  <p class="content greycolor mb-0">
+                    {{
+                      item.company
+                        ? item.company
+                        : (item.firstname | titlecase) +
+                          " " +
+                          (item.lastname | titlecase)
+                    }}
+                  </p>
+                  <mat-checkbox
+                    type="checkbox"
+                    [checked]="item.checked"
+                    style="position: absolute; left: 90%"
+                    (change)="filtercheckboxvalues('company', i)"
+                  ></mat-checkbox>
+                </mat-option>
+              </div>
+              <div class="text-center overflow" *ngIf="!companyList.length">
+                <p
+                  style="font-size: 12px; font-weight: 500"
+                  class="text-secondary pt-2 ml-1"
+                >
+                  No Company found
+                </p>
+              </div>
+            </div>
+            <hr class="line" *ngIf="loggedInUser.parent.id == 232" />
+            <div class="col-12 mt-3">
+              <p class="heading mb-0">Creator</p>
+              <mat-form-field appearance="outline" class="fullwidth">
+                <input
+                  matInput
+                  placeholder="search"
+                  [ngModel]="searchdata"
+                  (ngModelChange)="searchinputArchives('designer', $event)"
+                  (keydown)="$event.stopPropagation()"
+                />
+              </mat-form-field>
+              <div
+                infiniteScroll
+                [infiniteScrollDistance]="0.5"
+                [scrollWindow]="false"
+                [infiniteScrollThrottle]="100"
+                (scrolled)="oncompanyScroll()"
+                class="w-100 overflow mb-2"
+                [ngClass]="
+                  loggedInUser.parent.id == 232
+                    ? 'overflow'
+                    : 'creator-overflow'
+                "
+              >
+                <mat-option
+                  *ngFor="let item of designerList; let i = index"
+                  (click)="this.matselect.open()"
+                  style="cursor: default !important"
+                >
+                  <p class="content greycolor mb-0">
+                    {{ item.firstname | titlecase }}
+                    {{ item.lastname | titlecase }}
+                  </p>
+                  <mat-checkbox
+                    type="checkbox"
+                    [checked]="item.checked"
+                    style="position: absolute; left: 90%"
+                    (change)="filtercheckboxvalues('designer', i)"
+                  ></mat-checkbox>
+                </mat-option>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          class="col-12 d-flex justify-content-between align-items-center mt-2"
+          style="padding: 0px 30px"
+        >
+          <p class="heading mb-0 cursor" (click)="clearcheckboxvalues('all')">
+            Clear All
+          </p>
+          <button
+            mat-raised-button
+            (click)="filtercheckboxvalues('submit', '1')"
+          >
+            Submit
+          </button>
+        </div>
+      </mat-select>
+    </div>
+  </div>
+
+  <!-- main-content UI -->
+  <div
+    class="container-fluid archive-checkbox-margin archivecheckbox"
+    *ngIf="!placeholder"
+  >
+    <div class="col-12 mt-5 border" *ngIf="isoverviewloading">
+      <div
+        class="row bg-light"
+        style="height: 60px; display: flex; align-items: center"
+      >
+        <div class="col d-flex justify-content-center">
+          <ngx-skeleton-loader
+            count="1"
+            class="d-block"
+            [theme]="{
+              'border-radius': '8px',
+              'background-color': '#DBDAD8',
+              height: '12px',
+              width: '55px',
+              'margin-top': '1.1rem'
+            }"
+          >
+          </ngx-skeleton-loader>
+        </div>
+        <div class="col d-flex justify-content-center">
+          <ngx-skeleton-loader
+            count="1"
+            class="d-block"
+            [theme]="{
+              'border-radius': '8px',
+              'background-color': '#DBDAD8',
+              height: '12px',
+              width: '55px',
+              'margin-top': '1.1rem'
+            }"
+          >
+          </ngx-skeleton-loader>
+        </div>
+        <div class="col d-flex justify-content-center">
+          <ngx-skeleton-loader
+            count="1"
+            class="d-block"
+            [theme]="{
+              'border-radius': '8px',
+              'background-color': '#DBDAD8',
+              height: '12px',
+              width: '55px',
+              'margin-top': '1.1rem'
+            }"
+          >
+          </ngx-skeleton-loader>
+        </div>
+        <div class="col d-flex justify-content-center">
+          <ngx-skeleton-loader
+            count="1"
+            class="d-block"
+            [theme]="{
+              'border-radius': '8px',
+              'background-color': '#DBDAD8',
+              height: '12px',
+              width: '55px',
+              'margin-top': '1.1rem'
+            }"
+          >
+          </ngx-skeleton-loader>
+        </div>
+        <div class="col d-flex justify-content-center">
+          <ngx-skeleton-loader
+            count="1"
+            class="d-block"
+            [theme]="{
+              'border-radius': '8px',
+              'background-color': '#DBDAD8',
+              height: '12px',
+              width: '55px',
+              'margin-top': '1.1rem'
+            }"
+          >
+          </ngx-skeleton-loader>
+        </div>
+        <div class="col d-flex justify-content-center">
+          <ngx-skeleton-loader
+            count="1"
+            class="d-block"
+            [theme]="{
+              'border-radius': '8px',
+              'background-color': '#DBDAD8',
+              height: '12px',
+              width: '55px',
+              'margin-top': '1.1rem'
+            }"
+          >
+          </ngx-skeleton-loader>
+        </div>
+      </div>
+      <div
+        class="row bg-white"
+        *ngFor="let number of [0, 1]"
+        style="height: 60px; display: flex; align-items: center"
+      >
+        <div class="col d-flex justify-content-center">
+          <ngx-skeleton-loader
+            count="1"
+            class="d-block"
+            [theme]="{
+              'border-radius': '8px',
+              'background-color': '#DBDAD8',
+              height: '12px',
+              width: '55px',
+              'margin-top': '1.1rem'
+            }"
+          >
+          </ngx-skeleton-loader>
+        </div>
+        <div class="col d-flex justify-content-center">
+          <ngx-skeleton-loader
+            count="1"
+            class="d-block"
+            [theme]="{
+              'border-radius': '8px',
+              'background-color': '#DBDAD8',
+              height: '12px',
+              width: '55px',
+              'margin-top': '1.1rem'
+            }"
+          >
+          </ngx-skeleton-loader>
+        </div>
+        <div class="col d-flex justify-content-center">
+          <ngx-skeleton-loader
+            count="1"
+            class="d-block"
+            [theme]="{
+              'border-radius': '8px',
+              'background-color': '#DBDAD8',
+              height: '12px',
+              width: '55px',
+              'margin-top': '1.1rem'
+            }"
+          >
+          </ngx-skeleton-loader>
+        </div>
+        <div class="col d-flex justify-content-center">
+          <ngx-skeleton-loader
+            count="1"
+            class="d-block"
+            [theme]="{
+              'border-radius': '8px',
+              'background-color': '#DBDAD8',
+              height: '12px',
+              width: '55px',
+              'margin-top': '1.1rem'
+            }"
+          >
+          </ngx-skeleton-loader>
+        </div>
+        <div class="col d-flex justify-content-center">
+          <ngx-skeleton-loader
+            count="1"
+            class="d-block"
+            [theme]="{
+              'border-radius': '8px',
+              'background-color': '#DBDAD8',
+              height: '12px',
+              width: '55px',
+              'margin-top': '1.1rem'
+            }"
+          >
+          </ngx-skeleton-loader>
+        </div>
+        <div class="col d-flex justify-content-center">
+          <ngx-skeleton-loader
+            count="1"
+            class="d-block"
+            [theme]="{
+              'border-radius': '8px',
+              'background-color': '#DBDAD8',
+              height: '12px',
+              width: '55px',
+              'margin-top': '1.1rem'
+            }"
+          >
+          </ngx-skeleton-loader>
+        </div>
+      </div>
+    </div>
+    <div
+      infiniteScroll
+      [infiniteScrollDistance]="1"
+      [scrollWindow]="false"
+      [infiniteScrollThrottle]="100"
+      (scrolled)="ontableScroll()"
+      class="archivetable"
+      *ngIf="!isoverviewloading"
+      [ngClass]="selectedArchives.length ? 'unarchivescroll' : 'archivescroll'"
+    >
+      <table mat-table [dataSource]="allArchives" class="table-spacing">
+        <ng-container matColumnDef="checked">
+          <th mat-header-cell *matHeaderCellDef class="w-5"></th>
+          <td *matCellDef="let element; let i = index" class="w-5">
+            <mat-checkbox
+              type="checkbox"
+              [ngClass]="[
+                selectedArchives.length
+                  ? 'checkedcheckbox'
+                  : 'uncheckedcheckbox'
+              ]"
+              [checked]="element.checked"
+              (change)="selectAllArchives('single', element, i)"
+            ></mat-checkbox>
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="Id">
+          <th mat-header-cell *matHeaderCellDef class="heading w-5">S.No</th>
+          <td *matCellDef="let element; let i = index" class="w-5">
+            {{ i + 1 }}
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef class="heading w-15">
+            Task Name
+          </th>
+          <td *matCellDef="let element" class="w-15">
+            {{ element.taskname | titlecase }}
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="type">
+          <th mat-header-cell *matHeaderCellDef class="heading w-10">
+            Task Type
+          </th>
+          <td *matCellDef="let element" class="w-10">
+            {{ element.tasktype | titlecase }}
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="company">
+          <th mat-header-cell *matHeaderCellDef class="heading w-15">
+            Customer Name
+          </th>
+          <td *matCellDef="let element" class="w-15">
+            {{ element.companyname | titlecase }}
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="address">
+          <th mat-header-cell *matHeaderCellDef class="heading w-20">
+            Address
+          </th>
+          <td *matCellDef="let element" class="w-20">
+            {{ element.address ? (element.address | titlecase) : "----" }}
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="email">
+          <th mat-header-cell *matHeaderCellDef class="heading w-20">Email</th>
+          <td *matCellDef="let element" class="w-20">
+            {{ element.email | titlecase }}
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="updated_at">
+          <th mat-header-cell *matHeaderCellDef class="heading w-10">
+            Delivered At
+          </th>
+          <td *matCellDef="let element" class="w-10">
+            {{
+              element.deliverydate
+                ? (element.deliverydate | date: "dd MMM yy")
+                : "----"
+            }}
+          </td>
+        </ng-container>
+
+        <tr
+          mat-header-row
+          class="table-hr"
+          *matHeaderRowDef="tableColumns"
+        ></tr>
+        <tr
+          mat-row
+          *matRowDef="let row; columns: tableColumns"
+          class="tbody-hover"
+          [ngClass]="[row.checked == 'true' ? 'bg-yellow' : 'bg-white']"
+        ></tr>
+      </table>
+      <mat-spinner
+        *ngIf="scrolling"
+        style="position: absolute; left: 49%; bottom: 1%"
+        [diameter]="35"
+      ></mat-spinner>
+    </div>
+
+    <!-- bottom selection tool start -->
+    <div class="container-fluid py-3" *ngIf="selectedArchives.length">
+      <div class="row">
+        <div class="col-6 d-flex justify-content-between align-items-center">
+          <div>
+            <p class="mb-0">{{ selectedArchives.length }} Item selected</p>
+            <p class="mb-0 cursor" (click)="selectAllArchives('all', 'all', 0)">
+              <span
+                ><input
+                  type="checkbox"
+                  [checked]="selectedArchives.length == allArchives.length"
+                  class="mr-2 cursor" /></span
+              >Select all items
+            </p>
+          </div>
+          <button
+            style="font-weight: 600"
+            mat-raised-button
+            (click)="tounarchivedesign()"
+          >
+            Move to deliver
+          </button>
+        </div>
+        <div class="col-6 d-flex justify-content-end align-items-center">
+          <button
+            style="font-weight: 600"
+            class="mr-2"
+            mat-raised-button
+            *ngIf="selectedArchives.length == 1"
+            style="display: none"
+          >
+            Download
+          </button>
+          <button
+            style="font-weight: 600"
+            class="mr-5"
+            mat-raised-button
+            style="display: none"
+          >
+            Send for Revision
+          </button>
+          <img
+            src="../../../../../assets/close (1).svg"
+            width="22px"
+            height="21px"
+            (click)="clearselectedarchives()"
+            class="cursor"
+          />
+        </div>
+      </div>
+    </div>
+    <!-- bottom selection tool end -->
+  </div>
+
+  <!-- placeholdar -->
+  <div
+    class="container-fluid d-flex justify-content-center align-items-center"
+    style="height: 70vh"
+    *ngIf="placeholder"
+  >
+    <img
+      src="../../../../../assets/Report-Work Status Placholder.jpg"
+      width="700px"
+    />
+  </div>
+</div>

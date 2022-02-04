@@ -1,0 +1,853 @@
+<div class="main-content">
+  <!-- <div *ngIf="isLoading" class="overlay">
+    <mat-progress-bar class="commonprogressbar" mode="indeterminate"></mat-progress-bar>
+  </div> -->
+  <div class="container">
+    <div class="topactionbar">
+      <button class="primarymatbutton" mat-raised-button (click)="openAddSurveyDialog()">
+        + Survey
+      </button>
+    </div>
+    <div class="row mt-4 designoverviewsection widthClass designmaintabs">
+      <mat-tab-group mat-stretch-tabs style="width: 99%" (selectedTabChange)="maintabchange($event)">
+        <mat-tab>
+          <ng-template matTabLabel>
+            <div class="condesignoverviewbutton">
+              <img src="../../../../../assets/inprogress.svg" />
+              <h1 *ngIf="inprogress < 0">
+                <ngx-skeleton-loader [theme]="{
+                    'border-radius': '5px',
+                    height: '32px',
+                    width: '32px',
+                    'background-color': '#EDDBB2',
+                    position: 'absolute',
+                    top: '16px',
+                    right: '0px'
+                  }">
+                </ngx-skeleton-loader>
+              </h1>
+              <h1 class="conoverviewvalue" *ngIf="inprogress >= 0">
+                {{ inprogress }}
+              </h1>
+              <h4 style="font-size: 0.7rem">Pending</h4>
+            </div>
+          </ng-template>
+          <div class="mt-4 innertabs">
+            <div *ngIf="isinprogresssurveyslistloading">
+              <div *ngFor="let number of [0, 1, 2]">
+                <div class="row">
+                  <div class="col-10">
+                    <ngx-skeleton-loader [theme]="{
+                        'margin-top': '4px',
+                        'margin-bottom': '0px',
+                        'border-radius': '4px',
+                        height: '15px',
+                        width: '60px',
+                        'background-color': '#EDDBB2'
+                      }">
+                    </ngx-skeleton-loader>
+                    <ngx-skeleton-loader [theme]="{
+                        'margin-top': '16px',
+                        'border-radius': '4px',
+                        'margin-bottom': '0px',
+                        height: '15px',
+                        'background-color': '#EDDBB2'
+                      }">
+                    </ngx-skeleton-loader>
+                    <ngx-skeleton-loader [theme]="{
+                        'border-radius': '4px',
+                        'margin-bottom': '0px',
+                        height: '15px',
+                        'background-color': '#EDDBB2'
+                      }">
+                    </ngx-skeleton-loader>
+                  </div>
+                  <div class="col">
+                    <ngx-skeleton-loader [theme]="{
+                        'margin-top': '4px',
+                        'border-radius': '4px',
+                        height: '24px',
+                        width: '24px',
+                        'background-color': '#EDDBB2'
+                      }">
+                    </ngx-skeleton-loader>
+                    <ngx-skeleton-loader [theme]="{
+                        'margin-top': '4px',
+                        'margin-left': '8px',
+                        'border-radius': '4px',
+                        height: '24px',
+                        width: '24px',
+                        'background-color': '#EDDBB2'
+                      }">
+                    </ngx-skeleton-loader>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col">
+                    <ngx-skeleton-loader [theme]="{
+                        'margin-top': '16px',
+                        'margin-bottom': '0px',
+                        'border-radius': '8px',
+                        height: '26px',
+                        width: '50px',
+                        'background-color': '#EDDBB2'
+                      }">
+                    </ngx-skeleton-loader>
+                    <ngx-skeleton-loader [theme]="{
+                        'margin-top': '16px',
+                        'margin-left': '8px',
+                        'margin-bottom': '0px',
+                        'border-radius': '8px',
+                        height: '26px',
+                        width: '50px',
+                        'background-color': '#EDDBB2'
+                      }">
+                    </ngx-skeleton-loader>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <cdk-virtual-scroll-viewport itemSize="50" class="listitems-viewport"
+              *ngIf="inprogresssurveyslist.length > 0">
+              <div class="surveyitemrow" *cdkVirtualFor="let surveygroup of inprogresssurveyslist">
+                <p class="survey-dt">{{ surveygroup.date }}</p>
+                <mat-card [ngClass]="[i % 2 == 0 ? 'itemcard even' : 'itemcard odd']"
+                  *ngFor="let survey of surveygroup.records; let i = index" (click)="fetchSurveyDetails(survey)">
+                  <mat-card-header>
+                    <div class="row align-items-center headerrow">
+                      <div class="col-10 headercol">
+                        <mat-card-title style="font-size: 0.9em">{{ survey.name }}
+                          <span class="chipdetail ml-1" *ngIf="isClient">{{
+                            survey.status | titlecase
+                            }}</span>
+                          <span class="chipdetail ml-1" style="background-color: #1289a7"
+                            *ngIf="survey.status == 'created'">Unassigned</span>
+                          <span class="chipdetail ml-1" style="background-color: #3c78d8"
+                            *ngIf="survey.status == 'assigned'">{{ survey.status | titlecase }}</span>
+                          <span class="chipdetail ml-1" style="background-color: rgb(109, 187, 26)"
+                            *ngIf="survey.status == 'completed'">{{ survey.status | titlecase }}</span>
+                          <span class="chipdetail ml-1" style="background-color: rgb(246, 77, 10)"
+                            *ngIf="survey.isoverdue">Overdue</span>
+                        </mat-card-title>
+                      </div>
+                      <div class="col headercol">
+                        <button class="float-right" mat-icon-button (click)="activitybarToggle(survey, $event)">
+                          <img src="../../../../../assets/activitylist.png" width="24px" />
+                        </button>
+                        <button *ngIf="
+                            survey.unreadmessagecount == 0 ||
+                            survey.unreadmessagecount == null
+                          " class="float-right" mat-icon-button (click)="onChatButtonClick(survey, $event)">
+                          <img src="../../../../../assets/chat.svg" width="24px" />
+                        </button>
+                        <button *ngIf="survey.unreadmessagecount > 0" class="float-right" mat-icon-button
+                          (click)="onChatButtonClick(survey, $event)">
+                          <img src="../../../../../assets/newchat.svg" width="24px" />
+                        </button>
+                      </div>
+                    </div>
+                  </mat-card-header>
+                  <mat-card-content>
+                    <div class="row contentrow">
+                      <div class="col-8 contentcol">
+                        <a class="actiondetail" href="mailto:{{ survey.email }}" (click)="$event.stopPropagation()">{{
+                          survey.email }}</a>
+                        <a class="actiondetail" href="tel:{{ survey.phonenumber }}"
+                          (click)="$event.stopPropagation()">{{ survey.phonenumber }}</a>
+                        <a class="actiondetail" href="https://maps.google.com/?q={{ survey.address }}" target="_blank"
+                          (click)="$event.stopPropagation()">{{ survey.address }}</a>
+                      </div>
+                      <div class="col-4 contentcol">
+                        <p class="timedetail">{{ survey.formattedtime }}</p>
+                        <!--  <p class="assigneedetails">Assigned to</p>
+                        <p class="assigneedetails" style="font-weight: 600;">{{survey.assignedto.firstname}}
+                          {{survey.assignedto.lastname}}</p> -->
+                      </div>
+                    </div>
+                    <p class="silentdetail">
+                      Updated {{ survey.formattedupdatedat }}
+                    </p>
+                  </mat-card-content>
+                  <mat-card-footer>
+                    <div class="row footerrow align-items-center">
+                      <div class="col-8 footercol">
+                        <div class="row align-items-center">
+                          <p class="chipdetail ml-1">
+                            {{ survey.formattedjobtype }}
+                          </p>
+                          <p class="chipdetail ml-1">
+                            {{ survey.source | titlecase }}
+                          </p>
+                        </div>
+                      </div>
+                      <div class="col-4 footercol">
+                        <button (click)="startSurvey($event)" class="prominentbutton float-right" mat-button>
+                          Start Survey
+                        </button>
+                      </div>
+                    </div>
+                  </mat-card-footer>
+                </mat-card>
+              </div>
+            </cdk-virtual-scroll-viewport>
+            <p class="listplaceholder" *ngIf="inprogresssurveyslist.length == 0">
+              No In progress Survey Found
+            </p>
+          </div>
+        </mat-tab>
+        <mat-tab>
+          <ng-template matTabLabel>
+            <div class="condesignoverviewbutton">
+              <img src="../../../../../assets/completed.svg" />
+              <h1 *ngIf="completed < 0">
+                <ngx-skeleton-loader [theme]="{
+                    'border-radius': '5px',
+                    height: '32px',
+                    width: '32px',
+                    'background-color': '#EDDBB2',
+                    position: 'absolute',
+                    top: '16px',
+                    right: '0px'
+                  }">
+                </ngx-skeleton-loader>
+              </h1>
+              <h1 class="conoverviewvalue" *ngIf="completed >= 0">
+                {{ completed }}
+              </h1>
+              <h4 style="font-size: 0.7rem">Completed</h4>
+            </div>
+          </ng-template>
+          <div class="mt-4 innertabs">
+            <div *ngIf="iscompletedsurveyslistloading">
+              <div *ngFor="let number of [0, 1, 2]">
+                <div class="row">
+                  <div class="col-10">
+                    <ngx-skeleton-loader [theme]="{
+                        'margin-top': '4px',
+                        'margin-bottom': '0px',
+                        'border-radius': '4px',
+                        height: '15px',
+                        width: '60px',
+                        'background-color': '#EDDBB2'
+                      }">
+                    </ngx-skeleton-loader>
+                    <ngx-skeleton-loader [theme]="{
+                        'margin-top': '16px',
+                        'border-radius': '4px',
+                        'margin-bottom': '0px',
+                        height: '15px',
+                        'background-color': '#EDDBB2'
+                      }">
+                    </ngx-skeleton-loader>
+                    <ngx-skeleton-loader [theme]="{
+                        'border-radius': '4px',
+                        'margin-bottom': '0px',
+                        height: '15px',
+                        'background-color': '#EDDBB2'
+                      }">
+                    </ngx-skeleton-loader>
+                  </div>
+                  <div class="col">
+                    <ngx-skeleton-loader [theme]="{
+                        'margin-top': '4px',
+                        'border-radius': '4px',
+                        height: '24px',
+                        width: '24px',
+                        'background-color': '#EDDBB2'
+                      }">
+                    </ngx-skeleton-loader>
+                    <ngx-skeleton-loader [theme]="{
+                        'margin-top': '4px',
+                        'margin-left': '8px',
+                        'border-radius': '4px',
+                        height: '24px',
+                        width: '24px',
+                        'background-color': '#EDDBB2'
+                      }">
+                    </ngx-skeleton-loader>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col">
+                    <ngx-skeleton-loader [theme]="{
+                        'margin-top': '16px',
+                        'margin-bottom': '0px',
+                        'border-radius': '8px',
+                        height: '26px',
+                        width: '50px',
+                        'background-color': '#EDDBB2'
+                      }">
+                    </ngx-skeleton-loader>
+                    <ngx-skeleton-loader [theme]="{
+                        'margin-top': '16px',
+                        'margin-left': '8px',
+                        'margin-bottom': '0px',
+                        'border-radius': '8px',
+                        height: '26px',
+                        width: '50px',
+                        'background-color': '#EDDBB2'
+                      }">
+                    </ngx-skeleton-loader>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <cdk-virtual-scroll-viewport itemSize="50" class="designlistitems-viewport"
+              *ngIf="completedsurveyslist.length > 0">
+              <div class="surveyitemrow" *cdkVirtualFor="let surveygroup of completedsurveyslist">
+                <p class="survey-dt">{{ surveygroup.date }}</p>
+                <mat-card [ngClass]="[i % 2 == 0 ? 'itemcard even' : 'itemcard odd']"
+                  *ngFor="let survey of surveygroup.records; let i = index" (click)="fetchSurveyDetails(survey)">
+                  <mat-card-header>
+                    <div class="row align-items-center headerrow">
+                      <div class="col-10 headercol">
+                        <mat-card-title style="font-size: 0.9em">{{ survey.name }}
+                          <span class="chipdetail ml-1" *ngIf="isClient">{{
+                            survey.status | titlecase
+                            }}</span>
+                          <span class="chipdetail ml-1" style="background-color: #1289a7"
+                            *ngIf="survey.status == 'created'">Unassigned</span>
+                          <span class="chipdetail ml-1" style="background-color: #3c78d8"
+                            *ngIf="survey.status == 'assigned'">{{ survey.status | titlecase }}</span>
+                          <span class="chipdetail ml-1" style="background-color: rgb(109, 187, 26)"
+                            *ngIf="survey.status == 'completed'">{{ survey.status | titlecase }}</span>
+                          <span class="chipdetail ml-1" style="background-color: rgb(246, 77, 10)"
+                            *ngIf="survey.isoverdue">Overdue</span>
+                        </mat-card-title>
+                      </div>
+                      <div class="col headercol">
+                        <button class="float-right" mat-icon-button (click)="activitybarToggle(survey, $event)">
+                          <img src="../../../../../assets/activitylist.png" width="16px" />
+                        </button>
+                        <button *ngIf="
+                            survey.unreadmessagecount == 0 ||
+                            survey.unreadmessagecount == null
+                          " class="float-right" mat-icon-button (click)="onChatButtonClick(survey, $event)">
+                          <img src="../../../../../assets/chat.svg" width="24px" />
+                        </button>
+                        <button *ngIf="survey.unreadmessagecount > 0" class="float-right" mat-icon-button
+                          (click)="onChatButtonClick(survey, $event)">
+                          <img src="../../../../../assets/newchat.svg" width="24px" />
+                        </button>
+                      </div>
+                    </div>
+                  </mat-card-header>
+                  <mat-card-content>
+                    <div class="row contentrow">
+                      <div class="col-8 contentcol">
+                        <a class="actiondetail" href="mailto:{{ survey.email }}" (click)="$event.stopPropagation()">{{
+                          survey.email }}</a>
+                        <a class="actiondetail" href="tel:{{ survey.phonenumber }}"
+                          (click)="$event.stopPropagation()">{{ survey.phonenumber }}</a>
+                        <a class="actiondetail" href="https://maps.google.com/?q={{ survey.address }}" target="_blank"
+                          (click)="$event.stopPropagation()">{{ survey.address }}</a>
+                      </div>
+                      <div class="col-4 contentcol">
+                        <p class="timedetail">{{ survey.formattedtime }}</p>
+                        <!-- <p class="assigneedetails">Assigned to</p>
+                        <p class="assigneedetails" style="font-weight: 600;">{{survey.assignedto.firstname}}
+                          {{survey.assignedto.lastname}}</p> -->
+                      </div>
+                    </div>
+                    <p class="silentdetail">
+                      Updated {{ survey.formattedupdatedat }}
+                    </p>
+                  </mat-card-content>
+                  <mat-card-footer>
+                    <div class="row footerrow align-items-center">
+                      <div class="col-8 footercol">
+                        <div class="row align-items-center">
+                          <p class="chipdetail ml-1">
+                            {{ survey.formattedjobtype }}
+                          </p>
+                          <p class="chipdetail ml-1">
+                            {{ survey.source | titlecase }}
+                          </p>
+                        </div>
+                      </div>
+                      <div class="col-4 footercol"></div>
+                    </div>
+                  </mat-card-footer>
+                </mat-card>
+              </div>
+            </cdk-virtual-scroll-viewport>
+            <p class="listplaceholder" *ngIf="completedsurveyslist.length == 0">
+              No Survey Requests Completed
+            </p>
+          </div>
+        </mat-tab>
+        <!-- <mat-tab>
+          <ng-template matTabLabel>
+            <div class="condesignoverviewbutton">
+              <img src="../../../../../assets/inreview.svg" />
+              <h1 *ngIf="inreview < 0">
+                <ngx-skeleton-loader
+                  [theme]="{ 'border-radius': '5px', height: '32px', width: '32px', 'background-color': '#EDDBB2', 'position': 'absolute', 'top': '16px', 'right': '0px' }">
+                </ngx-skeleton-loader>
+              </h1>
+              <h1 class="conoverviewvalue" *ngIf="completed >= 0">
+                {{ inreview }}</h1>
+                <h4>In Review</h4> 
+            </div>
+          </ng-template>
+          <div class="mt-4 innertabs">
+               
+            <cdk-virtual-scroll-viewport itemSize="50" class="designlistitems-viewport"
+              *ngIf="inreviewsurveyslist.length > 0">
+                <mat-card [ngClass]="[ i%2 == 0 ? 'itemcard even' : 'itemcard odd']"
+                *cdkVirtualFor="let survey of inreviewsurveys; let i = index" (click)="fetchSurveyDetails(survey, listtypes.INREVIEW)">
+                  <mat-card-header>
+                    <div class="row align-items-center headerrow">
+                      <div class="col-10 headercol">
+                        <mat-card-title>{{survey.name}}
+                          <span class="chipdetail ml-1"
+                                  *ngIf="isClient">{{survey.currentstatus}}</span>
+                                <span class="chipdetail ml-1" style="background-color: #1289A7;"
+                                  *ngIf="survey.status == 'created'">Unassigned</span>
+                                <span class="chipdetail ml-1" style="background-color: #3c78d8;"
+                                  *ngIf="survey.status == 'assigned'">{{survey.currentstatus}}</span>
+                                <span class="chipdetail ml-1" style="background-color: rgb(109, 187, 26);"
+                                  *ngIf="survey.status == 'completed'">{{survey.currentstatus}}</span>
+                                <span class="chipdetail ml-1" style="background-color: rgb(246, 77, 10);"
+                                  *ngIf="survey.isoverdue">Overdue</span>
+                        </mat-card-title>
+                      </div>
+                      <div class="col headercol">
+                        <button class="float-right" mat-icon-button (click)="activitybarToggle(survey, $event)"><img
+                            src="../../../../../assets/activitylist.svg" width="16px" /></button>
+                        <button class="float-right" mat-icon-button (click)="onChatButtonClick(survey, $event)"><img
+                            src="../../../../../assets/chat.svg" width="24px" /></button>
+                        
+                      </div>
+                    </div>
+                  </mat-card-header>
+                  <mat-card-content>
+                    <div class="row contentrow">
+                      <div class="col-8 contentcol">
+                        <a class="actiondetail" href="mailto:{{survey.email}}"
+                          (click)="$event.stopPropagation()">{{ survey.email }}</a>
+                        <a class="actiondetail" href="tel:{{survey.phonenumber}}"
+                          (click)="$event.stopPropagation()">{{ survey.phonenumber }}</a>
+                        <a class="actiondetail" href="https://maps.google.com/?q={{survey.address}}"
+                          target="_blank" (click)="$event.stopPropagation()">{{ survey.address }}</a>
+                      </div>
+                      <div class="col-4 contentcol">
+                        <p class="timedetail">{{ survey.formattedtime }}</p>
+                        <p class="assigneedetails">Assigned to</p>
+                        <p class="assigneedetails" style="font-weight: 600;">{{survey.assignedto.firstname}}
+                          {{survey.assignedto.lastname}}</p>
+                      </div>
+                    </div>
+                    <p class="silentdetail">Updated {{ survey.formattedupdatedat }}
+                    </p>
+                  </mat-card-content>
+                  <mat-card-footer>
+                    <div class="row footerrow align-items-center">
+                      <div class="col-8 footercol">
+                        <div class="row align-items-center">
+                          <p class="chipdetail ml-1">{{survey.formattedjobtype}}</p>
+                          <p class="chipdetail ml-1">{{survey.source | titlecase}}</p>
+                        </div>
+                      </div>
+                      <div class="col-4 footercol">
+                      </div>
+                    </div>
+                  </mat-card-footer>
+                </mat-card>
+              
+            </cdk-virtual-scroll-viewport>
+            <p class="listplaceholder" *ngIf="inreviewsurveyslist.length == 0">No Inreview Survey Requests </p>
+           </div>
+        </mat-tab>
+        <mat-tab>
+          <ng-template matTabLabel>
+            <div class="condesignoverviewbutton">
+              <img src="../../../../../assets/delivered.svg" />
+              <h1 *ngIf="delivered < 0">
+                <ngx-skeleton-loader
+                  [theme]="{ 'border-radius': '5px', height: '32px', width: '32px', 'background-color': '#EDDBB2', 'position': 'absolute', 'top': '16px', 'right': '0px' }">
+                </ngx-skeleton-loader>
+              </h1>
+              <h1 class="conoverviewvalue" *ngIf="completed >= 0">
+                {{ delivered }}</h1>
+                <h4>Delivered</h4> 
+            </div>
+          </ng-template>
+          <div class="mt-4 innertabs">
+               
+            <cdk-virtual-scroll-viewport itemSize="50" class="designlistitems-viewport"
+              *ngIf="deliveredsurveyslist.length > 0">
+                <mat-card [ngClass]="[ i%2 == 0 ? 'itemcard even' : 'itemcard odd']"
+                *cdkVirtualFor="let survey of deliveredsurveys; let i = index" (click)="fetchSurveyDetails(survey, listtypes.DELIVERED)">
+                  <mat-card-header>
+                    <div class="row align-items-center headerrow">
+                      <div class="col-10 headercol">
+                        <mat-card-title>{{survey.name}}
+                          <span class="chipdetail ml-1"
+                                  *ngIf="isClient">{{survey.currentstatus}}</span>
+                                <span class="chipdetail ml-1" style="background-color: #1289A7;"
+                                  *ngIf="survey.status == 'created'">Unassigned</span>
+                                <span class="chipdetail ml-1" style="background-color: #3c78d8;"
+                                  *ngIf="survey.status == 'assigned'">{{survey.currentstatus}}</span>
+                                <span class="chipdetail ml-1" style="background-color: rgb(109, 187, 26);"
+                                  *ngIf="survey.status == 'completed'">{{survey.currentstatus}}</span>
+                                <span class="chipdetail ml-1" style="background-color: rgb(246, 77, 10);"
+                                  *ngIf="survey.isoverdue">Overdue</span>
+                        </mat-card-title>
+                      </div>
+                      <div class="col headercol">
+                        <button class="float-right" mat-icon-button (click)="activitybarToggle(survey, $event)"><img
+                            src="../../../../../assets/activitylist.svg" width="16px" /></button>
+                        <button class="float-right" mat-icon-button (click)="onChatButtonClick(survey, $event)"><img
+                            src="../../../../../assets/chat.svg" width="24px" /></button>
+                        
+                      </div>
+                    </div>
+                  </mat-card-header>
+                  <mat-card-content>
+                    <div class="row contentrow">
+                      <div class="col-8 contentcol">
+                        <a class="actiondetail" href="mailto:{{survey.email}}"
+                          (click)="$event.stopPropagation()">{{ survey.email }}</a>
+                        <a class="actiondetail" href="tel:{{survey.phonenumber}}"
+                          (click)="$event.stopPropagation()">{{ survey.phonenumber }}</a>
+                        <a class="actiondetail" href="https://maps.google.com/?q={{survey.address}}"
+                          target="_blank" (click)="$event.stopPropagation()">{{ survey.address }}</a>
+                      </div>
+                      <div class="col-4 contentcol">
+                        <p class="timedetail">{{ survey.formattedtime }}</p>
+                        <p class="assigneedetails">Assigned to</p>
+                        <p class="assigneedetails" style="font-weight: 600;">{{survey.assignedto.firstname}}
+                          {{survey.assignedto.lastname}}</p>
+                      </div>
+                    </div>
+                    <p class="silentdetail">Updated {{ survey.formattedupdatedat }}
+                    </p>
+                  </mat-card-content>
+                  <mat-card-footer>
+                    <div class="row footerrow align-items-center">
+                      <div class="col-8 footercol">
+                        <div class="row align-items-center">
+                          <p class="chipdetail ml-1">{{survey.formattedjobtype}}</p>
+                          <p class="chipdetail ml-1">{{survey.source | titlecase}}</p>
+                        </div>
+                      </div>
+                      <div class="col-4 footercol">
+                      </div>
+                    </div>
+                  </mat-card-footer>
+                </mat-card>
+              
+            </cdk-virtual-scroll-viewport>
+            <p class="listplaceholder" *ngIf="deliveredsurveyslist.length == 0">No Survey Requests Delivered</p> 
+           </div>
+        </mat-tab> -->
+      </mat-tab-group>
+    </div>
+
+    <!--  <div class="surveypage container data-content" [hidden]="placeholder">
+        <div class="row">
+          <h4>Overview</h4>
+        </div>
+        <div class="row overviewsection">
+          <div class="col">
+            <button mat-button class="conoverviewbutton" (click)="gotoSection('inprogress')">
+              <img src="../../../../../assets/inprogress.svg" />
+              <h1>{{ inprogress }}</h1>
+              <h4>Survey Requests</h4>
+            </button>
+          </div>
+          
+          <div class="col">
+            <button mat-button class="conoverviewbutton" (click)="gotoSection('completed')">
+              <img src="../../../../../assets/completed.svg" />
+              <h1>{{ completed }}</h1>
+              <h4>Completed</h4>
+            </button>
+          </div>
+          <div class="col">
+            <button mat-button class="conoverviewbutton" (click)="gotoSection('inreview')">
+              <img src="../../../../../assets/inreview.svg" />
+              <h1>{{ inreview }}</h1>
+              <h4>In Review</h4>
+            </button>
+          </div>
+          <div class="col">
+            <button mat-button class="conoverviewbutton" (click)="gotoSection('delivered')">
+              <img src="../../../../../assets/delivered.svg" />
+              <h1>{{ delivered }}</h1>
+              <h4>Delivered</h4>
+            </button>
+          </div>
+        </div>
+       -->
+    <!-- <div class="row">
+         
+          <div class="col-6 listcolumn">
+            <mat-card class="listcard">
+              <mat-card-header>
+                <img mat-card-avatar src="../../../../../assets/inprogress.svg" />
+                <mat-card-title>New Requests</mat-card-title>
+              </mat-card-header>
+              <mat-card-content>
+                <cdk-virtual-scroll-viewport itemSize="50" class="listitems-viewport" *ngIf="inprogresssurveyslist.length > 0">
+                  <div class="surveyitemrow" *cdkVirtualFor="let surveygroup of inprogresssurveyslist">
+                    <p class="survey-dt">{{surveygroup.date}}</p>
+                  <mat-card [ngClass]="[ i%2 == 0 ? 'itemcard even' : 'itemcard odd']" *ngFor="let survey of surveygroup.records; let i = index" (click)="fetchSurveyDetails(survey, listtypes.INPROGRESS)">
+                    <mat-card-header>
+                      <div class="row align-items-center headerrow">
+                        <div class="col headercol">
+                          <mat-card-title>{{survey.name}}
+                            <span class="chipdetail ml-1"
+                                  *ngIf="isClient">{{survey.currentstatus}}</span>
+                                <span class="chipdetail ml-1" style="background-color: #1289A7;"
+                                  *ngIf="survey.status == 'created'">Unassigned</span>
+                                <span class="chipdetail ml-1" style="background-color: #3c78d8;"
+                                  *ngIf="survey.status == 'assigned'">{{survey.currentstatus}}</span>
+                                <span class="chipdetail ml-1" style="background-color: rgb(109, 187, 26);"
+                                  *ngIf="survey.status == 'completed'">{{survey.currentstatus}}</span>
+                                <span class="chipdetail ml-1" style="background-color: rgb(246, 77, 10);"
+                                  *ngIf="survey.isoverdue">Overdue</span>
+                          </mat-card-title>
+                        </div>
+                        <div class="col-4 headercol">
+                          <button class="float-right" mat-icon-button (click)="activitybarToggle(survey, $event)"><img src="../../../../../assets/activitylist.png" width="24px"/></button>
+                       
+                        </div>
+                      </div>
+                    </mat-card-header>
+                    <mat-card-content>
+                      <div class="row contentrow">
+                        <div class="col-8 contentcol">
+                          <a class="actiondetail" href="mailto:{{survey.email}}" (click)="$event.stopPropagation()">{{ survey.email }}</a>
+                          <a class="actiondetail" href="tel:{{survey.phonenumber}}" (click)="$event.stopPropagation()">{{ survey.phonenumber }}</a>
+                          <a class="actiondetail" href="https://maps.google.com/?q={{survey.address}}" target="_blank" (click)="$event.stopPropagation()">{{ survey.address }}</a>
+                        </div>
+                        <div class="col-4 contentcol">
+                          <p class="timedetail">{{ survey.formattedtime }}</p>
+                          <p class="assigneedetails">Assigned to</p>
+                          <p class="assigneedetails" style="font-weight: 600;">{{survey.assignedto.firstname}} {{survey.assignedto.lastname}}</p>
+                        </div>
+                      </div>
+                      <p class="silentdetail">Updated {{ survey.formattedupdatedat }}</p>
+                    </mat-card-content>
+                    <mat-card-footer>
+                      <div class="row footerrow align-items-center">
+                        <div class="col-8 footercol">
+                          <div class="row align-items-center">
+                            <p class="chipdetail">{{survey.createdby.company}}</p>
+                            <p class="chipdetail ml-1">{{survey.formattedjobtype}}</p>
+                            <p class="chipdetail ml-1">{{survey.source | titlecase}}</p>
+                          </div>
+                        </div>
+                        <div class="col-4 footercol">
+                        </div>
+                      </div>
+                    </mat-card-footer>
+                  </mat-card>
+                </div>
+                </cdk-virtual-scroll-viewport>
+                <p class="listplaceholder" *ngIf="inprogresssurveyslist.length == 0">No Survey Requests In Progress</p>
+              </mat-card-content>
+            </mat-card>
+          </div>
+         
+         
+          <div class="col-6 listcolumn">
+            <mat-card class="listcard">
+              <mat-card-header>
+                <img mat-card-avatar src="../../../../../assets/completed.svg" />
+                <mat-card-title>Completed</mat-card-title>
+              </mat-card-header>
+              <mat-card-content>
+                <cdk-virtual-scroll-viewport itemSize="50" class="listitems-viewport" *ngIf="completedsurveyslist.length > 0">
+                  <div class="surveyitemrow" *cdkVirtualFor="let surveygroup of completedsurveyslist">
+                    <p class="survey-dt">{{surveygroup.date}}</p>
+                  <mat-card [ngClass]="[ i%2 == 0 ? 'itemcard even' : 'itemcard odd']" *ngFor="let survey of surveygroup.records; let i = index" (click)="fetchSurveyDetails(survey, listtypes.COMPLETED)">
+                    <mat-card-header>
+                      <div class="row align-items-center headerrow">
+                        <div class="col headercol">
+                          <mat-card-title>{{survey.name}}
+                            <span class="chipdetail ml-1"
+                                  *ngIf="isClient">{{survey.currentstatus}}</span>
+                                <span class="chipdetail ml-1" style="background-color: #1289A7;"
+                                  *ngIf="survey.status == 'created'">Unassigned</span>
+                                <span class="chipdetail ml-1" style="background-color: #3c78d8;"
+                                  *ngIf="survey.status == 'assigned'">{{survey.currentstatus}}</span>
+                                <span class="chipdetail ml-1" style="background-color: rgb(109, 187, 26);"
+                                  *ngIf="survey.status == 'completed'">{{survey.currentstatus}}</span>
+                                <span class="chipdetail ml-1" style="background-color: rgb(246, 77, 10);"
+                                  *ngIf="survey.isoverdue">Overdue</span>
+                          </mat-card-title>
+                        </div>
+                      </div>
+                    </mat-card-header>
+                    <mat-card-content>
+                      <div class="row contentrow">
+                        <div class="col-8 contentcol">
+                          <a class="actiondetail" href="mailto:{{survey.email}}" (click)="$event.stopPropagation()">{{ survey.email }}</a>
+                          <a class="actiondetail" href="tel:{{survey.phonenumber}}" (click)="$event.stopPropagation()">{{ survey.phonenumber }}</a>
+                          <a class="actiondetail" href="https://maps.google.com/?q={{survey.address}}" target="_blank" (click)="$event.stopPropagation()">{{ survey.address }}</a>
+                        </div>
+                        <div class="col-4 contentcol">
+                          <p class="timedetail">{{ survey.formattedtime }}</p>
+                          <p class="assigneedetails">Assigned to</p>
+                          <p class="assigneedetails" style="font-weight: 600;">{{survey.assignedto.firstname}} {{survey.assignedto.lastname}}</p>
+                        </div>
+                      </div>
+                      <p class="silentdetail">Updated {{ survey.formattedupdatedat }}</p>
+                    </mat-card-content>
+                    <mat-card-footer>
+                      <div class="row footerrow align-items-center">
+                        <div class="col-8 footercol">
+                          <div class="row align-items-center">
+                            <p class="chipdetail">{{survey.createdby.company}}</p>
+                            <p class="chipdetail ml-1">{{survey.formattedjobtype}}</p>
+                            <p class="chipdetail ml-1">{{survey.source | titlecase}}</p>
+                          </div>
+                        </div>
+                        <div class="col-4 footercol">
+                        </div>
+                      </div>
+                    </mat-card-footer>
+                  </mat-card>
+                </div>
+                </cdk-virtual-scroll-viewport>
+                <p class="listplaceholder" *ngIf="completedsurveyslist.length == 0">No Survey Requests Completed</p>
+              </mat-card-content>
+            </mat-card>
+          </div>
+          
+          <div class="col-6 listcolumn">
+            <mat-card class="listcard">
+              <mat-card-header>
+                <img mat-card-avatar src="../../../../../assets/inreview.svg" />
+                <mat-card-title>In Review</mat-card-title>
+              </mat-card-header>
+              <mat-card-content>
+                <cdk-virtual-scroll-viewport itemSize="50" class="listitems-viewport" *ngIf="inreviewsurveyslist.length > 0">
+                  <div class="surveyitemrow" *cdkVirtualFor="let surveygroup of inreviewsurveyslist">
+                    <p class="survey-dt">{{surveygroup.date}}</p>
+                  <mat-card [ngClass]="[ i%2 == 0 ? 'itemcard even' : 'itemcard odd']" *ngFor="let survey of surveygroup.records; let i = index" (click)="fetchSurveyDetails(survey, listtypes.INREVIEW)">
+                    <mat-card-header>
+                      <div class="row align-items-center headerrow">
+                        <div class="col headercol">
+                          <mat-card-title>{{survey.name}}
+                            <span class="chipdetail ml-1"
+                                  *ngIf="isClient">{{survey.currentstatus}}</span>
+                                <span class="chipdetail ml-1" style="background-color: #1289A7;"
+                                  *ngIf="survey.status == 'created'">Unassigned</span>
+                                <span class="chipdetail ml-1" style="background-color: #3c78d8;"
+                                  *ngIf="survey.status == 'assigned'">{{survey.currentstatus}}</span>
+                                <span class="chipdetail ml-1" style="background-color: rgb(109, 187, 26);"
+                                  *ngIf="survey.status == 'completed'">{{survey.currentstatus}}</span>
+                                <span class="chipdetail ml-1" style="background-color: rgb(246, 77, 10);"
+                                  *ngIf="survey.isoverdue">Overdue</span>
+                          </mat-card-title>
+                        </div>
+                      </div>
+                    </mat-card-header>
+                    <mat-card-content>
+                      <div class="row contentrow">
+                        <div class="col-8 contentcol">
+                          <a class="actiondetail" href="mailto:{{survey.email}}" (click)="$event.stopPropagation()">{{ survey.email }}</a>
+                          <a class="actiondetail" href="tel:{{survey.phonenumber}}" (click)="$event.stopPropagation()">{{ survey.phonenumber }}</a>
+                          <a class="actiondetail" href="https://maps.google.com/?q={{survey.address}}" target="_blank" (click)="$event.stopPropagation()">{{ survey.address }}</a>
+                        </div>
+                        <div class="col-4 contentcol">
+                          <p class="timedetail">{{ survey.formattedtime }}</p>
+                          <p class="assigneedetails">Assigned to</p>
+                          <p class="assigneedetails" style="font-weight: 600;">{{survey.reviewassignedto.firstname}} {{survey.reviewassignedto.lastname}}</p>
+                        </div>
+                      </div>
+                      <p class="silentdetail">Updated {{ survey.formattedupdatedat }}</p>
+                    </mat-card-content>
+                    <mat-card-footer>
+                      <div class="row footerrow align-items-center">
+                        <div class="col-8 footercol">
+                          <div class="row align-items-center">
+                            <p class="chipdetail">{{survey.createdby.company}}</p>
+                            <p class="chipdetail ml-1">{{survey.formattedjobtype}}</p>
+                            <p class="chipdetail ml-1">{{survey.source | titlecase}}</p>
+                          </div>
+                        </div>
+                        <div class="col-4 footercol">
+                        </div>
+                      </div>
+                    </mat-card-footer>
+                  </mat-card>
+                </div>
+                </cdk-virtual-scroll-viewport>
+                <p class="listplaceholder" *ngIf="inreviewsurveyslist.length == 0">No Survey Requests In Review</p>
+              </mat-card-content>
+            </mat-card>
+          </div>
+          
+          <div class="col-6 listcolumn">
+            <mat-card class="listcard">
+              <mat-card-header>
+                <img mat-card-avatar src="../../../../../assets/delivered.svg" />
+                <mat-card-title>Delivered</mat-card-title>
+              </mat-card-header>
+              <mat-card-content>
+                <cdk-virtual-scroll-viewport itemSize="50" class="listitems-viewport" *ngIf="deliveredsurveyslist.length > 0">
+                  <div class="surveyitemrow" *cdkVirtualFor="let surveygroup of deliveredsurveyslist">
+                    <p class="survey-dt">{{surveygroup.date}}</p>
+                  <mat-card [ngClass]="[ i%2 == 0 ? 'itemcard even' : 'itemcard odd']" *ngFor="let survey of surveygroup.records; let i = index" (click)="fetchSurveyDetails(survey, listtypes.DELIVERED)">
+                    <mat-card-header>
+                      <div class="row align-items-center headerrow">
+                        <div class="col headercol">
+                          <mat-card-title>{{survey.name}}
+                            <span class="chipdetail ml-1"
+                                  *ngIf="isClient">{{survey.currentstatus}}</span>
+                                <span class="chipdetail ml-1" style="background-color: #1289A7;"
+                                  *ngIf="survey.status == 'created'">Unassigned</span>
+                                <span class="chipdetail ml-1" style="background-color: #3c78d8;"
+                                  *ngIf="survey.status == 'assigned'">{{survey.currentstatus}}</span>
+                                <span class="chipdetail ml-1" style="background-color: rgb(109, 187, 26);"
+                                  *ngIf="survey.status == 'completed'">{{survey.currentstatus}}</span>
+                                <span class="chipdetail ml-1" style="background-color: rgb(246, 77, 10);"
+                                  *ngIf="survey.isoverdue">Overdue</span>
+                          </mat-card-title>
+                        </div>
+                      </div>
+                    </mat-card-header>
+                    <mat-card-content>
+                      <div class="row contentrow">
+                        <div class="col-8 contentcol">
+                          <a class="actiondetail" href="mailto:{{survey.email}}" (click)="$event.stopPropagation()">{{ survey.email }}</a>
+                          <a class="actiondetail" href="tel:{{survey.phonenumber}}" (click)="$event.stopPropagation()">{{ survey.phonenumber }}</a>
+                          <a class="actiondetail" href="https://maps.google.com/?q={{survey.address}}" target="_blank" (click)="$event.stopPropagation()">{{ survey.address }}</a>
+                        </div>
+                        <div class="col-4 contentcol">
+                          <p class="timedetail">{{ survey.formattedtime }}</p>
+                          <p class="assigneedetails">Assigned to</p>
+                          <p class="assigneedetails" style="font-weight: 600;">{{survey.reviewassignedto.firstname}} {{survey.reviewassignedto.lastname}}</p>
+                        </div>
+                      </div>
+                      <p class="silentdetail">Updated {{ survey.formattedupdatedat }}</p>
+                    </mat-card-content>
+                    <mat-card-footer>
+                      <div class="row footerrow align-items-center">
+                        <div class="col-8 footercol">
+                          <div class="row align-items-center">
+                            <p class="chipdetail">{{survey.createdby.company}}</p>
+                            <p class="chipdetail ml-1">{{survey.formattedjobtype}}</p>
+                            <p class="chipdetail ml-1">{{survey.source | titlecase}}</p>
+                          </div>
+                        </div>
+                        <div class="col-4 footercol">
+                        </div>
+                      </div>
+                    </mat-card-footer>
+                  </mat-card>
+                </div>
+                </cdk-virtual-scroll-viewport>
+                <p class="listplaceholder" *ngIf="deliveredsurveyslist.length == 0">No Survey Requests Delivered</p>
+              </mat-card-content>
+            </mat-card>
+          </div>
+        </div>
+      </div> -->
+  </div>
+</div>

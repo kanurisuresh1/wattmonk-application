@@ -1,0 +1,183 @@
+<div class="row">
+    <div class="col-10">
+      <h4 class="dialogformtitle">Edit Electricals Inputs</h4>
+    </div>
+    
+    <div class="col-2">
+      <button mat-icon-button (click)="onCloseClick()" class="float-right">
+        <img class="dialogclose" src="../../../../../assets/close.svg" />
+      </button>
+    </div>
+  </div>
+<div mat-dialog-content class="designdialogcontent">
+    <div class="container mb-2">
+        <form [formGroup]="designerelectricalinputFormGroup">
+            <div class="row">
+                <div class="col">
+                    <mat-form-field appearance="fill" class="fullwidth">
+                        <mat-label>Typical</mat-label>
+                        <input [formControl]="typical" matInput required>
+                        <mat-error *ngIf="typical.invalid">{{getErrorMessage(typical)}}</mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col">
+                    <mat-form-field appearance="fill" class="fullwidth" >
+                        <mat-label>Initial Conductor Location</mat-label>
+                        <mat-select [formControl]="initialconductorlocation" required style="font-size: 0.8em;">
+                            <mat-option *ngFor="let data of initialfinalconductorlocation"  [value]="data">{{data}}</mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="initialconductorlocation.invalid">
+                            {{getErrorMessage(initialconductorlocation)}}</mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col" >
+                    <mat-form-field appearance="fill" class="fullwidth" >
+                        <mat-label>Final Conductor Location</mat-label>
+                        <mat-select [formControl]="finalconductorlocation" required style="font-size: 0.8em;">
+                            <mat-option *ngFor="let data of initialfinalconductorlocation"  [value]="data">{{data}}</mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="finalconductorlocation.invalid">{{getErrorMessage(finalconductorlocation)}}
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                
+                <div class="col" >
+                    <mat-form-field appearance="fill" class="fullwidth">
+                        <mat-label>Max Current</mat-label>
+                        <input autocomplete="off" type="tel" maxlength="5" min="1" matInput placeholder="eg. 90"
+                            [formControl]="maxcurrent" required>
+                        <mat-error *ngIf="maxcurrent.invalid">{{getErrorMessage(maxcurrent)}}</mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col" >
+                    <mat-form-field appearance="fill" class="fullwidth" >
+                        <mat-label># Of Parallel Circuits</mat-label>
+                        <input autocomplete="off" type="tel" maxlength="5" min="1" matInput placeholder="eg. 2"
+                            [formControl]="parallelcircuits" required>
+                        <mat-error *ngIf="parallelcircuits.invalid">{{getErrorMessage(parallelcircuits)}}</mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col">
+                    <mat-form-field appearance="fill" class="fullwidth">
+                        <mat-label>Conductor1</mat-label>
+                        <input [formControl]="conductor1" matInput required>
+                        <mat-error *ngIf="conductor1.invalid">{{getErrorMessage(conductor1)}}</mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col">
+                    <mat-form-field appearance="fill" class="fullwidth">
+                        <mat-label>Conductor2</mat-label>
+                        <input [formControl]="conductor2" matInput>
+                        <mat-error *ngIf="conductor2.invalid">{{getErrorMessage(conductor2)}}</mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col">
+                    <mat-form-field appearance="fill" class="fullwidth">
+                        <mat-label>Conductor3</mat-label>
+                        <input [formControl]="conductor3" matInput required>
+                        <mat-error *ngIf="conductor3.invalid">{{getErrorMessage(conductor3)}}</mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col">
+                    <mat-form-field appearance="fill" class="fullwidth">
+                        <mat-label>Conduit</mat-label>
+                        <input [formControl]="conduit" matInput>
+                        <mat-error *ngIf="conduit.invalid">{{getErrorMessage(conduit)}}</mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col">
+                    <mat-form-field appearance="fill" class="fullwidth">
+                        <mat-label>Currentcarryingconductorinconduit</mat-label>
+                        <input [formControl]="currentcarryingconductorinconduit" matInput required>
+                        <mat-error *ngIf="currentcarryingconductorinconduit.invalid">{{getErrorMessage(currentcarryingconductorinconduit)}}</mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col">
+                    <mat-form-field appearance="fill" class="fullwidth">
+                        <mat-label>Conduit fill percent</mat-label>
+                        <input [formControl]="conduitfillpercent" matInput required>
+                        <mat-error *ngIf="conduitfillpercent.invalid">{{getErrorMessage(conduitfillpercent)}}</mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col">
+                    <mat-form-field appearance="fill" class="fullwidth">
+                        <mat-label>Egc1</mat-label>
+                        <input [formControl]="egc1" matInput required>
+                        <mat-error *ngIf="egc1.invalid">{{getErrorMessage(egc1)}}</mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col">
+                    <mat-form-field appearance="fill" class="fullwidth">
+                        <mat-label>Egc2</mat-label>
+                        <input [formControl]="egc2" matInput required>
+                        <mat-error *ngIf="egc2.invalid">{{getErrorMessage(egc2)}}</mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col">
+                    <mat-form-field appearance="fill" class="fullwidth">
+                        <mat-label>Tempcorrfactor1</mat-label>
+                        <input [formControl]="tempcorrfactor1" matInput required>
+                        <mat-error *ngIf="tempcorrfactor1.invalid">{{getErrorMessage(tempcorrfactor1)}}</mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col">
+                    <mat-form-field appearance="fill" class="fullwidth">
+                        <mat-label>Conduit fill factor</mat-label>
+                        <input [formControl]="conduitfillfactor" matInput required>
+                        <mat-error *ngIf="conduitfillfactor.invalid">{{getErrorMessage(conduitfillfactor)}}</mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col">
+                    <mat-form-field appearance="fill" class="fullwidth">
+                        <mat-label>Cont current</mat-label>
+                        <input [formControl]="contcurrent" matInput required>
+                        <mat-error *ngIf="contcurrent.invalid">{{getErrorMessage(contcurrent)}}</mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col">
+                    <mat-form-field appearance="fill" class="fullwidth">
+                        <mat-label>Deratedamp</mat-label>
+                        <input [formControl]="deratedamp" matInput required>
+                        <mat-error *ngIf="deratedamp.invalid">{{getErrorMessage(deratedamp)}}</mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col">
+                    <mat-form-field appearance="fill" class="fullwidth">
+                        <mat-label>Baseamp</mat-label>
+                        <input [formControl]="baseamp" matInput required>
+                        <mat-error *ngIf="baseamp.invalid">{{getErrorMessage(baseamp)}}</mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col">
+                    <mat-form-field appearance="fill" class="fullwidth">
+                        <mat-label>Term temp rating</mat-label>
+                        <input [formControl]="termtemprating" matInput required>
+                        <mat-error *ngIf="termtemprating.invalid">{{getErrorMessage(termtemprating)}}</mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col">
+                    <mat-form-field appearance="fill" class="fullwidth">
+                        <mat-label>Voltage drop</mat-label>
+                        <input [formControl]="voltagedrop" matInput required>
+                        <mat-error *ngIf="voltagedrop.invalid">{{getErrorMessage(voltagedrop)}}</mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col">
+                    <mat-form-field appearance="fill" class="fullwidth">
+                        <mat-label>Input length</mat-label>
+                        <input [formControl]="inputlength" matInput required>
+                        <mat-error *ngIf="inputlength.invalid">{{getErrorMessage(inputlength)}}</mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col" >
+                    <mat-slide-toggle style="font-size: 10px; margin-top: 10px;  " color="primary"
+                        [formControl]="ocpd">
+                        OCPD</mat-slide-toggle>
+                </div>
+            </div>
+        </form>
+    </div> 
+</div>
+<mat-dialog-actions align="center">
+    <button mat-raised-button class="prominentbutton float-right mr-3" (click)="onSaveElectricalsDetails($event)">Update</button>
+  </mat-dialog-actions>

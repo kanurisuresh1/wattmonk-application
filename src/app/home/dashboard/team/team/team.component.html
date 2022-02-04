@@ -1,0 +1,549 @@
+<div class="main-content">
+  <div class="container">
+    <div class="topactionbar">
+      <button class="primarymatbutton" mat-raised-button (click)="openAddTeamMemberDialog()">
+        + Member
+      </button>
+      <button class="ml-2 primarymatbutton" mat-raised-button (click)="openAddGroupDialog()" *ngIf="showGroup == true">
+        + Group
+      </button>
+    </div>
+    <div *ngIf="placeholder">
+      <div class="row">
+        <div class="col placeholder">
+          <mat-icon class="placeholderlogo">sentiment_very_dissatisfied</mat-icon><br />
+          <p class="placholderheading" *ngIf="isClient">No team data</p>
+          <p class="placeholdercontent" *ngIf="isClient">
+            team list will be displayed when team members are added
+          </p>
+          <p class="placholderheading" *ngIf="!isClient">
+            No team & group data
+          </p>
+          <p class="placeholdercontent" *ngIf="!isClient">
+            team & group list will be displayed when team members & group are
+            added
+          </p>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="!placeholder">
+      <div class="container">
+        <div class="row">
+          <h4 class="headers mb-2">Overview</h4>
+        </div>
+        <div class="row overviewsection">
+          <div *ngIf="loggedInUser.role.id != teamheadid">
+            <div *ngIf="isoverviewloading" class="row" style="display: flex; padding-left: 16px">
+              <div class="teamoverviewbutton" [ngClass]="[
+                  selectedoveriewsection == 'Admin'
+                    ? 'selctedbackground'
+                    : 'unselctedbackground'
+                ]" *ngFor="let number of [0, 1, 2, 3, 4]">
+                <div class="row mt-2">
+                  <div class="col-3">
+                    <ngx-skeleton-loader count="1" class="overviewsectionicon" appearance="circle">
+                    </ngx-skeleton-loader>
+                  </div>
+                  <div class="col-9">
+                    <div class="row">
+                      <ngx-skeleton-loader class="col-12 overviewcount" [theme]="{
+                          'border-radius': '5px',
+                          height: '10px',
+                          width: '40%'
+                        }">
+                      </ngx-skeleton-loader>
+                      <ngx-skeleton-loader class="col-12 overviewheading" [theme]="{
+                          'border-radius': '5px',
+                          height: '10px',
+                          width: '80%'
+                        }">
+                      </ngx-skeleton-loader>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div *ngIf="!isoverviewloading" class="row" style="display: flex; padding-left: 16px">
+              <div class="teamoverviewbutton" [ngStyle]="{
+                  'background-color': data.active ? '#EDC773' : 'white'
+                }" *ngFor="let data of overviewData; let i = index" (click)="overviewFilter(data.roleName, i)">
+                <div class="row mt-2">
+                  <div class="col-3">
+                    <img class="overviewsectionicon" *ngIf="
+                        data.roleName != 'Team Head' &&
+                        data.roleName != 'Master Electrician' &&
+                        data.roleName != 'Success Manager'
+                      " src="../../../../../assets/{{
+                        data.roleName | lowercase
+                      }}.svg" />
+                    <img class="overviewsectionicon" *ngIf="data.roleName == 'Team Head'"
+                      src="../../../../../assets/team head.png" />
+                    <img class="overviewsectionicon" *ngIf="data.roleName == 'Master Electrician'"
+                      src="../../../../../assets/master electrician.png" />
+                    <img class="overviewsectionicon" *ngIf="data.roleName == 'Success Manager'"
+                      src="../../../../../assets/Success Manager.png" />
+                  </div>
+                  <div class="col-9">
+                    <div class="row">
+                      <div class="col-12 overviewcount">
+                        {{ data.roleCount }}
+                      </div>
+                      <div class="col-12 overviewheading">
+                        {{ data.roleName }}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div [ngClass]="[showGroup ? 'col-md-9 col-lg-9' : 'col-md-12 col-lg-12']" *ngIf="isteamdataloading">
+          <div class="row container statisticssection">
+            <div class="col-9 header">
+              <h4 class="headers" style="margin: 10px">{{ detailtitle }}</h4>
+            </div>
+          </div>
+          <div class="row">
+            <div [ngClass]="[
+                showGroup
+                  ? 'col-md-4 col-sm-6 col-xs-12'
+                  : 'col-md-3 col-sm-6 col-xs-12'
+              ]" *ngFor="let number of [0, 1, 2]" style="padding-right: 0px">
+              <div class="membercard">
+                <div class="row">
+                  <div class="col-5">
+                    <div>
+                      <ngx-skeleton-loader count="1" appearance="circle"></ngx-skeleton-loader>
+                    </div>
+                  </div>
+                  <div class="col-7" style="
+                      padding-left: 0px;
+                      padding-right: 17px;
+                      text-align: right;
+                    ">
+                    <span>
+                      <ngx-skeleton-loader count="1" appearance="circle" [theme]="{ height: '10px', width: '10px' }">
+                      </ngx-skeleton-loader>
+                    </span>
+                    <span>
+                      <ngx-skeleton-loader count="1" appearance="circle" [theme]="{ height: '10px', width: '10px' }">
+                      </ngx-skeleton-loader>
+                      <span style="padding-left: 7px; cursor: pointer">
+                        <ngx-skeleton-loader count="1" appearance="circle" [theme]="{ height: '10px', width: '10px' }">
+                        </ngx-skeleton-loader>
+                      </span>
+                    </span>
+                  </div>
+                </div>
+                <div class="row mt-1">
+                  <div class="col-12 membercard-title">
+                    <ngx-skeleton-loader class="d-block" [theme]="{
+                        'border-radius': '5px',
+                        height: '10px',
+                        width: '80%'
+                      }">
+                    </ngx-skeleton-loader>
+                  </div>
+                  <div class="col-12 membercard-content">
+                    <ngx-skeleton-loader class="d-block" [theme]="{
+                        'border-radius': '5px',
+                        height: '10px',
+                        width: '50%'
+                      }">
+                    </ngx-skeleton-loader>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-12 membercard-footer">
+                    <ngx-skeleton-loader class="d-block" [theme]="{
+                        'border-radius': '5px',
+                        height: '10px',
+                        width: '80%'
+                      }">
+                    </ngx-skeleton-loader>
+                  </div>
+                  <div class="col-12 membercard-footer">
+                    <ngx-skeleton-loader class="d-block" [theme]="{
+                        'border-radius': '5px',
+                        height: '10px',
+                        width: '50%'
+                      }">
+                    </ngx-skeleton-loader>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div [ngClass]="[showGroup ? 'col-md-9 col-lg-9' : 'col-md-12 col-lg-12']"
+          *ngIf="!isteamdataloading && !isGroupSelected">
+          <div class="row container statisticssection">
+            <div class="col-5 header">
+              <h4 class="headers" style="margin: 10px">{{ detailtitle }}</h4>
+            </div>
+            <div class="col-5 header" *ngIf="
+                detailtitle == 'All Members' &&
+                loggedInUser.role.type == 'wattmonkadmins'
+              ">
+              <div style="margin: 6px">
+                <mat-checkbox style="font-weight: 600" [(ngModel)]="idlemembersselected"
+                  (change)="overviewFilter('All', null)">Idle Members</mat-checkbox>
+              </div>
+            </div>
+          </div>
+          <div class="row" [ngClass]="
+              overviewData.length < 6
+                ? 'members-height-full'
+                : 'memebers-height'
+            ">
+            <div *ngIf="teamMembers.length == 0">
+              <div class="row">
+                <div class="col placeholder" style="top: 30% !important">
+                  <mat-icon class="placeholderlogo">sentiment_very_dissatisfied</mat-icon><br />
+                  <p class="placholderheading">No {{ detailtitle }} data</p>
+                  <p class="placeholdercontent">
+                    {{ detailtitle }} list will be displayed when
+                    {{ detailtitle }} are added
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div [ngClass]="[
+                showGroup
+                  ? 'col-md-4 col-sm-6 col-xs-12'
+                  : 'col-md-3 col-sm-6 col-xs-12'
+              ]" *ngFor="let user of teamMembers; let i = index" style="padding-right: 0px">
+              <div class="membercard" (click)="openTeamMemberDetailDialog(user, $event)">
+                <div class="row">
+                  <div class="col-5">
+                    <div class="photo" *ngIf="user.logo != null">
+                      <span *ngIf="user.activejobs != null" matBadge="{{ user.activejobs }}" matBadgePosition="after">
+                      </span>
+                      <img style="
+                          width: inherit;
+                          height: inherit;
+                          border-radius: inherit;
+                        " src="{{ user.logo.url }}" />
+                    </div>
+                    <div *ngIf="user.logo == null" class="photo">
+                      <div>
+                        <span *ngIf="user.activejobs != null" matBadge="{{ user.activejobs }}" matBadgePosition="after">
+                        </span>
+                        <p>
+                          {{
+                          this.genericService.getInitials(
+                          user.firstname,
+                          user.lastname
+                          )
+                          }}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-7" style="
+                      padding-left: 0px;
+                      padding-right: 17px;
+                      text-align: right;
+                    ">
+                    <span *ngIf="user.role.id == '8' || user.role.id == '10'" style="padding-right: 7px"><img
+                        style="width: 13px; cursor: pointer" (click)="openTaskListingDialog(user, $event)"
+                        matTooltip="Assign Jobs" src="../../../../../assets/view_tasks_icon.svg" /></span>
+                    <span>
+                      <img style="width: 13px; cursor: pointer" (click)="openEditTeamMemberDialog(user, $event)"
+                        matTooltip="Edit Profile" src="../../../../../assets/editnew.svg" />
+                      <span style="padding-left: 7px; cursor: pointer">
+                        <img style="width: 13px" (click)="openConfirmationDialog(user, $event)" matTooltip="Block User"
+                          src="../../../../../assets/blockuser.svg" /></span></span>
+                  </div>
+                  <!-- <div *ngIf="user.role != 6" class="col-2" style="padding-left: 0px; padding-right: 0px;">
+                    <div style="text-align: center;
+                    color:#000000;
+                    border: 1px solid #fff;
+                    border-radius: 10px;
+                    font-size: 14px; 
+                    background: #EDC773;
+                    margin-right: 50%;">{{user.activejobs}}</div>
+                  </div> -->
+                </div>
+                <div class="row mt-1">
+                  <div class="col-12 membercard-title">
+                    {{ user.firstname | titlecase }} {{ user.lastname }}
+                  </div>
+                  <div class="col-12 membercard-content">
+                    {{ user.role.displayname }}
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-12 membercard-footer">
+                    <img src="../../../../../assets/Email.svg" />
+                    {{ user.email }}
+                  </div>
+                  <div class="col-12 membercard-footer" *ngIf="user.phone != null">
+                    <img src="../../../../../assets/call.svg" />
+                    {{ user.phone }}
+                  </div>
+                </div>
+                <!--  <div class="row" style="margin: 0.5rem;">
+                <div class="col" align="end" style="padding-right: 0px;">
+                  <button
+                    *ngIf="specificclientid!=null && (loggedInUser.role.id==6 || loggedInUser.role.id==7) && user.role.id==9 && (user.addedby.role!=3 )"
+                    mat-raised-button (click)="openAssignSalesManager(user)">
+                    Assign
+                  </button>
+                  <button
+                    *ngIf="specificclientid!=null && (loggedInUser.role.id==6 ) && user.role.id==3 && (user.addedby.role!=7 )"
+                    mat-raised-button (click)="openAssignAdmin(user)">
+                    Assign
+                  </button>
+                </div>
+              </div> -->
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- group members -->
+        <div [ngClass]="[showGroup ? 'col-md-9 col-lg-9' : 'col-md-12 col-lg-12']"
+          *ngIf="!isteamdataloading && isGroupSelected">
+          <div class="row statisticssection">
+            <div class="col-10 header">
+              <h4 class="headers" style="margin: 6px; padding-left: 12px">
+                {{ detailtitle }}
+              </h4>
+            </div>
+            <div class="col-2 header text-right">
+              <h4 class="headers" style="margin: 6px; padding-right: 0px">
+                {{ totalgrouppeoples }}
+              </h4>
+            </div>
+          </div>
+          <div class="row" [ngClass]="
+              overviewData.length < 6
+                ? 'members-height-full'
+                : 'memebers-height'
+            ">
+            <div [ngClass]="[
+                showGroup
+                  ? 'col-md-4 col-sm-6 col-xs-12'
+                  : 'col-md-3 col-sm-6 col-xs-12'
+              ]" *ngFor="let user of groupsmembers; let i = index" style="padding-right: 0px">
+              <div class="membercard">
+                <div class="row">
+                  <div class="col-10">
+                    <div class="photo" *ngIf="user.logo != null">
+                      <span *ngIf="user.activejobs != null" matBadge="{{ user.activejobs }}" matBadgePosition="after">
+                      </span>
+                      <img style="
+                          width: inherit;
+                          height: inherit;
+                          border-radius: inherit;
+                        " src="{{ user.logo.url }}" />
+                    </div>
+
+                    <div *ngIf="user.logo == null" class="photo">
+                      <span *ngIf="user.activejobs != null" matBadge="{{ user.activejobs }}" matBadgePosition="after">
+                      </span>
+                      <p>
+                        {{
+                        this.genericService.getInitials(
+                        user.firstname,
+                        user.lastname
+                        )
+                        }}
+                      </p>
+                    </div>
+                  </div>
+                  <div *ngIf="user.role != 6" class="col-2" style="padding-left: 0px; padding-right: 0px">
+                    <!-- <span> <img style="width: 13px; cursor: pointer;" (click)="openEditTeamMemberDialog(user)"
+                        src="../../../../../assets/editnew.svg">
+                      <span style="padding-left: 7px; cursor: pointer;"> <img style="width: 13px;"
+                          (click)="openConfirmationDialog(user)" src="../../../../../assets/blockuser.svg"></span></span> -->
+                  </div>
+                </div>
+                <div class="row mt-1">
+                  <div class="col-12 membercard-title">
+                    {{ user.firstname | titlecase }} {{ user.lastname }}
+                  </div>
+                  <div class="col-12 membercard-content">
+                    {{ user.rolename }}
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-12 membercard-footer">
+                    <img src="../../../../../assets/Email.svg" />
+                    {{ user.email }}
+                  </div>
+                  <div class="col-12 membercard-footer" *ngIf="user.phone != null">
+                    <img src="../../../../../assets/call.svg" />
+                    {{ user.phone }}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-3 col-lg-3" *ngIf="showGroup">
+          <div class="row" style="margin-left: 1px; height: 44vh">
+            <!-- <div class="col-12 membercard scroller">
+              <div class="row mt-2 ">
+                <div class="col-6">
+                  <h4 class="headers">Members</h4>
+                </div>
+              </div>
+              <div *ngIf=" isteamdataloading ">
+                <div class="row  groupcontainer" *ngFor="let number of [0,1,2]">
+                  <div class="col-10 sidebar-spacing">
+                    <div class="row">
+                      <div class="col-3">
+                        <ngx-skeleton-loader count="1" appearance="circle"></ngx-skeleton-loader>
+                      </div>
+                      <div class="col-9">
+                        <div class="row">
+                          <div class="col-12" style="font-size: 14px;font-weight: 600;">
+                            <ngx-skeleton-loader class="d-block"
+                              [theme]="{ 'border-radius': '5px', height: '10px', width: '90%'}"></ngx-skeleton-loader>
+                          </div>
+                          <div class="col-12" style="color: #757575;">
+                            <ngx-skeleton-loader class="d-block"
+                              [theme]="{ 'border-radius': '5px', height: '10px', width: '40%'}"></ngx-skeleton-loader>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div *ngIf="!isteamdataloading ">
+                <div class="row  groupcontainer" *ngFor="let user of sidebarteammembers; let i = index">
+                  <div class="col-10 sidebar-spacing">
+                    <div class="row">
+                      <div class="col-3">
+                        <div class="groupphoto">{{this.genericService.getInitials(user.firstnamename, user.lastname)}}
+                        </div>
+                      </div>
+                      <div class="col-9" style="font-size: 13px;">
+                        <div class="row">
+                          <div class="col-12" style="font-size: 14px;font-weight: 600;">{{user.firstnamename | titlecase
+                            }} {{user.lastname}}</div>
+                          <div class="col-12" style="color: #757575;">{{user.email}} </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-2 text-right moreoption">
+                    <span><button mat-icon-button><img style="width: 13px;" (click)="openEditTeamMemberDialog(user)"
+                          src="../../../../../assets/editnew.svg"> </button>
+                      <span><button mat-icon-button><img style="width: 13px;" (click)="openConfirmationDialog(user)"
+                            src="../../../../../assets/blockuser.svg"></button> </span></span>
+
+                  </div>
+                </div>
+              </div>
+            </div> -->
+
+            <div class="row mt-2">
+              <div class="col-6">
+                <h4 class="headers">Groups</h4>
+              </div>
+            </div>
+            <div class="col-12 membercard scroller" style="margin-top: -1%">
+              <!-- <div class="row mt-2 ">
+                <div class="col-6">
+                  <h4 class="headers">Groups</h4>
+                </div>
+              </div> -->
+              <div *ngIf="isgroupdataloading">
+                <div class="row groupcontainer" *ngFor="let number of [0, 1, 2]">
+                  <div class="col-10 sidebar-spacing">
+                    <div class="row">
+                      <div class="col-3">
+                        <ngx-skeleton-loader count="1" appearance="circle"></ngx-skeleton-loader>
+                      </div>
+                      <div class="col-9">
+                        <div class="row">
+                          <div class="col-12" style="font-size: 14px; font-weight: 600">
+                            <ngx-skeleton-loader class="d-block" [theme]="{
+                                'border-radius': '5px',
+                                height: '10px',
+                                width: '90%'
+                              }"></ngx-skeleton-loader>
+                          </div>
+                          <div class="col-12" style="color: #757575">
+                            <ngx-skeleton-loader class="d-block" [theme]="{
+                                'border-radius': '5px',
+                                height: '10px',
+                                width: '40%'
+                              }"></ngx-skeleton-loader>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div *ngIf="!isgroupdataloading && groups.length > 0">
+                <div class="row groupcontainer" *ngFor="let group of groups; let i = index" [ngStyle]="{
+                    'background-color': group.isselected ? '#EDC773' : 'white'
+                  }" (click)="onGroupSelect(group, i)">
+                  <div class="col-8 sidebar-spacing">
+                    <div class="row">
+                      <div class="col-3">
+                        <div class="groupphoto" [ngStyle]="{
+                            'background-color': group.isselected
+                              ? 'white'
+                              : '#EDC773'
+                          }">
+                          {{
+                          this.genericService.getInitials(
+                          group.name,
+                          group.name
+                          )
+                          }}
+                        </div>
+                      </div>
+                      <div class="col-9">
+                        <div class="row">
+                          <div class="col-12" style="font-size: 14px; font-weight: 600">
+                            {{ group.name | titlecase }}
+                          </div>
+                          <div class="col-12" style="color: #757575">
+                            {{ group.clients.length + group.members.length }}
+                            peoples
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-4 text-right moreoption">
+                    <span>
+                      <img style="width: 13px; margin-right: 5px" (click)="openEditGroupDialog(group)"
+                        matTooltip="Edit Group" src="../../../../../assets/editnew.svg" />
+                      <span>
+                        <img style="width: 13px" (click)="DeleteGroup(group)" matTooltip="Delete Group"
+                          src="../../../../../assets/delete.svg" /></span></span>
+                  </div>
+                </div>
+              </div>
+              <div class="row" *ngIf="groupplaceholder">
+                <div class="col groupplaceholder">
+                  <mat-icon class="placeholderlogo">sentiment_very_dissatisfied</mat-icon><br />
+                  <p class="placholderheading" *ngIf="!isClient">
+                    No group data
+                  </p>
+                  <p class="placeholdercontent" *ngIf="!isClient">
+                    group list will be displayed when group are added
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

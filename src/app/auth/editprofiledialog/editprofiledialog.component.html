@@ -1,0 +1,267 @@
+<!-- <div *ngIf="isLoading" class="overlay">
+  <mat-card class="spinnercard" align-items-center>
+    <div class="row">
+      <div class="col-3">
+        <mat-progress-spinner diameter="50" color="primary" mode="indeterminate" strokeWidth="5"></mat-progress-spinner>
+      </div>
+      <div class="col">
+        <h4 class="spinnertext">{{loadingmessage}}</h4>
+      </div>
+    </div>
+  </mat-card>
+</div>
+<div mat-dialog-content>
+  <div class="container">
+    <div class="row">
+      <div class="col-9">
+        <h4 class="dialogformtitle">Edit Profile</h4>
+      </div>
+      <div class="col-3">
+        <button class="float-right font-weight-bold" mat-icon-button (click)="onCloseClick()">
+          <img class="dialogclose" src="../../../../../assets/close.svg" />
+        </button>
+      </div>
+      <div class="row main" style="margin-left: -45px;">
+        <div class="row">
+          <div class="col-md-6 editprofileimg">
+            <div class="avatar-upload" (click)="fileInput.click()">
+              <div class="avatar-edit">
+                <input [formControl]="userlogo" type='file' id="imageUpload" accept=".png, .jpg, .jpeg" #fileInput
+                  (change)="uploadFile($event)" />
+              </div>
+              <div class="avatar-preview logo-upload">
+                <button mat-icon-button (click)="Deleteuploadedlogo($event)" *ngIf="logoUploaded" class="float-right">
+                  <img class="dialogclose" src="../../../../../assets/close.svg" />
+                </button>
+                <div id="imagePreview" [style.backgroundImage]="'url('+ imageUrl +')'">
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6" style=" padding-right: 40px; padding-left: 0px;">
+            <form class="dialogform editformdialog" [formGroup]="editprofileDialogForm"
+              (submit)="onAddMember($event, editprofileDialogForm.value)" (keydown.enter)="$event.preventDefault()">
+              <div class="form-group">
+                <div class="row">
+                  <div class="col-md-6 editprofileinput">
+                    <label>First Name*</label>
+                    <mat-form-field appearance="outline" class="fullwidth">
+                      <input matInput placeholder=" " [formControl]="firstname" required>
+                      <mat-error *ngIf="firstname.invalid">{{getErrorMessage(firstname)}}</mat-error>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-md-6 editprofileinput">
+                    <label>Last Name*</label>
+                    <mat-form-field appearance="outline" class="fullwidth">
+                      <input matInput placeholder=" " [formControl]="lastname" required>
+                      <mat-error *ngIf="lastname.invalid">{{getErrorMessage(lastname)}}</mat-error>
+                    </mat-form-field>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="row">
+                  <div class="col-md-12 editprofileinput">
+                    <label>Phone Number*</label>
+                    <mat-form-field class="fullwidth" appearance="outline">
+                      <input matInput autocomplete="off" maxlength="15" min="8" placeholder="eg. 9876543210"
+                        [formControl]="phone">
+                      <mat-error *ngIf="phone.invalid">{{getErrorMessage(phone)}}</mat-error>
+                    </mat-form-field>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="row">
+                  <div class="col-md-12 editprofileinput">
+                    <label>Address*</label>
+                    <mat-form-field class="fullwidth" appearance="outline">
+                      <input matInput placeholder="eg. XYZ, Street" [formControl]="address" required>
+                      <mat-error *ngIf="address.invalid">{{getErrorMessage(address)}}</mat-error>
+                    </mat-form-field>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="row mt-3 mr-1 ml-1 justify-content-between align-items-center">
+                  <button mat-raised-button class="fieldwidth" type="submit"
+                    (click)="onAddMember($event, editprofileDialogForm.value)">Save</button>
+                  <button mat-raised-button class="fieldwidth" (click)="onCloseClick()"
+                    style="background-color: #fbefd5 ;">Cancel</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> -->
+
+<!-- <div *ngIf="isLoading" class="overlay">
+  <mat-card class="spinnercard" align-items-center>
+    <div class="row">
+      <div class="col-3">
+        <mat-progress-spinner diameter="50" color="primary" mode="indeterminate" strokeWidth="5"></mat-progress-spinner>
+      </div>
+      <div class="col">
+        <h4 class="spinnertext">{{loadingmessage}}</h4>
+      </div>
+    </div>
+  </mat-card>
+</div> -->
+<div *ngIf="isLoading" class="progress-loader">
+  <div id="pause" class="d-flex align-items-center justify-content-center">
+    <div id="spinner" style="background: #fff; padding: 25px; border-radius: 5px; width: 19rem" class="row">
+      <div class="loading-message bkgg col-9">{{ loadingmessage }}</div>
+      <div class="col-3" style="top: 5px">
+        <div class="snippet" data-title=".dot-pulse">
+          <div class="stage">
+            <div class="dot-pulse"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div mat-dialog-content>
+  <div class="container">
+    <div class="row">
+      <div class="col-9">
+        <h4 class="dialogformtitle">Edit Profile</h4>
+      </div>
+      <div class="col-3">
+        <button class="float-right" mat-icon-button (click)="onCloseClick()">
+          <img class="dialogclose" src="../../../../../assets/close.svg" />
+        </button>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-6 editprofileimg">
+        <div class="col-12 pl-0">
+          <img src="{{ selectednewimage }}" width="100%" height="266px" style="border-radius: 8px" />
+        </div>
+        <div>
+          <input type="file" style="display: none" accept=".png, .jpg, .jpeg" (change)="uploadFile($event)"
+            #fileSelect />
+          <div class="selectprofileimg" (click)="fileSelect.click()">
+            <mat-icon>camera_alt</mat-icon>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6 pb-3">
+        <form class="dialogform logincard editprofilecard" [formGroup]="editprofileDialogForm"
+          (keydown.enter)="$event.preventDefault()">
+          <!-- <div class="form-group">
+            <mat-form-field appearance="outline">
+              <input matInput placeholder="eg. john" [formControl]="firstname" required>
+              <mat-error *ngIf="firstname.invalid">{{getErrorMessage(firstname)}}</mat-error>
+            </mat-form-field>
+            <mat-form-field class="pl-2" appearance="outline">
+              <mat-label>Lastname</mat-label>
+              <input matInput placeholder="eg. doe" [formControl]="lastname" required>
+              <mat-error *ngIf="lastname.invalid">{{getErrorMessage(lastname)}}</mat-error>
+            </mat-form-field>
+          </div>
+          <div class="form-group">
+            <mat-form-field appearance="outline">
+              <mat-label>Email</mat-label>
+              <input matInput placeholder="eg. pat@example.com" [formControl]="workemail" readonly>
+              <mat-error *ngIf="workemail.invalid">{{getErrorMessage(workemail)}}</mat-error>
+            </mat-form-field>
+            <mat-form-field class="pl-2" appearance="outline">
+              <mat-label>Address</mat-label>
+              <input matInput placeholder="eg. XYZ, Street" [formControl]="address" required>
+              <mat-error *ngIf="address.invalid">{{getErrorMessage(address)}}</mat-error>
+            </mat-form-field>
+          </div>
+          <div class="form-group">
+            <mat-form-field appearance="outline">
+              <mat-label>Country</mat-label>
+              <input type="text" matInput [matAutocomplete]="auto" [formControl]="countrycontrol"
+                (click)="$event.stopPropagation()" required>
+              <mat-error *ngIf="countrycontrol.invalid">{{getErrorMessage(countrycontrol)}}</mat-error>
+              <mat-autocomplete #auto="matAutocomplete">
+                <mat-option *ngFor="let country of filteredOptions | async" [value]="country.country"
+                  (onSelectionChange)="setSelectedCountry(country)">{{country.country}}</mat-option>
+              </mat-autocomplete>
+            </mat-form-field>
+            <mat-form-field class="pl-2" appearance="outline">
+              <mat-label>Phone</mat-label>
+              <input matInput autocomplete="off" maxlength="15" min="8" placeholder="eg. 9876543210" [formControl]="phone">
+              <mat-error *ngIf="phone.invalid">{{getErrorMessage(phone)}}</mat-error>
+            </mat-form-field>
+          </div>
+          <div class="form-group" *ngIf="loggedinuser.usertype == 'company'" >
+            <mat-form-field appearance="outline" *ngIf="(userroleid===6 || userroleid===4)">
+              <mat-label>Company</mat-label>
+              <input matInput placeholder="eg. XYZ Pvt Ltd" [formControl]="company" maxlength='80'>
+              <mat-error *ngIf="company.invalid">{{getErrorMessage(company)}}</mat-error>
+            </mat-form-field>
+          </div>
+          
+          <div class="form-group mt-2">
+            <button mat-raised-button class="fieldwidth">Confirm</button>
+          </div> -->
+          <div class="form-group">
+            <div class="row">
+              <div class="col-md-6 pr-0">
+                <label>First Name*</label>
+                <mat-form-field appearance="outline" class="fullwidth">
+                  <input matInput [formControl]="firstname" required />
+                </mat-form-field>
+                <mat-error *ngIf="firstname.invalid">{{
+                  getErrorMessage(firstname)
+                  }}</mat-error>
+              </div>
+              <div class="col-md-6 pl-1">
+                <label>Last Name*</label>
+                <mat-form-field appearance="outline" class="fullwidth">
+                  <input matInput [formControl]="lastname" required />
+                </mat-form-field>
+                <mat-error *ngIf="lastname.invalid">{{
+                  getErrorMessage(lastname)
+                  }}</mat-error>
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="col-12 px-0">
+              <label>Phone Number*</label>
+              <mat-form-field class="fullwidth" appearance="outline">
+                <input matInput autocomplete="off" maxlength="15" min="8" placeholder="eg. 9876543210"
+                  [formControl]="phone" />
+              </mat-form-field>
+              <mat-error *ngIf="phone.invalid">{{
+                getErrorMessage(phone)
+                }}</mat-error>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="col-12 px-0">
+              <label>Address</label>
+              <mat-form-field appearance="outline" class="fullwidth">
+                <!-- <mat-label>Address</mat-label> -->
+
+                <input style="resize: none" matInput matGoogleMapsAutocomplete country="us"
+                  (onAutocompleteSelected)="onAutocompleteSelected($event)" [formControl]="address" />
+              </mat-form-field>
+              <!-- <mat-error *ngIf="address.invalid">{{getErrorMessage( address)}}</mat-error>
+                <mat-error *ngIf="address.value.length>300">Max 300 characters are allowed.</mat-error> -->
+            </div>
+            <div class="form-group">
+              <div class="mt-3 justify-content-between">
+                <button mat-raised-button class="fieldwidth" style="margin-right: 6px;" type="submit"
+                  (click)="onAddMember($event)">Save</button>
+                <button mat-raised-button class="fieldwidth" (click)="onCloseClick()"
+                  style="background-color: #fbefd5 ;">Cancel</button>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+    <!-- <div class="row main">    
+      </div> -->
+  </div>
+</div>

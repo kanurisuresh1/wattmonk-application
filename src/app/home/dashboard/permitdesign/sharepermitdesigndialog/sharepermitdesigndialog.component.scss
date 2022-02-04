@@ -1,0 +1,55 @@
+.sharedialog {
+  display: block;
+  margin: 0 -24px;
+  padding: 0 24px;
+  max-height: 40vh;
+  overflow: auto;
+}
+.even {
+  background-color: #ecf0f9ab;
+}
+.odd {
+  background-color: #ffffff;
+}
+
+.listitem {
+  display: flex;
+  font-size: 0.7em;
+  font-weight: 600;
+  margin: 0 10px;
+}
+
+.selectall {
+  font-size: 0.9em;
+  font-weight: 600;
+  margin: 4px;
+}
+.matlist {
+  padding-top: 16px;
+}
+
+.sendButton {
+  margin-top: 16px;
+  text-align: left;
+  float: left;
+  margin-left: 16px;
+}
+.item {
+  padding-bottom: 16px;
+}
+.close {
+  margin-left: 500px;
+}
+.listitem1 {
+  display: flex;
+  font-size: 0.7em;
+  font-weight: 600;
+  margin: 0 2px;
+  margin-bottom: 10px;
+}
+.listitem2 {
+  display: flex;
+  font-size: 0.7em;
+  font-weight: 600;
+  margin: 0 2px;
+}

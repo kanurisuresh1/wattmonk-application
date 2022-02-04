@@ -1,0 +1,153 @@
+.searchbox {
+  -webkit-border-radius: 0;
+  font-size: 12px;
+  font-weight: 400;
+  padding: 10px;
+  //border-bottom: 1px solid #ebebeb !important;
+  border: 1px solid #ebebeb !important;
+  box-sizing: border-box;
+  /* margin-top: 22px; */
+  width: 60%;
+  border-radius: 7px;
+}
+.photo {
+  width: 40px;
+  height: 40px;
+  text-align: center !important;
+  background-color: #f0f0f0;
+  border-radius: 50%;
+  box-shadow: 0 5px 15px -8px rgb(0 0 0 / 24%), 0 8px 10px -5px rgb(0 0 0 / 20%);
+}
+
+.photo p {
+  color: black;
+  font-weight: 500;
+  font-size: 16px;
+  padding-top: 10px;
+  text-align: center !important;
+}
+.chatcontainer {
+  background: white;
+  min-height: 50px;
+  align-items: center;
+}
+.chattitle {
+  font-size: 12px;
+  font-weight: 500;
+  word-wrap: break-word;
+}
+.even {
+  background-color: #fff5e4 !important;
+}
+.odd {
+  background-color: #ffffff !important;
+}
+
+.inboxplaceholder {
+  height: 80vh;
+}
+/* width */
+::-webkit-scrollbar {
+  width: 8px !important;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #ddd;
+  width: 50px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #aaa;
+}
+.bigbutton {
+  font-size: 1em;
+}
+
+.chatplaceholderimage {
+  width: 40%;
+  position: absolute;
+  margin: 38%;
+}
+.comingsoonimage {
+  position: absolute;
+  bottom: 34%;
+  left: 34%;
+  width: 30%;
+}
+
+.comingsoontext {
+  position: absolute;
+  left: 43%;
+  top: 30%;
+}
+::ng-deep .cometchat-conversation-screen-conatiner {
+  height: 90vh !important;
+  display: flex;
+}
+
+// ::ng-deep .mat-snack-bar-container{
+//     transform: none;
+//     width: 62vw !important;
+//     max-width: none;
+//     position: fixed;
+//     height: 97vh;
+//     background: white;
+//     right: -12px;
+//     bottom: -12px;
+//     /* border: 1px solid #141414; */
+//     border-radius: 10px;
+//     padding: 16px;
+//     }
+
+.searchbox {
+  -webkit-border-radius: 0;
+  font-size: 12px;
+  font-weight: 400;
+  padding: 10px;
+  //border-bottom: 1px solid #ebebeb !important;
+  border: 1px solid #ebebeb !important;
+  box-sizing: border-box;
+  /* margin-top: 22px; */
+  width: 80%;
+  border-radius: 7px;
+}
+.photo {
+  width: 40px;
+  height: 40px;
+  text-align: center !important;
+  background-color: #f0f0f0;
+  border-radius: 50%;
+  box-shadow: 0 5px 15px -8px rgb(0 0 0 / 24%), 0 8px 10px -5px rgb(0 0 0 / 20%);
+}
+
+.photo p {
+  color: black;
+  font-weight: 500;
+  font-size: 16px;
+  padding-top: 10px;
+  text-align: center !important;
+}
+.chatcontainer {
+  background: white;
+  min-height: 50px;
+  align-items: center;
+  height: fit-content;
+}
+.chattitle {
+  font-size: 12px;
+  font-weight: 500;
+  word-wrap: break-word;
+}
+.even {
+  background-color: #fff5e4 !important;
+}
+.odd {
+  background-color: #ffffff !important;
+}

@@ -1,0 +1,454 @@
+@import "../../../../shared/loader/loader.component.scss";
+// .comingsoonimage{
+//   position: absolute;
+//   bottom: 34%;
+//   left: 34%;
+//   width: 30%;
+// }
+// .comingsoonimage{
+//     position: absolute;
+//     bottom: 34%;
+//     left: 34%;
+//     width: 30%;
+// }
+
+.comingsoontext {
+  // .comingsoontext{
+  //     position: absolute;
+  //     left: 43%;
+  //     top: 30%;
+  // }
+
+  .designdialogcontent {
+    max-height: 80vh;
+    height: 80vh;
+  }
+  .pestampform {
+    width: 100% !important;
+  }
+  .data-content {
+    margin-left: 16px;
+  }
+  .designmaintabs {
+    .mat-tab-label {
+      height: 90px !important;
+      background-color: #fff;
+      margin: 0px 8px;
+      border-radius: 8px;
+    }
+  }
+
+  .innertabs {
+    margin-left: 8px;
+    margin-right: 8px;
+    .mat-tab-label {
+      height: 48px !important;
+      background-color: transparent;
+    }
+  }
+  .mat-tab-nav-bar,
+  .mat-tab-header {
+    border-bottom: 0px;
+  }
+
+  .mat-icon1 {
+    color: #0984e3;
+  }
+  .listcolumn {
+    margin-top: 16px;
+    padding-left: 0px;
+  }
+  .listcard {
+    height: 60vh;
+    overflow: hidden;
+  }
+  .designlistitems-viewport {
+    height: 61vh;
+    width: 100%;
+  }
+  .listcard .mat-card-title {
+    margin-top: 10px;
+    font-size: 1.1em;
+  }
+  .even {
+    background-color: #ecf0f9ab;
+  }
+  .odd {
+    background-color: #ffffff;
+  }
+  .itemcard {
+    margin-bottom: 8px;
+    padding: 10px !important;
+    box-shadow: none !important;
+    border-radius: 8px !important;
+    // border-bottom: 1px solid #cccccc;
+
+    .mat-card-content {
+      margin-bottom: 0px;
+    }
+  }
+  .itemcard :hover {
+    cursor: pointer;
+  }
+  .itemcard .mat-card-header {
+    margin-bottom: 8px;
+  }
+  .itemcard .headerrow {
+    display: inline-block;
+    width: 100%;
+    margin-left: 10px;
+    margin-right: 10px;
+  }
+  .itemcard .headercol {
+    display: inline;
+    padding-left: 0px;
+    padding-right: 0px;
+  }
+  .itemcard .contentrow {
+    margin-left: 10px;
+    margin-right: 10px;
+  }
+  .itemcard .contentcol {
+    padding-left: 0px;
+    padding-right: 0px;
+  }
+  .itemcard .mat-card-title {
+    font-size: 0.9em;
+    font-weight: 600;
+    margin: 1px;
+    margin-bottom: 0px !important;
+  }
+  .itemcard .mat-card-subtitle {
+    font-size: 0.7em;
+    margin: 0px;
+    background-color: #0984e3;
+    padding: 4px 10px;
+    border-radius: 3px;
+    text-align: center;
+    height: 28px;
+    color: #fff;
+  }
+  .itemcard .actiondetail {
+    font-size: 0.8em;
+    color: #0984e3;
+    display: table;
+    text-align: left !important;
+  }
+  .itemcard .timedetail {
+    font-size: 0.9em;
+    color: #0984e3;
+    display: block;
+    font-weight: 600;
+    margin-bottom: 0px;
+    text-align: right;
+  }
+  .itemcard .blockdetail {
+    font-size: 0.7em;
+    margin: 0px;
+    background-color: #95afc0;
+    padding: 4px 10px;
+    border-radius: 3px;
+    text-align: center;
+    height: 28px;
+    color: #fff;
+  }
+  .itemcard .silentdetail {
+    color: #636e72;
+    font-style: italic;
+    font-size: 0.7em;
+    text-align: right;
+    margin-right: 10px;
+  }
+  .itemcard .chipdetail {
+    background-color: #95afc0;
+    font-size: 0.7em;
+    padding: 2px 10px;
+    border-radius: 12px;
+    text-align: center;
+    height: 24px;
+    color: #fff;
+    margin-bottom: 0px;
+  }
+  .itemcard .mat-card-footer {
+    margin: 0px;
+  }
+  .itemcard .footerrow {
+    margin-left: 10px;
+    margin-right: 10px;
+  }
+  .itemcard .footercol {
+    padding-left: 0px;
+    padding-right: 0px;
+  }
+  .itemcard .footercol .row {
+    margin-left: 0px !important;
+    margin-right: 0px !important;
+  }
+  .itemcard .assigneedetails {
+    font-size: 0.7em;
+    margin-bottom: 0px;
+    text-align: right;
+  }
+  .listplaceholder {
+    font-size: 1em;
+    color: #aaaaaa;
+    font-style: italic;
+    font-weight: 600;
+    margin-top: 6% !important;
+  }
+
+  // .col-lg-2 .col-md-3 .col-sm-6 .col-xs-6{
+  //   //flex: none !important;
+  // }
+
+  .condesignoverviewbutton {
+    background-color: #ffffff;
+    width: 100%;
+    color: #2b313f;
+    text-align: right !important;
+  }
+  // .overviewsection .col {
+  //   padding-left: 0;
+  // }
+  .condesignoverviewbutton img {
+    width: 22%;
+    position: absolute;
+    left: 16px;
+    top: 12px;
+  }
+  .condesignoverviewbutton h1 {
+    position: absolute;
+    top: 0px;
+    right: 16px;
+  }
+
+  .condesignoverviewbutton h4 {
+    font-size: 0.7rem;
+    position: absolute;
+    left: 43%;
+    top: 30%;
+  }
+  right: 16px;
+  top: 60px;
+}
+
+.conoverviewvalue {
+  margin-top: 22px !important;
+}
+
+.brandarea .logo {
+  width: 36px;
+  margin-left: 8px;
+  padding-right: 0px !important;
+  padding-left: 0px !important;
+  max-width: none !important;
+}
+
+.brandarea .logo img {
+  width: 36px !important;
+}
+
+.brandarea .initials {
+  padding: 9px;
+  margin-left: 6px;
+  margin-right: 0px !important;
+}
+
+@media screen and (min-width: 320px) {
+  // .overviewsection {
+  //   display: block;
+
+  // }
+
+  // .widthClass {
+  //   width: 224%;
+  // }
+}
+
+@media screen and (min-width: 768px) {
+  // .overviewsection {
+  //   display: flex;
+  // }
+
+  // .widthClass {
+  //   width: 102%;
+  // }
+}
+.deletclass {
+  display: inline;
+}
+.widt {
+  width: 80%;
+}
+
+.hight {
+  height: 20px;
+}
+
+.badges .col-md-4.col-sm-6.col-xs-6 {
+  padding-bottom: 10px;
+  padding-right: 5px;
+  padding-left: 5px;
+}
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+.pdfpreviewcol img {
+  width: 50px !important;
+}
+
+.spinnertext {
+  margin-top: 16px !important;
+  color: #3c78d8;
+}
+
+.spinnercard {
+  width: 26%;
+  position: absolute;
+  left: 34%;
+  top: 36%;
+}
+
+::ng-deep .mat-form-field {
+  display: initial !important;
+  position: relative;
+  text-align: left;
+}
+
+.list-border {
+  padding: 10px 0 10px 0px;
+  padding-top: 0px;
+}
+
+.contentheader {
+  color: #666666;
+  font-size: 0.8rem;
+  margin-bottom: 0;
+  padding: 0px 6px;
+}
+
+.file-icon {
+  width: 60px;
+  // float: right;
+}
+
+/* .title{
+font-size: 0.7rem;
+color: #666666;
+background-color: #f9f9f9;
+padding: 4px 6px;
+font-weight: 400;
+text-transform: uppercase;
+border-bottom: 0.6px solid #cccccc;
+margin-bottom: 2px;
+} */
+.mat-error {
+  font-size: x-small !important;
+}
+
+.containers-img {
+  width: 120px !important;
+  height: 70px;
+  object-fit: cover;
+  margin: 5px;
+  border-radius: 6px;
+  box-shadow: 0 5px 15px -8px rgba(0, 0, 0, 0.24),
+    0 8px 10px -5px rgba(0, 0, 0, 0.2);
+}
+
+.attachment-img {
+  object-fit: fill;
+  border-radius: 6px;
+  box-shadow: 0 5px 15px -8px rgba(0, 0, 0, 0.24),
+    0 8px 10px -5px rgba(0, 0, 0, 0.2);
+}
+
+.image-container {
+  width: 20%;
+  height: 80px;
+  display: flex;
+  padding: 4px;
+}
+
+.g-overlay {
+  min-width: 320px;
+}
+
+gallery {
+  font-size: 16px;
+}
+
+.lightbox-example,
+.gallerize-example {
+  margin: 2em;
+}
+
+.pestampgallery {
+  flex-wrap: nowrap;
+  overflow-x: scroll;
+  overflow: auto;
+}
+
+.surveycontainers {
+  display: flex;
+  flex-wrap: wrap;
+  img {
+    width: 15%;
+    height: 70px;
+    object-fit: cover;
+    margin: 5px;
+    border-radius: 6px;
+    box-shadow: 0 5px 15px -8px rgba(0, 0, 0, 0.24),
+      0 8px 10px -5px rgba(0, 0, 0, 0.2);
+  }
+}
+
+.appliancescontainers {
+  display: flex;
+  flex-wrap: wrap;
+  img {
+    width: 100%;
+    height: 70px;
+    object-fit: cover;
+    margin: 5px;
+    border-radius: 6px;
+    box-shadow: 0 5px 15px -8px rgba(0, 0, 0, 0.24),
+      0 8px 10px -5px rgba(0, 0, 0, 0.2);
+  }
+}
+
+.surveyprocesscardsubtext {
+  font-size: 12px;
+}
+
+.surveyprocesscardsubtext span {
+  font-weight: 600;
+  color: #3c78d8;
+}
+
+.slidecarouselrow {
+  margin: auto;
+}
+
+.subbody a {
+  color: #3c78d8 !important;
+}
+.comapnylist{
+  overflow: hidden;
+  }
+.scroll-container {
+  height: 30vh;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+

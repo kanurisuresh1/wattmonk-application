@@ -1,0 +1,101 @@
+<div *ngIf="isLoading" class="overlay">
+  <mat-progress-bar
+    class="commonprogressbar"
+    mode="indeterminate"
+  ></mat-progress-bar>
+</div>
+<div class="container">
+  <div class="row">
+    <div class="col-11">
+      <h4 class="dialogformtitle">Transfer Request</h4>
+    </div>
+
+    <div class="col-1">
+      <button mat-icon-button (click)="onCloseClick()">
+        <img class="dialogclose" src="../../../../../assets/close.svg" />
+      </button>
+    </div>
+  </div>
+</div>
+<div mat-dialog-content>
+  <div class="container">
+    <div class="row mt-4 mb-4">
+      <div class="col">
+        <!-- <div *ngIf="!isDesignerSelected" style="color: red;"> Please select user from the given list</div> -->
+        <div class="designerslist">
+          <cdk-virtual-scroll-viewport
+            *ngIf="data.users.length > 0"
+            itemSize="10"
+            class="designerslist-viewport"
+          >
+            <div
+              *cdkVirtualFor="let designer of data.users; let i = index"
+              class="style"
+            >
+              <div *ngIf="!designer.blocked">
+                <button
+                  mat-button
+                  class="designeritem"
+                  matBadge="{{ designer.jobcount }}"
+                  matBadgePosition="after"
+                  (click)="setSelectedAssignee(designer, i)"
+                >
+                  <div
+                    *ngIf="
+                      designer.contractorlogo != null &&
+                      designer.contractorlogo.logo != null
+                    "
+                    class="logo"
+                  >
+                    <img src="{{ designer.contractorlogo.logo.url }}" />
+                  </div>
+
+                  <div
+                    *ngIf="
+                      designer.contractorlogo == null ||
+                      designer.contractorlogo.logo == null
+                    "
+                    class="initials"
+                  >
+                    <p>
+                      {{
+                        genericService.getInitials(
+                          designer.firstname,
+                          designer.lastname
+                        )
+                      }}
+                    </p>
+                  </div>
+                  <div class="selectionbackground" *ngIf="designer.isDisplayed">
+                    <img src="../../../../../assets/whitetick.svg" />
+                  </div>
+                </button>
+                <div class="namedetails">
+                  <p>{{ designer.firstname }} {{ designer.lastname }}</p>
+                </div>
+              </div>
+            </div>
+            <!-- <button mat-button *cdkVirtualFor="let designer of designers; let i = index" class="designeritem" matBadge="{{designer.jobcount}}"
+                            matBadgePosition="after" (click)="setSelectedAssignee(designer, i)">
+                            <div *ngIf="designer.contractorlogo != null && designer.contractorlogo.logo != null" class="logo">
+                                <img src="{{designer.contractorlogo.logo.url}}" />
+                            </div>
+                            <div *ngIf="designer.contractorlogo == null || designer.contractorlogo.logo == null" class="initials">
+                                <p>{{genericService.getInitials(designer.firstname, designer.lastname)}}</p>
+                            </div>
+                            <div class="selectionbackground" *ngIf="designer.isDisplayed">
+                                <img src="../../../../../assets/whitetick.svg" />
+                            </div>
+                        </button> -->
+          </cdk-virtual-scroll-viewport>
+          <div *ngIf="data.users.length == 0">
+            No User found to transfer job
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<mat-dialog-actions align="end">
+  <button mat-raised-button (click)="onSaveClick()">Confirm</button>
+</mat-dialog-actions>

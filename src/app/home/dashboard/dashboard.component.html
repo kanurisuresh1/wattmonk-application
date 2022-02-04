@@ -1,0 +1,21 @@
+<div class="wrapper">
+  <app-sidebar
+    *ngIf="
+      isadmin &&
+      ((isonboardingcompleted && clientSuperAdmin) || !clientSuperAdmin)
+    "
+  ></app-sidebar>
+  <app-navbar *ngIf="!isadmin"></app-navbar>
+  <div [ngClass]="[isadmin == true ? 'main-panel' : 'full-panel']">
+    <app-activitybar></app-activitybar>
+    <app-navbar *ngIf="isadmin"></app-navbar>
+    <app-call-screen
+      *ngIf="incomingScreen"
+      (actionPerformed)="handleCallScreenActions()"
+      inProgressCall="{{ inProgressCall }}"
+      incomingScreen="{{ incomingScreen }}"
+    ></app-call-screen>
+    <app-zoho-salesiq></app-zoho-salesiq>
+    <router-outlet></router-outlet>
+  </div>
+</div>

@@ -1,0 +1,176 @@
+<div *ngIf="isLoading" class="overlay">
+  <mat-progress-bar
+    class="commonprogressbar"
+    mode="indeterminate"
+  ></mat-progress-bar>
+</div>
+<div class="fullscreen commonbackground">
+  <div class="container">
+    <div class="row">
+      <div class="col px-0 designerregistrationcard">
+        <mat-card>
+          <div class="container">
+            <div class="row align-items-center">
+              <div
+                class="col-md-5 col-sm-12 formpadding"
+                [ngClass]="[isDesktop ? 'none' : 'mobileform']"
+              >
+                <form
+                  class="registerform"
+                  [formGroup]="registerForm"
+                  (submit)="onRegister()"
+                  (keydown.enter)="onRegister()"
+                >
+                  <h1 class="title">Create your account</h1>
+                  <div class="mt-5 form-group row">
+                    <div class="col-md-6 col-sm-12">
+                      <p class="mb-0">First Name*</p>
+                      <mat-form-field appearance="outline" class="fullwidth">
+                        <input matInput [formControl]="firstname" required />
+                        <mat-error *ngIf="firstname.invalid">{{
+                          getErrorMessage(firstname)
+                        }}</mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div class="col-md-6 col-sm-12">
+                      <p class="mb-0">Last Name*</p>
+                      <mat-form-field
+                        class="pl-3"
+                        appearance="outline"
+                        class="fullwidth"
+                      >
+                        <input matInput [formControl]="lastname" required />
+                        <mat-error *ngIf="lastname.invalid">{{
+                          getErrorMessage(lastname)
+                        }}</mat-error>
+                      </mat-form-field>
+                    </div>
+                  </div>
+                  <div class="form-group row">
+                    <div class="col-md-6 col-sm-12">
+                      <p class="mb-0">Email*</p>
+                      <mat-form-field appearance="outline" class="fullwidth">
+                        <input matInput [formControl]="workemail" required />
+                        <mat-error *ngIf="workemail.invalid">{{
+                          getErrorMessage(workemail)
+                        }}</mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div class="col-md-6 col-sm-12">
+                      <p class="mb-0">Country*</p>
+                      <mat-form-field appearance="outline" class="fullwidth">
+                        <mat-select
+                          [formControl]="countrycontrol"
+                          style="font-size: 0.8em"
+                          disableOptionCentering
+                        >
+                          <mat-option
+                            *ngFor="let country of filteredOptions | async"
+                            [value]="country"
+                          >
+                            {{ country.country }}</mat-option
+                          >
+                        </mat-select>
+                        <mat-error *ngIf="countrycontrol.invalid">{{
+                          getErrorMessage(countrycontrol)
+                        }}</mat-error>
+                      </mat-form-field>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <mat-checkbox
+                      #agreementcheckbox
+                      class="mediumtext"
+                      [formControl]="agreement"
+                      (change)="OnAgreeTerms(agreementcheckbox)"
+                      required
+                      >I agree to the
+                      <a
+                        href=" https://www.wattmonk.net/service-agreement"
+                        class="actionlink fontweight"
+                        >Terms</a
+                      >
+                      and
+                      <a
+                        href="https://www.wattmonk.net/privacy-policy  "
+                        class="fontweight actionlink"
+                        >Privacy Policy</a
+                      ></mat-checkbox
+                    >
+                    <mat-error
+                      class="checkboxerror"
+                      *ngIf="agreement.invalid && display"
+                      >{{ getErrorMessage(agreement) }}
+                    </mat-error>
+                  </div>
+                  <div class="form-group">
+                    <button class="fullwidth" mat-raised-button type="submit">
+                      Sign up
+                    </button>
+                  </div>
+                  <div class="form-group pt-4">
+                    <span class="mediumtext fontweight"
+                      >Already registered? </span
+                    ><a
+                      class="actionlink fontweight mediumtext"
+                      [routerLink]="['/auth/login']"
+                      >Sign In</a
+                    >
+                  </div>
+                </form>
+                <div class="row footerrow fullwidth">
+                  <div class="col pt-2">
+                    <span class=""
+                      >&copy; 2020 WattMonk Private Limited. All Rights
+                      Reserved. and "Service Agreement"</span
+                    >
+                    <div class="row justify-content-center">
+                      <a
+                        href="https://www.wattmonk.com/privacy-policy"
+                        target="_blank"
+                        class="greyactionlink"
+                        style="border-right: 1px solid #697386"
+                        >Privacy Policy</a
+                      >
+                      <a
+                        href="https://www.wattmonk.com/service-agreement"
+                        target="_blank"
+                        class="greyactionlink"
+                        >Terms & Agreement</a
+                      >
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div
+                class="col-md-7 col-sm-0 background pt-5 pl-5"
+                style="z-index: 2; height: 100vh"
+                *ngIf="isDesktop"
+              >
+                <p [routerLink]="['/auth/login']">
+                  <img
+                    src="../../../assets/wattmonk logo white.svg"
+                    width="133px"
+                    height="34px"
+                  />
+                </p>
+                <img
+                  src="../../../assets/designer.svg"
+                  width="190px"
+                  height="auto"
+                  style="margin-top: 13rem"
+                />
+                <h2 class="mt-4 mb-3 title fontweight">Designer</h2>
+                <p class="w-50 fontweight mediumtext">
+                  Become part of a growing solar design company that provides a
+                  strong platform for your career by registering as a Solar
+                  Permit Designer.
+                </p>
+              </div>
+            </div>
+          </div>
+        </mat-card>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,15 @@
+<div class="container-fluid">
+    <div class="d-flex align-items-center justify-content-between">
+        <h2>Guidelines</h2>
+        <button mat-icon-button (click)="close()" class="float-right">
+            <img class="dialogclose" src="../../../../../assets/close.svg" />
+        </button>
+    </div>
+    <div class="row">
+        <div class="col-8">
+            <ul *ngFor="let x of guidelines">
+                <li>{{x.name}}</li>
+            </ul>
+        </div>
+    </div>
+</div>

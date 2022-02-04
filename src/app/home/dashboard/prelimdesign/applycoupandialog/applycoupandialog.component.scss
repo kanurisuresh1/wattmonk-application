@@ -1,0 +1,37 @@
+.promocodeinput {
+  -webkit-border-radius: 0;
+  font-size: 12px;
+  font-weight: 400;
+  padding: 10px;
+  //border-bottom: 1px solid #ebebeb !important;
+  border: 1px solid #ebebeb !important;
+  box-sizing: border-box;
+  /* margin-top: 22px; */
+  width: 100%;
+  border-radius: 13px;
+}
+.coupon-apply-btn {
+  padding: 5px;
+  border-radius: 13px;
+  margin-left: 10px;
+}
+
+::ng-deep .mat-list-base .mat-list-item .mat-list-item-content,
+.mat-list-base .mat-list-option .mat-list-item-content {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  box-sizing: border-box;
+  padding: 0 16px;
+  position: relative;
+  height: 5px !important;
+}
+.mat-list-item {
+  font-size: 12px;
+  font-weight: 400px;
+}
+
+.dashed-border {
+  margin-left: 0px;
+  border: 0.8px dashed #666666;
+}

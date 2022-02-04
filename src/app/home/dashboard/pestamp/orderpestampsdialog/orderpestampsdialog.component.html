@@ -1,0 +1,306 @@
+<div *ngIf="isLoading || ispaymentLoading">
+  <mat-spinner style="margin: auto; margin-top: 16px" [diameter]="50"></mat-spinner>
+</div>
+<!-- <div *ngIf="isLoading" class="progress-loader">
+  <div id="pause" class="d-flex align-items-center justify-content-center">
+    <div id="spinner" style="background: #fff;padding: 25px;border-radius: 5px;" class="row">
+        <div class="loading-message bkgg col-9">{{loadingmessage}}</div>
+        <div class="col-3" style="top: 5px;">
+          <div class="snippet" data-title=".dot-pulse">
+            <div class="stage">
+              <div class="dot-pulse"></div>
+            </div>
+          </div>
+        </div>
+    </div>
+  </div>
+</div> -->
+<div class="container">
+  <div class="row" *ngIf="!isLoading && !ispaymentLoading">
+    <div class="col-8">
+      <h4 class="orderformtitle">Order Details</h4>
+    </div>
+    <div class="col-4">
+      <button mat-icon-button (click)="onCloseClick()" class="float-right">
+        <img class="dialogclose" src="../../../../../assets/close.svg" style="font-weight: bold" />
+      </button>
+    </div>
+  </div>
+</div>
+<div mat-dialog-content>
+  <div class="container" *ngIf="!isLoading && !ispaymentLoading">
+    <div class="row">
+      <div>
+        <img class="sidecardicon" src="../../../../../assets/Group416.svg" />
+      </div>
+      <div>
+        <h5 class="orderformsubtitle">PE Stamp</h5>
+      </div>
+    </div>
+    <div class="row" *ngIf="!loggedinuser.parent.ispaymentmodeprepay" style="padding: 0 15px">
+      <div>
+        <h5 style="font-size: 13px; color: #666666">
+          On confirmation, your pestamp request purchase will be add to your
+          monthly invoice. Please find below the summary of your purchase.
+        </h5>
+      </div>
+    </div>
+    <div class="row mt-4">
+      <div class="col">
+        <div class="row">
+          <div class="col-6">
+            <p class="ordertext" style="margin-bottom: 0px">Service Charges:</p>
+            <!-- <p class="ordertext" *ngIf="data.pestamp.propertytype =='commercial'" style="color: red;font-size: 8px;">Service Charges will be applicable on delivery.</p> -->
+          </div>
+          <div class="col-6">
+            <p class="highlightedtext" *ngIf="data.pestamp.propertytype != 'commercial'">
+              ${{ servicecharge.toFixed(2) }}
+            </p>
+            <p class="highlightedtext" *ngIf="data.pestamp.propertytype == 'commercial'">
+              -
+            </p>
+          </div>
+        </div>
+        <div class="row" *ngIf="
+            this.data.pestamp.modeofstamping == 'hardcopy' ||
+            this.data.pestamp.modeofstamping == 'both'
+          ">
+          <div class="col-10">
+            <p class="ordertext">
+              Printing Charges
+              <span *ngIf="data.pestamp.propertytype != 'commercial'">(per copy ${{ printingCharges }} x
+                {{ this.data.pestamp.hardcopies }} copy)</span>
+            </p>
+          </div>
+          <div class="col">
+            <p class="highlightedtext">
+              {{
+              data.pestamp.propertytype == "commercial"
+              ? "-"
+              : "$" + totalprintingcharges
+              }}
+            </p>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">
+            <p class="ordertext">Discount:</p>
+          </div>
+          <div class="col">
+            <p class="highlightedtext">${{ discountamount.toFixed(2) }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row mt-4">
+      <div class="col">
+        <div class="row">
+          <div class="col">
+            <p class="ordersubtitle" style="margin-bottom: 0px">
+              You have to pay
+            </p>
+          </div>
+          <div class="col">
+            <p class="highlightedamount" style="margin-bottom: 0px">
+              {{
+              data.pestamp.propertytype == "commercial"
+              ? "-"
+              : "$" + amounttopay.toFixed(2)
+              }}
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <hr />
+    <div class="row" *ngIf="
+        walletamount > amounttopay && loggedinuser.parent.ispaymentmodeprepay
+      ">
+      <div class="col">
+        <p class="ordertext" style="margin-bottom: 0px">Amount in wallet</p>
+      </div>
+      <div class="col">
+        <p class="highlightedtext" style="margin-bottom: 0px; color: #666666; font-weight: 500">
+          ${{ walletamount.toFixed(2) }}
+        </p>
+      </div>
+    </div>
+    <div class="row" *ngIf="
+        data.pestamp.modeofstamping == 'hardcopy' ||
+        data.pestamp.modeofstamping == 'both' ||
+        data.pestamp.propertytype == 'commercial'
+      ">
+      <p class="shippingtext" style="padding: 0px 15px">
+        *{{
+        data.pestamp.propertytype == "commercial"
+        ? "All charges should be paid on monthly invoicing"
+        : "Shipping charges to be paid on delivery"
+        }}
+      </p>
+    </div>
+  </div>
+</div>
+
+<section *ngIf="
+    loggedinuser.parent.ispaymentmodeprepay && !isLoading && !ispaymentLoading
+  ">
+  <mat-dialog-actions>
+    <div class="example-button-row mt-2" *ngIf="
+        walletamount < amounttopay &&
+        (loggedinuser.role.id == 6 || loggedinuser.role.id == 7) &&
+        data.pestamp.propertytype != 'commercial'
+      ">
+      <div class="row mt-2">
+        <div class="col">
+          <div class="row mx-1">
+            <div class="col" style="padding-left: 11px">
+              <p class="ordersubtitle">Payment Option:</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row mb-2" *ngIf="
+          loggedinuser.parent.ispaymentmodeprepay &&
+          (loggedinuser.role.id == 6 || loggedinuser.role.id == 7)
+        ">
+        <div class="row" style="margin: 10px 0 0px 13px; width: 100%">
+          <button mat-stroked-button class="col balancebtn fullwidth" (click)="openAddMoneyUsingPaypal()">
+            <div class="row">
+              <div class="col">
+                <p style="margin-bottom: -6px; margin-top: 17px">Paypal</p>
+              </div>
+              <div class="col" style="display: flex; justify-content: flex-end">
+                <img class="balanceimg1" src="../../../../../assets/paypal-seeklogo.com.svg" />
+              </div>
+            </div>
+          </button>
+        </div>
+        <div class="row" style="margin: 10px 0 15px 10px; width: 100%">
+          <button mat-stroked-button class="col balancebtn" (click)="openAddMoneyToWalletDialog(1)">
+            <div class="row">
+              <div class="col">
+                <p style="margin-bottom: -6px">Wallet</p>
+                <p>Available bal: ${{ walletamount.toFixed(2) }}</p>
+              </div>
+              <div class="col" style="
+                  display: flex;
+                  justify-content: flex-end;
+                  align-items: center;
+                ">
+                <img class="balanceimg2" src="../../../../../assets/Group 2274.svg" />
+              </div>
+            </div>
+          </button>
+        </div>
+      </div>
+    </div>
+    <p class="subtitle"
+      *ngIf='(loggedinuser.role.id !=6 && loggedinuser.role.id !=7) &&loggedinuser.parent.amount < amounttopay'
+      style="color: red; font-size: 12px;">Insufficent Amount</p>
+    <button class="w-100 mt-2 mb-4" *ngIf="walletamount >= amounttopay || data.pestamp.propertytype =='commercial'"
+      mat-raised-button mat-button (click)="onConfirmationClick()">Confirm
+    </button>
+  </mat-dialog-actions>
+</section>
+
+<section *ngIf="!loggedinuser.parent.ispaymentmodeprepay">
+  <mat-dialog-actions>
+    <button class="w-100 mt-2 mb-4" mat-raised-button mat-button (click)="onProceedClick()">
+      Confirm
+    </button>
+  </mat-dialog-actions>
+</section>
+
+<!-- <div class="container">
+  <div class="row">
+    <div class="col-8">
+      <h4 class="dialogformtitle">Confirm your order</h4>
+    </div>
+    <div class="col-4" style="padding-right: 0px;">
+      <button mat-icon-button (click)="onCloseClick()" class="float-right">
+        <img class="dialogclose" src="../../../../../assets/close.svg" />
+      </button>
+    </div>
+  </div>
+</div>
+<div mat-dialog-content>
+  <div class="container">
+    <div class="row mt-2">
+      <div class="col">
+        <p *ngIf="loggedinuser.ispaymentmodeprepay &&this.data.pestamp.propertytype !='commercial'" style="font-size: 13px; color: #666666;">Please make the payment to process your pestamp request with WattMonk.</p>
+        <p *ngIf="!loggedinuser.ispaymentmodeprepay " style="font-size: 13px; color: #666666;">On confirmation, your pestamp request purchase will be add to your monthly invoice. Please find below the summary of your purchase.</p>
+        <p *ngIf="loggedinuser.ispaymentmodeprepay && this.data.pestamp.propertytype=='commercial'" style="font-size: 13px; color: #666666;">Payment to be made on delivery. </p>
+      </div>
+    </div>
+    <div class="row mt-4">
+      <div class="col">
+        <div class="row">
+          <div class="col">
+            <p class="subtitle" style="color: #666666; font-size: 12px;">Service Charges</p>
+          </div>
+          <div class="col" *ngIf="this.data.pestamp.propertytype=='residential'">
+            <p class="highlightedtext">${{servicecharge}}</p>
+          </div>
+          <div class="col" *ngIf="this.data.pestamp.propertytype=='commercial'">
+            <p class="highlightedtext">${{this.genericService.commercialpestampcharges}}/hr</p>
+          </div>
+        </div>
+        <div class="row" *ngIf="this.data.pestamp.modeofstamping =='hardcopy' || this.data.pestamp.modeofstamping =='both'">
+          <div class="col">
+            <p class="subtitle" style="color: #666666; font-size: 12px;">Printing Charges (per copy $ {{printingCharges}} - 1 x {{this.data.pestamp.hardcopies}}copy)</p>
+          </div>
+          <div class="col" >
+            <p class="highlightedtext">${{totalprintingcharges}}</p>
+          </div>
+        </div>
+        <div class="row mt-2">
+          <div class="col">
+            <div style="height: 1px; background-color: #A5A9ABAA;"></div>
+          </div>
+        </div>
+        <div class="row mt-3" [hidden]="this.data.pestamp.propertytype=='commercial'">
+          <div class="col">
+            <p style="color: #000000; font-size: 15px; font-weight: 600;">You have to pay</p>
+          </div>
+          <div class="col">
+            <p class="superhighlightedtext">${{amounttopay}}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row mt-2" *ngIf="loggedinuser.ispaymentmodeprepay &&loggedinuser.role.id==6">
+      <div class="col">
+        <div class="row" style="background-color: #DFEFFD; border-radius: 10px;">
+          <div class="col">
+            <p class="subtitle" style="color: #667785; font-size: 12px; margin: 5px 0px !important;">Amount in wallet</p>
+          </div>
+          <div class="col">
+            <p class="highlightedtext" style="color: #667785; margin: 5px 0px !important;">${{walletamount}}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row" *ngIf="this.data.pestamp.modeofstamping=='hardcopy' ||this.data.pestamp.modeofstamping=='both'">
+      <p style="color: #EC3434; font-size: 13px; font-weight: 500;" 
+      >* Shipping charges to be paid on service delivery.</p>
+    </div>
+  </div>
+</div>
+<section *ngIf="loggedinuser.parent.ispaymentmodeprepay">
+  <mat-dialog-actions align="end">
+    <div class="example-button-row" *ngIf="walletamount < amounttopay && (loggedinuser.role.id==6||loggedinuser.role.id==7)">
+      <button mat-raised-button (click)="openAddMoneyToWalletDialog(1)">Add money to wallet </button>
+      
+      <button mat-raised-button (click)='openAddMoneyUsingPaypal()'   >Pay via Paypal</button>
+    </div>
+    <p class="subtitle" *ngIf='(loggedinuser.role.id !=6 && loggedinuser.role.id !=7) &&loggedinuser.parent.amount < amounttopay' style="color: #667785; font-size: 12px; ">Insufficent Amount</p>
+    <button *ngIf="walletamount >= amounttopay" mat-raised-button mat-button
+      (click)="onConfirmationClick()">Confirm</button>
+  </mat-dialog-actions>
+</section>
+<section *ngIf="!loggedinuser.parent.ispaymentmodeprepay">
+  <mat-dialog-actions align="end">
+    <button mat-raised-button mat-button
+      (click)="onProceedClick()">Confirm</button>
+  </mat-dialog-actions>
+</section> -->

@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20">
+  <g id="Block" transform="translate(0.212 0.174)">
+    <g id="Ellipse_18" data-name="Ellipse 18" transform="translate(-0.212 -0.174)" fill="none" stroke="#333" stroke-width="3">
+      <circle cx="10" cy="10" r="10" stroke="none"/>
+      <circle cx="10" cy="10" r="8.5" fill="none"/>
+    </g>
+    <line id="Line_5" data-name="Line 5" y1="13.919" x2="13.186" transform="translate(3.076 2.97)" fill="none" stroke="#333" stroke-width="3"/>
+  </g>
+</svg>

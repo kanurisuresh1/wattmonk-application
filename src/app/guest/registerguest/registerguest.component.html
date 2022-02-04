@@ -1,0 +1,82 @@
+<div mat-dialog-content>
+  <div class="container">
+    <div class="row">
+      <div class="col-11">
+        <h4 class="dialogformtitle">Get live status updates</h4>
+        <p>
+          Please provide us with few more details, so that the platform can keep
+          you posted about the status of your design request.
+        </p>
+      </div>
+      <div class="col-1">
+        <button class="float-right" mat-icon-button (click)="onCloseClick()">
+          <img class="dialogclose" src="../../../../../assets/close.svg" />
+        </button>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        <form
+          class="innerdialogform"
+          [formGroup]="registerguest"
+          (submit)="onAddMember()"
+          (keydown.enter)="$event.preventDefault()"
+        >
+          <div class="form-group">
+            <mat-form-field class="pl-3">
+              <mat-label>Firstname</mat-label>
+              <input
+                matInput
+                placeholder="eg. john"
+                [formControl]="firstname"
+                required
+              />
+              <mat-error *ngIf="firstname.invalid">{{
+                getErrorMessage(firstname)
+              }}</mat-error>
+            </mat-form-field>
+            <mat-form-field class="pl-3">
+              <mat-label>Lastname</mat-label>
+              <input
+                matInput
+                placeholder="eg. doe"
+                [formControl]="lastname"
+                required
+              />
+              <mat-error *ngIf="lastname.invalid">{{
+                getErrorMessage(lastname)
+              }}</mat-error>
+            </mat-form-field>
+            <mat-form-field class="pl-3">
+              <mat-label>Email</mat-label>
+              <input
+                matInput
+                placeholder="eg. pat@example.com"
+                [formControl]="workemail"
+                required
+              />
+              <mat-error *ngIf="workemail.invalid">{{
+                getErrorMessage(workemail)
+              }}</mat-error>
+            </mat-form-field>
+            <mat-form-field class="pl-3">
+              <mat-label>Phone Number</mat-label>
+              <input
+                matInput
+                placeholder="eg. 98775534220"
+                [formControl]="phone"
+                required
+              />
+              <mat-error *ngIf="phone.invalid">{{
+                getErrorMessage(phone)
+              }}</mat-error>
+            </mat-form-field>
+          </div>
+          <div class="mt-5 float-right">
+            <button mat-raised-button style="width: 100px">Confirm</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,515 @@
+<!-- <div *ngIf="isLoading" class="overlay">
+    <mat-card class="spinnercard" align-items-center>
+      <div class="row">
+        <div class="col-3">
+          <mat-progress-spinner diameter="50" color="primary" mode="indeterminate" strokeWidth="5"></mat-progress-spinner>
+        </div>
+        <div class="col">
+          <h4 class="spinnertext">{{loadingmessage}}</h4>
+        </div>
+      </div>
+    </mat-card>
+  </div> -->
+<div *ngIf="isLoading" class="progress-loader">
+  <div id="pause" class="d-flex align-items-center justify-content-center">
+    <div id="spinner" style="background: #fff; padding: 35px; border-radius: 5px; width: 17rem" class="row">
+      <div class="loading-message bkgg col-9">{{loadingmessage}}</div>
+      <div class="col-3" style="top: 5px">
+        <div class="snippet" data-title=".dot-pulse">
+          <div class="stage">
+            <div class="dot-pulse"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<h3 mat-dialog-title>Send PE stamp for revision</h3>
+<div mat-dialog-content class="revisiondialogcontent">
+  <div class="container">
+    <div class="row d-flex">
+      <div class="col-6 align-items-center">
+        <p class="subtitle fullwidth" *ngIf="data.isWattmonkUser">
+          Proof of Request Attachment*
+          <span style="color: red" *ngIf="displayerror && !isAttachmentUploaded">Required</span>
+        </p>
+        <p class="subtitle fullwidth" *ngIf="!data.isWattmonkUser">
+          Upload Attachment
+        </p>
+        <div class="row architectureuploadrow">
+          <div class="col align-items-center architectureuploadcol">
+            <div class="multiple-dropzone fullwidth" ngx-dropzone [multiple]="true"
+              (change)="onAttachmentFileSelect($event)">
+              <ngx-dropzone-label>
+                <div>
+                  <img class="addimage" src="../../../../../assets/add.svg" />
+                  <h5>Drag and drop or click to browse.</h5>
+                </div>
+              </ngx-dropzone-label>
+              <div *ngFor="let f of attachmentfiles">
+                {{ f.type }}
+                <ngx-dropzone-preview *ngIf="!f.isImage" class="imagepreview" ngProjectAs="ngx-dropzone-preview"
+                  [file]="f" [removable]="true" (removed)="onAttachmentFileRemove(f)">
+                  <ngx-dropzone-label class="previewlabel">{{ f.name }} ({{ f.type }})</ngx-dropzone-label>
+                </ngx-dropzone-preview>
+                <ngx-dropzone-image-preview *ngIf="f.isImage" class="imagepreview" ngProjectAs="ngx-dropzone-preview"
+                  [file]="f" [removable]="true" (removed)="onAttachmentFileRemove(f)">
+                </ngx-dropzone-image-preview>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-6">
+        <mat-form-field appearance="fill" class="fullwidth">
+          <mat-label>Reason</mat-label>
+          <textarea style="height: 100px" matInput [formControl]="resendcommentscontrol" required></textarea>
+          <mat-error *ngIf="resendcommentscontrol.invalid">"Field input is required."</mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+    <mat-tab-group mat-align-tabs="center" class="revisiondialogpage">
+      <mat-tab *ngIf="data.pestamp != null">
+        <ng-template matTabLabel> PE Stamp </ng-template>
+        <div class="mt-3 container detailsdialog">
+          <div class="row mt-3 surveyfieldrow">
+            <div class="col-12 col-sm-6">
+              <p class="subtitle fullwidth">Customer Details</p>
+              <div class="row subbody">
+                <div class="col-6">
+                  <p class="contentheader">Name</p>
+                  <p class="contentheader">Phone Number</p>
+                  <p class="contentheader">Email</p>
+                  <p class="contentheader">Created By</p>
+                </div>
+                <div class="col-6">
+                  <p class="contentvalue text-right">
+                    {{ (data.pestamp?.personname | titlecase) || defaultvalue}}
+                  </p>
+                  <p class="contentvalue text-right">
+                    {{ data.pestamp?.contactnumber || defaultvalue}}
+                  </p>
+                  <p class="contentvalue text-right">
+                    {{ data.pestamp?.email || defaultvalue}}
+                  </p>
+                  <p class="contentvalue text-right">
+                    {{ data.pestamp.createdby.firstname }} {{
+                    data.pestamp.createdby.lastname }}
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="col-12 col-sm-6">
+              <p class="subtitle fullwidth">Job Details</p>
+              <div class="row subbody">
+                <div class="col-6">
+                  <p class="contentheader">Request Type</p>
+                  <p class="contentheader">Mode of Stamping</p>
+                  <p class="contentheader" *ngIf="data.pestamp.hardcopies != null">
+                    Hard copies
+                  </p>
+                  <p class="contentheader" *ngIf="data.pestamp.type=='electrical' ||data.pestamp.type=='both'">
+                    Job Type
+                  </p>
+                  <p class="contentheader" class="contentheader" *ngIf="data.pestamp.deliveryaddress != null">
+                    Shipping Address
+                  </p>
+                  <p class="contentheader"
+                    *ngIf="data.pestamp.status=='delivered' && (data.pestamp.modeofstamping == 'hardcopy' || data.pestamp.modeofstamping == 'both')">
+                    Shipping Charges
+                  </p>
+                </div>
+                <div class="col-6">
+                  <p class="contentvalue text-right">
+                    {{ (data.pestamp?.type | titlecase) || defaultvalue }}
+                  </p>
+                  <p class="contentvalue text-right">
+                    {{ (data.pestamp?.modeofstamping | titlecase) ||
+                    defaultvalue }}
+                  </p>
+                  <p class="contentvalue text-right">
+                    {{ data.pestamp.hardcopies }}
+                  </p>
+                  <p class="contentvalue text-right" *ngIf="data.pestamp.jobtype!='pvbattery'">
+                    {{ data.pestamp.jobtype | titlecase }}
+                  </p>
+                  <p class="contentvalue text-right" *ngIf="data.pestamp.jobtype=='pvbattery'">
+                    PV+Battery
+                  </p>
+                  <p class="contentvalue text-right" *ngIf="data.pestamp.deliveryaddress != null">
+                    {{ data.pestamp.deliveryaddress }}
+                  </p>
+                  <p class="contentvalue text-right"
+                    *ngIf="data.pestamp.status=='delivered' && (data.pestamp.modeofstamping == 'hardcopy' || data.pestamp.modeofstamping == 'both')">
+                    {{data.pestamp.deliverycharges}}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-6 mt-3">
+              <p class="subtitle fullwidth">Mounting Details</p>
+              <div class="row subbody">
+                <div class="col">
+                  <p class="contentheader">Mounting type</p>
+                </div>
+                <div class="col">
+                  <p class="contentvalue text-right">
+                    {{ (data.pestamp?.mountingtype | titlecase) ||
+                    defaultvalue}}
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-6 mt-3">
+              <p class="subtitle fullwidth">Property Details</p>
+              <div class="row subbody">
+                <div class="col">
+                  <p class="contentheader">Property type</p>
+                </div>
+                <div class="col">
+                  <p class="contentvalue text-right">
+                    {{ (data.pestamp?.propertytype | titlecase)|| defaultvalue
+                    }}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-12 col-sm-6 mt-5" *ngIf="this.data.pestamp.thirdpartystamping != null">
+              <mat-checkbox [checked]="this.data.pestamp.thirdpartystamping" disabled>3rd party stamping required
+              </mat-checkbox>
+            </div>
+            <div class="col-12 col-sm-6 mt-5"
+              *ngIf="(this.data.pestamp.type=='structural' ||this.data.pestamp.type=='both')&& data.pestamp?.atticphotos?.length > 0">
+              <p class="subtitle fullwidth">Attic Photos</p>
+              <p class="containers">
+                <img *ngFor="let item of atticphotos; index as i" [lightbox]="i" [src]="item.data.thumb"
+                  [gallery]="'atticphotos'" />
+              </p>
+            </div>
+            <div class="col-12 col-sm-6 mt-5"
+              *ngIf="(this.data.pestamp.type=='structural' ||this.data.pestamp.type=='both') && data.pestamp?.roofphotos?.length > 0">
+              <p class="subtitle fullwidth">Roof Photos</p>
+              <p class="containers">
+                <img *ngFor="let item of roofphotos; index as i" [lightbox]="i" [src]="item.data.thumb"
+                  [gallery]="'roofphotos'" />
+              </p>
+            </div>
+            <div class="col-12 col-sm-6 mt-5" *ngIf="data.pestamp?.permitplan?.length > 0">
+              <p class="subtitle fullwidth">Permit plan</p>
+              <div class="row subbody" *ngFor="let file of data.pestamp?.permitplan">
+                <div class="col-2">
+                  <p class="contentheader">
+                    <img *ngIf="file.ext == '.pdf'" class="material-icons" src="./../assets/pdf.svg" width="60px"
+                      height="60px" />
+                    <img *ngIf="file.ext == '.png'" class="material-icons file-icon" src="./../assets/png.svg"
+                      width="60px" height="60px" />
+                    <img *ngIf="file.ext == '.zip'" class="material-icons file-icon" src="./../assets/zip.svg"
+                      width="60px" height="60px" />
+                    <img *ngIf="file.ext == '.doc'" class="material-icons file-icon" src="./../assets/doc.svg"
+                      width="60px" height="60px" />
+                    <img *ngIf="file.ext == '.docx'" class="material-icons file-icon" src="./../assets/doc.svg"
+                      width="60px" height="60px" />
+                    <img *ngIf="file.ext == '.odt'" class="material-icons file-icon" src="./../assets/pdf.svg"
+                      width="60px" height="60px" />
+                    <img *ngIf="file.ext == '.rtf'" class="material-icons file-icon" src="./../assets/rtf.svg"
+                      width="60px" height="60px" />
+                    <img *ngIf="file.ext == '.txt'" class="material-icons file-icon" src="./../assets/txt.svg"
+                      width="60px" height="60px" />
+                    <img
+                      *ngIf="file.ext != '.png' && file.ext != '.pdf' && file.ext != '.zip' && file.ext != '.doc' && file.ext != '.docx' && file.ext != '.odt' && file.ext != '.rtf' && file.ext != '.txt'"
+                      class="material-icons file-icon" src="./../assets/file.svg" width="60px" height="60px" />
+                  </p>
+                </div>
+                <div class="col-10 d-flex justify-content-end">
+                  <a href="{{file.url}}" target="_blank" class="contentvalue float-right" style="margin: auto 0px">{{
+                    file.name | uppercase }}</a>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-6 col-12 mt-5 align-items-center" *ngIf="data.pestamp?.comments?.length > 0">
+              <p class="subtitle fullwidth">Comments</p>
+              <div *ngFor="let comment of data.pestamp.comments">
+                <div class="row commentslist">
+                  <p style="width: 50%; word-wrap: break-word">
+                    <span>&#8220;</span>
+                    <span innerHTML="{{wrapURLs(comment.message)}}"></span>
+                    <span>&#8221;</span>
+                  </p>
+                  <p class="pl-1 text-center" style="width: 25%">
+                    {{comment.createdby.firstname}}
+                    {{comment.createdby.lastname}}
+                  </p>
+                  <p class="pl-1 text-right" style="
+                      width: 25%;
+                      font-style: italic;
+                      color: #666666;
+                      font-weight: 80%;
+                    ">
+                    {{
+                    genericService.formatDateInDisplayFormatnew(comment.created_at)
+                    }}
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="col-12 col-sm-6 mt-5"
+              *ngIf="(data.pestamp.status == 'completed'   || this.data.pestamp.status == 'delivered') ">
+              <p class="subtitle fullwidth">Stamped File</p>
+              <div class="row subbody" *ngFor="let files of data.pestamp.stampedfiles">
+                <div class="col">
+                  <!-- <p class="contentheader">View File</p> -->
+                  <img class="material-icons" src="./../assets/pdf.svg" width="60px" height="60px" />
+                </div>
+                <div class="col d-flex justify-content-end">
+                  <a href="{{files.url}}" target="_blank" class="contentvalue float-right" style="margin: auto 0px">{{
+                    files.name | titlecase }}</a>
+                </div>
+              </div>
+            </div>
+            <div class="col-12 col-sm-6 mt-5"
+              *ngIf="((this.data.pestamp.status == 'completed'|| this.data.pestamp.status == 'delivered')&& this.data.pestamp.propertytype=='commercial') ">
+              <p class="subtitle fullwidth">Working Hours</p>
+              <div class="row subbody">
+                <div class="col">
+                  <p class="contentheader">PE engineer working hours</p>
+                </div>
+                <div class="col">
+                  <p class="contentvalue float-right">
+                    {{this.data.pestamp.workinghours}}
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="col-12 col-sm-6 mt-5"
+              *ngIf="this.data.pestamp.status == 'declined' || data.pestamp?.onholdpestamp?.length || data.pestamp.requestdeclinereason != null">
+              <p class="subtitle fullwidth">Reason</p>
+              <ng-container *ngIf="data.pestamp?.requestdeclinereason && data.pestamp?.onholdpestamp?.length == 0">
+                <div class="row subbody">
+                  <div class="col">
+                    <p class="contentvalue">
+                      {{this.data.pestamp.requestdeclinereason}}
+                    </p>
+                  </div>
+                </div>
+              </ng-container>
+              <ng-container
+                *ngIf="(data.pestamp.requestdeclinereason == null && data.pestamp?.onholdpestamp?.length) || (data.pestamp.requestdeclinereason && data.pestamp?.onholdpestamp?.length)">
+                <div class="col-12 subbody px-0" *ngFor="let item of data.pestamp.onholdpestamp">
+                  <div class="d-flex mb-2 commentslist">
+                    <div class="col-5 pl-0">
+                      <p>{{item.comment}}</p>
+                    </div>
+                    <div class="col-4">
+                      <p>
+                        {{item.createdby.firstname}} {{item.createdby.lastname}}
+                      </p>
+                    </div>
+                    <div class="col-3">
+                      <p class="pl-1 text-right" style="
+                          font-style: italic;
+                          color: #666666;
+                          font-weight: 80%;
+                        ">
+                        {{
+                        genericService.formatDateInDisplayFormatnew(item.created_at)
+                        }}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </ng-container>
+            </div>
+            <div class="col-sm-6 col-12 mt-5"
+              *ngIf="(this.data.pestamp.status == 'declined' && data.pestamp?.requestdeclineattachment?.length) || data.pestamp?.requestdeclineattachment?.length || (data.pestamp.onholdpestamp && data.pestamp?.onholdpestamp?.length > 0)">
+              <p class="subtitle fullwidth">Request Decline Attachments</p>
+              <ng-container
+                *ngIf="(data.pestamp?.requestdeclineattachment?.length && !data.pestamp?.onholdpestamp?.length) || (data.pestamp?.requestdeclineattachment?.length && (data.pestamp?.onholdpestamp?.length && data.pestamp?.onholdpestamp?.length == 0))">
+                <div class="row subbody list-border"
+                  *ngFor="let attachmentfile of data.pestamp.requestdeclineattachment">
+                  <div class="col-2">
+                    <p class="contentheader">
+                      <img *ngIf="attachmentfile.ext == '.pdf'" class="material-icons file-icon"
+                        src="./../assets/pdf.svg" />
+                      <img *ngIf="attachmentfile.ext == '.png'" class="material-icons file-icon"
+                        src="./../assets/png.svg" />
+                      <img *ngIf="attachmentfile.ext == '.zip'" class="material-icons file-icon"
+                        src="./../assets/zip.svg" />
+                      <img *ngIf="attachmentfile.ext == '.doc'" class="material-icons file-icon"
+                        src="./../assets/doc.svg" />
+                      <img *ngIf="attachmentfile.ext == '.docx'" class="material-icons file-icon"
+                        src="./../assets/doc.svg" />
+                      <img *ngIf="attachmentfile.ext == '.odt'" class="material-icons file-icon"
+                        src="./../assets/pdf.svg" />
+                      <img *ngIf="attachmentfile.ext == '.rtf'" class="material-icons file-icon"
+                        src="./../assets/rtf.svg" />
+                      <img *ngIf="attachmentfile.ext == '.txt'" class="material-icons file-icon"
+                        src="./../assets/txt.svg" />
+                      <img
+                        *ngIf="attachmentfile.ext != '.png' && attachmentfile.ext != '.pdf' && attachmentfile.ext != '.zip' && attachmentfile.ext != '.doc' && attachmentfile.ext != '.docx' && attachmentfile.ext != '.odt' && attachmentfile.ext != '.rtf' && attachmentfile.ext != '.txt'"
+                        class="material-icons file-icon" src="./../assets/file.svg" />
+                    </p>
+                  </div>
+                  <div class="col-10">
+                    <a href="{{attachmentfile.url}}" target="_blank" class="contentvalue float-right">{{
+                      attachmentfile.name | uppercase }}</a>
+                  </div>
+                </div>
+              </ng-container>
+              <ng-container *ngIf="data.pestamp?.onholdpestamp?.length">
+                <div class="col-12 subbody px-0" *ngFor="let item of data.pestamp.onholdpestamp">
+                  <div class="d-flex mb-2 commentslist" *ngFor="let file of item.file">
+                    <div class="col-5 pl-0 d-flex">
+                      <p class="contentheader">
+                        <img *ngIf="file.ext == '.pdf'" class="material-icons file-icon" src="./../assets/pdf.svg" />
+                        <img *ngIf="file.ext == '.png'" class="material-icons file-icon" src="./../assets/png.svg" />
+                        <img *ngIf="file.ext == '.zip'" class="material-icons file-icon" src="./../assets/zip.svg" />
+                        <img *ngIf="file.ext == '.doc'" class="material-icons file-icon" src="./../assets/doc.svg" />
+                        <img *ngIf="file.ext == '.docx'" class="material-icons file-icon" src="./../assets/doc.svg" />
+                        <img *ngIf="file.ext == '.odt'" class="material-icons file-icon" src="./../assets/pdf.svg" />
+                        <img *ngIf="file.ext == '.rtf'" class="material-icons file-icon" src="./../assets/rtf.svg" />
+                        <img *ngIf="file.ext == '.txt'" class="material-icons file-icon" src="./../assets/txt.svg" />
+                        <img
+                          *ngIf="file.ext != '.png' && file.ext != '.pdf' && file.ext != '.zip' && file.ext != '.doc' && file.ext != '.docx' && file.ext != '.odt' && file.ext != '.rtf' && file.ext != '.txt'"
+                          class="material-icons file-icon" src="./../assets/file.svg" />
+                      </p>
+                      <a href="{{file.url}}" target="_blank" class="contentvalue float-right">{{ file.name}}</a>
+                    </div>
+                    <div class="col-4">
+                      <p>
+                        {{item.createdby.firstname}} {{item.createdby.lastname}}
+                      </p>
+                    </div>
+                    <div class="col-3">
+                      <p class="pl-1 text-right" style="
+                          font-style: italic;
+                          color: #666666;
+                          font-weight: 80%;
+                        ">
+                        {{
+                        genericService.formatDateInDisplayFormatnew(item.created_at)
+                        }}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </ng-container>
+            </div>
+            <div class="col-sm-6 col-12 mt-5 align-items-center"
+              *ngIf="data.pestamp?.isinrevisionstate && this.data.pestamp?.revisionpestamp?.length > 0">
+              <p class="subtitle fullwidth">Revision Comments</p>
+              <div class="row subbody" *ngFor="let revisiondesign of data.pestamp?.revisionpestamp">
+                <div class="col d-flex justify-content-between">
+                  <p class="contentvalue" style="width: 50%">
+                    {{revisiondesign?.comment}}
+                  </p>
+                  <p class="contentvalue">
+                    {{revisiondesign?.createdby != null?
+                    revisiondesign.createdby?.firstname: "-"}}
+                    {{revisiondesign?.createdby != null?
+                    revisiondesign.createdby?.lastname: null}}
+                  </p>
+                  <p class="contentvalue" style="
+                      font-style: italic;
+                      color: #666666;
+                      font-weight: bold;
+                    ">
+                    {{
+                    genericService.formatDateInDisplayFormatnew(revisiondesign?.created_at)
+                    }}
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="col-12 col-sm-6 mt-5"
+              *ngIf="this.data.pestamp.isinrevisionstate && this.data.pestamp?.revisionpestamp?.length > 0">
+              <p class="subtitle fullwidth">Revision Pestamp</p>
+              <div class="row subbody"
+                *ngFor="let revisionpestamp of data.pestamp?.revisionpestamp ; let index = index">
+                <div style="margin-right: 10rem !important" class="pl-1 col d-flex justify-content-between"
+                  *ngIf="revisionpestamp?.pestampfile?.length != 0">
+                  <div class="col-3">
+                    <p class="contentheader"
+                      [ngStyle]="index == 0? {'visibility': 'visible'} : {'visibility': 'hidden'}">
+                      Stamped file
+                    </p>
+                  </div>
+                  <div class="col-7">
+                    <p class="contentvalue" *ngFor="let pestampfile of revisionpestamp?.pestampfile">
+                      <a href="{{pestampfile.url}}" target="_blank">{{ pestampfile.name | uppercase }}</a>
+                    </p>
+                  </div>
+                  <div class="col-4">
+                    <p class="contentvalue">
+                      {{revisionpestamp.createdby != null?
+                      revisionpestamp.createdby.firstname: "-"}}
+                      {{revisionpestamp.createdby != null?
+                      revisionpestamp.createdby.lastname: null}}
+                    </p>
+                  </div>
+                  <div class="col-4" style="padding-left: 0px">
+                    <p class="contentvalue" style="
+                        font-style: italic;
+                        color: #666666;
+                        font-weight: bold;
+                      ">
+                      {{
+                      genericService.formatDateInDisplayFormatnew(revisionpestamp.created_at)
+                      }}
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div class="row subbody" *ngFor="let revisionpestamp of data.pestamp?.revisionpestamp; let index = index">
+                <div style="margin-right: 10rem !important" class="pl-1 col d-flex justify-content-between"
+                  *ngIf="revisionpestamp.file.length != 0">
+                  <div class="col-3">
+                    <p class="contentheader"
+                      [ngStyle]="index == 0? {'visibility': 'visible'} : {'visibility': 'hidden'}">
+                      Attachment
+                    </p>
+                  </div>
+                  <div class="col-7">
+                    <p class="contentvalue" *ngFor="let file of revisionpestamp?.file">
+                      <a href="{{file.url}}" target="_blank">{{ file.name | uppercase }}</a>
+                    </p>
+                  </div>
+                  <div class="col-4">
+                    <p class="contentvalue">
+                      {{revisionpestamp.createdby != null?
+                      revisionpestamp.createdby.firstname: "-"}}
+                      {{revisionpestamp.createdby != null?
+                      revisionpestamp.createdby.lastname: null}}
+                    </p>
+                  </div>
+                  <div class="col-4">
+                    <p class="contentvalue" style="
+                        font-style: italic;
+                        color: #666666;
+                        font-weight: bold;
+                      ">
+                      {{
+                      genericService.formatDateInDisplayFormatnew(revisionpestamp.created_at)
+                      }}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </mat-tab>
+    </mat-tab-group>
+  </div>
+</div>
+<mat-dialog-actions align="end">
+  <button mat-raised-button class="greybutton" (click)="onNoClick()">
+    Cancel
+  </button>
+  <button mat-raised-button (click)="getPestampsCharges()" required>
+    Submit
+  </button>
+</mat-dialog-actions>

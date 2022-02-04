@@ -1,0 +1,2261 @@
+<!-- <div *ngIf="isLoading" class="overlay">
+  <mat-card class="spinnercard" align-items-center>
+    <div class="row">
+      <div class="col-3">
+        <mat-progress-spinner diameter="50" color="primary" mode="indeterminate" strokeWidth="5"></mat-progress-spinner>
+      </div>
+      <div class="col">
+        <h4 class="spinnertext">{{loadingmessage}}</h4>
+      </div>
+    </div>
+  </mat-card>
+</div> -->
+<div *ngIf="isLoading" class="progress-loader">
+  <div id="pause" class="d-flex align-items-center justify-content-center">
+    <div id="spinner" style="background: #fff; padding: 25px; border-radius: 5px; width: 17rem" class="row">
+      <div class="loading-message bkgg col-9">{{ loadingmessage }}</div>
+      <div class="col-3" style="top: 5px">
+        <div class="snippet" data-title=".dot-pulse">
+          <div class="stage">
+            <div class="dot-pulse"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="container">
+  <div class="row">
+    <div class="col-8" *ngIf="
+        !this.genericService.specificclient && !data.designRaisedbyWattmonk
+      ">
+      <h4 class="dialogformtitle" *ngIf="!data.isEditMode">
+        Add Permit Design Request
+      </h4>
+      <h4 class="dialogformtitle" *ngIf="data.isEditMode">
+        Edit Permit Design Request
+      </h4>
+    </div>
+    <div class="col-8" *ngIf="this.genericService.specificclient">
+      <h4 class="dialogformtitle" *ngIf="!data.isEditMode">
+        Add Design Request
+      </h4>
+      <h4 class="dialogformtitle" *ngIf="data.isEditMode">
+        Edit Design Request
+      </h4>
+    </div>
+    <div class="col-2">
+      <!-- <mat-slide-toggle class="prioritybutton float-right" style="margin-left: -13px;" color="warn"
+        [formControl]="prioritytoggle">High Priority
+      </mat-slide-toggle> -->
+    </div>
+    <div [ngClass]="[data.designRaisedbyWattmonk ? 'col-10' : 'col-2']">
+      <button mat-icon-button (click)="onCloseClick()" class="float-right">
+        <img class="dialogclose" src="../../../../../assets/close.svg" />
+      </button>
+    </div>
+  </div>
+</div>
+<div mat-dialog-content class="designdialogcontent">
+  <div class="container">
+    <div class="row">
+      <form class="designform" [formGroup]="addDesignDialogForm">
+        <div class="row d-flex mb-4" *ngIf="data.designRaisedbyWattmonk">
+          <div class="col-6 align-items-center">
+            <p class="subtitle fullwidth">Proof of Request Attachment*</p>
+            <mat-error [hidden]="raiseattachmentError" style="font-size: 10px">Uploading Proof of Request Attachment is
+              required.
+            </mat-error>
+            <div class="row architectureuploadrow">
+              <div class="col align-items-center architectureuploadcol">
+                <div class="multiple-dropzone fullwidth" ngx-dropzone [multiple]="true"
+                  (change)="onraiserequestattachmentFileSelect($event)">
+                  <ngx-dropzone-label>
+                    <div>
+                      <img class="addimage" src="../../../../../assets/add.svg" />
+                      <h5>Drag and drop or click to browse.</h5>
+                    </div>
+                  </ngx-dropzone-label>
+                  <div *ngFor="let f of raiserequestattachmentfiles">
+                    {{ f.type }}
+                    <ngx-dropzone-preview *ngIf="!f.isImage" class="imagepreview" ngProjectAs="ngx-dropzone-preview"
+                      [file]="f" [removable]="true" (removed)="onraiserequestattachmentFileRemove(f)">
+                      <ngx-dropzone-label class="previewlabel">{{ f.name }} ({{ f.type }})</ngx-dropzone-label>
+                    </ngx-dropzone-preview>
+                    <ngx-dropzone-image-preview *ngIf="f.isImage" class="imagepreview"
+                      ngProjectAs="ngx-dropzone-preview" [file]="f" [removable]="true"
+                      (removed)="onraiserequestattachmentFileRemove(f)">
+                    </ngx-dropzone-image-preview>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-6">
+            <mat-form-field appearance="fill" class="fullwidth">
+              <mat-label>Reason</mat-label>
+              <textarea style="height: 100px" matInput [formControl]="raiserequestreason" required></textarea>
+              <mat-error *ngIf="raiserequestreason.invalid">{{
+                getErrorMessage(raiserequestreason)
+                }}</mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="col-8" *ngIf="data.designRaisedbyWattmonk">
+          <h4 class="dialogformtitle">Add Permit Design Request</h4>
+        </div>
+        <div class="row mt-1 mb-2">
+          <div class="col" *ngIf="
+              !data.designRaisedbyWattmonk &&
+              (loggedInUser.role.id == 4 ||
+                loggedInUser.role.id == 5 ||
+                ((loggedInUser.role.id == teamheadroleid ||
+                  loggedInUser.role.id == bdroleid) &&
+                  !isClient))
+            ">
+            <mat-form-field appearance="fill" class="fullwidth">
+              <mat-label>Company Name</mat-label>
+              <mat-select [formControl]="company" [disabled]="data.isEditMode && data.design.status != 'created'"
+                panelClass="comapnylist">
+                <mat-option value="">Please select the company.</mat-option>
+                <div infiniteScroll [infiniteScrollDistance]="0.5" [scrollWindow]="false" [infiniteScrollThrottle]="100"
+                  (scrolled)="oncompanyScroll()" class="scroll-container" *ngIf="companyList?.length">
+                  <mat-option *ngFor="let company of companyList" [value]="company" (onSelectionChange)="
+                    setCompanyValue($event, company.companyid)
+                  ">
+                    {{ company.companyname }}
+                  </mat-option>
+                  <mat-spinner *ngIf="scrolling" style="position: absolute; left: 40%; bottom: 1%" [diameter]="35">
+                  </mat-spinner>
+                </div>
+              </mat-select>
+              <mat-error *ngIf="company.invalid">{{
+                getErrorMessage(company)
+                }}</mat-error>
+            </mat-form-field>
+          </div>
+
+          <!-- <div class="col" *ngIf="!isClient">
+            <mat-form-field appearance="fill" class="fullwidth">
+              <mat-label>Company Name</mat-label>
+              <input [(ngModel)]="proxyValue" type="text" matInput [matAutocomplete]="auto11" [formControl]="company">
+              <mat-autocomplete #auto11="matAutocomplete" (optionSelected)="onCompanyChanged($event)">
+                <mat-option *ngFor="let company of filteredCompanies | async" [value]="company"
+                >{{company.companyname}}</mat-option>
+              </mat-autocomplete>
+            </mat-form-field>
+          </div> -->
+
+          <div class="col" style="margin-bottom: 8px">
+            <mat-form-field appearance="fill" class="fullwidth">
+              <mat-label>Name</mat-label>
+              <input autocomplete="off" matInput placeholder="eg. john" [formControl]="name" required />
+              <mat-error *ngIf="name.invalid">{{
+                getErrorMessage(name)
+                }}</mat-error>
+            </mat-form-field>
+          </div>
+          <div class="col">
+            <mat-form-field appearance="fill" class="fullwidth">
+              <mat-label>Email</mat-label>
+              <input [ngStyle]="
+                  data.isEditMode
+                    ? { color: 'rgba(0,0,0,0.7)' }
+                    : { color: '#000000' }
+                " autocomplete="off" matInput placeholder="eg. pat@example.com" [formControl]="email"
+                [readonly]="data.isEditMode" required />
+              <mat-error *ngIf="email.invalid">{{
+                getErrorMessage(email)
+                }}</mat-error>
+            </mat-form-field>
+          </div>
+          <div class="col">
+            <mat-form-field appearance="fill" class="fullwidth">
+              <mat-label>Phone</mat-label>
+              <input type="text" (keypress)="numberOnly($event)" autocomplete="off" maxlength="15" min="8" matInput
+                placeholder="eg. 98775534220" [formControl]="phone" required [readonly]="data.isPermitmode" />
+              <mat-error *ngIf="phone.invalid">{{
+                getErrorMessage(phone)
+                }}</mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="row">
+          <!-- <div class="col">
+            <mat-form-field appearance="fill" class="fullwidth">
+              <mat-label>Annual Units (kW)</mat-label>
+              <input autocomplete="off" type="text" (keypress)="numberOnly($event)" maxlength="7" min="1" matInput
+                placeholder="eg. 6000" [formControl]="monthlybill" required>
+              <mat-error *ngIf="monthlybill.invalid">{{getErrorMessage(monthlybill)}}</mat-error>
+            </mat-form-field>
+          </div> -->
+          <div class="col">
+            <mat-form-field appearance="fill" class="fullwidth">
+              <mat-label>Solar Capacity (kW)</mat-label>
+              <input autocomplete="off" type="textbox" maxlength="15" min="1" matInput placeholder="eg. 6000"
+                [formControl]="solarcapacity" [readonly]="data.isEditMode && data.design.status != 'created'" required
+                appTwoDigitDecimaNumber />
+              <mat-error *ngIf="solarcapacity.invalid">{{
+                getErrorMessage(solarcapacity)
+                }}</mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-8">
+            <div class="form-group formradiogroup fullwidth" [ngClass]="[
+                projecttype.invalid && !displayerror
+                  ? 'formradiogroup-invalid'
+                  : ''
+              ]">
+              <h5>Property Type*</h5>
+              <mat-radio-group aria-label="project type" [formControl]="projecttype"
+                [disabled]="data.isEditMode && data.design.status != 'created'" required>
+                <div class="row">
+                  <div class="col">
+                    <mat-radio-button value="residential">Residential</mat-radio-button>
+                  </div>
+                  <div class="col">
+                    <mat-radio-button value="commercial">Commercial</mat-radio-button>
+                  </div>
+                  <div class="col">
+                    <mat-radio-button value="detachedbuildingorshop">Detached Building or Shop</mat-radio-button>
+                  </div>
+                  <div class="col">
+                    <mat-radio-button value="carport">Carport</mat-radio-button>
+                  </div>
+                </div>
+              </mat-radio-group>
+            </div>
+            <mat-error class="custom-mat-error" [hidden]="displayerror" *ngIf="projecttype.invalid">
+              {{ getErrorMessage(projecttype) }}
+            </mat-error>
+          </div>
+          <div class="col-4">
+            <div class="form-group formradiogroup fullwidth">
+              <h5>MPU Required</h5>
+              <mat-radio-group name="mpurequired" aria-label="mpurequired" [formControl]="mpurequired" required
+                (change)="radioChange($event)">
+                <div class="row">
+                  <div class="col">
+                    <mat-radio-button value="true">Yes</mat-radio-button>
+                  </div>
+                  <div class="col">
+                    <mat-radio-button value="false">No</mat-radio-button>
+                  </div>
+                </div>
+              </mat-radio-group>
+            </div>
+            <mat-error class="custom-mat-error" [hidden]="displayerror" *ngIf="mpurequired.invalid">
+              {{ getErrorMessage(mpurequired) }}
+            </mat-error>
+          </div>
+        </div>
+
+        <div class="row mt-3">
+          <div class="col">
+            <div class="form-group formradiogroup fullwidth" [ngClass]="[
+                jobtype.invalid && !displayerror ? 'formradiogroup-invalid' : ''
+              ]">
+              <h5>Job Type*</h5>
+              <mat-radio-group name="jobtype" aria-label="job type" [formControl]="jobtype" required
+                (change)="radioChange($event)" [disabled]="
+                  (data.isEditMode && data.design.status != 'created') ||
+                  data.isPermitmode
+                ">
+                <div class="row">
+                  <div class="col">
+                    <mat-radio-button value="pvbattery">PV+Battery</mat-radio-button>
+                  </div>
+                  <div class="col">
+                    <mat-radio-button value="pv">PV</mat-radio-button>
+                  </div>
+                  <div class="col">
+                    <mat-radio-button value="battery">Battery</mat-radio-button>
+                  </div>
+                </div>
+              </mat-radio-group>
+            </div>
+            <mat-error class="custom-mat-error" [hidden]="displayerror" *ngIf="jobtype.invalid">
+              {{ getErrorMessage(jobtype) }}</mat-error>
+          </div>
+          <div class="col">
+            <mat-form-field appearance="fill" class="fullwidth">
+              <mat-label>Address</mat-label>
+
+              <textarea *ngIf="!data.isEditMode && !data.isPermitmode" style="min-height: 41px; resize: none" matInput
+                aria-expanded="false" matGoogleMapsAutocomplete country="us" (input)="checkAddress($event)"
+                (onAutocompleteSelected)="onAutocompleteSelected($event)"
+                (onLocationSelected)="onLocationSelected($event)" [formControl]="address" required></textarea>
+
+              <textarea [ngStyle]="
+                  data.isEditMode
+                    ? { color: 'rgba(0,0,0,0.7)' }
+                    : { color: '#000000' }
+                " *ngIf="data.isEditMode || data.isPermitmode" readonly style="min-height: 41px; resize: none" matInput
+                [formControl]="address"></textarea>
+
+              <mat-error *ngIf="address.invalid">{{
+                getErrorMessage(address)
+                }}</mat-error>
+              <mat-error *ngIf="address.value.length > 300">Max 300 characters are allowed.</mat-error>
+            </mat-form-field>
+          </div>
+          <div class="col">
+            <div class="form-group formradiogroup fullwidth" [ngClass]="[
+                newconstruction.invalid ? 'formradiogroup-invalid' : ''
+              ]">
+              <h5>
+                <p matTooltip="Property age less than 4 months is New, so select YES as it is not visible on Maps, so it is required to attach architectural drawings. And in case of Carport where architectural drawing is not available please select NO."
+                  aria-label="Button that displays a tooltip when focused or hovered over" class="prominentbutton"
+                  style="
+                    text-align-last: center;
+                    margin-bottom: -19px;
+                    background: #3c78d8;
+                    width: 16px;
+                    border-radius: 10px;
+                    color: #fff;
+                    margin-left: 100px;
+                    height: 17px;
+                    padding: 0px 0 0px 0px;
+                    cursor: pointer;
+                  " mat-button>
+                  i
+                </p>
+                New Construction
+              </h5>
+              <mat-radio-group name="newconstruction" aria-label="newconstruction" [formControl]="newconstruction"
+                required (change)="radioChange($event)">
+                <div class="row">
+                  <div class="col">
+                    <mat-radio-button value="true">Yes</mat-radio-button>
+                  </div>
+                  <div class="col">
+                    <mat-radio-button value="false">No</mat-radio-button>
+                  </div>
+                </div>
+              </mat-radio-group>
+            </div>
+            <mat-error class="custom-mat-error" [hidden]="displayerror" *ngIf="newconstruction.invalid">
+              {{ getErrorMessage(newconstruction) }}
+            </mat-error>
+          </div>
+        </div>
+        <!--      -->
+        <div class="row mt-3">
+          <div class="col" style="margin-bottom: 8px;">
+            <mat-form-field appearance="fill" class="fullwidth">
+              <mat-label>State</mat-label>
+              <input [ngStyle]="data.isEditMode ? {'color': 'rgba(0,0,0,0.7)'} : {'color': '#000000'}"
+                autocomplete="off" matInput placeholder="eg. state" [formControl]="state" required
+                [readonly]='data.isPermitmode'>
+              <mat-error *ngIf="state.invalid">{{getErrorMessage(state)}}</mat-error>
+            </mat-form-field>
+          </div>
+          <div class="col">
+            <mat-form-field appearance="fill" class="fullwidth">
+              <mat-label>City</mat-label>
+              <input [ngStyle]="data.isEditMode ? {'color': 'rgba(0,0,0,0.7)'} : {'color': '#000000'}"
+                autocomplete="off" matInput placeholder="eg. city" [formControl]="city" required>
+              <mat-error *ngIf="city.invalid">{{getErrorMessage(city)}}</mat-error>
+            </mat-form-field>
+          </div>
+          <div class="col">
+            <mat-form-field appearance="fill" class="fullwidth">
+              <mat-label>ESI ID</mat-label>
+              <input autocomplete="off" matInput type="text" (keypress)="numberOnly($event)"
+                placeholder="eg. 10004324300" [formControl]="esiid">
+              <mat-error *ngIf="esiid.invalid">{{getErrorMessage(esiid)}}</mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+        <!--      -->
+        <div class="row">
+          <div class="col" style="margin-left: 16px" *ngIf="
+              data.isEditMode && data.design.architecturaldesign?.length > 0
+            ">
+            <div class="row pdfselectionpreview align-items-center list-border" *ngFor="
+                let file of data.design.architecturaldesign;
+                let i = index
+              ">
+              <div class="col-2 pdfpreviewcol">
+                <img *ngIf="file.ext == '.pdf'" class="material-icons file-icon" src="./../assets/pdf.svg" />
+                <img *ngIf="file.ext == '.png'" class="material-icons file-icon" src="./../assets/png.svg" />
+                <img *ngIf="file.ext == '.zip'" class="material-icons file-icon" src="./../assets/zip.svg" />
+                <img *ngIf="file.ext == '.doc'" class="material-icons file-icon" src="./../assets/doc.svg" />
+                <img *ngIf="file.ext == '.docx'" class="material-icons file-icon" src="./../assets/doc.svg" />
+                <img *ngIf="file.ext == '.odt'" class="material-icons file-icon" src="./../assets/pdf.svg" />
+                <img *ngIf="file.ext == '.rtf'" class="material-icons file-icon" src="./../assets/rtf.svg" />
+                <img *ngIf="file.ext == '.txt'" class="material-icons file-icon" src="./../assets/txt.svg" />
+                <img *ngIf="
+                    file.ext !== '.png' &&
+                    file.ext !== '.pdf' &&
+                    file.ext !== '.zip' &&
+                    file.ext !== '.doc' &&
+                    file.ext !== '.docx' &&
+                    file.ext !== '.odt' &&
+                    file.ext !== '.rtf' &&
+                    file.ext !== '.txt'
+                  " class="material-icons file-icon" src="./../assets/file.svg" />
+              </div>
+              <div class="col-8">
+                <p>
+                  {{
+                  file.name.length > 50
+                  ? (file.name | slice: 0:50) + ".."
+                  : file.name
+                  }}
+                </p>
+              </div>
+              <div class="col-2">
+                <span class="float-right delete-btn" (click)="onRemoveArchitecturalDesign(file, i)"><img
+                    src="../../../../../assets/delete.svg" class="dialogclose" /></span>
+              </div>
+            </div>
+          </div>
+          <div class="col" *ngIf="newconstruction.value == 'true'" [ngStyle]="
+              data.isEditMode
+                ? { 'margin-right': '16px' }
+                : { 'margin-right': '0px' }
+            ">
+            <div class="row architectureuploadrow">
+              <div class="col align-items-center architectureuploadcol">
+                <mat-error [hidden]="displayerror" style="font-size: 10px; margin-left: 16px"
+                  *ngIf="architecturalfiles.length == 0">Uploading architectural design is required.
+                </mat-error>
+                <div class="multiple-dropzone" style="width: 97%; margin-left: 15px; margin-bottom: 16px" ngx-dropzone
+                  [multiple]="true" (change)="onArchitecturalFileSelect($event)">
+                  <ngx-dropzone-label>
+                    <div>
+                      <img class="addimage" src="../../../../../assets/add.svg" />
+                      <h5>
+                        Drag and drop or click to browse Architectural Design of
+                        your house.
+                      </h5>
+                    </div>
+                  </ngx-dropzone-label>
+                  <div *ngFor="let f of architecturalfiles">
+                    {{ f.type }}
+                    <ngx-dropzone-preview *ngIf="!f.isImage" class="imagepreview" ngProjectAs="ngx-dropzone-preview"
+                      [file]="f" [removable]="true" (removed)="onArchitecturalFileRemove(f)">
+                      <ngx-dropzone-label class="previewlabel">{{ f.name }} ({{ f.type }})</ngx-dropzone-label>
+                    </ngx-dropzone-preview>
+                    <ngx-dropzone-image-preview *ngIf="f.isImage" class="imagepreview"
+                      ngProjectAs="ngx-dropzone-preview" [file]="f" [removable]="true"
+                      (removed)="onArchitecturalFileRemove(f)">
+                    </ngx-dropzone-image-preview>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">
+            <mat-form-field class="fullwidth" appearance="fill">
+              <mat-label>Utility Name</mat-label>
+              <input [ngStyle]="
+                  data.isEditMode
+                    ? { color: 'rgba(0,0,0,0.7)' }
+                    : { color: '#000000' }
+                " type="text" placeholder="eg. XYZ Pvt. Ltd." matInput [formControl]="utilityname"
+                [matAutocomplete]="auto6" required />
+              <mat-autocomplete #auto6="matAutocomplete">
+                <mat-option *ngFor="let utility of filteredUtility | async" [value]="utility.name"
+                  (onSelectionChange)="fetchUtilityRateData($event, utility)">
+                  {{ utility.name }}
+                </mat-option>
+              </mat-autocomplete>
+              <mat-error *ngIf="utilityname.invalid">{{ getErrorMessage(utilityname) }}
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div class="col">
+            <mat-form-field class="fullwidth" appearance="fill">
+              <mat-label>AHJ</mat-label>
+              <input [ngStyle]="
+                  data.isEditMode
+                    ? { color: 'rgba(0,0,0,0.7)' }
+                    : { color: '#000000' }
+                " type="text" placeholder="eg. E-1 - Baseline Region X (Code B)" matInput [formControl]="ahj"
+                [matAutocomplete]="auto4" />
+              <mat-autocomplete #auto4="matAutocomplete">
+                <mat-option *ngFor="let ahj of filteredAhj | async" [value]="ahj.name"
+                  (onSelectionChange)="setSelectedAHJ($event, ahj)">
+                  {{ ahj.name }}
+                </mat-option>
+              </mat-autocomplete>
+              <mat-error *ngIf="ahj.invalid">{{
+                getErrorMessage(ahj)
+                }}</mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div class="row mt-3">
+          <div class="col">
+            <mat-form-field appearance="fill" class="fullwidth">
+              <mat-label>Module Make*</mat-label>
+              <!-- <input type="text" matInput [matAutocomplete]="auto" [formControl]="modulemake">
+              <mat-error *ngIf="modulemake.invalid">{{getErrorMessage(modulemake)}}</mat-error>
+              <mat-autocomplete #auto="matAutocomplete"> -->
+              <mat-select [formControl]="modulemake" (selectionChange)="modulemodelempty()" #singleSelect>
+                <mat-option>
+                  <ngx-mat-select-search [formControl]="modulemakefilter" placeholderLabel="Search">
+                  </ngx-mat-select-search>
+                </mat-option>
+                <mat-option *ngFor="let modulemake of filteredModuleMakes | async" [value]="modulemake.name"
+                  (onSelectionChange)="
+                    fetchModuleModelsData($event, modulemake)
+                  ">{{ modulemake.name }}</mat-option>
+                <mat-option (onSelectionChange)="
+                    showextrainputfield($event, 'extramodulemake')
+                  " value="Others">
+                  Others
+                </mat-option>
+                <!-- </mat-autocomplete> -->
+              </mat-select>
+              <mat-error *ngIf="modulemake.invalid">{{
+                getErrorMessage(modulemake)
+                }}</mat-error>
+            </mat-form-field>
+          </div>
+          <div class="col">
+            <mat-form-field appearance="fill" class="fullwidth">
+              <mat-label>Module Model*</mat-label>
+              <!-- <input type="text" matInput [matAutocomplete]="auto1" [formControl]="modulemodel">
+              <mat-error *ngIf="modulemodel.invalid">{{getErrorMessage(modulemodel)}}</mat-error> -->
+              <!-- <mat-autocomplete #auto1="matAutocomplete"> -->
+              <mat-select [formControl]="modulemodel" (selectionChange)="modulemodelrefresh()" #singleSelect>
+                <mat-option>
+                  <ngx-mat-select-search [formControl]="modulemodelfilter" placeholderLabel="Search">
+                  </ngx-mat-select-search>
+                </mat-option>
+                <mat-option *ngFor="let modulemodel of filteredModuleModels | async" [value]="modulemodel.name"
+                  (onSelectionChange)="setSelectedModuleModel(modulemodel)">{{ modulemodel.name }}</mat-option>
+                <mat-option (onSelectionChange)="
+                    showextrainputfield($event, 'extramodulemodel')
+                  " value="Others" [disabled]="modulemake.value == 'None'">
+                  Others
+                </mat-option>
+                <!-- </mat-autocomplete> -->
+              </mat-select>
+              <mat-error *ngIf="modulemodel.invalid">{{
+                getErrorMessage(modulemodel)
+                }}</mat-error>
+            </mat-form-field>
+          </div>
+          <div class="col">
+            <mat-form-field appearance="fill" class="fullwidth">
+              <mat-label>Module Count</mat-label>
+              <input type="text" (keypress)="numberOnly($event)" autocomplete="off" maxlength="7" min="0" matInput
+                placeholder="eg. 987" [formControl]="modulecount" required />
+              <mat-error *ngIf="modulecount.invalid">{{
+                getErrorMessage(modulecount)
+                }}</mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+        <ng-container *ngIf="numberOfInverters.length>0">
+          <div class="row mt-3" *ngFor="let inverters of numberOfInverters; let i = index">
+            <div class="col-4">
+              <mat-form-field appearance="fill" class="fullwidth">
+                <mat-label>Inverter Make</mat-label>
+                <mat-select [formControlName]="inverters.invertermake" #singleSelect
+                  (selectionChange)="invertermodelempty(i)" required>
+                  <mat-option>
+                    <ngx-mat-select-search [formControl]="invertermakefilter" placeholderLabel="Search">
+                    </ngx-mat-select-search>
+                  </mat-option>
+                  <mat-option (onSelectionChange)="resetInvertorModel(i)">Clear</mat-option>
+                  <mat-option *ngFor="let invertermake of filteredInverterMakes | async" [value]="invertermake.name"
+                    (onSelectionChange)="fetchInverterModelsData($event,invertermake,i)">{{invertermake.name}}
+                  </mat-option>
+                  <mat-option value="Others" (onSelectionChange)="setOtherInverterMake($event,i)">Others</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div class="col-4">
+              <mat-form-field appearance="fill" class="fullwidth">
+                <mat-label>Inverter Model</mat-label>
+                <mat-select [formControlName]="inverters.invertermodel" #singleSelect
+                  [disabled]="inverters.disabledinvertermodel" (selectionChange)="setInverterModelId($event,i)"
+                  required>
+
+                  <input matInput placeholder="Search here" style="height: 29px;padding-left: 10px;font-size: 11px !important;
+                  " (keyup)="searchinvertermodels($event)" />
+
+                  <mat-option>Clear</mat-option>
+                  <mat-option *ngFor="let invertermodel of inverters.invertermodellist | filterBy: searchTerm;"
+                    [value]="invertermodel.name">
+                    {{invertermodel.name}}</mat-option>
+                  <mat-option value="Others" (onSelectionChange)="setOtherInverterModel($event,i)">Others</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div class="col-3">
+              <mat-form-field appearance="fill" class="fullwidth">
+                <mat-label>Inverters Count</mat-label>
+                <input type="text" (keypress)="numberOnly($event)" autocomplete="off" maxlength="7" min="1" matInput
+                  placeholder="eg. 987" [formControlName]="inverters.inverterscountcontrol" required>
+
+              </mat-form-field>
+            </div>
+            <div class="col-1" *ngIf="addextrainverters && i==0">
+              <img class="dialogclose" matTooltip="Add Extra Inverter" (click)="addMoreInverters()"
+                src="../../../../../assets/add.svg" />
+            </div>
+            <div class="col-1" *ngIf="i>0">
+              <img class="dialogclose" matTooltip="Remove Extra Inverter" (click)="removeExtraInverter(i)"
+                src="../../../../../assets/remove.svg" />
+            </div>
+          </div>
+
+        </ng-container>
+
+
+        <div class="row mt-3">
+          <div class="col">
+            <div class="form-group formradiogroup fullwidth" [ngClass]="[
+                mountingtype.invalid && !displayerror
+                  ? 'formradiogroup-invalid'
+                  : ''
+              ]">
+              <h5>Mounting Type *</h5>
+              <mat-radio-group name="mountingtype" aria-label="mounting type" [formControl]="mountingtype" required
+                (change)="radioChange($event)">
+                <div class="row">
+                  <div class="col">
+                    <mat-radio-button value="roof">Roof</mat-radio-button>
+                  </div>
+                  <div class="col">
+                    <mat-radio-button value="ground">Ground</mat-radio-button>
+                  </div>
+                  <div class="col">
+                    <mat-radio-button value="both">Both</mat-radio-button>
+                  </div>
+                </div>
+              </mat-radio-group>
+            </div>
+            <mat-error class="custom-mat-error" [hidden]="displayerror" *ngIf="mountingtype.invalid">
+              {{ getErrorMessage(mountingtype) }}
+            </mat-error>
+          </div>
+          <div class="col" *ngIf="mountingtype.value == 'roof' || mountingtype.value == 'both'">
+            <div class="form-group formradiogroup fullwidth" [ngClass]="[
+                rooftype.invalid && !displayerror
+                  ? 'formradiogroup-invalid'
+                  : ''
+              ]">
+              <h5>Roof Type*</h5>
+              <mat-radio-group aria-label="roof type" [formControl]="rooftype">
+                <div class="row">
+                  <div class="col">
+                    <mat-radio-button value="flat">Flat</mat-radio-button>
+                  </div>
+                  <div class="col">
+                    <mat-radio-button value="pitch">Pitch</mat-radio-button>
+                  </div>
+                  <div class="col">
+                    <mat-radio-button value="both">Both</mat-radio-button>
+                  </div>
+                </div>
+              </mat-radio-group>
+            </div>
+            <mat-error class="custom-mat-error" [hidden]="displayerror" *ngIf="rooftype.invalid">
+              {{ getErrorMessage(rooftype) }}</mat-error>
+          </div>
+          <div class="col" *ngIf="
+              mountingtype.value == 'ground' || mountingtype.value == 'both'
+            ">
+            <mat-form-field appearance="fill" style="width: 90%">
+              <mat-label>Tilt for ground mount system*</mat-label>
+              <input autocomplete="off" type="tel" maxlength="5" min="1" matInput placeholder="eg. 20"
+                [formControl]="tiltgroundmount" />
+              <mat-error *ngIf="tiltgroundmount.invalid">{{
+                getErrorMessage(tiltgroundmount)
+                }}</mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+        <!-- 
+        <div class="row mt-4">
+          <div class="col">
+            <mat-checkbox [formControl]="pestampingondelivery" (change)="pestampondeliver()" >Need PE Stamping on delivery</mat-checkbox>
+          </div>
+         
+        </div>
+        <div class="row mt-2" *ngIf="pestampingondelivery.value">
+          <div class="col">
+            <div class="form-group formradiogroup"
+              >
+              <h5>Mode of stamping *</h5>
+              <mat-radio-group name="modeofstamping" aria-label="hard copies required" [formControl]="modeofstamping"
+                (change)="radioChangePestamp($event)" [disabled]='this.data.isEditMode' >
+                <div class="row">
+                  <div class="col">
+                    <mat-radio-button value="ecopy">Email Copy</mat-radio-button>
+                  </div>
+                  <div class="col">
+                    <mat-radio-button value="hardcopy">Hard Copy</mat-radio-button>
+                  </div>
+                  <div class="col">
+                    <mat-radio-button value="both">Both</mat-radio-button>
+                  </div>
+                </div>
+              </mat-radio-group>
+            </div>
+            <mat-error [hidden]="displayerror" *ngIf="modeofstamping.invalid">
+              {{getErrorMessage(modeofstamping)}}
+            </mat-error>
+          </div>
+          <div class="col">
+            <div class="form-group formradiogroup">
+              <h5>Request type * </h5>
+              <mat-radio-group aria-label="project type" name="type" [formControl]="type" 
+                (change)="radioChangePestamp($event)" [disabled]='this.data.isEditMode'>
+                <div class="row">
+                  <div class="col">
+                    <mat-radio-button value="structural">Structural</mat-radio-button>
+                  </div>
+                  <div class="col">
+                    <mat-radio-button value="electrical">Electrical</mat-radio-button>
+                  </div>
+                   <div class="col">
+                    <mat-radio-button value="both">Both</mat-radio-button>
+                  </div>
+                </div>
+              </mat-radio-group>
+            </div>
+            <mat-error [hidden]="displayerror" style="font-size: 10px; margin-left: 16px;" *ngIf="type.invalid">
+              {{getErrorMessage(type)}}
+            </mat-error>
+          </div>
+        </div>
+        <div class="row mt-2" *ngIf="pestampingondelivery.value">
+          <div class="col" *ngIf="this.modeofstamping.value=='hardcopy' || this.modeofstamping.value=='both'">
+            <mat-form-field appearance="fill" class="fullwidth">
+              <mat-label>Number of hard copies</mat-label>
+              <input style="height: 33px;" type="text" (keypress)="numberOnly($event)" min="1" max="10" maxlength="2"
+                autocomplete="off" matInput placeholder="eg. 1-10" [formControl]="hardcopies" required>
+              <mat-error *ngIf="hardcopies.invalid">{{getErrorMessage(hardcopies)}}</mat-error>
+            </mat-form-field>
+          </div>
+          <div class="col" *ngIf="this.modeofstamping.value=='hardcopy' || this.modeofstamping.value=='both'">
+            <mat-form-field appearance="fill" class="fullwidth">
+              <mat-label>Shipping address</mat-label>
+              <textarea maxlength='300' style="resize: none; height: 36px;" matGoogleMapsAutocomplete country="us"
+                (onAutocompleteSelected)="onAutocompleteSelected($event)" matInput
+                (onLocationSelected)="onLocationSelected($event)" [formControl]="shippingaddress" required></textarea>
+              <mat-error *ngIf="shippingaddress.invalid">{{getErrorMessage(shippingaddress)}}</mat-error>
+              <mat-error *ngIf="shippingaddress.value.length>300">Max 300 characters are allowed.</mat-error>
+            </mat-form-field>
+          </div>
+          <div class="col" *ngIf="this.modeofstamping.value=='hardcopy' || this.modeofstamping.value=='both'">
+            <mat-form-field appearance="fill" class="fullwidth">
+              <mat-label>Contact number</mat-label>
+              <input style="height: 33px;" type="text" (keypress)="numberOnly($event)" autocomplete="off" maxlength="15"
+                min="8" matInput placeholder="eg. 0123456789" [formControl]="contactnumber" required>
+              <mat-error *ngIf="contactnumber.invalid">{{getErrorMessage(contactnumber)}}</mat-error>
+            </mat-form-field>
+          </div>
+        </div> -->
+
+        <div class="row mt-4">
+          <div class="col" style="margin-left: 16px" *ngIf="data.isEditMode && data.design.attachments.length > 0">
+            <div class="row pdfselectionpreview align-items-center list-border"
+              *ngFor="let file of data.design.attachments; let i = index">
+              <div class="col-2 pdfpreviewcol">
+                <img *ngIf="file.ext == '.pdf'" class="material-icons file-icon" src="./../assets/pdf.svg" />
+                <img *ngIf="file.ext == '.png'" class="material-icons file-icon" src="./../assets/png.svg" />
+                <img *ngIf="file.ext == '.zip'" class="material-icons file-icon" src="./../assets/zip.svg" />
+                <img *ngIf="file.ext == '.doc'" class="material-icons file-icon" src="./../assets/doc.svg" />
+                <img *ngIf="file.ext == '.docx'" class="material-icons file-icon" src="./../assets/doc.svg" />
+                <img *ngIf="file.ext == '.odt'" class="material-icons file-icon" src="./../assets/pdf.svg" />
+                <img *ngIf="file.ext == '.rtf'" class="material-icons file-icon" src="./../assets/rtf.svg" />
+                <img *ngIf="file.ext == '.txt'" class="material-icons file-icon" src="./../assets/txt.svg" />
+                <img *ngIf="
+                    file.ext !== '.png' &&
+                    file.ext !== '.pdf' &&
+                    file.ext !== '.zip' &&
+                    file.ext !== '.doc' &&
+                    file.ext !== '.docx' &&
+                    file.ext !== '.odt' &&
+                    file.ext !== '.rtf' &&
+                    file.ext !== '.txt'
+                  " class="material-icons file-icon" src="./../assets/file.svg" />
+              </div>
+              <div class="col-8">
+                <p style="word-break: break-word">
+                  {{
+                  file.name.length > 50
+                  ? (file.name | slice: 0:50) + ".."
+                  : file.name
+                  }}
+                </p>
+              </div>
+              <div class="col-2">
+                <span class="float-right delete-btn" (click)="onRemoveAttachment(file, i)"><img
+                    src="../../../../../assets/delete.svg" class="dialogclose" /></span>
+              </div>
+            </div>
+          </div>
+          <div class="col" [ngStyle]="
+              data.isEditMode
+                ? { 'margin-right': '16px' }
+                : { 'margin-right': '0px' }
+            ">
+            <div class="row architectureuploadrow">
+              <div class="col align-items-center architectureuploadcol">
+                <div class="multiple-dropzone" style="width: 97%; margin-left: 15px; margin-bottom: 16px" ngx-dropzone
+                  [multiple]="true" (change)="onAttachmentFileSelect($event)">
+                  <ngx-dropzone-label>
+                    <div>
+                      <img class="addimage" src="../../../../../assets/add.svg" />
+                      <h5>Drag and drop or click to browse files to attach.</h5>
+                    </div>
+                  </ngx-dropzone-label>
+                  <div *ngFor="let f of attachmentfiles">
+                    {{ f.type }}
+                    <ngx-dropzone-preview *ngIf="!f.isImage" class="imagepreview" ngProjectAs="ngx-dropzone-preview"
+                      [file]="f" [removable]="true" (removed)="onAttachmentFileRemove(f)">
+                      <ngx-dropzone-label class="previewlabel">{{ f.name }} ({{ f.type }})</ngx-dropzone-label>
+                    </ngx-dropzone-preview>
+                    <ngx-dropzone-image-preview *ngIf="f.isImage" class="imagepreview"
+                      ngProjectAs="ngx-dropzone-preview" [file]="f" [removable]="true"
+                      (removed)="onAttachmentFileRemove(f)">
+                    </ngx-dropzone-image-preview>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col">
+            <mat-form-field appearance="fill" class="fullwidth">
+              <mat-label>Comments</mat-label>
+              <textarea style="min-height: 94px; resize: none" matInput [placeholder]="placeholder"
+                [formControl]="comments"></textarea>
+              <mat-error *ngIf="comments.invalid">{{
+                getErrorMessage(comments)
+                }}</mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+      </form>
+      <!-- <div class="col-12  col-sm-6" >
+        <p class="subtitle fullwidth">Prelim Design</p>
+        <div class="row subbody">
+          <div class="col">
+            <p class="contentheader">View File</p>
+          </div>
+          <div class="col">
+            <a href="{{data.prelimData.prelimdesign.url}}" target="_blank" class="contentvalue float-right">{{
+              data.prelimData.prelimdesign.name }}</a>
+          </div>
+        </div>
+      </div> -->
+    </div>
+
+    <!--  Start Display Sales Proposal Details-->
+    <mat-tab-group mat-align-tabs="center" *ngIf="data.isprelimmode">
+      <mat-tab *ngIf="data.prelimData != null">
+        <ng-template matTabLabel> Sales Proposal </ng-template>
+        <div class="mt-3 container detailsdialog">
+          <div class="row mt-3 surveyfieldrow">
+            <div class="col-12 col-sm-6">
+              <p class="subtitle fullwidth">Customer and Site Details</p>
+              <div class="row subbody">
+                <div class="col-6">
+                  <p class="contentheader">Company</p>
+                  <p class="contentheader">Name</p>
+                  <p class="contentheader">Email</p>
+                  <p class="contentheader">Annual Units</p>
+                  <p class="contentheader" *ngIf="data.prelimData.address != null">
+                    Address
+                  </p>
+                </div>
+                <div class="col-6">
+                  <p class="contentvalue text-right">
+                    {{ data.prelimData?.company || defaultvalue }}
+                  </p>
+                  <p class="contentvalue text-right">
+                    {{ data.prelimData?.name || defaultvalue }}
+                  </p>
+                  <p class="contentvalue text-right">
+                    {{ data.prelimData?.email || defaultvalue }}
+                  </p>
+                  <p class="contentvalue text-right">
+                    {{ data.prelimData?.monthlybill || defaultvalue }} kW
+                  </p>
+                  <p class="contentvalue text-right" *ngIf="data.prelimData.address != null">
+                    {{ data.prelimData.address }}
+                  </p>
+                  <p class="contentvalue text-right" *ngIf="data.prelimData.address == null">
+                    No address found
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="col-12 col-sm-6">
+              <p class="subtitle fullwidth">Job Details</p>
+              <div class="row subbody">
+                <div class="col">
+                  <p class="contentheader">Property</p>
+                </div>
+                <div class="col">
+                  <p class="contentvalue text-right" *ngIf="
+                      data.prelimData.projecttype == 'detachedbuildingorshop'
+                    ">
+                    Detached Building or Shop
+                  </p>
+                  <p class="contentvalue text-right" *ngIf="
+                      data.prelimData.projecttype != 'detachedbuildingorshop'
+                    ">
+                    {{ data.prelimData.projecttype | titlecase }}
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="col-12 col-sm-6 mt-5">
+              <p class="subtitle fullwidth">Module Details</p>
+              <div class="row subbody">
+                <div class="col">
+                  <p class="contentheader">Make</p>
+                  <p class="contentheader">Model</p>
+                </div>
+                <div class="col">
+                  <p class="contentvalue text-right" *ngIf="data.prelimData.solarmake?.name != null">
+                    {{ data.prelimData.solarmake?.name || defaultvalue }}
+                  </p>
+                  <p class="contentvalue text-right" *ngIf="data.prelimData.solarmodel?.name != null">
+                    {{ data.prelimData.solarmodel?.name || defaultvalue }}
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="col-12 col-sm-6 mt-5">
+              <p class="subtitle fullwidth">Inverter Details</p>
+              <div class="row subbody">
+                <div class="col">
+                  <p class="contentheader">Make</p>
+                  <p class="contentheader">Model</p>
+                  <p class="contentheader">Inverters Count</p>
+                </div>
+                <div class="col">
+                  <p class="contentvalue text-right" *ngIf="data.prelimData.invertermake?.name != null">
+                    {{ data.prelimData.invertermake.name || defaultvalue }}
+                  </p>
+                  <p class="contentvalue text-right" *ngIf="data.prelimData.invertermodel?.name != null">
+                    {{ data.prelimData.invertermodel.name || defaultvalue }}
+                  </p>
+                  <p class="contentvalue text-right">
+                    {{ data.prelimData.inverterscount || defaultvalue }}
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-12 col-sm-6 mt-5" *ngIf="data.prelimData.attachments.length > 0">
+              <!-- <p class="subtitle fullwidth">Attachments</p>
+              <div class="row subbody list-border" *ngFor="let attachmentfile of data.prelimDesign.attachments">
+                <div class="col-2">
+                  <p class="contentheader">
+                    <img *ngIf="attachmentfile.ext == '.pdf'" class="material-icons file-icon"
+                      src="./../assets/pdf.svg">
+                    <img *ngIf="attachmentfile.ext == '.png'" class="material-icons file-icon"
+                      src="./../assets/png.svg">
+                    <img *ngIf="attachmentfile.ext == '.zip'" class="material-icons file-icon"
+                      src="./../assets/zip.svg">
+                    <img *ngIf="attachmentfile.ext == '.doc'" class="material-icons file-icon"
+                      src="./../assets/doc.svg">
+                    <img *ngIf="attachmentfile.ext == '.docx'" class="material-icons file-icon"
+                      src="./../assets/doc.svg">
+                    <img *ngIf="attachmentfile.ext == '.odt'" class="material-icons file-icon"
+                      src="./../assets/pdf.svg">
+                    <img *ngIf="attachmentfile.ext == '.rtf'" class="material-icons file-icon"
+                      src="./../assets/rtf.svg">
+                    <img *ngIf="attachmentfile.ext == '.txt'" class="material-icons file-icon"
+                      src="./../assets/txt.svg">
+                    <img
+                      *ngIf="attachmentfile.ext != '.png' && attachmentfile.ext != '.pdf' && attachmentfile.ext != '.zip' && attachmentfile.ext != '.doc' && attachmentfile.ext != '.docx' && attachmentfile.ext != '.odt' && attachmentfile.ext != '.rtf' && attachmentfile.ext != '.txt'"
+                      class="material-icons file-icon" src="./../assets/file.svg">
+                  </p>
+                </div>
+                <div class="col-10">
+                  <a href="{{attachmentfile.url}}" target="_blank" class="contentvalue float-right">{{
+                    attachmentfile.name |
+                    uppercase }}</a>
+                </div>
+              </div> -->
+
+              <p class="subtitle fullwidth">Attachments</p>
+              <!-- <p class="containers">
+                <img
+                  *ngFor="let item of permitAttachments; index as i"
+                  [lightbox]="i"
+                  [gallery]="'permitAttachments'"
+                  [src]="item.data.thumb"
+                  class="containers-img"
+                />
+              </p> -->
+              <div class="row subbody list-border pl-3">
+                <p class="image-container" *ngFor="let attachmentfile of permitAttachments;let i = index">
+                  <a style="position: relative;" (mouseenter)="attachmenthoverIdx = i"
+                    (mouseleave)="attachmenthoverIdx = -1" href="{{ attachmentfile.data.thumb }}" target="_blank"
+                    *ngIf="attachmentfile.data.ext == '.pdf'">
+                    <span [ngClass]="{ 'overlay-icon': true, 'hide': attachmenthoverIdx != i }">
+                      <img src="../../../assets/downloadicon.svg" style="height: 25px;width: 25px;"
+                        (click)="downloadSingleFile(attachmentfile)" />
+                    </span><img src="../../../assets/pdf.svg" width="70px" height="70px" /></a>
+                  <a style="position: relative;" (mouseenter)="attachmenthoverIdx = i"
+                    (mouseleave)="attachmenthoverIdx = -1" href="{{ attachmentfile.data.thumb }}" target="_blank"
+                    *ngIf="attachmentfile.data.ext == '.zip'">
+                    <span [ngClass]="{ 'overlay-icon': true, 'hide': attachmenthoverIdx != i }">
+                      <img src="../../../assets/downloadicon.svg" style="height: 25px;width: 25px;"
+                        (click)="downloadSingleFile(attachmentfile)" />
+                    </span><img src="../../../assets/zip.svg" width="70px" height="95px" /></a>
+
+                  <a style="position: relative;" (mouseenter)="attachmenthoverIdx = i"
+                    (mouseleave)="attachmenthoverIdx = -1" href="{{ attachmentfile.data.thumb }}" target="_blank"
+                    *ngIf="attachmentfile.data.ext == '.doc'">
+                    <span [ngClass]="{ 'overlay-icon': true, 'hide': attachmenthoverIdx != i }">
+                      <img src="../../../assets/downloadicon.svg" style="height: 25px;width: 25px;"
+                        (click)="downloadSingleFile(attachmentfile)" />
+                    </span><img src="../../../assets/doc.svg" width="70px" height="95px" /></a>
+
+                  <a style="position: relative;" (mouseenter)="attachmenthoverIdx = i"
+                    (mouseleave)="attachmenthoverIdx = -1" href="{{ attachmentfile.data.thumb }}" target="_blank"
+                    *ngIf="attachmentfile.data.ext == '.docx'">
+                    <span [ngClass]="{ 'overlay-icon': true, 'hide': attachmenthoverIdx != i }">
+                      <img src="../../../assets/downloadicon.svg" style="height: 25px;width: 25px;"
+                        (click)="downloadSingleFile(attachmentfile)" />
+                    </span><img src="../../../assets/doc.svg" width="70px" height="95px" /></a>
+
+                  <a style="position: relative;" (mouseenter)="attachmenthoverIdx = i"
+                    (mouseleave)="attachmenthoverIdx = -1" href="{{ attachmentfile.data.thumb }}" target="_blank"
+                    *ngIf="attachmentfile.data.ext == '.odt'">
+                    <span [ngClass]="{ 'overlay-icon': true, 'hide': attachmenthoverIdx != i }">
+                      <img src="../../../assets/downloadicon.svg" style="height: 25px;width: 25px;"
+                        (click)="downloadSingleFile(attachmentfile)" />
+                    </span><img src="../../../assets/odt.svg" width="70px" height="95px" /></a>
+                  <a style="position: relative;" (mouseenter)="attachmenthoverIdx = i"
+                    (mouseleave)="attachmenthoverIdx = -1" href="{{ attachmentfile.data.thumb }}" target="_blank"
+                    *ngIf="attachmentfile.data.ext == '.rtf'">
+                    <span [ngClass]="{ 'overlay-icon': true, 'hide': attachmenthoverIdx != i }">
+                      <img src="../../../assets/downloadicon.svg" style="height: 25px;width: 25px;"
+                        (click)="downloadSingleFile(attachmentfile)" />
+                    </span><img src="../../../assets/rtf.svg" width="70px" height="95px" /></a>
+                  <a style="position: relative;" (mouseenter)="attachmenthoverIdx = i"
+                    (mouseleave)="attachmenthoverIdx = -1" href="{{ attachmentfile.data.thumb }}" target="_blank"
+                    *ngIf="attachmentfile.data.ext == '.txt'">
+                    <span [ngClass]="{ 'overlay-icon': true, 'hide': attachmenthoverIdx != i }">
+                      <img src="../../../assets/downloadicon.svg" style="height: 25px;width: 25px;"
+                        (click)="downloadSingleFile(attachmentfile)" />
+                    </span><img src="../../../assets/file.svg" width="70px" height="70px" /></a>
+
+
+                  <a style="position: relative;" *ngIf="
+                attachmentfile.data.ext != '.pdf' &&
+                attachmentfile.data.ext != '.zip' &&
+                attachmentfile.data.ext != '.doc' &&
+                attachmentfile.data.ext != '.docx' &&
+                attachmentfile.data.ext != '.odt' &&
+                attachmentfile.data.ext != '.rtf' &&
+                attachmentfile.data.ext != '.txt'
+              " (mouseenter)="attachmenthoverIdx = i" (mouseleave)="attachmenthoverIdx = -1">
+                    <span [ngClass]="{ 'overlay-icon': true, 'hide': attachmenthoverIdx != i }">
+                      <img src="../../../assets/downloadicon.svg" style="height: 25px;width: 25px;"
+                        (click)="downloadSingleFile(attachmentfile)" />
+                    </span>
+                    <img class="material-icons attachment-img" [gallery]="'permitAttachments'" [lightbox]="i"
+                      [src]="attachmentfile.data.thumb" width="95%" height="95%" />
+                  </a>
+
+                </p>
+              </div>
+            </div>
+            <div class="col-12 col-sm-6 mt-5">
+              <p class="subtitle fullwidth">Construction Details</p>
+              <div class="row subbody">
+                <div class="col">
+                  <p class="contentheader">New Construction</p>
+                </div>
+                <div class="col">
+                  <p class="contentvalue text-right">
+                    {{
+                    genericService?.getBooleanValue(
+                    data.prelimData.newconstruction
+                    ) || defaultvalue
+                    }}
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="col-12 col-sm-6 mt-5" *ngIf="
+                this.data.prelimData.newconstruction &&
+                data.prelimData.architecturaldesign.length > 0
+              ">
+              <p class="subtitle fullwidth">Architectural Design</p>
+              <div class="row subbody list-border">
+                <p class="image-container" *ngFor="let designfile of permitArchitecture;let i = index;">
+                  <a style="position: relative;" (mouseenter)="architecturehoverIdx = i"
+                    (mouseleave)="architecturehoverIdx = -1" href="{{ designfile.data.thumb }}" target="_blank"
+                    *ngIf="designfile.data.ext == '.pdf'">
+                    <span [ngClass]="{ 'overlay-icon': true, 'hide': architecturehoverIdx != i }">
+                      <img src="../../../assets/downloadicon.svg" style="height: 25px;width: 25px;"
+                        (click)="downloadSingleFile(designfile)" />
+                    </span><img src="../../../assets/pdf.svg" width="70px" height="70px" /></a>
+                  <a style="position: relative;" (mouseenter)="architecturehoverIdx = i"
+                    (mouseleave)="architecturehoverIdx = -1" href="{{ designfile.data.thumb }}" target="_blank"
+                    *ngIf="designfile.data.ext == '.zip'">
+                    <span [ngClass]="{ 'overlay-icon': true, 'hide': architecturehoverIdx != i }">
+                      <img src="../../../assets/downloadicon.svg" style="height: 25px;width: 25px;"
+                        (click)="downloadSingleFile(designfile)" />
+                    </span><img src="../../../assets/zip.svg" width="70px" height="95px" /></a>
+
+                  <a style="position: relative;" (mouseenter)="architecturehoverIdx = i"
+                    (mouseleave)="architecturehoverIdx = -1" href="{{ designfile.data.thumb }}" target="_blank"
+                    *ngIf="designfile.data.ext == '.doc'">
+                    <span [ngClass]="{ 'overlay-icon': true, 'hide': architecturehoverIdx != i }">
+                      <img src="../../../assets/downloadicon.svg" style="height: 25px;width: 25px;"
+                        (click)="downloadSingleFile(designfile)" />
+                    </span><img src="../../../assets/doc.svg" width="70px" height="95px" /></a>
+
+                  <a style="position: relative;" (mouseenter)="architecturehoverIdx = i"
+                    (mouseleave)="architecturehoverIdx = -1" href="{{ designfile.data.thumb }}" target="_blank"
+                    *ngIf="designfile.data.ext == '.docx'">
+                    <span [ngClass]="{ 'overlay-icon': true, 'hide': architecturehoverIdx != i }">
+                      <img src="../../../assets/downloadicon.svg" style="height: 25px;width: 25px;"
+                        (click)="downloadSingleFile(designfile)" />
+                    </span><img src="../../../assets/doc.svg" width="70px" height="95px" /></a>
+
+                  <a style="position: relative;" (mouseenter)="architecturehoverIdx = i"
+                    (mouseleave)="architecturehoverIdx = -1" href="{{ designfile.data.thumb }}" target="_blank"
+                    *ngIf="designfile.data.ext == '.odt'">
+                    <span [ngClass]="{ 'overlay-icon': true, 'hide': architecturehoverIdx != i }">
+                      <img src="../../../assets/downloadicon.svg" style="height: 25px;width: 25px;"
+                        (click)="downloadSingleFile(designfile)" />
+                    </span><img src="../../../assets/odt.svg" width="70px" height="95px" /></a>
+                  <a style="position: relative;" (mouseenter)="architecturehoverIdx = i"
+                    (mouseleave)="architecturehoverIdx = -1" href="{{ designfile.data.thumb }}" target="_blank"
+                    *ngIf="designfile.data.ext == '.rtf'">
+                    <span [ngClass]="{ 'overlay-icon': true, 'hide': architecturehoverIdx != i }">
+                      <img src="../../../assets/downloadicon.svg" style="height: 25px;width: 25px;"
+                        (click)="downloadSingleFile(designfile)" />
+                    </span><img src="../../../assets/rtf.svg" width="70px" height="95px" /></a>
+                  <a style="position: relative;" (mouseenter)="architecturehoverIdx = i"
+                    (mouseleave)="architecturehoverIdx = -1" href="{{ designfile.data.thumb }}" target="_blank"
+                    *ngIf="designfile.data.ext == '.txt'">
+                    <span [ngClass]="{ 'overlay-icon': true, 'hide': architecturehoverIdx != i }">
+                      <img src="../../../assets/downloadicon.svg" style="height: 25px;width: 25px;"
+                        (click)="downloadSingleFile(designfile)" />
+                    </span><img src="../../../assets/file.svg" width="70px" height="70px" /></a>
+
+
+                  <a style="position: relative;" *ngIf="
+                    designfile.data.ext != '.pdf' &&
+                    designfile.data.ext != '.zip' &&
+                    designfile.data.ext != '.doc' &&
+                    designfile.data.ext != '.docx' &&
+                    designfile.data.ext != '.odt' &&
+                    designfile.data.ext != '.rtf' &&
+                    designfile.data.ext != '.txt'
+                  " (mouseenter)="architecturehoverIdx = i" (mouseleave)="architecturehoverIdx = -1">
+                    <span [ngClass]="{ 'overlay-icon': true, 'hide': architecturehoverIdx != i }">
+                      <img src="../../../assets/downloadicon.svg" style="height: 25px;width: 25px;"
+                        (click)="downloadSingleFile(designfile)" />
+                    </span>
+                    <img class="material-icons attachment-img" [gallery]="'permitArchitecture'" [lightbox]="i"
+                      [src]="designfile.data.thumb" width="95%" height="95%" />
+                  </a>
+
+                </p>
+              </div>
+            </div>
+            <div class="col-12 col-sm-6 mt-5">
+              <p class="subtitle fullwidth">Mounting Details</p>
+              <div class="row subbody">
+                <div class="col">
+                  <p class="contentheader">Mounting</p>
+                  <p class="contentheader" *ngIf="
+                      data.prelimData.mountingtype == 'roof' ||
+                      data.prelimData.mountingtype == 'both'
+                    ">
+                    Roof
+                  </p>
+                  <p class="contentheader" *ngIf="
+                      data.prelimData.mountingtype == 'ground' ||
+                      data.prelimData.mountingtype == 'both'
+                    ">
+                    Tilt for ground mount system
+                  </p>
+                </div>
+                <div class="col">
+                  <p class="contentvalue text-right">
+                    {{ data.prelimData?.mountingtype | titlecase }}
+                  </p>
+                  <p class="contentvalue text-right" *ngIf="
+                      data.prelimData.mountingtype == 'roof' ||
+                      data.prelimData.mountingtype == 'both'
+                    ">
+                    {{ data.prelimData.rooftype | titlecase }}
+                  </p>
+                  <p class="contentvalue text-right" *ngIf="
+                      data.prelimData.mountingtype == 'ground' ||
+                      data.prelimData.mountingtype == 'both'
+                    ">
+                    {{ data.prelimData.tiltofgroundmountingsystem }}
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="col-12 col-sm-6 mt-5" *ngIf="data.prelimData.requirementtype == 'proposal'">
+              <p class="subtitle fullwidth">Utility Details</p>
+              <div class="row subbody">
+                <div class="col">
+                  <p class="contentheader">Utility name</p>
+                  <p class="contentheader">Utility rates</p>
+                </div>
+                <div class="col">
+                  <p class="contentvalue text-right">
+                    {{ data.prelimData.utility?.name || defaultvalue }}
+                  </p>
+                  <p class="contentvalue text-right">
+                    {{ data.prelimData.utilityrate?.rate || defaultvalue }}
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="col-12 col-sm-6 mt-5" *ngIf="data.prelimData.requirementtype == 'proposal'">
+              <p class="subtitle fullwidth">Site Proposal Details</p>
+              <div class="row subbody">
+                <div class="col">
+                  <p class="contentheader">Annual utility rate escalation</p>
+                  <p class="contentheader">Cost of system</p>
+                  <p class="contentheader">Representative name</p>
+                  <p class="contentheader">Any Incentives</p>
+                </div>
+                <div class="col">
+                  <p class="contentvalue text-right">
+                    {{
+                    data.prelimData?.annualutilityescalation || defaultvalue
+                    }}%
+                  </p>
+                  <p class="contentvalue text-right">
+                    {{ data.prelimData?.costofsystem || defaultvalue }} $/Watt
+                  </p>
+                  <p class="contentvalue text-right">
+                    {{ data.prelimData?.personname || defaultvalue }}
+                  </p>
+                  <p class="contentvalue text-right">
+                    {{ data.prelimData?.incentive.title || defaultvalue }}
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="col-12 col-sm-6 mt-5">
+              <p class="subtitle fullwidth">Sales Proposal Design</p>
+              <div class="d-flex justify-content-between">
+                <img src="../../../../../assets/pdf.svg" width="60px" height="60px" />
+                <a href="{{ data.prelimData.prelimdesign.url }}" target="_blank" class="contentvalue">{{
+                  data.prelimData.prelimdesign?.name }}</a>
+              </div>
+            </div>
+            <div class="col-12 col-sm-6 mt-5 align-items-center"
+              *ngIf="this.data.prelimData.status == 'requestdeclined'">
+              <p class="subtitle fullwidth">Reason</p>
+              <div class="row subbody">
+                <div class="col">
+                  <p class="contentvalue">
+                    {{ this.data.prelimData?.requestdeclinereason }}
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="col-12 col-sm-6 mt-5" *ngIf="
+                this.data.prelimData.status == 'requestdeclined' &&
+                this.data.prelimData.requestdeclineattachment.length > 0
+              ">
+              <p class="subtitle fullwidth">On Hold Attachments</p>
+              <div class="row subbody list-border" *ngFor="
+                  let attachmentfile of data.prelimData.requestdeclineattachment
+                ">
+                <div class="col-2">
+                  <p class="contentheader">
+                    <img *ngIf="attachmentfile.ext == '.pdf'" class="material-icons file-icon"
+                      src="./../assets/pdf.svg" />
+                    <img *ngIf="attachmentfile.ext == '.png'" class="material-icons file-icon"
+                      src="./../assets/png.svg" />
+                    <img *ngIf="attachmentfile.ext == '.zip'" class="material-icons file-icon"
+                      src="./../assets/zip.svg" />
+                    <img *ngIf="attachmentfile.ext == '.doc'" class="material-icons file-icon"
+                      src="./../assets/doc.svg" />
+                    <img *ngIf="attachmentfile.ext == '.docx'" class="material-icons file-icon"
+                      src="./../assets/doc.svg" />
+                    <img *ngIf="attachmentfile.ext == '.odt'" class="material-icons file-icon"
+                      src="./../assets/pdf.svg" />
+                    <img *ngIf="attachmentfile.ext == '.rtf'" class="material-icons file-icon"
+                      src="./../assets/rtf.svg" />
+                    <img *ngIf="attachmentfile.ext == '.txt'" class="material-icons file-icon"
+                      src="./../assets/txt.svg" />
+                    <img *ngIf="
+                        attachmentfile.ext != '.png' &&
+                        attachmentfile.ext != '.pdf' &&
+                        attachmentfile.ext != '.zip' &&
+                        attachmentfile.ext != '.doc' &&
+                        attachmentfile.ext != '.docx' &&
+                        attachmentfile.ext != '.odt' &&
+                        attachmentfile.ext != '.rtf' &&
+                        attachmentfile.ext != '.txt'
+                      " class="material-icons file-icon" src="./../assets/file.svg" />
+                  </p>
+                </div>
+                <div class="col-10">
+                  <a href="{{ attachmentfile.url }}" target="_blank" class="contentvalue float-right">{{
+                    attachmentfile.name | uppercase }}</a>
+                </div>
+              </div>
+            </div>
+            <div class="col-12 col-sm-6 mt-5 align-items-center" *ngIf="this.data.prelimData.isinrevisionstate">
+              <p class="subtitle fullwidth">Revision Comments</p>
+              <div class="row subbody">
+                <div class="col">
+                  <p class="contentvalue">
+                    {{ this.data.prelimData?.revisioncomments }}
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="col-12 col-sm-6 mt-5" *ngIf="
+                this.data.prelimData.isinrevisionstate &&
+                this.data.prelimData.revisionattachments.length > 0
+              ">
+              <p class="subtitle fullwidth">Revision Attachments</p>
+              <div class="row subbody list-border" *ngFor="
+                  let attachmentfile of data.prelimData.revisionattachments
+                ">
+                <div class="col-2">
+                  <p class="contentheader">
+                    <img *ngIf="attachmentfile.ext == '.pdf'" class="material-icons file-icon"
+                      src="./../assets/pdf.svg" />
+                    <img *ngIf="attachmentfile.ext == '.png'" class="material-icons file-icon"
+                      src="./../assets/png.svg" />
+                    <img *ngIf="attachmentfile.ext == '.zip'" class="material-icons file-icon"
+                      src="./../assets/zip.svg" />
+                    <img *ngIf="attachmentfile.ext == '.doc'" class="material-icons file-icon"
+                      src="./../assets/doc.svg" />
+                    <img *ngIf="attachmentfile.ext == '.docx'" class="material-icons file-icon"
+                      src="./../assets/doc.svg" />
+                    <img *ngIf="attachmentfile.ext == '.odt'" class="material-icons file-icon"
+                      src="./../assets/pdf.svg" />
+                    <img *ngIf="attachmentfile.ext == '.rtf'" class="material-icons file-icon"
+                      src="./../assets/rtf.svg" />
+                    <img *ngIf="attachmentfile.ext == '.txt'" class="material-icons file-icon"
+                      src="./../assets/txt.svg" />
+                    <img *ngIf="
+                        attachmentfile.ext != '.png' &&
+                        attachmentfile.ext != '.pdf' &&
+                        attachmentfile.ext != '.zip' &&
+                        attachmentfile.ext != '.doc' &&
+                        attachmentfile.ext != '.docx' &&
+                        attachmentfile.ext != '.odt' &&
+                        attachmentfile.ext != '.rtf' &&
+                        attachmentfile.ext != '.txt'
+                      " class="material-icons file-icon" src="./../assets/file.svg" />
+                  </p>
+                </div>
+                <div class="col-10">
+                  <a href="{{ attachmentfile.url }}" target="_blank" class="contentvalue float-right">{{
+                    attachmentfile.name | uppercase }}</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </mat-tab>
+    </mat-tab-group>
+
+    <!--  End Display Sales Proposal Details-->
+    <mat-tab-group mat-align-tabs="center" *ngIf="data.isPermitmode">
+      <mat-tab>
+        <ng-template matTabLabel> Survey </ng-template>
+        <div class="row mt-3 slidecarouselrow" *ngIf="data.survey.mspimages.length > 0">
+          <p class="surveydetailsubtitle fullwidth">MSP</p>
+          <div class="col-5">
+            <p class="surveyprocesscardsubtext">
+              MSP is located
+              <span>{{ data.survey.msplocation | titlecase }}</span> the site.
+            </p>
+            <p class="surveyprocesscardsubtext">
+              MSP/BUS Rating is <span>{{ data.survey.msprating }}</span> for
+              this site.
+            </p>
+            <p class="surveyprocesscardsubtext">
+              Main breaker size is
+              <span>{{ data.survey.mainbreakersize }}</span> for this site.
+            </p>
+            <p class="surveyprocesscardsubtext">
+              Main Breaker location in MSP is
+              <span>{{ data.survey.mspbreaker | titlecase }}</span> for this
+              site.
+            </p>
+          </div>
+          <div class="col-7">
+            <p class="containers">
+              <img *ngFor="let item of mspimages; index as i" [lightbox]="i" [src]="item.data.thumb"
+                class="containers-img" />
+            </p>
+          </div>
+        </div>
+
+        <div class="row slidecarouselrow" *ngIf="data.survey.utilitymeterimages.length > 0">
+          <p class="surveydetailsubtitle fullwidth">Utility Meter</p>
+          <div class="col-5">
+            <p class="surveyprocesscardsubtext">
+              Utility meter is
+              <span>{{ data.survey.utilitymeter | titlecase }}ed</span> to MSP.
+            </p>
+          </div>
+          <div class="col-7">
+            <p class="containers">
+              <img *ngFor="let item of utilitymeterimages; index as i" [lightbox]="i" [src]="item.data.thumb"
+                [gallery]="'utilitymeterimages'" class="containers-img" />
+            </p>
+          </div>
+        </div>
+        <div class="row slidecarouselrow" *ngIf="data.survey.pvinverterimages.length > 0">
+          <p class="surveydetailsubtitle fullwidth">PV Inverter</p>
+          <div class="col-5">
+            <p class="surveyprocesscardsubtext">
+              PV Inverter is located
+              <span>{{ data.survey.pvinverterlocation | titlecase }}</span> the
+              site.
+            </p>
+            <p class="surveyprocesscardsubtext">
+              Inverter manufacturer is
+              <span>{{ data.survey.invertermake }}</span> for this site.
+            </p>
+            <p class="surveyprocesscardsubtext">
+              Inverter model is <span>{{ data.survey.invertermodel }}</span>
+            </p>
+          </div>
+
+          <div class="col-7">
+            <p class="containers">
+              <img *ngFor="let item of pvinverterimages; index as i" [lightbox]="i" [src]="item.data.thumb"
+                [gallery]="'pvinverterimages'" class="containers-img" />
+            </p>
+          </div>
+        </div>
+        <div class="row slidecarouselrow" *ngIf="data.survey.pvmeterimages.length > 0">
+          <p class="surveydetailsubtitle fullwidth">PV Meter</p>
+          <div class="col-5">
+            <p class="surveyprocesscardsubtext">PV Meter Wide Angle Shot</p>
+          </div>
+          <div class="col-7">
+            <p class="containers">
+              <img *ngFor="let item of pvmeterimages; index as i" [lightbox]="i" [src]="item.data.thumb"
+                [gallery]="'pvmeterimages'" class="containers-img" />
+            </p>
+          </div>
+        </div>
+        <div class="row slidecarouselrow" *ngIf="data.survey.acdisconnectimages.length > 0">
+          <p class="surveydetailsubtitle fullwidth">Ac Disconnect</p>
+          <div class="col-5">
+            <p class="surveyprocesscardsubtext">
+              AC Disconnect Wide Angle Shot
+            </p>
+            <p class="surveyprocesscardsubtext">AC Disconnect Zoom Shot</p>
+          </div>
+          <div class="col-7">
+            <p class="containers">
+              <img *ngFor="let item of acdisconnectimages; index as i" [lightbox]="i" [src]="item.data.thumb"
+                [gallery]="'acdisconnectimages'" class="containers-img" />
+            </p>
+          </div>
+        </div>
+        <div class="row" *ngIf="
+            data.survey.roofimages.length > 0 ||
+            data.survey.obstaclesimages.length > 0
+          ">
+          <div class="col" *ngIf="data.survey.roofimages.length > 0">
+            <p class="surveydetailsubtitle fullwidth">Roof Images</p>
+            <p class="surveyprocesscardsubtext">
+              Roof tilt is <span>{{ data.survey.rooftilt }}</span>
+            </p>
+            <p class="containers">
+              <img *ngFor="let item of roofimages; index as i" [lightbox]="i" [src]="item.data.thumb"
+                [gallery]="'roofimages'" class="containers-img" />
+            </p>
+          </div>
+          <div class="col" *ngIf="data.survey.roofdimensionimages.length > 0">
+            <p class="surveydetailsubtitle fullwidth">Roof Dimensions</p>
+            <p class="surveyprocesscardsubtext"></p>
+            <p class="containers">
+              <img *ngFor="let item of roofdimensionimages; index as i" [lightbox]="i" [src]="item.data.thumb"
+                [gallery]="'roofdimensionimages'" class="containers-img" />
+            </p>
+          </div>
+        </div>
+        <div class="row" *ngIf="data.survey.obstaclesimages.length > 0">
+          <div class="col" *ngIf="data.survey.obstaclesimages.length > 0">
+            <p class="surveydetailsubtitle fullwidth">Obstacles Images</p>
+            <p class="containers">
+              <img *ngFor="let item of obstaclesimages; index as i" [lightbox]="i" [src]="item.data.thumb"
+                [gallery]="'obstaclesimages'" class="containers-img" />
+            </p>
+          </div>
+          <div class="col" *ngIf="data.survey.obstaclesdimensionsimages.length > 0">
+            <p class="surveydetailsubtitle fullwidth">
+              Obstacles Dimensions Images
+            </p>
+            <p class="containers">
+              <img *ngFor="let item of obstaclesdimensionsimages; index as i" [lightbox]="i" [src]="item.data.thumb"
+                [gallery]="'obstaclesdimensionsimages'" class="containers-img" />
+            </p>
+          </div>
+        </div>
+
+        <div class="row" *ngIf="
+            data.survey.meternumber != null ||
+            data.survey.utilitybillfront != null ||
+            data.survey.utilitybillback != null
+          ">
+          <div class="col" *ngIf="data.survey.meternumber != null">
+            <p class="surveydetailsubtitle fullwidth">Meter Number</p>
+            <p class="containers">
+              <span class="surveyprocesscardsubtext">{{
+                data.survey.meternumber
+                }}</span>
+            </p>
+          </div>
+
+          <div class="col" *ngIf="data.survey.utilitybillfront != null">
+            <p class="surveydetailsubtitle fullwidth">Utility Bill Front</p>
+            <p class="containers">
+              <img style="width: 40%" *ngFor="let item of utilitybillfront; index as i" [lightbox]="i"
+                [src]="item.data.thumb" [gallery]="'utilitybillfront'" class="containers-img" />
+            </p>
+          </div>
+
+          <div class="col" *ngIf="data.survey.utilitybillback != null">
+            <p class="surveydetailsubtitle fullwidth">Utility Bill Back</p>
+            <p class="containers">
+              <img style="width: 40%" *ngFor="let item of utilitybillback; index as i" [lightbox]="i"
+                [src]="item.data.thumb" [gallery]="'utilitybillback'" class="containers-img" />
+            </p>
+          </div>
+        </div>
+
+        <div class="row slidecarouselrow" *ngIf="data.survey.atticimages.length > 0">
+          <p class="surveydetailsubtitle fullwidth">Attic Images</p>
+          <div class="col-5">
+            <p class="surveyprocesscardsubtext">
+              Framing is <span>{{ data.survey.framing }}</span>
+            </p>
+            <p class="surveyprocesscardsubtext">
+              Framing size is <span>{{ data.survey.framingsize }}</span> inches
+            </p>
+            <p class="surveyprocesscardsubtext">
+              Distance between two rafts
+              <span>{{ data.survey.distancebetweentworafts }} inches</span>
+            </p>
+          </div>
+          <div class="col">
+            <p class="containers">
+              <img *ngFor="let item of atticimages; index as i" [lightbox]="i" [src]="item.data.thumb"
+                [gallery]="'atticimages'" class="containers-img" />
+            </p>
+          </div>
+        </div>
+
+        <div class="row slidecarouselrow" *ngIf="data.survey.groundimages.length > 0">
+          <p class="surveydetailsubtitle fullwidth">Ground Images</p>
+          <div class="row">
+            <div class="col-3 appliancescontainers" *ngFor="let item of groundimages; index as i">
+              <img [lightbox]="i" [src]="item.data.thumb" [gallery]="'groundimages'" class="containers-img" />
+              <p class="imagetitle">
+                {{ item.data.name }}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="row slidecarouselrow" *ngIf="data.survey.solarpanelsimages.length > 0">
+          <p class="surveydetailsubtitle fullwidth">Solar Panel Images</p>
+          <div class="row">
+            <div class="col-3 appliancescontainers" *ngFor="let item of solarpanelsimages; index as i">
+              <img [lightbox]="i" [src]="item.data.thumb" [gallery]="'solarpanelsimages'" class="containers-img" />
+              <p class="imagetitle">
+                {{ item.data.name }}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="row slidecarouselrow" *ngIf="data.survey.existingsubpanelimages.length > 0">
+          <p class="surveydetailsubtitle fullwidth">
+            Existing sub Panel Images
+          </p>
+          <div class="row">
+            <div class="col-3 appliancescontainers" *ngFor="let item of existingsubpanelimages; index as i">
+              <img [lightbox]="i" [src]="item.data.thumb" [gallery]="'existingsubpanelimages'" class="containers-img" />
+              <p class="imagetitle">
+                {{ item.data.name }}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="row col">
+          <div class="col-sm-6 col-12" *ngIf="data.survey.appliancesimages.length > 0">
+            <div class="row slidecarouselrow">
+              <p class="surveydetailsubtitle fullwidth">Appliances Images</p>
+              <div class="row">
+                <div class="col-3 appliancescontainers" *ngFor="let item of appliancesimages; index as i">
+                  <img [lightbox]="i" [src]="item.data.thumb" [gallery]="'appliancesimages'" class="containers-img" />
+                  <p class="imagetitle">
+                    {{ item.data.name }}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-sm-6 col-12">
+            <p class="surveydetailsubtitle fullwidth">Details</p>
+            <div class="row subbody">
+              <div class="col">
+                <!-- <p class="contentheader">Existing Modules Brand</p>
+          <p class="contentheader">Existing Modules Model</p>
+          <p class="contentheader">Battery Backup</p> -->
+                <p class="contentheader" *ngIf="data.survey.interconnection != null">
+                  Interconnection
+                </p>
+                <p class="contentheader" *ngIf="data.survey.servicefeedsource != null">
+                  Service Feed Source
+                </p>
+                <p class="contentheader" *ngIf="data.survey.existingsolarsystem != null">
+                  Existing solar system
+                </p>
+                <p class="contentheader" *ngIf="data.survey.roofmaterial != null">
+                  Roof Material
+                </p>
+                <p class="contentheader" *ngIf="
+                    data.survey.additionalnotes != null &&
+                    data.survey.additionalnotes != ''
+                  ">
+                  Additional Notes
+                </p>
+                <p class="contentheader" *ngIf="data.survey.batterysystem != null">
+                  Battery System
+                </p>
+                <p class="contentheader" *ngIf="data.survey.esid != null">
+                  ESID
+                </p>
+              </div>
+
+              <div class="col text-right">
+                <!-- <p class="contentvalue">{{ data.survey.modulemake.name }}</p>
+          <p class="contentvalue">{{ data.survey.modulemodel.name }}</p>
+          <p class="contentvalue">{{ data.survey.batterybackup | titlecase }}</p> -->
+                <p class="contentvalue" *ngIf="data.survey.interconnection != null">
+                  {{
+                  genericService.getInterconnectionName(
+                  data.survey.interconnection
+                  )
+                  }}
+                </p>
+                <p class="contentvalue" *ngIf="data.survey.servicefeedsource != null">
+                  {{ data.survey.servicefeedsource | titlecase }}
+                </p>
+                <p class="contentvalue" *ngIf="data.survey.existingsolarsystem != null">
+                  {{ data.survey.existingsolarsystem }}
+                </p>
+                <p class="contentvalue" *ngIf="data.survey.roofmaterial != null">
+                  {{ data.survey.roofmaterial.name }}
+                </p>
+                <p class="contentvalue" *ngIf="data.survey.additionalnotes != null">
+                  {{ data.survey.additionalnotes }}
+                </p>
+                <p class="contentvalue" *ngIf="data.survey.batterysystem != null">
+                  {{ data.survey.batterysystem }}
+                </p>
+                <p class="contentvalue" *ngIf="data.survey.esid != null">
+                  {{ data.survey.esid }}
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-sm-6 col-12 mt-3" *ngIf="
+              data.survey.status == 'completed' &&
+              (data.survey.hoaattachments.length != 0 ||
+                data.survey.hoadetails != null)
+            ">
+            <p class="surveydetailsubtitle fullwidth">HOA Guidelines</p>
+            <div class="row">
+              <div class="col">
+                <p class="contentheader" *ngIf="data.survey.hoadetails != null">
+                  HOA Details
+                </p>
+              </div>
+              <div class="col text-right">
+                <p class="contentvalue" *ngIf="data.survey.hoadetails != null">
+                  {{ data.survey.hoadetails }}
+                </p>
+              </div>
+            </div>
+            <div class="row subbody list-border" *ngFor="let hoattachment of data.survey.hoaattachments">
+              <div class="col-2">
+                <p class="contentheader">
+                  <img *ngIf="hoattachment.ext == '.pdf'" class="material-icons file-icon" src="./../assets/pdf.svg" />
+                  <img *ngIf="hoattachment.ext == '.png'" class="material-icons file-icon" src="./../assets/png.svg" />
+                  <img *ngIf="hoattachment.ext == '.zip'" class="material-icons file-icon" src="./../assets/zip.svg" />
+                  <img *ngIf="hoattachment.ext == '.doc'" class="material-icons file-icon" src="./../assets/doc.svg" />
+                  <img *ngIf="hoattachment.ext == '.docx'" class="material-icons file-icon" src="./../assets/doc.svg" />
+                  <img *ngIf="hoattachment.ext == '.odt'" class="material-icons file-icon" src="./../assets/pdf.svg" />
+                  <img *ngIf="hoattachment.ext == '.rtf'" class="material-icons file-icon" src="./../assets/rtf.svg" />
+                  <img *ngIf="hoattachment.ext == '.txt'" class="material-icons file-icon" src="./../assets/txt.svg" />
+                  <img *ngIf="
+                      hoattachment.ext != '.png' &&
+                      hoattachment.ext != '.pdf' &&
+                      hoattachment.ext != '.zip' &&
+                      hoattachment.ext != '.doc' &&
+                      hoattachment.ext != '.docx' &&
+                      hoattachment.ext != '.odt' &&
+                      hoattachment.ext != '.rtf' &&
+                      hoattachment.ext != '.txt'
+                    " class="material-icons file-icon" src="./../assets/file.svg" />
+                </p>
+              </div>
+              <div class="col-10">
+                <a href="{{ hoattachment.url }}" target="_blank" class="contentvalue float-right">{{ hoattachment.name |
+                  uppercase }}</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </mat-tab>
+      <mat-tab *ngIf="data.prelimDesign != null">
+        <ng-template matTabLabel> Sales Proposal </ng-template>
+        <div class="container detailsdialog">
+          <div class="row mt-3 surveyfieldrow">
+            <div class="col-12 col-sm-6">
+              <p class="subtitle fullwidth">Customer and Site Details</p>
+              <div class="row subbody">
+                <div class="col-6">
+                  <p class="contentheader">Company</p>
+                  <p class="contentheader">Name</p>
+                  <p class="contentheader">Email</p>
+                  <p class="contentheader">Annual Units</p>
+                  <p class="contentheader" *ngIf="data.prelimDesign.address != null">
+                    Address
+                  </p>
+                </div>
+                <div class="col-6">
+                  <p class="contentvalue text-right">
+                    {{ data.prelimDesign.company }}
+                  </p>
+                  <p class="contentvalue text-right">
+                    {{ data.prelimDesign.name }}
+                  </p>
+                  <p class="contentvalue text-right">
+                    {{ data.prelimDesign.email }}
+                  </p>
+                  <p class="contentvalue text-right">
+                    {{ data.prelimDesign.monthlybill }} kW
+                  </p>
+                  <p class="contentvalue text-right" *ngIf="data.prelimDesign.address != null">
+                    {{ data.prelimDesign.address }}
+                  </p>
+                  <p class="contentvalue text-right" *ngIf="data.prelimDesign.address == null">
+                    No address found
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="col-12 col-sm-6">
+              <p class="subtitle fullwidth">Job Details</p>
+              <div class="row subbody">
+                <div class="col">
+                  <p class="contentheader">Property</p>
+                </div>
+                <div class="col">
+                  <p class="contentvalue text-right" *ngIf="
+                      data.prelimDesign.projecttype == 'detachedbuildingorshop'
+                    ">
+                    Detached Building or Shop
+                  </p>
+                  <p class="contentvalue text-right" *ngIf="
+                      data.prelimDesign.projecttype != 'detachedbuildingorshop'
+                    ">
+                    {{ data.prelimDesign.projecttype | titlecase }}
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="col-12 col-sm-6 mt-5">
+              <p class="subtitle fullwidth">Module Details</p>
+              <div class="row subbody">
+                <div class="col">
+                  <p class="contentheader">Make</p>
+                  <p class="contentheader">Model</p>
+                </div>
+                <div class="col">
+                  <p class="contentvalue text-right">
+                    {{ data.prelimDesign.solarmake.name }}
+                  </p>
+                  <p class="contentvalue text-right">
+                    {{ data.prelimDesign.solarmodel.name }}
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="col-12 col-sm-6 mt-5">
+              <p class="subtitle fullwidth">Inverter Details</p>
+              <div class="row subbody">
+                <div class="col">
+                  <p class="contentheader">Make</p>
+                  <p class="contentheader">Model</p>
+                  <p class="contentheader">Inverters Count</p>
+                </div>
+                <div class="col">
+                  <p class="contentvalue text-right">
+                    {{ data.prelimDesign.invertermake.name }}
+                  </p>
+                  <p class="contentvalue text-right">
+                    {{ data.prelimDesign.invertermodel.name }}
+                  </p>
+                  <p class="contentvalue text-right">
+                    {{ data.prelimDesign.inverterscount }}
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-12 col-sm-6 mt-5" *ngIf="data.prelimDesign.attachments.length > 0">
+              <!-- <p class="subtitle fullwidth">Attachments</p>
+              <div class="row subbody list-border" *ngFor="let attachmentfile of data.prelimDesign.attachments">
+                <div class="col-2">
+                  <p class="contentheader">
+                    <img *ngIf="attachmentfile.ext == '.pdf'" class="material-icons file-icon"
+                      src="./../assets/pdf.svg">
+                    <img *ngIf="attachmentfile.ext == '.png'" class="material-icons file-icon"
+                      src="./../assets/png.svg">
+                    <img *ngIf="attachmentfile.ext == '.zip'" class="material-icons file-icon"
+                      src="./../assets/zip.svg">
+                    <img *ngIf="attachmentfile.ext == '.doc'" class="material-icons file-icon"
+                      src="./../assets/doc.svg">
+                    <img *ngIf="attachmentfile.ext == '.docx'" class="material-icons file-icon"
+                      src="./../assets/doc.svg">
+                    <img *ngIf="attachmentfile.ext == '.odt'" class="material-icons file-icon"
+                      src="./../assets/pdf.svg">
+                    <img *ngIf="attachmentfile.ext == '.rtf'" class="material-icons file-icon"
+                      src="./../assets/rtf.svg">
+                    <img *ngIf="attachmentfile.ext == '.txt'" class="material-icons file-icon"
+                      src="./../assets/txt.svg">
+                    <img
+                      *ngIf="attachmentfile.ext != '.png' && attachmentfile.ext != '.pdf' && attachmentfile.ext != '.zip' && attachmentfile.ext != '.doc' && attachmentfile.ext != '.docx' && attachmentfile.ext != '.odt' && attachmentfile.ext != '.rtf' && attachmentfile.ext != '.txt'"
+                      class="material-icons file-icon" src="./../assets/file.svg">
+                  </p>
+                </div>
+                <div class="col-10">
+                  <a href="{{attachmentfile.url}}" target="_blank" class="contentvalue float-right">{{
+                    attachmentfile.name |
+                    uppercase }}</a>
+                </div>
+              </div> -->
+
+              <p class="subtitle fullwidth">Attachments</p>
+              <p class="containers">
+                <img *ngFor="let item of permitAttachments; index as i" [lightbox]="i" [gallery]="'permitAttachments'"
+                  [src]="item.data.thumb" class="containers-img" />
+              </p>
+            </div>
+            <div class="col-12 col-sm-6 mt-5">
+              <p class="subtitle fullwidth">Construction Details</p>
+              <div class="row subbody">
+                <div class="col">
+                  <p class="contentheader">New Construction</p>
+                </div>
+                <div class="col">
+                  <p class="contentvalue text-right">
+                    {{
+                    genericService.getBooleanValue(
+                    data.prelimDesign.newconstruction
+                    )
+                    }}
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="col-12 col-sm-6 mt-5" *ngIf="
+                this.data.prelimDesign.newconstruction &&
+                data.prelimDesign.architecturaldesign.length > 0
+              ">
+              <p class="subtitle fullwidth">Architectural Design</p>
+              <div class="row subbody list-border" *ngFor="let designfile of data.prelimDesign.architecturaldesign">
+                <div class="col-2">
+                  <p class="contentheader">
+                    <img *ngIf="designfile.ext == '.pdf'" class="material-icons file-icon" src="./../assets/pdf.svg" />
+                    <img *ngIf="designfile.ext == '.png'" class="material-icons file-icon" src="./../assets/png.svg" />
+                    <img *ngIf="designfile.ext == '.zip'" class="material-icons file-icon" src="./../assets/zip.svg" />
+                    <img *ngIf="designfile.ext == '.doc'" class="material-icons file-icon" src="./../assets/doc.svg" />
+                    <img *ngIf="designfile.ext == '.docx'" class="material-icons file-icon" src="./../assets/doc.svg" />
+                    <img *ngIf="designfile.ext == '.odt'" class="material-icons file-icon" src="./../assets/pdf.svg" />
+                    <img *ngIf="designfile.ext == '.rtf'" class="material-icons file-icon" src="./../assets/rtf.svg" />
+                    <img *ngIf="designfile.ext == '.txt'" class="material-icons file-icon" src="./../assets/txt.svg" />
+                    <img *ngIf="
+                        designfile.ext != '.png' &&
+                        designfile.ext != '.pdf' &&
+                        designfile.ext != '.zip' &&
+                        designfile.ext != '.doc' &&
+                        designfile.ext != '.docx' &&
+                        designfile.ext != '.odt' &&
+                        designfile.ext != '.rtf' &&
+                        designfile.ext != '.txt'
+                      " class="material-icons file-icon" src="./../assets/file.svg" />
+                  </p>
+                </div>
+                <div class="col-10">
+                  <a href="{{ designfile.url }}" target="_blank" class="contentvalue float-right">{{ designfile.name |
+                    uppercase }}</a>
+                </div>
+              </div>
+            </div>
+            <div class="col-12 col-sm-6 mt-5">
+              <p class="subtitle fullwidth">Mounting Details</p>
+              <div class="row subbody">
+                <div class="col">
+                  <p class="contentheader">Mounting</p>
+                  <p class="contentheader" *ngIf="
+                      data.prelimDesign.mountingtype == 'roof' ||
+                      data.prelimDesign.mountingtype == 'both'
+                    ">
+                    Roof
+                  </p>
+                  <p class="contentheader" *ngIf="
+                      data.prelimDesign.mountingtype == 'ground' ||
+                      data.prelimDesign.mountingtype == 'both'
+                    ">
+                    Tilt for ground mount system
+                  </p>
+                </div>
+                <div class="col">
+                  <p class="contentvalue text-right">
+                    {{ data.prelimDesign.mountingtype | titlecase }}
+                  </p>
+                  <p class="contentvalue text-right" *ngIf="
+                      data.prelimDesign.mountingtype == 'roof' ||
+                      data.prelimDesign.mountingtype == 'both'
+                    ">
+                    {{ data.prelimDesign.rooftype | titlecase }}
+                  </p>
+                  <p class="contentvalue text-right" *ngIf="
+                      data.prelimDesign.mountingtype == 'ground' ||
+                      data.prelimDesign.mountingtype == 'both'
+                    ">
+                    {{ data.prelimDesign.tiltofgroundmountingsystem }}
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="col-12 col-sm-6 mt-5" *ngIf="data.prelimDesign.requirementtype == 'proposal'">
+              <p class="subtitle fullwidth">Utility Details</p>
+              <div class="row subbody">
+                <div class="col">
+                  <p class="contentheader">Utility name</p>
+                  <p class="contentheader">Utility rates</p>
+                </div>
+                <div class="col">
+                  <p class="contentvalue text-right">
+                    {{ data.prelimDesign.utility.name }}
+                  </p>
+                  <p class="contentvalue text-right">
+                    {{ data.prelimDesign.utilityrate.rate }}
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="col-12 col-sm-6 mt-5" *ngIf="data.prelimDesign.requirementtype == 'proposal'">
+              <p class="subtitle fullwidth">Site Proposal Details</p>
+              <div class="row subbody">
+                <div class="col">
+                  <p class="contentheader">Annual utility rate escalation</p>
+                  <p class="contentheader">Cost of system</p>
+                  <p class="contentheader">Representative name</p>
+                  <p class="contentheader">Any Incentives</p>
+                </div>
+                <div class="col">
+                  <p class="contentvalue text-right">
+                    {{ data.prelimDesign.annualutilityescalation }}%
+                  </p>
+                  <p class="contentvalue text-right">
+                    {{ data.prelimDesign.costofsystem }} $/Watt
+                  </p>
+                  <p class="contentvalue text-right">
+                    {{ data.prelimDesign.personname }}
+                  </p>
+                  <p class="contentvalue text-right">
+                    {{ data.prelimDesign.incentive.title }}
+                  </p>
+                </div>
+              </div>
+            </div>
+            <!-- <div class="col-12  col-sm-6 mt-5"
+                *ngIf="data.prelimDesign.requirementtype=='proposal' && this.loggedInUser.logo!=null && this.loggedInUser.usertype=='company'">
+                <p class="subtitle fullwidth">Company Logo</p>
+                <div class="row subbody list-border">
+                  <div class="col-2">
+                    <p class="contentheader">
+                      <img *ngIf="this.loggedInUser.logo.ext == '.pdf'" class="material-icons file-icon"
+                        src="./../assets/pdf.svg">
+                      <img *ngIf="this.loggedInUser.logo.ext == '.png'" class="material-icons file-icon"
+                        src="./../assets/png.svg">
+                      <img *ngIf="this.loggedInUser.logo.ext == '.zip'" class="material-icons file-icon"
+                        src="./../assets/zip.svg">
+                      <img *ngIf="this.loggedInUser.logo.ext == '.doc'" class="material-icons file-icon"
+                        src="./../assets/doc.svg">
+                      <img *ngIf="this.loggedInUser.logo.ext == '.docx'" class="material-icons file-icon"
+                        src="./../assets/doc.svg">
+                      <img *ngIf="this.loggedInUser.logo.ext == '.odt'" class="material-icons file-icon"
+                        src="./../assets/pdf.svg">
+                      <img *ngIf="this.loggedInUser.logo.ext == '.rtf'" class="material-icons file-icon"
+                        src="./../assets/rtf.svg">
+                      <img *ngIf="this.loggedInUser.logo.ext == '.txt'" class="material-icons file-icon"
+                        src="./../assets/txt.svg">
+                      <img
+                        *ngIf="this.loggedInUser.logo.ext != '.png' && this.loggedInUser.logo.ext != '.pdf' &&this.loggedInUser.logo.ext != '.zip' && this.loggedInUser.logo.ext != '.doc' && this.loggedInUser.logo.ext != '.docx' && this.loggedInUser.logo.ext != '.odt' && this.loggedInUser.logo.ext != '.rtf' && this.loggedInUser.logo.ext != '.txt'"
+                        class="material-icons file-icon" src="./../assets/file.svg">
+                    </p>
+                  </div>
+                  <div class="col-10">
+                    <a href="{{this.loggedInUser.logo.url}}" target="_blank" class="contentvalue float-right">{{
+                      this.loggedInUser.logo.name | uppercase }}</a>
+                  </div>
+                </div>
+              </div> -->
+            <!--  <div class="col-12  col-sm-6 mt-5" *ngIf="data.design.comments.length > 0">
+          <p class="subtitle fullwidth">Comments</p>
+          <div *ngFor="let comment of data.design.comments">
+            <div class="row commentslist"
+              *ngIf="(isClient && (comment.createdby.role != 8 && comment.createdby.role != 9 && comment.createdby.role != 10)) || (!isClient)">
+              <p style="width: 50%; word-wrap: break-word;">
+                <span>&#8220;</span>
+                <span innerHTML="{{wrapURLs(comment.message)}}"></span>
+                <span>&#8221;</span>
+              </p>
+              <p class="pl-1 text-center" style="width: 25%;">{{comment.createdby.firstname}}
+                {{comment.createdby.lastname}}
+              </p>
+              <p class="pl-1 text-right"
+                style="width: 25%; font-style: italic; color: #666666; font-weight: 100;font-weight: bold;">
+                {{ genericService.formatDateInTimeAgo(comment.created_at) }}</p>
+            </div>
+          </div>
+        </div> -->
+
+            <!-- <div class="col-6 mt-5"
+          *ngIf="(this.data.design.status == 'created' || (this.data.design.status == 'requestaccepted' && !isClient))">
+          <p class="subtitle">Assign</p>
+          <div class="row subbody">
+            <div class="col" *ngIf="loggedInUser.role.id==4 || loggedInUser.role.id==5">
+              <p class="contentheader">Assign it to a designer from your team </p>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <div class="designerslist">
+                <cdk-virtual-scroll-viewport *ngIf="designers.length > 0" orientation="horizontal" itemSize="50"
+                  class="designerslist-viewport">
+                  <div *cdkVirtualFor="let designer of designers; let i = index" class="style">
+                    <button mat-button class="designeritem" matBadge="{{designer.jobcount}}" matBadgePosition="after"
+                      (click)="setSelectedAssignee(designer, i)">
+                      <div *ngIf="designer.contractorlogo != null && designer.contractorlogo.logo != null" class="logo">
+                        <img src="{{designer.contractorlogo.logo.url}}" />
+                      </div>
+                      <div *ngIf="designer.contractorlogo == null || designer.contractorlogo.logo == null"
+                        class="initials text-center">
+                        <p>{{genericService.getInitials(designer.firstname, designer.lastname)}}</p>
+                      </div>
+                      <div class="selectionbackground" *ngIf="designer.isDisplayed">
+                        <img src="../../../../../assets/whitetick.svg" />
+                      </div>
+                    </button>
+                    <div class="namedetails text-center">
+                      <p>{{designer.firstname}} {{designer.lastname}}</p>
+                    </div>
+                  </div>
+                </cdk-virtual-scroll-viewport>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-3">
+              <button mat-raised-button (click)="assignUserToDesign()">Assign</button>
+            </div>
+          </div>
+        </div> -->
+            <div class="col-12 col-sm-6 mt-5">
+              <!-- <p class="subtitle fullwidth">Prelim Design</p>
+              <div class="row subbody">
+                <div class="col">
+                  <p class="contentheader">View File</p>
+                </div>
+                <div class="col">
+                  <a href="{{data.prelimDesign.prelimdesign.url}}" target="_blank" class="contentvalue float-right">{{
+                    data.prelimDesign.prelimdesign.name }}</a>
+                </div>
+              </div> -->
+              <p class="subtitle fullwidth">Sales Proposal Design</p>
+              <div class="d-flex justify-content-between">
+                <img src="../../../../../assets/pdf.svg" width="60px" height="60px" />
+                <a href="{{ data.prelimDesign.prelimdesign.url }}" target="_blank" class="contentvalue">{{
+                  data.prelimDesign.prelimdesign.name }}</a>
+              </div>
+            </div>
+            <!-- <div class="col-12  col-sm-6 mt-5"
+                *ngIf="!isClient && this.data.design.reviewissues != ''">
+                <p class="subtitle fullwidth">Review comments</p>
+                <div class="row subbody">
+                  <div class="col">
+                    <p class="reviewissues">{{this.data.design.reviewissues}}</p>
+                  </div>
+                  <div class="col">
+                    <p class="reviewissues float-right">{{this.data.design.reviewassignedto.firstname}}
+                      {{this.data.design.reviewassignedto.lastname}}</p>
+                  </div>
+                </div>
+              </div> -->
+            <div class="col-12 col-sm-6 mt-5 align-items-center"
+              *ngIf="this.data.prelimDesign.status == 'requestdeclined'">
+              <p class="subtitle fullwidth">Reason</p>
+              <div class="row subbody">
+                <div class="col">
+                  <p class="contentvalue">
+                    {{ this.data.prelimDesign.requestdeclinereason }}
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="col-12 col-sm-6 mt-5" *ngIf="
+                this.data.prelimDesign.status == 'requestdeclined' &&
+                this.data.prelimDesign.requestdeclineattachment.length > 0
+              ">
+              <p class="subtitle fullwidth">On Hold Attachments</p>
+              <div class="row subbody list-border" *ngFor="
+                  let attachmentfile of data.prelimDesign
+                    .requestdeclineattachment
+                ">
+                <div class="col-2">
+                  <p class="contentheader">
+                    <img *ngIf="attachmentfile.ext == '.pdf'" class="material-icons file-icon"
+                      src="./../assets/pdf.svg" />
+                    <img *ngIf="attachmentfile.ext == '.png'" class="material-icons file-icon"
+                      src="./../assets/png.svg" />
+                    <img *ngIf="attachmentfile.ext == '.zip'" class="material-icons file-icon"
+                      src="./../assets/zip.svg" />
+                    <img *ngIf="attachmentfile.ext == '.doc'" class="material-icons file-icon"
+                      src="./../assets/doc.svg" />
+                    <img *ngIf="attachmentfile.ext == '.docx'" class="material-icons file-icon"
+                      src="./../assets/doc.svg" />
+                    <img *ngIf="attachmentfile.ext == '.odt'" class="material-icons file-icon"
+                      src="./../assets/pdf.svg" />
+                    <img *ngIf="attachmentfile.ext == '.rtf'" class="material-icons file-icon"
+                      src="./../assets/rtf.svg" />
+                    <img *ngIf="attachmentfile.ext == '.txt'" class="material-icons file-icon"
+                      src="./../assets/txt.svg" />
+                    <img *ngIf="
+                        attachmentfile.ext != '.png' &&
+                        attachmentfile.ext != '.pdf' &&
+                        attachmentfile.ext != '.zip' &&
+                        attachmentfile.ext != '.doc' &&
+                        attachmentfile.ext != '.docx' &&
+                        attachmentfile.ext != '.odt' &&
+                        attachmentfile.ext != '.rtf' &&
+                        attachmentfile.ext != '.txt'
+                      " class="material-icons file-icon" src="./../assets/file.svg" />
+                  </p>
+                </div>
+                <div class="col-10">
+                  <a href="{{ attachmentfile.url }}" target="_blank" class="contentvalue float-right">{{
+                    attachmentfile.name | uppercase }}</a>
+                </div>
+              </div>
+            </div>
+            <div class="col-12 col-sm-6 mt-5 align-items-center" *ngIf="this.data.prelimDesign.isinrevisionstate">
+              <p class="subtitle fullwidth">Revision Comments</p>
+              <div class="row subbody">
+                <div class="col">
+                  <p class="contentvalue">
+                    {{ this.data.prelimDesign.revisioncomments }}
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="col-12 col-sm-6 mt-5" *ngIf="
+                this.data.prelimDesign.isinrevisionstate &&
+                this.data.prelimDesign.revisionattachments.length > 0
+              ">
+              <p class="subtitle fullwidth">Revision Attachments</p>
+              <div class="row subbody list-border" *ngFor="
+                  let attachmentfile of data.prelimDesign.revisionattachments
+                ">
+                <div class="col-2">
+                  <p class="contentheader">
+                    <img *ngIf="attachmentfile.ext == '.pdf'" class="material-icons file-icon"
+                      src="./../assets/pdf.svg" />
+                    <img *ngIf="attachmentfile.ext == '.png'" class="material-icons file-icon"
+                      src="./../assets/png.svg" />
+                    <img *ngIf="attachmentfile.ext == '.zip'" class="material-icons file-icon"
+                      src="./../assets/zip.svg" />
+                    <img *ngIf="attachmentfile.ext == '.doc'" class="material-icons file-icon"
+                      src="./../assets/doc.svg" />
+                    <img *ngIf="attachmentfile.ext == '.docx'" class="material-icons file-icon"
+                      src="./../assets/doc.svg" />
+                    <img *ngIf="attachmentfile.ext == '.odt'" class="material-icons file-icon"
+                      src="./../assets/pdf.svg" />
+                    <img *ngIf="attachmentfile.ext == '.rtf'" class="material-icons file-icon"
+                      src="./../assets/rtf.svg" />
+                    <img *ngIf="attachmentfile.ext == '.txt'" class="material-icons file-icon"
+                      src="./../assets/txt.svg" />
+                    <img *ngIf="
+                        attachmentfile.ext != '.png' &&
+                        attachmentfile.ext != '.pdf' &&
+                        attachmentfile.ext != '.zip' &&
+                        attachmentfile.ext != '.doc' &&
+                        attachmentfile.ext != '.docx' &&
+                        attachmentfile.ext != '.odt' &&
+                        attachmentfile.ext != '.rtf' &&
+                        attachmentfile.ext != '.txt'
+                      " class="material-icons file-icon" src="./../assets/file.svg" />
+                  </p>
+                </div>
+                <div class="col-10">
+                  <a href="{{ attachmentfile.url }}" target="_blank" class="contentvalue float-right">{{
+                    attachmentfile.name | uppercase }}</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </mat-tab>
+    </mat-tab-group>
+  </div>
+</div>
+<mat-dialog-actions align="end">
+  <button mat-raised-button style="width: 128px" [hidden]="data.isEditMode" (click)="onSaveDesign()"
+    *ngIf="!data.designRaisedbyWattmonk">
+    Save for Later
+  </button>
+  <button mat-raised-button style="width: 128px" *ngIf="data.isEditMode" (click)="onSaveDesign()">
+    Update
+  </button>
+
+  <button mat-raised-button *ngIf="isClient || data.designRaisedbyWattmonk" [hidden]="data.isEditMode"
+    (click)="sendDesigntoWattmonk($event)">
+    <span *ngIf="isClient">Send to WattMonk</span><span *ngIf="data.designRaisedbyWattmonk"> Submit</span>
+  </button>
+</mat-dialog-actions>

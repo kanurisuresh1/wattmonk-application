@@ -1,0 +1,91 @@
+<ng-container *ngIf="!exceedlimit">
+  <div>
+    <!-- <h1>3. Doughnut chart</h1> -->
+    <canvas #doughnutCanvas style="height: 10vh; width: 20vw"></canvas>
+    <div class="center-text" style="line-height: 1.1; text-align: center">
+      <label class="percentage">{{ selectedSliceLabel }}%</label>
+      <label style="margin: 0px; font-size: 10px; font-weight: 600"
+        ><span
+          >Customer <br />
+          Probability</span
+        ></label
+      >
+    </div>
+    <div style="text-align-last: center; word-break: break-word">
+      <h2>
+        Based upon many multiple factors mainly your customer's address, city,
+        state & zip postal code etc.
+      </h2>
+      <h5
+        *ngIf="!loggedInUser"
+        style="font-weight: 600; color: gray; font-size: 12px"
+      >
+        Your customer probability more details will be viewed under customer
+        section on our <br />
+        platform, please Sign In or Sign Up
+      </h5>
+    </div>
+    <!-- <hr color="red"> -->
+  </div>
+  <mat-dialog-actions style="justify-content: center; margin-bottom: 0px">
+    <ng-container *ngIf="!loggedInUser">
+      <button mat-raised-button class="onefourthwidth" (click)="goToLogin()">
+        Sign In
+      </button>
+      <button
+        mat-raised-button
+        class="onefourthwidth"
+        style="background: white"
+        (click)="goToSignUp()"
+      >
+        Sign Up
+      </button>
+    </ng-container>
+  </mat-dialog-actions>
+</ng-container>
+
+<ng-container *ngIf="exceedlimit">
+  <div>
+    <!-- <h1>3. Doughnut chart</h1> -->
+    <div style="text-align: -webkit-center">
+      <img
+        width="50%"
+        class="imagecss"
+        src="../assets/furthercontinueIllustration.png"
+      />
+    </div>
+
+    <div style="text-align-last: center; word-break: break-word">
+      <h2
+        style="
+          font-size: larger;
+          text-align: center;
+          font-weight: 600;
+          line-height: normal;
+        "
+      >
+        Sorry you have already generated maximum number of customer probability
+        score without signing in to our platform.
+      </h2>
+      <h5 style="font-weight: 600; color: gray; font-size: 12px">
+        To further continue more please sign in / sign up on our platform.
+      </h5>
+    </div>
+    <!-- <hr color="red"> -->
+  </div>
+  <mat-dialog-actions style="justify-content: center; margin-bottom: 0px">
+    <ng-container>
+      <button mat-raised-button class="onefourthwidth" (click)="goToLogin()">
+        Sign In
+      </button>
+      <button
+        mat-raised-button
+        class="onefourthwidth"
+        style="background: white"
+        (click)="goToSignUp()"
+      >
+        Sign Up
+      </button>
+    </ng-container>
+  </mat-dialog-actions>
+</ng-container>

@@ -1,0 +1,529 @@
+<form class="designform" [formGroup]="addDesignDialogFormGroup">
+  <div class="row mt-1" *ngIf="!isDesigner">
+    <div class="col">
+      <mat-form-field appearance="fill" class="fullwidth">
+        <mat-label>Name</mat-label>
+        <input autocomplete="off" matInput placeholder="eg. john" [formControl]="name" required />
+        <mat-error *ngIf="name.invalid">{{ getErrorMessage(name) }}</mat-error>
+      </mat-form-field>
+    </div>
+    <div class="col">
+      <mat-form-field appearance="fill" class="fullwidth">
+        <mat-label>Email</mat-label>
+        <input [ngStyle]="isEditMode ? {'color': 'rgba(0,0,0,0.7)'} : {'color': '#000000'}" [readonly]="isEditMode"
+          autocomplete="off" matInput placeholder="eg. pat@example.com" [formControl]="email" required>
+        <mat-error *ngIf="email.invalid">{{getErrorMessage(email)}}</mat-error>
+      </mat-form-field>
+    </div>
+    <div class="col">
+      <mat-form-field appearance="fill" class="fullwidth">
+        <mat-label>Phone</mat-label>
+        <input type="tel" autocomplete="off" maxlength="15" min="8" matInput placeholder="eg. 98775534220"
+          [formControl]="phone" required>
+        <mat-error *ngIf="phone.invalid">{{getErrorMessage(phone)}}</mat-error>
+      </mat-form-field>
+    </div>
+    <div class="col">
+      <mat-form-field appearance="fill" class="fullwidth">
+        <mat-label>Annual units (kW)</mat-label>
+        <input autocomplete="off" type="tel" maxlength="5" min="1" matInput placeholder="eg. 6000"
+          [formControl]="monthlybill" required />
+        <mat-error *ngIf="monthlybill.invalid">{{
+          getErrorMessage(monthlybill)
+          }}</mat-error>
+      </mat-form-field>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-8">
+      <div class="form-group formradiogroup fullwidth"
+        [ngClass]="[ (projecttype.invalid && !displayerror) ? 'formradiogroup-invalid' : '']">
+        <h5>Property type* </h5>
+        <mat-radio-group aria-label="project type" [formControl]="projecttype" required>
+          <div class="row">
+            <div class="col">
+              <mat-radio-button value="residential">Residential</mat-radio-button>
+            </div>
+            <div class="col">
+              <mat-radio-button value="commercial">Commercial</mat-radio-button>
+            </div>
+            <div class="col">
+              <mat-radio-button value="detachedbuildingorshop">Detached Building or Shop</mat-radio-button>
+            </div>
+            <div class="col">
+              <mat-radio-button value="carport">Carport</mat-radio-button>
+            </div>
+          </div>
+        </mat-radio-group>
+      </div>
+      <mat-error class="custom-mat-error" [hidden]="displayerror" *ngIf="projecttype.invalid">
+        {{getErrorMessage(projecttype)}}
+      </mat-error>
+    </div>
+    <div class="col-4">
+      <div class="form-group formradiogroup fullwidth">
+        <h5>MPU Required</h5>
+        <mat-radio-group name="mpurequired" aria-label="mpurequired" [formControl]="mpurequired" required
+          (change)="radioChange($event)">
+          <div class="row">
+            <div class="col">
+              <mat-radio-button value="true">Yes</mat-radio-button>
+            </div>
+            <div class="col">
+              <mat-radio-button value="false">No</mat-radio-button>
+            </div>
+          </div>
+        </mat-radio-group>
+      </div>
+      <mat-error class="custom-mat-error" [hidden]="displayerror" *ngIf="mpurequired.invalid">
+        {{ getErrorMessage(mpurequired) }}
+      </mat-error>
+    </div>
+
+  </div>
+  <div class="row mt-3">
+    <div class="col">
+      <div class="form-group formradiogroup fullwidth"
+        [ngClass]="[ (jobtype.invalid && !displayerror) ? 'formradiogroup-invalid' : '']">
+        <h5>Job type *</h5>
+        <mat-radio-group name="jobtype" aria-label="job type" [formControl]="jobtype" required
+          (change)="radioChange($event)">
+          <div class="row">
+            <div class="col">
+              <mat-radio-button value="pvbattery">PV+Battery</mat-radio-button>
+            </div>
+            <div class="col">
+              <mat-radio-button value="pv">PV</mat-radio-button>
+            </div>
+            <div class="col">
+              <mat-radio-button value="battery">Battery</mat-radio-button>
+            </div>
+          </div>
+        </mat-radio-group>
+      </div>
+      <mat-error class="custom-mat-error" [hidden]="displayerror" *ngIf="jobtype.invalid">{{getErrorMessage(jobtype)}}
+      </mat-error>
+    </div>
+    <div class="col">
+      <mat-form-field appearance="fill" class="fullwidth">
+        <mat-label>Address</mat-label>
+
+        <textarea *ngIf="!isEditMode" style="min-height: 41px;" matInput matGoogleMapsAutocomplete country="us"
+          (onAutocompleteSelected)="onAutocompleteSelected($event)" (onLocationSelected)="onLocationSelected($event)"
+          [formControl]="address" required></textarea>
+
+        <textarea [ngStyle]="isEditMode ? {'color': 'rgba(0,0,0,0.7)'} : {'color': '#000000'}" *ngIf="isEditMode"
+          readonly style="min-height: 41px;" matInput [formControl]="address" required></textarea>
+
+        <mat-error *ngIf="address.invalid">{{getErrorMessage(address)}}</mat-error>
+      </mat-form-field>
+    </div>
+    <div class="col">
+      <div class="form-group formradiogroup fullwidth"
+        [ngClass]="[ newconstruction.invalid ? 'formradiogroup-invalid' : '']">
+        <h5>New construction</h5>
+        <mat-radio-group name="newconstruction" aria-label="newconstruction" [formControl]="newconstruction" required
+          (change)="radioChange($event)">
+          <div class="row">
+            <div class="col">
+              <mat-radio-button value="true">Yes</mat-radio-button>
+            </div>
+            <div class="col">
+              <mat-radio-button value="false">No</mat-radio-button>
+            </div>
+          </div>
+        </mat-radio-group>
+      </div>
+      <mat-error class="custom-mat-error" [hidden]="displayerror" *ngIf="newconstruction.invalid">
+        {{ getErrorMessage(newconstruction) }}
+      </mat-error>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col" *ngIf="
+        generateddesign.newconstruction &&
+        generateddesign.architecturaldesign != null
+      ">
+      <p class="subtitle">Architectural Design</p>
+      <div class="row subbody" *ngFor="let designfile of generateddesign.architecturaldesign">
+        <div class="col-4">
+          <p class="contentheader" style="margin: 0px;">
+            <img *ngIf="designfile.ext == '.pdf'" class="material-icons file-icon" src="./../assets/pdf.svg">
+            <img *ngIf="designfile.ext == '.png'" class="material-icons file-icon" src="./../assets/png.svg">
+            <img *ngIf="designfile.ext == '.zip'" class="material-icons file-icon" src="./../assets/zip.svg">
+            <img *ngIf="designfile.ext == '.doc'" class="material-icons file-icon" src="./../assets/doc.svg">
+            <img *ngIf="designfile.ext == '.docx'" class="material-icons file-icon" src="./../assets/doc.svg">
+            <img *ngIf="designfile.ext == '.odt'" class="material-icons file-icon" src="./../assets/pdf.svg">
+            <img *ngIf="designfile.ext == '.rtf'" class="material-icons file-icon" src="./../assets/rtf.svg">
+            <img *ngIf="designfile.ext == '.txt'" class="material-icons file-icon" src="./../assets/txt.svg">
+            <img
+              *ngIf="designfile.ext !== '.png' && designfile.ext !== '.pdf' && designfile.ext !== '.zip' && designfile.ext !== '.doc' && designfile.ext !== '.docx' && designfile.ext !== '.odt' && designfile.ext !== '.rtf' && designfile.ext !== '.txt'"
+              class="material-icons file-icon" src="./../assets/file.svg">
+          </p>
+        </div>
+        <div class="col">
+          <a href="{{designfile.url}}" target="_blank" class="contentvalue float-right" style="margin-top: 8px;">{{
+            designfile.name | uppercase }}</a>
+        </div>
+      </div>
+    </div>
+    <!-- <div class="col" style="margin-left: 16px;" *ngIf="isEditMode && generateddesign.architecturaldesign.length > 0">
+      <div class="row pdfselectionpreview align-items-center list-border"
+        *ngFor="let file of generateddesign.architecturaldesign; let i = index">
+        <div class="col-1 pdfpreviewcol">
+          <img *ngIf="file.ext == '.pdf'" class="material-icons file-icon" src="./../assets/pdf.svg">
+          <img *ngIf="file.ext == '.png'" class="material-icons file-icon" src="./../assets/png.svg">
+          <img *ngIf="file.ext == '.zip'" class="material-icons file-icon" src="./../assets/zip.svg">
+          <img *ngIf="file.ext == '.doc'" class="material-icons file-icon" src="./../assets/doc.svg">
+          <img *ngIf="file.ext == '.docx'" class="material-icons file-icon" src="./../assets/doc.svg">
+          <img *ngIf="file.ext == '.odt'" class="material-icons file-icon" src="./../assets/pdf.svg">
+          <img *ngIf="file.ext == '.rtf'" class="material-icons file-icon" src="./../assets/rtf.svg">
+          <img *ngIf="file.ext == '.txt'" class="material-icons file-icon" src="./../assets/txt.svg">
+          <img
+            *ngIf="file.ext != '.png' && file.ext != '.pdf' && file.ext != '.zip' && file.ext != '.doc' && file.ext != '.docx' && file.ext != '.odt' && file.ext != '.rtf' && file.ext != '.txt'"
+            class="material-icons file-icon" src="./../assets/file.svg">
+        </div>
+        <div class="col-9">
+          <p>{{(file.name.length>50)? (file.name | slice:0:50)+'..':(file.name)}}</p>
+        </div>
+        <div class="col-2">
+          <span class="float-right delete-btn" (click)="onRemoveArchitecturalDesign(file, i)"><img
+              src="../../../../../assets/delete.svg" class="dialogclose"></span>
+        </div>
+      </div>
+    </div>
+    <div class="col" *ngIf="newconstruction.value == 'true'" [ngStyle]="isEditMode ? {'margin-right': '16px'} : {'margin-right': '0px'}">
+      <div class="row architectureuploadrow">
+        <div class="col align-items-center architectureuploadcol">
+          <mat-error [hidden]="displayerror" style="font-size: 10px; margin-left: 16px;">Uploading architectural design is
+            required.
+          </mat-error>
+          <div class="multiple-dropzone" style="width: 97%; margin-left: 15px; margin-bottom: 16px;" ngx-dropzone [multiple]="true"
+            (change)="onArchitecturalFileSelect($event)">
+            <ngx-dropzone-label>
+              <div>
+                <img class="addimage" src="../../../../../assets/add.svg">
+                <h5>Drag and drop or click to browse Architectural Design of your house.</h5>
+              </div>
+            </ngx-dropzone-label>
+            <div *ngFor="let f of architecturalfiles">
+              {{ f.type }}
+              <ngx-dropzone-preview *ngIf="!f.isImage" class="imagepreview" ngProjectAs="ngx-dropzone-preview"
+                [file]="f" [removable]="true" (removed)="onArchitecturalFileRemove(f)">
+                <ngx-dropzone-label class="previewlabel">{{ f.name }} ({{ f.type }})</ngx-dropzone-label>
+              </ngx-dropzone-preview>
+              <ngx-dropzone-image-preview *ngIf="f.isImage" class="imagepreview"
+                ngProjectAs="ngx-dropzone-preview" [file]="f" [removable]="true"
+                (removed)="onArchitecturalFileRemove(f)">
+              </ngx-dropzone-image-preview>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div> -->
+  </div>
+  <div class="row">
+    <div class="col" style="margin-bottom: 8px;">
+      <mat-form-field appearance="fill" class="fullwidth">
+        <mat-label>State</mat-label>
+        <input autocomplete="off" matInput placeholder="eg. state" [formControl]="designstate" required>
+        <mat-error *ngIf="designstate.invalid">{{getErrorMessage(designstate)}}</mat-error>
+      </mat-form-field>
+    </div>
+    <div class="col">
+      <mat-form-field appearance="fill" class="fullwidth">
+        <mat-label>City</mat-label>
+        <input autocomplete="off" matInput placeholder="eg. city" [formControl]="designcity" required>
+        <mat-error *ngIf="designcity.invalid">{{getErrorMessage(designcity)}}</mat-error>
+      </mat-form-field>
+    </div>
+    <div class="col">
+      <mat-form-field appearance="fill" class="fullwidth">
+        <mat-label>ESI ID</mat-label>
+        <input autocomplete="off" matInput placeholder="eg. 10004324300" [formControl]="esiid" required>
+        <mat-error *ngIf="esiid.invalid">{{getErrorMessage(esiid)}}</mat-error>
+      </mat-form-field>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col">
+      <mat-form-field appearance="fill" class="fullwidth">
+        <mat-label>Module Make*</mat-label>
+        <mat-select [formControl]="modulemake" #singleSelect>
+          <mat-option>
+            <ngx-mat-select-search [formControl]="modulemakefilter" placeholderLabel="Search">
+            </ngx-mat-select-search>
+          </mat-option>
+          <mat-option *ngFor="let modulemake of filteredModuleMakes | async" [value]="modulemake.name"
+            (onSelectionChange)="fetchModuleModelsData($event,modulemake)">{{modulemake.name}}</mat-option>
+        </mat-select>
+        <mat-error *ngIf="modulemake.invalid">{{getErrorMessage(modulemake)}}</mat-error>
+      </mat-form-field>
+    </div>
+    <div class="col">
+      <mat-form-field appearance="fill" class="fullwidth">
+        <mat-label>Module Model*</mat-label>
+        <mat-select [formControl]="modulemodel" #singleSelect>
+          <mat-option>
+            <ngx-mat-select-search [formControl]="modulemodelfilter" placeholderLabel="Search">
+            </ngx-mat-select-search>
+          </mat-option>
+          <mat-option *ngFor="let modulemodel of filteredModuleModels | async" [value]="modulemodel.name"
+            (onSelectionChange)="setSelectedModuleModel(modulemodel)">{{modulemodel.name}}</mat-option>
+        </mat-select>
+        <mat-error *ngIf="modulemodel.invalid">{{getErrorMessage(modulemodel)}}</mat-error>
+      </mat-form-field>
+    </div>
+    <div class="col">
+      <mat-form-field appearance="fill" class="fullwidth">
+        <mat-label>Module Count</mat-label>
+        <input type="text" autocomplete="off" maxlength="7" min="0" matInput placeholder="eg. 987"
+          [formControl]="modulecount" required>
+        <mat-error *ngIf="modulecount.invalid">{{getErrorMessage(modulecount)}}</mat-error>
+      </mat-form-field>
+    </div>
+  </div>
+  <!--   <div class="row">
+    <div class="col-4">
+      <mat-form-field appearance="fill" class="fullwidth">
+        <mat-label>Inverter Make*</mat-label>
+        <mat-select [formControl]="invertermake" #singleSelect>
+          <mat-option>
+            <ngx-mat-select-search [formControl]="invertermakefilter" placeholderLabel="Search">
+            </ngx-mat-select-search>
+          </mat-option>
+          <mat-option *ngFor="let invertermake of filteredInverterMakes | async" [value]="invertermake.name"
+            (onSelectionChange)="fetchInverterModelsData($event,invertermake)">{{invertermake.name}}
+          </mat-option>
+        </mat-select>
+        <mat-error *ngIf="invertermake.invalid">{{getErrorMessage(invertermake)}}</mat-error>
+      </mat-form-field>
+    </div>
+    <div class="col-4">
+      <mat-form-field appearance="fill" class="fullwidth">
+        <mat-label>Inverter Model*</mat-label>
+        <mat-select [formControl]="invertermodel" #singleSelect>
+          <mat-option>
+            <ngx-mat-select-search [formControl]="invertermodelfilter" placeholderLabel="Search">
+            </ngx-mat-select-search>
+          </mat-option>
+          <mat-option *ngFor="let invertermodel of filteredInverterModels | async" [value]="invertermodel.name"
+            (onSelectionChange)="setSelectedInverterModel(invertermodel)">
+            {{invertermodel.name}}</mat-option>
+        </mat-select>
+        <mat-error *ngIf="invertermodel.invalid">{{getErrorMessage(invertermodel)}}</mat-error>
+      </mat-form-field>
+    </div>
+    <div class="col-3">
+      <mat-form-field appearance="fill" class="fullwidth">
+        <mat-label>Inverters count</mat-label>
+        <input autocomplete="off" type="tel" maxlength="5" min="1" matInput placeholder="eg. 2"
+          [formControl]="inverterscount" required />
+        <mat-error *ngIf="inverterscount.invalid">{{
+          getErrorMessage(inverterscount)
+          }}</mat-error>
+      </mat-form-field>
+    </div>
+    <div class="col-1" *ngIf="addextrainverters">
+      <img class="dialogclose" matTooltip="Add Extra Inverter" (click)="addMoreInverters()"
+        src="../../../../../assets/add.svg" />
+    </div>
+  </div> -->
+
+
+
+  <ng-container *ngIf="numberOfInverters.length>0">
+    <div class="row mt-3" *ngFor="let inverters of numberOfInverters; let i = index">
+      <div class="col-4">
+        <mat-form-field appearance="fill" class="fullwidth">
+          <mat-label>Inverter Make</mat-label>
+          <mat-select [formControlName]="inverters.invertermake" #singleSelect>
+            <mat-option>
+              <ngx-mat-select-search [formControl]="invertermakefilter" placeholderLabel="Search">
+              </ngx-mat-select-search>
+            </mat-option>
+            <mat-option>Clear</mat-option>
+            <mat-option *ngFor="let invertermake of filteredInverterMakes | async" [value]="invertermake.name"
+              (onSelectionChange)="fetchOtherInverterModelsData($event,invertermake,i)">{{invertermake.name}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div class="col-4">
+        <mat-form-field appearance="fill" class="fullwidth">
+          <mat-label>Inverter Model</mat-label>
+          <mat-select [formControlName]="inverters.invertermodel" #singleSelect>
+            <input matInput placeholder="Search here" style="height: 29px;padding-left: 10px;font-size: 11px !important;
+              " (keyup)="searchinvertermodels($event)" />
+            <mat-option>Clear</mat-option>
+            <mat-option *ngFor="let invertermodel of inverters.invertermodellist | filterBy: searchTerm;"
+              [value]="invertermodel.name" (onSelectionChange)="setInverterModelId(invertermodel,i)">
+              {{invertermodel.name}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div class=" col-3">
+        <mat-form-field appearance="fill" class="fullwidth">
+          <mat-label>Inverters Count</mat-label>
+          <input type="text" autocomplete="off" maxlength="7" min="1" matInput placeholder="eg. 987"
+            [formControlName]="inverters.inverterscount" required>
+        </mat-form-field>
+      </div>
+      <div class="col-1" *ngIf="addextrainverters && i==0">
+        <img class="dialogclose" matTooltip="Add Extra Inverter" (click)="addMoreInverters()"
+          src="../../../../../assets/add.svg" />
+      </div>
+      <div class="col-1" *ngIf="i>0">
+        <img class="dialogclose" matTooltip="Remove Extra Inverter" (click)="removeExtraInverter(i,inverters)"
+          src="../../../../../assets/remove.svg" />
+      </div>
+    </div>
+  </ng-container>
+
+  <div class="row">
+    <div class="col">
+      <div class="form-group formradiogroup fullwidth"
+        [ngClass]="[ (mountingtype.invalid && !displayerror) ? 'formradiogroup-invalid' : '']">
+        <h5>Mounting type *</h5>
+        <mat-radio-group name="mountingtype" aria-label="mounting type" [formControl]="mountingtype" required
+          (change)="radioChange($event)">
+          <div class="row">
+            <div class="col">
+              <mat-radio-button value="roof">Roof</mat-radio-button>
+            </div>
+            <div class="col">
+              <mat-radio-button value="ground">Ground</mat-radio-button>
+            </div>
+            <div class="col">
+              <mat-radio-button value="both">Both</mat-radio-button>
+            </div>
+          </div>
+        </mat-radio-group>
+      </div>
+      <mat-error class="custom-mat-error" [hidden]="displayerror" *ngIf="mountingtype.invalid">
+        {{getErrorMessage(mountingtype)}}
+      </mat-error>
+    </div>
+    <div class="col" *ngIf="mountingtype.value == 'roof' || mountingtype.value == 'both'">
+      <div class="form-group formradiogroup fullwidth"
+        [ngClass]="[ (rooftype.invalid && !displayerror) ? 'formradiogroup-invalid' : '']">
+        <h5>Roof type*</h5>
+        <mat-radio-group aria-label="roof type" [formControl]="rooftype">
+          <div class="row">
+            <div class="col">
+              <mat-radio-button value="flat">Flat</mat-radio-button>
+            </div>
+            <div class="col">
+              <mat-radio-button value="pitch">Pitch</mat-radio-button>
+            </div>
+            <div class="col">
+              <mat-radio-button value="both">Both</mat-radio-button>
+            </div>
+          </div>
+        </mat-radio-group>
+      </div>
+      <mat-error class="custom-mat-error" [hidden]="displayerror" *ngIf="rooftype.invalid">{{getErrorMessage(rooftype)}}
+      </mat-error>
+    </div>
+    <div class="col" *ngIf="mountingtype.value == 'ground' || mountingtype.value == 'both'">
+      <mat-form-field appearance="fill" style="width: 90%">
+        <mat-label>Tilt for ground mount system*</mat-label>
+        <input autocomplete="off" type="tel" maxlength="5" min="1" matInput placeholder="eg. 20"
+          [formControl]="tiltgroundmount">
+        <mat-error *ngIf="tiltgroundmount.invalid">{{getErrorMessage(tiltgroundmount)}}</mat-error>
+      </mat-form-field>
+    </div>
+  </div>
+  <div class="row mt-4">
+    <div class="col" *ngIf="
+        generateddesign.attachments != null &&
+        generateddesign.attachments.length > 0
+      ">
+      <p class="subtitle">Attachments</p>
+      <div class="row subbody" *ngFor="let attachmentfile of generateddesign.attachments">
+        <div class="col-4">
+          <p class="contentheader" style="margin: 0px;">
+            <img *ngIf="attachmentfile.ext == '.pdf'" class="material-icons file-icon" src="./../assets/pdf.svg">
+            <img *ngIf="attachmentfile.ext == '.png'" class="material-icons file-icon" src="./../assets/png.svg">
+            <img *ngIf="attachmentfile.ext == '.zip'" class="material-icons file-icon" src="./../assets/zip.svg">
+            <img *ngIf="attachmentfile.ext == '.doc'" class="material-icons file-icon" src="./../assets/doc.svg">
+            <img *ngIf="attachmentfile.ext == '.docx'" class="material-icons file-icon" src="./../assets/doc.svg">
+            <img *ngIf="attachmentfile.ext == '.odt'" class="material-icons file-icon" src="./../assets/pdf.svg">
+            <img *ngIf="attachmentfile.ext == '.rtf'" class="material-icons file-icon" src="./../assets/rtf.svg">
+            <img *ngIf="attachmentfile.ext == '.txt'" class="material-icons file-icon" src="./../assets/txt.svg">
+            <img
+              *ngIf="attachmentfile.ext !== '.png' && attachmentfile.ext !== '.pdf' && attachmentfile.ext !== '.zip' && attachmentfile.ext !== '.doc' && attachmentfile.ext !== '.docx' && attachmentfile.ext !== '.odt' && attachmentfile.ext !== '.rtf' && attachmentfile.ext !== '.txt'"
+              class="material-icons file-icon" src="./../assets/file.svg">
+
+          </p>
+        </div>
+        <div class="col">
+          <a href="{{attachmentfile.url}}" target="_blank" class="contentvalue float-right" style="margin-top: 8px;">{{
+            attachmentfile.name | uppercase }}</a>
+        </div>
+      </div>
+    </div>
+    <!-- <div class="col" style="margin-left: 16px;" *ngIf="isEditMode && generateddesign.attachments.length > 0">
+      <div class="row pdfselectionpreview align-items-center list-border"
+        *ngFor="let file of generateddesign.attachments; let i = index">
+        <div class="col-1 pdfpreviewcol">
+          <img *ngIf="file.ext == '.pdf'" class="material-icons file-icon" src="./../assets/pdf.svg">
+          <img *ngIf="file.ext == '.png'" class="material-icons file-icon" src="./../assets/png.svg">
+          <img *ngIf="file.ext == '.zip'" class="material-icons file-icon" src="./../assets/zip.svg">
+          <img *ngIf="file.ext == '.doc'" class="material-icons file-icon" src="./../assets/doc.svg">
+          <img *ngIf="file.ext == '.docx'" class="material-icons file-icon" src="./../assets/doc.svg">
+          <img *ngIf="file.ext == '.odt'" class="material-icons file-icon" src="./../assets/pdf.svg">
+          <img *ngIf="file.ext == '.rtf'" class="material-icons file-icon" src="./../assets/rtf.svg">
+          <img *ngIf="file.ext == '.txt'" class="material-icons file-icon" src="./../assets/txt.svg">
+          <img
+            *ngIf="file.ext != '.png' && file.ext != '.pdf' && file.ext != '.zip' && file.ext != '.doc' && file.ext != '.docx' && file.ext != '.odt' && file.ext != '.rtf' && file.ext != '.txt'"
+            class="material-icons file-icon" src="./../assets/file.svg">
+        </div>
+        <div class="col-9">
+          <p>{{(file.name.length>50)? (file.name | slice:0:50)+'..':(file.name)}}</p>
+        </div>
+        <div class="col-2">
+          <span class="float-right delete-btn" (click)="onRemoveAttachment(file, i)"><img
+              src="../../../../../assets/delete.svg" class="dialogclose"></span>
+        </div>
+      </div>
+    </div>
+    <div class="col" [ngStyle]="isEditMode ? {'margin-right': '16px'} : {'margin-right': '0px'}">
+      <div class="row architectureuploadrow">
+        <div class="col align-items-center architectureuploadcol">
+          <div class="multiple-dropzone" style="width: 97%; margin-left: 15px; margin-bottom: 16px;" ngx-dropzone [multiple]="true"
+            (change)="onAttachmentFileSelect($event)">
+            <ngx-dropzone-label>
+              <div>
+                <img class="addimage" src="../../../../../assets/add.svg">
+                <h5>Drag and drop or click to browse files to attach.</h5>
+              </div>
+            </ngx-dropzone-label>
+            <div *ngFor="let f of attachmentfiles">
+              {{ f.type }}
+              <ngx-dropzone-preview *ngIf="!f.isImage" class="imagepreview" ngProjectAs="ngx-dropzone-preview"
+                [file]="f" [removable]="true" (removed)="onAttachmentFileRemove(f)">
+                <ngx-dropzone-label class="previewlabel">{{ f.name }} ({{ f.type }})</ngx-dropzone-label>
+              </ngx-dropzone-preview>
+              <ngx-dropzone-image-preview *ngIf="f.isImage" class="imagepreview"
+                ngProjectAs="ngx-dropzone-preview" [file]="f" [removable]="true"
+                (removed)="onAttachmentFileRemove(f)">
+              </ngx-dropzone-image-preview>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div> -->
+    <div class="col">
+      <mat-form-field appearance="fill" class="fullwidth">
+        <mat-label>Comments</mat-label>
+        <textarea style="min-height: 94px" matInput placeholder="Start typing here..."
+          [formControl]="comments"></textarea>
+      </mat-form-field>
+    </div>
+  </div>
+  <div class="row mt-2" style="float: right; padding-right: 10px;">
+    <button mat-raised-button style="width: 128px; " *ngIf="showsavebutton"
+      (click)="onSaveInformation($event)">Save</button>
+  </div>
+</form>

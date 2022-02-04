@@ -1,0 +1,53 @@
+<!--
+<div class="main-content">
+  <img class="comingsoonimage" src="../../../../../assets/comingsoon.png"/>
+  <h2 class="comingsoontext">Coming Soon</h2>
+</div> -->
+<div class="main-content" style="height: 80vh; overflow: hidden">
+  <div class="container">
+    <div class="row">
+      <div class="col-12">
+        <div class="row pl-4">
+          <div class="col-lg-10 col-md-10">
+            <div class="rounded workstatusbar">
+              <mat-button-toggle-group
+                #group="matButtonToggleGroup"
+                [(value)]="selectedToggleButtonVal"
+                (change)="onValChange(group.value)"
+                class="bg-white"
+              >
+                <mat-button-toggle
+                  value="designtrackerbutton"
+                  (click)="callTracker()"
+                  >Design Tracker</mat-button-toggle
+                >
+                <span
+                  style="font-size: 26px; padding-top: 8px; font-weight: 300"
+                  >|</span
+                >
+                <mat-button-toggle value="workstatusbutton"
+                  >Work Status</mat-button-toggle
+                >
+                <span
+                  style="font-size: 26px; padding-top: 8px; font-weight: 300"
+                  >|</span
+                >
+                <mat-button-toggle value="designstatusbutton"
+                  >Delivery Status</mat-button-toggle
+                >
+              </mat-button-toggle-group>
+            </div>
+          </div>
+          <div class="col-lg-2 col-md-2">
+            <!--<button class="text-dark downloadbtn" mat-button *ngIf="designtrackerselected"><img
+              src="../../../../../assets/download.svg" width="14px;" height="14px" /> Download Report</button>
+          </div>-->
+          </div>
+        </div>
+      </div>
+    </div>
+    <app-workstatus *ngIf="workstatusselcted"></app-workstatus>
+    <app-designstatus *ngIf="designStatusSelected"></app-designstatus>
+    <app-designtracker *ngIf="designtrackerselected"></app-designtracker>
+  </div>
+</div>

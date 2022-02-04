@@ -1,0 +1,151 @@
+<!-- <div *ngIf="isLoading" class="overlay">
+    <mat-progress-bar class="commonprogressbar" mode="indeterminate"></mat-progress-bar>
+</div> -->
+<!-- <div *ngIf="isLoading" class="overlay">
+    <mat-card class="spinnercard" align-items-center>
+        <div class="row">
+            <div class="col-3">
+                <mat-progress-spinner diameter="50" color="primary" mode="indeterminate" strokeWidth="5">
+                </mat-progress-spinner>
+            </div>
+            <div class="col">
+                <h4 class="spinnertext">{{loadingmessage}}</h4>
+            </div>
+        </div>
+    </mat-card>
+  </div> -->
+<div *ngIf="isLoading" class="progress-loader">
+  <div id="pause" class="d-flex align-items-center justify-content-center">
+    <div id="spinner" style="background: #fff; padding: 25px; border-radius: 5px; width: 17rem" class="row">
+      <div class="loading-message bkgg col-9">{{ loadingmessage }}</div>
+      <div class="col-3" style="top: 5px">
+        <div class="snippet" data-title=".dot-pulse">
+          <div class="stage">
+            <div class="dot-pulse"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="container">
+  <div class="row">
+    <div class="col-11">
+      <h4 class="dialogformtitle" style="margin-bottom: 0% !important">
+        Assign PE Request
+      </h4>
+    </div>
+
+    <div class="col-1">
+      <button mat-icon-button (click)="onCloseClick()">
+        <img class="dialogclose" src="../../../../../assets/close.svg" />
+      </button>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col">
+      <h4 class="dialoginfoheader" style="margin-top: 0% !important">
+        {{ data.pestamp.shippingaddress }}
+      </h4>
+    </div>
+  </div>
+</div>
+<div mat-dialog-content>
+  <div class="container">
+    <div class="row mt-4 mb-4">
+      <div class="col">
+        <div *ngIf="!ispeengineerSelected" style="color: red">
+          <p>Please Select PE Engineer From The Given List </p>
+        </div>
+        <div class="designerslist">
+          <cdk-virtual-scroll-viewport *ngIf="peengineers.length == 0" itemSize="10" class="designerslist-viewport">
+            <div class="row pl-4">
+              <div *cdkVirtualFor="let number of [0, 1, 2]" class="style">
+                <button mat-button class="designeritem px-0" matBadge="0" matBadgePosition="after">
+                  <ngx-skeleton-loader class="d-block" [theme]="{
+                      'border-radius': '5px',
+                      'background-color': '#DBDAD8',
+                      height: '60px',
+                      width: '50px',
+                      'margin-top': '5px'
+                    }">
+                  </ngx-skeleton-loader>
+                </button>
+              </div>
+            </div>
+          </cdk-virtual-scroll-viewport>
+          <cdk-virtual-scroll-viewport *ngIf="peengineers.length > 0" itemSize="10" class="designerslist-viewport">
+            <div class="row pl-3">
+              <div *cdkVirtualFor="let designer of peengineers; let i = index" class="style">
+                <button mat-button class="designeritem px-0" matBadge="{{ designer.jobcount }}" matBadgePosition="after"
+                  (click)="setSelectedAssignee(designer, i)">
+                  <div *ngIf="
+                      designer.contractorlogo != null &&
+                      designer.contractorlogo.logo != null
+                    " class="logo">
+                    <img src="{{ designer.contractorlogo.logo.url }}" />
+                  </div>
+
+                  <div *ngIf="
+                      designer.contractorlogo == null ||
+                      designer.contractorlogo.logo == null
+                    " class="initials">
+                    <p>
+                      {{
+                      genericService.getInitials(
+                      designer.firstname,
+                      designer.lastname
+                      )
+                      }}
+                    </p>
+                  </div>
+                  <div class="selectionbackground" *ngIf="designer.isDisplayed">
+                    <img src="../../../../../assets/whitetick.svg" />
+                  </div>
+                  <div class="namedetails">
+                    <p class="mb-0 text-center">
+                      {{
+                      designer.firstname == null
+                      ? "N/A"
+                      : designer.firstname.length > 6
+                      ? (designer.firstname | slice: 0:1)
+                      : designer.firstname
+                      }}
+                      {{
+                      designer.lastname == null
+                      ? "N/A"
+                      : designer.lastname.length > 6
+                      ? (designer.lastname | slice: 0:1)
+                      : designer.lastname
+                      }}
+                    </p>
+                    <span class="mb-0">{{
+                      designer.email.length > 20
+                      ? (designer.email | slice: 0:22) + "..."
+                      : designer.email
+                      }}</span>
+                  </div>
+                </button>
+              </div>
+            </div>
+            <!-- <button mat-button *cdkVirtualFor="let designer of designers; let i = index" class="designeritem" matBadge="{{designer.jobcount}}"
+                            matBadgePosition="after" (click)="setSelectedAssignee(designer, i)">
+                            <div *ngIf="designer.contractorlogo != null && designer.contractorlogo.logo != null" class="logo">
+                                <img src="{{designer.contractorlogo.logo.url}}" />
+                            </div>
+                            <div *ngIf="designer.contractorlogo == null || designer.contractorlogo.logo == null" class="initials">
+                                <p>{{genericService.getInitials(designer.firstname, designer.lastname)}}</p>
+                            </div>
+                            <div class="selectionbackground" *ngIf="designer.isDisplayed">
+                                <img src="../../../../../assets/whitetick.svg" />
+                            </div>
+                        </button> -->
+          </cdk-virtual-scroll-viewport>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<mat-dialog-actions class="mb-1" align="end">
+  <button mat-raised-button (click)="assignUserToPeRequest()">Confirm</button>
+</mat-dialog-actions>

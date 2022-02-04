@@ -1,0 +1,220 @@
+<div class="container">
+  <div class="row">
+    <div class="col-8">
+      <h4 class="dialogformtitle">Clear Dues</h4>
+    </div>
+    <div class="col-4" style="padding-right: 0px">
+      <button mat-icon-button class="float-right">
+        <img
+          class="dialogclose"
+          (click)="onCloseClick()"
+          src="../../../../../assets/close.svg"
+        />
+      </button>
+    </div>
+  </div>
+</div>
+
+<div mat-dialog-content>
+  <div class="container">
+    <div class="row mt-2">
+      <div class="col">
+        <p style="font-size: 13px; color: #666666">
+          Please make payment to clear your dues.
+        </p>
+      </div>
+    </div>
+    <div class="row mt-4">
+      <div class="col">
+        <div class="row" *ngIf="this.data.pestamp.propertytype == 'commercial'">
+          <div class="col">
+            <p class="subtitle" style="color: #666666; font-size: 12px">
+              Service Charges
+            </p>
+          </div>
+          <div class="col">
+            <p class="highlightedtext">${{ servicecharge }}</p>
+          </div>
+        </div>
+        <div
+          class="row"
+          *ngIf="
+            this.data.pestamp.modeofstamping == 'hardcopy' ||
+            this.data.pestamp.modeofstamping == 'both'
+          "
+        >
+          <div class="col">
+            <p class="subtitle" style="color: #666666; font-size: 12px">
+              Shipping Charges
+            </p>
+          </div>
+          <div class="col">
+            <p class="highlightedtext">${{ deliverycharges }}</p>
+          </div>
+        </div>
+        <div class="row mt-2">
+          <div class="col">
+            <div style="height: 1px; background-color: #a5a9abaa"></div>
+          </div>
+        </div>
+        <div class="row mt-3">
+          <div class="col">
+            <p style="color: #000000; font-size: 15px; font-weight: 600">
+              You have to pay
+            </p>
+          </div>
+          <div class="col">
+            <p class="superhighlightedtext">${{ amounttopay.toFixed() }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row mb-4" *ngIf="loggedinuser.role.id == 6">
+      <div class="col">
+        <div class="row" style="background-color: #dfeffd; border-radius: 10px">
+          <div class="col">
+            <p
+              class="subtitle"
+              style="
+                color: #667785;
+                font-size: 12px;
+                margin: 5px 0px !important;
+              "
+            >
+              Amount in wallet
+            </p>
+          </div>
+          <div class="col">
+            <p
+              class="highlightedtext"
+              style="color: #667785; margin: 5px 0px !important"
+            >
+              ${{ walletamount }}
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<section>
+  <div mat-dialog-actions align="end">
+    <div
+      class="example-button-row"
+      *ngIf="walletamount < amounttopay && loggedinuser.role.id == 6"
+    >
+      <p
+        class="subtitle"
+        *ngIf="
+          loggedinuser.role.id != 6 && loggedinuser.parent.amount < amounttopay
+        "
+        style="color: #667785; font-size: 12px"
+      >
+        Insufficent Amount
+      </p>
+      <button mat-raised-button (click)="openAddMoneyToWalletDialog(1)">
+        Add money to wallet
+      </button>
+      <!-- <button mat-raised-button (click)="openAddMoneyToWalletDialog(2)">Pay via card</button> -->
+      <button mat-raised-button (click)="openAddMoneyUsingPaypal()">
+        Pay via Paypal
+      </button>
+    </div>
+    <p
+      class="subtitle"
+      *ngIf="
+        loggedinuser.role.id != 6 && loggedinuser.parent.amount < amounttopay
+      "
+      style="color: #667785; font-size: 12px"
+    >
+      Insufficent Amount
+    </p>
+    <button
+      *ngIf="walletamount >= amounttopay"
+      mat-raised-button
+      mat-button
+      (click)="onProceedClick()"
+    >
+      Confirm
+    </button>
+  </div>
+</section>
+
+<!-- 
+  <div class="container">
+      <div class="row">
+        <div class="col-8">
+          <h4 class="dialogformtitle">Confirm your order</h4>
+        </div>
+        <div class="col-4">
+          <button mat-icon-button (click)="onCloseClick()" class="float-right">
+            <img class="dialogclose" src="../../../../../assets/close.svg" />
+          </button>
+        </div>
+      </div>
+    </div>
+    
+    <div mat-dialog-content>
+      <div class="container">
+        <div class="row mt-2">
+          <div class="col">
+            <p >Please make the payment to process your order with Wattmonk.</p>
+          
+          </div>
+        </div>
+        <div class="row mt-4 mb-4">
+          <div class="col">
+            <mat-card style="background-color: #4C95E9;">
+              <div class="row">
+                <div class="col">
+                  <div>
+                    <p class="subtitle" style="color: #FFFFFFAA;">Service Price</p>
+                    <p class="highlightedtext">$ {{servicecharge}}</p>
+                  </div>
+                  <div class="mt-4">
+                    <p class="subtitle" style="color: #FFFFFFAA;">Discount</p>
+                    <p class="highlightedtext">$ 0</p>
+                  </div>
+                  <div class="mt-4">
+                    <p class="subtitle" style="color: #FFFFFFAA;">You have to pay</p>
+                    <p class="highlightedtext">$ {{amounttopay}}</p>
+                  </div>
+                </div>
+                <div class="col">
+                  <div>
+                    <p class="subtitle" style="color: #FFFFFFAA;">Amount in wallet</p>
+                    <p class="highlightedtext">$ {{walletamount}}</p>
+                  </div>
+                  <div class="mt-4">
+                    <p class="subtitle" style="color: #FFFFFFAA;">Service used</p>
+                    <p  class="highlightedtext">PE Stamps</p>
+                    
+                  </div>
+                  <div class="mt-4">
+                    <p class="subtitle" style="color: #FFFFFFAA;">PE Stamp ID</p>
+                    <p class="highlightedtext">{{this.data.pestampid}}</p>
+                  </div>
+                </div>
+              </div>
+            </mat-card>
+          </div>
+        </div>
+      </div>
+    </div>
+    <section *ngIf="loggedinuser.parent.ispaymentmodeprepay">
+      <mat-dialog-actions align="end">
+        <div class="example-button-row" *ngIf="walletamount < amounttopay">
+          <button mat-raised-button (click)="openAddMoneyToWalletDialog(1)">Add money to wallet </button>
+          <button mat-raised-button (click)="openAddMoneyToWalletDialog(2)">Pay via card</button>
+        </div>
+        <button *ngIf="walletamount >= amounttopay" mat-raised-button mat-button
+          (click)="onConfirmationClick()">Confirm</button>
+      </mat-dialog-actions>
+    </section> 
+    <section *ngIf="!loggedinuser.parent.ispaymentmodeprepay">
+      <mat-dialog-actions align="end">
+        <button mat-raised-button mat-button
+        (click)="onProceedClick()" >Confirm</button>
+      </mat-dialog-actions>
+    </section>
+   -->

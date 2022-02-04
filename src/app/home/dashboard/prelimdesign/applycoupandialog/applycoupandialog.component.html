@@ -1,0 +1,81 @@
+<div class="main-content">
+  <div class="row">
+    <div class="col-8">
+      <h4 class="dialogformtitle">Enter Promocode</h4>
+    </div>
+    <div class="col-4" style="padding-right: 0px">
+      <button mat-icon-button class="float-right" (click)="onCloseClick()">
+        <img class="dialogclose" src="../../../../../assets/close.svg" />
+      </button>
+    </div>
+  </div>
+  <div mat-dialog-content>
+    <div class="row" style="padding-top: 15px">
+      <div class="col-9" style="padding-right: 0px">
+        <input
+          maxlength="15"
+          min="6"
+          matInput
+          class="promocodeinput"
+          type="text"
+          placeholder="Have a promocode? Enter here"
+          [formControl]="enteredCoupan"
+        />
+        <mat-error
+          class="custom-mat-error"
+          *ngIf="couponerror"
+          style="margin-left: 5px"
+        >
+          {{ couponerrormessage }}
+        </mat-error>
+      </div>
+      <div class="col-3" style="padding-left: 0px">
+        <button
+          class="coupon-apply-btn"
+          mat-raised-button
+          style="width: inherit"
+          (click)="checkEnteredCoupan()"
+        >
+          Apply
+        </button>
+      </div>
+    </div>
+    <div class="row" style="padding-top: 15px">
+      <div class="col">
+        <p style="text-align-last: center">or</p>
+      </div>
+    </div>
+    <div class="row" style="padding-top: 15px">
+      <div class="col-6">
+        <p style="font-weight: 500; color: dimgrey">Select a Promo Code</p>
+      </div>
+    </div>
+    <mat-list *ngFor="let data of coupans">
+      <div class="row" style="margin-top: 10px">
+        <div class="col-9" style="padding-right: 0px">
+          <h4
+            style="
+              font-weight: 500;
+              background-color: #fffae6;
+              width: 170px;
+              align-items: center;
+              text-align: center;
+              border: 1px dotted;
+              margin-bottom: 25px;
+            "
+          >
+            {{ data.code }}
+          </h4>
+          <div class="row">
+            <div class="col">
+              <mat-list-item>{{ data.description }} </mat-list-item>
+            </div>
+          </div>
+        </div>
+        <div class="col-3" style="padding-left: 30px">
+          <button mat-stroked-button (click)="applycoupan(data)">Apply</button>
+        </div>
+      </div>
+    </mat-list>
+  </div>
+</div>

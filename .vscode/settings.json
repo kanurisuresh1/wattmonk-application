@@ -1,0 +1,11 @@
+{
+  "files.autoSave": "off",
+  "editor.wordWrap": "on",
+  "workbench.colorCustomizations": {
+    "editorUnnecessaryCode.border": "#f10e0e"
+  },
+  "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": {
+    "source.organizeImports": true
+  }
+}

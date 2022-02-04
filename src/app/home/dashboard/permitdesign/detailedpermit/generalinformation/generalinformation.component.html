@@ -1,0 +1,365 @@
+<form class="designform" [formGroup]="generalFormGroup">
+  <div class="row">
+    <div class="col" *ngIf="!isjobtypepv">
+      <div class="form-group formradiogroup fullwidth" [ngClass]="[
+          batterybackup.invalid && !displayerror ? 'formradiogroup-invalid' : ''
+        ]">
+        <h5>Battery backup*</h5>
+        <mat-radio-group aria-label="batterybackup" [formControl]="batterybackup" required>
+          <div class="row">
+            <div class="col">
+              <mat-radio-button value="whole">Whole</mat-radio-button>
+            </div>
+            <div class="col">
+              <mat-radio-button value="partial">Partial</mat-radio-button>
+            </div>
+          </div>
+        </mat-radio-group>
+      </div>
+      <mat-error class="custom-mat-error" [hidden]="displayerror" *ngIf="batterybackup.invalid">
+        {{ getErrorMessage(batterybackup) }}
+      </mat-error>
+    </div>
+    <div class="col">
+      <div class="form-group formradiogroup fullwidth"
+        [ngClass]="[firesetback.invalid ? 'formradiogroup-invalid' : '']">
+        <h5>Fire setback *</h5>
+        <mat-radio-group name="firesetback" aria-label="firesetback" [formControl]="firesetback"
+          (change)="radioChange($event)">
+          <div class="row">
+            <div class="col">
+              <mat-radio-button value="true">Yes</mat-radio-button>
+            </div>
+            <div class="col">
+              <mat-radio-button value="false">No</mat-radio-button>
+            </div>
+          </div>
+        </mat-radio-group>
+      </div>
+      <mat-error class="custom-mat-error" [hidden]="displayerror" *ngIf="firesetback.invalid">
+        {{ getErrorMessage(firesetback) }}
+      </mat-error>
+    </div>
+    <div class="col" *ngIf="firesetback.value == 'true'">
+      <mat-form-field class="fullwidth" appearance="fill" style="margin-top: 13px;">
+        <mat-label>Details of setback</mat-label>
+        <input type="text" placeholder="eg. XYZ Pvt. Ltd." aria-label="Number" matInput [formControl]="setbackdetails"
+          [matAutocomplete]="auto3" />
+        <mat-autocomplete autoActiveFirstOption #auto3="matAutocomplete">
+          <mat-option *ngFor="let option of firesetBackdetails | async" [value]="option">
+            {{ option }}
+          </mat-option>
+        </mat-autocomplete>
+        <mat-error [hidden]="displayerror" *ngIf="setbackdetails.invalid">{{
+          getErrorMessage(setbackdetails)
+          }}</mat-error>
+      </mat-form-field>
+    </div>
+  </div>
+  <div class="row mt-1">
+    <div class="col">
+      <mat-form-field class="fullwidth" appearance="fill">
+        <mat-label>AHJ Name</mat-label>
+        <input type="text" placeholder="eg. XYZ Pvt. Ltd." aria-label="Number" matInput [formControl]="ahjname"
+          [matAutocomplete]="auto" />
+        <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete"
+          (optionSelected)="selectedAhjfield($event.option.value)">
+          <mat-option *ngFor="let option of filteredAhj | async" [value]="option">
+            {{ option }}
+          </mat-option>
+        </mat-autocomplete>
+        <mat-error [hidden]="displayerror" *ngIf="ahjname.invalid">{{
+          getErrorMessage(ahjname)
+          }}</mat-error>
+      </mat-form-field>
+    </div>
+    <div class="col">
+      <mat-form-field class="fullwidth" appearance="fill">
+        <mat-label>Utility</mat-label>
+        <input type="text" placeholder="eg. XYZ Pvt. Ltd." aria-label="Number" matInput [formControl]="utilityname"
+          [matAutocomplete]="auto2" required />
+        <mat-autocomplete autoActiveFirstOption #auto2="matAutocomplete"
+          (optionSelected)="selectedUtilityfield($event.option.value)">
+          <mat-option *ngFor="let option of filteredUtility | async" [value]="option">
+            {{ option }}
+          </mat-option>
+        </mat-autocomplete>
+        <mat-error [hidden]="displayerror" *ngIf="utilityname.invalid">{{
+          getErrorMessage(utilityname)
+          }}</mat-error>
+      </mat-form-field>
+    </div>
+  </div>
+  <div class="row mt-1">
+    <div class="col">
+      <mat-form-field appearance="fill" class="fullwidth">
+        <mat-label>AHJ requirements</mat-label>
+        <textarea autocomplete="off" matInput placeholder="Ex. Start typing here..."
+          [formControl]="ahjrequirements"></textarea>
+        <mat-error *ngIf="ahjrequirements.invalid">{{
+          getErrorMessage(ahjrequirements)
+          }}</mat-error>
+      </mat-form-field>
+    </div>
+    <div class="col">
+      <mat-form-field appearance="fill" class="fullwidth">
+        <mat-label>Utility requirements</mat-label>
+        <textarea autocomplete="off" matInput placeholder="Ex. Start typing here..."
+          [formControl]="utilityrequirements"></textarea>
+        <mat-error *ngIf="utilityrequirements.invalid">{{
+          getErrorMessage(utilityrequirements)
+          }}</mat-error>
+      </mat-form-field>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col">
+      <div class="form-group formradiogroup fullwidth" [ngClass]="[
+          financingtype.invalid && !displayerror ? 'formradiogroup-invalid' : ''
+        ]">
+        <h5>Financing Type *</h5>
+        <mat-radio-group aria-label="project type" [formControl]="financingtype" required>
+          <div class="row">
+            <div class="col">
+              <mat-radio-button value="cashloan">Cash or Loan</mat-radio-button>
+            </div>
+            <div class="col">
+              <mat-radio-button value="lease">Lease</mat-radio-button>
+            </div>
+          </div>
+        </mat-radio-group>
+      </div>
+      <mat-error class="custom-mat-error" [hidden]="displayerror" *ngIf="financingtype.invalid">
+        {{ getErrorMessage(financingtype) }}
+      </mat-error>
+    </div>
+    <div class="col" *ngIf="financingtype.value == 'lease'">
+      <div class="form-group formradiogroup fullwidth"
+        [ngClass]="[meterlessor.invalid ? 'formradiogroup-invalid' : '']">
+        <h5>Do you require meter for lessor? *</h5>
+        <mat-radio-group name="meterlessor" aria-label="meterlessor" [formControl]="meterlessor" required
+          (change)="radioChange($event)">
+          <div class="row">
+            <div class="col">
+              <mat-radio-button value="true">Yes</mat-radio-button>
+            </div>
+            <div class="col">
+              <mat-radio-button value="false">No</mat-radio-button>
+            </div>
+          </div>
+        </mat-radio-group>
+      </div>
+      <mat-error class="custom-mat-error" [hidden]="displayerror" *ngIf="meterlessor.invalid">
+        {{ getErrorMessage(meterlessor) }}
+      </mat-error>
+    </div>
+  </div>
+  <div class="row mt-3">
+    <!--  <div class="col">
+      <mat-form-field appearance="fill" class="fullwidth">
+        <mat-label>Modules count*</mat-label>
+        <input autocomplete="off" type="number" min="1" autocomplete="off" matInput placeholder="eg. 16"
+          [formControl]="modulescount" />
+        <mat-error *ngIf="modulescount.invalid">{{
+          getErrorMessage(modulescount)
+          }}</mat-error>
+      </mat-form-field>
+    </div> -->
+    <div class="col">
+      <mat-form-field appearance="fill" class="fullwidth">
+        <mat-label>Risk Category</mat-label>
+        <mat-select required [formControl]="riskcategory">
+          <mat-option value="I">I</mat-option>
+          <mat-option value="II">II</mat-option>
+          <mat-option value="III">III</mat-option>
+          <mat-option value="IV">IV</mat-option>
+        </mat-select>
+        <mat-error *ngIf="riskcategory.invalid">{{
+          getErrorMessage(riskcategory)
+          }}</mat-error>
+      </mat-form-field>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col" *ngIf="
+        isDisplayMode &&
+        this.generateddesign.designgeneralinformation.moduleslayoutdesign
+      ">
+      <p class="subtitle">Modules Layout Design</p>
+      <div class="row subbody">
+        <div class="col-4">
+          <p class="contentheader" style="margin: 0px">
+            <img *ngIf="
+                this.generateddesign.designgeneralinformation
+                  .moduleslayoutdesign.ext == '.pdf'
+              " class="material-icons file-icon" src="./../assets/pdf.svg" />
+            <img *ngIf="
+                this.generateddesign.designgeneralinformation
+                  .moduleslayoutdesign.ext == '.png'
+              " class="material-icons file-icon" src="./../assets/png.svg" />
+            <img *ngIf="
+                this.generateddesign.designgeneralinformation
+                  .moduleslayoutdesign.ext == '.zip'
+              " class="material-icons file-icon" src="./../assets/zip.svg" />
+            <img *ngIf="
+                this.generateddesign.designgeneralinformation
+                  .moduleslayoutdesign.ext == '.doc'
+              " class="material-icons file-icon" src="./../assets/doc.svg" />
+            <img *ngIf="
+                this.generateddesign.designgeneralinformation
+                  .moduleslayoutdesign.ext == '.docx'
+              " class="material-icons file-icon" src="./../assets/doc.svg" />
+            <img *ngIf="
+                this.generateddesign.designgeneralinformation
+                  .moduleslayoutdesign.ext == '.odt'
+              " class="material-icons file-icon" src="./../assets/pdf.svg" />
+            <img *ngIf="
+                this.generateddesign.designgeneralinformation
+                  .moduleslayoutdesign.ext == '.rtf'
+              " class="material-icons file-icon" src="./../assets/rtf.svg" />
+            <img *ngIf="
+                this.generateddesign.designgeneralinformation
+                  .moduleslayoutdesign.ext == '.txt'
+              " class="material-icons file-icon" src="./../assets/txt.svg" />
+            <img *ngIf="
+                this.generateddesign.designgeneralinformation
+                  .moduleslayoutdesign.ext != '.png' &&
+                this.generateddesign.designgeneralinformation
+                  .moduleslayoutdesign.ext != '.pdf' &&
+                this.generateddesign.designgeneralinformation
+                  .moduleslayoutdesign.ext != '.zip' &&
+                this.generateddesign.designgeneralinformation
+                  .moduleslayoutdesign.ext != '.doc' &&
+                this.generateddesign.designgeneralinformation
+                  .moduleslayoutdesign.ext != '.docx' &&
+                this.generateddesign.designgeneralinformation
+                  .moduleslayoutdesign.ext != '.odt' &&
+                this.generateddesign.designgeneralinformation
+                  .moduleslayoutdesign.ext != '.rtf' &&
+                this.generateddesign.designgeneralinformation
+                  .moduleslayoutdesign.ext !== '.txt'
+              " class="material-icons file-icon" src="./../assets/file.svg" />
+          </p>
+        </div>
+        <div class="col">
+          <a href="{{
+              generateddesign.designgeneralinformation.moduleslayoutdesign.url
+            }}" target="_blank" class="contentvalue float-right" style="margin-top: 8px">{{
+            generateddesign.designgeneralinformation.moduleslayoutdesign.name
+            | uppercase
+            }}</a>
+        </div>
+      </div>
+    </div>
+    <div class="col" style="margin-left: 16px" *ngIf="
+        !isDisplayMode &&
+        isEditMode &&
+        this.generateddesign.designgeneralinformation.moduleslayoutdesign !=
+          null
+      ">
+      <div class="row pdfselectionpreview align-items-center list-border">
+        <div class="col-2 pdfpreviewcol">
+          <img *ngIf="
+              this.generateddesign.designgeneralinformation.moduleslayoutdesign
+                .ext == '.pdf'
+            " class="material-icons file-icon" src="./../assets/pdf.svg" />
+          <img *ngIf="
+              this.generateddesign.designgeneralinformation.moduleslayoutdesign
+                .ext == '.png'
+            " class="material-icons file-icon" src="./../assets/png.svg" />
+          <img *ngIf="
+              this.generateddesign.designgeneralinformation.moduleslayoutdesign
+                .ext == '.zip'
+            " class="material-icons file-icon" src="./../assets/zip.svg" />
+          <img *ngIf="
+              this.generateddesign.designgeneralinformation.moduleslayoutdesign
+                .ext == '.doc'
+            " class="material-icons file-icon" src="./../assets/doc.svg" />
+          <img *ngIf="
+              this.generateddesign.designgeneralinformation.moduleslayoutdesign
+                .ext == '.docx'
+            " class="material-icons file-icon" src="./../assets/doc.svg" />
+          <img *ngIf="
+              this.generateddesign.designgeneralinformation.moduleslayoutdesign
+                .ext == '.odt'
+            " class="material-icons file-icon" src="./../assets/pdf.svg" />
+          <img *ngIf="
+              this.generateddesign.designgeneralinformation.moduleslayoutdesign
+                .ext == '.rtf'
+            " class="material-icons file-icon" src="./../assets/rtf.svg" />
+          <img *ngIf="
+              this.generateddesign.designgeneralinformation.moduleslayoutdesign
+                .ext == '.txt'
+            " class="material-icons file-icon" src="./../assets/txt.svg" />
+          <img *ngIf="
+              this.generateddesign.designgeneralinformation.moduleslayoutdesign
+                .ext != '.png' &&
+              this.generateddesign.designgeneralinformation.moduleslayoutdesign
+                .ext != '.pdf' &&
+              this.generateddesign.designgeneralinformation.moduleslayoutdesign
+                .ext != '.zip' &&
+              this.generateddesign.designgeneralinformation.moduleslayoutdesign
+                .ext != '.doc' &&
+              this.generateddesign.designgeneralinformation.moduleslayoutdesign
+                .ext != '.docx' &&
+              this.generateddesign.designgeneralinformation.moduleslayoutdesign
+                .ext != '.odt' &&
+              this.generateddesign.designgeneralinformation.moduleslayoutdesign
+                .ext != '.rtf' &&
+              this.generateddesign.designgeneralinformation.moduleslayoutdesign
+                .ext !== '.txt'
+            " class="material-icons file-icon" src="./../assets/file.svg" />
+        </div>
+        <div class="col-7">
+          <p>
+            {{
+            this.generateddesign.designgeneralinformation.moduleslayoutdesign
+            .name
+            }}
+          </p>
+        </div>
+        <div class="col-3">
+          <span class="float-right delete-btn" (click)="onRemoveModulesFile()"><img
+              src="../../../../../assets/delete.svg" class="dialogclose" /></span>
+        </div>
+      </div>
+    </div>
+    <div class="col" *ngIf="!isDisplayMode" [ngStyle]="
+        isEditMode ? { 'margin-right': '16px' } : { 'margin-right': '0px' }
+      ">
+      <div class="row architectureuploadrow">
+        <div class="col align-items-center">
+          <div class="multiple-dropzone" style="width: 100%; margin-bottom: 16px" ngx-dropzone [multiple]="false"
+            (change)="onModuleLayoutFileSelect($event)" [disabled]="generalFormGroup.disabled">
+            <ngx-dropzone-label>
+              <div>
+                <img class="addimage" src="../../../../../assets/add.svg" />
+                <h5>
+                  Drag and drop or click to browse the modules layout design.
+                </h5>
+              </div>
+            </ngx-dropzone-label>
+            <div *ngFor="let f of modulelayoutfiles">
+              {{ f.type }}
+              <ngx-dropzone-preview *ngIf="!f.isImage" class="imagepreview" ngProjectAs="ngx-dropzone-preview"
+                [file]="f" [removable]="true" (removed)="onModuleLayoutFileRemove(f)">
+                <ngx-dropzone-label class="previewlabel">{{ f.name }} ({{ f.type }})</ngx-dropzone-label>
+              </ngx-dropzone-preview>
+              <ngx-dropzone-image-preview *ngIf="f.isImage" class="imagepreview" ngProjectAs="ngx-dropzone-preview"
+                [file]="f" [removable]="true" (removed)="onModuleLayoutFileRemove(f)">
+              </ngx-dropzone-image-preview>
+            </div>
+          </div>
+          <mat-error class="formerror" [hidden]="modulesfileuploaded">You have to upload file.</mat-error>
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <mat-form-field appearance="fill" class="fullwidth">
+        <mat-label>Comments</mat-label>
+        <textarea style="min-height: 94px" matInput placeholder="Start typing here..."
+          [formControl]="generalcomments"></textarea>
+      </mat-form-field>
+    </div>
+  </div>
+</form>

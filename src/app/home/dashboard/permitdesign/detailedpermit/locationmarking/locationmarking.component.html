@@ -1,0 +1,80 @@
+<form
+  class="bigdialogform locationform"
+  [formGroup]="locationFormGroup"
+  *ngIf="!isDisplayMode"
+>
+  <div class="row designrow mt-2">
+    <div class="col">
+      <p>EQUIPMENTS LOCATION</p>
+    </div>
+  </div>
+  <div #screen class="row locationmarkingboundary">
+    <div class="col dottedborder">
+      <agm-map
+        [latitude]="location.latitude"
+        [longitude]="location.longitude"
+        [mapTypeId]="location.maptype"
+        [zoom]="location.zoom"
+      >
+      </agm-map>
+      <div
+        class="row"
+        style="position: absolute; top: 0px; right: 15px; width: 170px"
+      >
+        <div class="col">
+          <div
+            class="row align-items-center locationlegend"
+            *ngFor="let item of equipments"
+          >
+            <div
+              class="dotcontainer"
+              [ngStyle]="
+                item.enabled
+                  ? { 'background-color': item.color }
+                  : { 'background-color': item.disabledcolor }
+              "
+            >
+              <span
+                id="item.id"
+                class="dot"
+                [ngStyle]="{ 'background-color': item.color }"
+                cdkDragBoundary=".locationmarkingboundary"
+                cdkDrag
+                (cdkDragEnded)="dragEnded($event, item)"
+              ></span>
+            </div>
+            <p
+              [ngClass]="[
+                item.enabled ? 'locationlegendtext' : 'disabledlegendtext'
+              ]"
+            >
+              {{ item.name }}
+            </p>
+            <button
+              mat-button
+              [ngClass]="[item.enabled ? 'undobutton' : 'hiddenundobutton']"
+              (click)="reverttoOriginalPosition(item)"
+            >
+              <img
+                class="undoimage"
+                src="../../../../../assets/undoarrow.svg"
+              />
+            </button>
+          </div>
+        </div>
+      </div>
+      <div id="download">
+        <img #canvas />
+        <a #downloadLink></a>
+      </div>
+    </div>
+  </div>
+</form>
+<div class="row" *ngIf="isDisplayMode">
+  <div class="col">
+    <img
+      class="locationimage mainsiteimage"
+      src="{{ generateddesign.electricalslocation.url }}"
+    />
+  </div>
+</div>

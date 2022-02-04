@@ -1,0 +1,132 @@
+@import "../../shared/loader/loader.component.scss";
+.surveyform {
+  width: 100%;
+}
+.surveyrow {
+  margin-left: 14px;
+  margin-right: 14px;
+}
+.surveyrow p {
+  font-size: 0.8em;
+  color: #000000;
+  font-weight: 600;
+}
+
+.surveyorslist .surveyorslist-viewport {
+  height: 86px;
+}
+
+.surveyorslist .surveyorslist-viewport .cdk-virtual-scroll-content-wrapper {
+  display: flex;
+  flex-direction: row;
+}
+
+.surveyorslist .surveyoritem {
+  width: 60px;
+  height: 60px;
+  background-color: #fff8e5;
+  border-radius: 8px;
+  margin-right: 16px;
+  text-align: center;
+  margin-top: 16px;
+}
+
+.surveyoritem img {
+  width: 28px;
+}
+
+.surveyoritem .initials {
+  color: #434343;
+  font-size: 1.5em;
+}
+
+.surveyoritem .initials p {
+  margin-bottom: 0px;
+}
+
+.selectionbackground {
+  background-color: #6666668a;
+  position: absolute;
+  border-radius: 8px;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+.selectionbackground img {
+  width: 40%;
+  margin-top: 28%;
+}
+
+.surveyorassignrow {
+  background-color: #f9f9f9;
+  border-radius: 4px;
+  /* border-bottom: 1px solid rgba(0, 0, 0, .42); */
+}
+
+.surveyorassignrow {
+  max-width: 100%;
+}
+
+.main mat-label {
+  font-size: small;
+}
+
+.editprofileimg {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.dialogform {
+  label {
+    margin-bottom: 0px;
+    color: #3c4257;
+    font-size: 12px;
+  }
+}
+.dialogform {
+  padding: 10px 20px 0px 0px;
+  // width:55%
+}
+
+.selectprofileimg {
+  width: 50px;
+  height: 49px;
+  background: #edc773;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  position: absolute;
+  bottom: 22px;
+  right: 45px;
+  cursor: pointer;
+}
+
+.fieldwidth {
+  width: 48.5% !important;
+}
+
+.spinnertext {
+  margin-top: 16px !important;
+  color: #3c78d8;
+}
+
+.spinnercard {
+  width: 26%;
+  position: absolute;
+  left: 34%;
+  top: 36%;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+mat-error {
+  font-size: 0.6em;
+}

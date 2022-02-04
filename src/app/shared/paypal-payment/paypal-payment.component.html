@@ -1,0 +1,37 @@
+<div mat-dialog-content class="paypal">
+  <div class="container">
+    <div class="row mt-4">
+      <div class="col-9">
+        <h2 class="heading">Pay via paypal</h2>
+      </div>
+
+      <div class="col-3">
+        <button
+          mat-icon-button
+          (click)="onCloseClick()"
+          class="float-right heading"
+        >
+          <img class="dialogclose" src="../../../../../assets/close.svg" />
+        </button>
+      </div>
+    </div>
+    <div class="row">
+      <div class="updatecontent">
+        <div class="Amount">
+          Add Amount :
+          <p
+            style="
+              margin: 11px 10px 15px 29px;
+              color: blue;
+              font-family: 'Montserrat';
+              font-size: 29px;
+            "
+          >
+            {{ finalamount | currency: "USD" }}
+          </p>
+        </div>
+      </div>
+    </div>
+    <ngx-paypal [config]="payPalConfig"></ngx-paypal>
+  </div>
+</div>

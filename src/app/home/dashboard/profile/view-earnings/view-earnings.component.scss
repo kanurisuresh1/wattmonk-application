@@ -1,0 +1,73 @@
+table {
+  width: 100%;
+}
+
+.viewreq {
+  margin: -6px 0px 18px 763px !important;
+}
+.statisticssection table {
+  width: 100%;
+}
+
+.statisticssection .col {
+  padding-left: 0;
+}
+
+.statisticssection .header {
+  padding-left: 0;
+}
+.data-content {
+  margin-left: 16px;
+}
+
+$mat-header-row-height: 56px;
+$mat-row-height: 48px;
+$mat-row-horizontal-padding: 24px;
+
+.mat-table {
+  width: 100%;
+}
+
+.mat-header-row {
+  min-height: $mat-header-row-height;
+}
+
+.mat-row {
+  min-height: $mat-row-height;
+}
+
+.mat-row,
+.mat-header-row {
+  display: flex;
+  border-bottom-width: 1px;
+  border-bottom-style: solid;
+  align-items: center;
+  padding: 0 $mat-row-horizontal-padding;
+  box-sizing: border-box;
+
+  // Workaround for https://goo.gl/pFmjJD in IE 11. Adds a pseudo
+  // element that will stretch the row the correct height. See:
+  // https://connect.microsoft.com/IE/feedback/details/802625
+  &::after {
+    display: inline-block;
+    min-height: inherit;
+    content: "";
+  }
+}
+
+.mat-cell,
+.mat-header-cell {
+  flex: 1;
+  overflow: hidden;
+  word-wrap: break-word;
+}
+
+table tr.mat-header-row {
+  background: #e6e6e6;
+}
+
+table th.mat-header-cell {
+  color: #000;
+  font-size: 13px;
+  font-weight: 400;
+}

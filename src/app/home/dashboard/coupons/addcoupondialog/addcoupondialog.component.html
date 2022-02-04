@@ -1,0 +1,220 @@
+<!-- <div *ngIf="isLoading" class="overlay">
+  <mat-card class="spinnercard" align-items-center>
+    <div class="row">
+      <div class="col-3">
+        <mat-progress-spinner diameter="50" color="primary" mode="indeterminate" strokeWidth="5"></mat-progress-spinner>
+      </div>
+      <div class="col">
+        <h4 class="spinnertext">{{loadingmessage}}</h4>
+      </div>
+    </div>
+  </mat-card>
+</div> -->
+<div *ngIf="isLoading" class="progress-loader">
+  <div id="pause" class="d-flex align-items-center justify-content-center">
+    <div id="spinner" style="background: #fff;padding: 25px;border-radius: 5px; width: 17rem;" class="row">
+      <div class="loading-message bkgg col-9">{{loadingmessage}}</div>
+      <div class="col-3" style="top: 5px;">
+        <div class="snippet" data-title=".dot-pulse">
+          <div class="stage">
+            <div class="dot-pulse"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="hidescrolly" mat-dialog-content>
+  <div class="container">
+    <div class="row">
+      <div class="col-11" *ngIf="!this.data.isEditMode">
+        <h4 class="dialogformtitle">Add Coupon</h4>
+      </div>
+      <div class="col-11" *ngIf="this.data.isEditMode">
+        <h4 class="dialogformtitle">Edit Coupon</h4>
+      </div>
+
+      <div class="col-1">
+        <button mat-icon-button (click)="onCloseClick()">
+          <img class="dialogclose" src="../../../../../assets/close.svg" />
+        </button>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-12">
+        <form [formGroup]="addCouponDialogForm" (submit)="onAddCoupon($event)">
+
+          <div class="form-group">
+            <mat-form-field appearance="fill">
+              <mat-label>Title</mat-label>
+              <input matInput placeholder="eg. john" maxlength="15" [formControl]="title" required />
+              <mat-error *ngIf="title.invalid">{{
+                getErrorMessage(title)
+                }}</mat-error>
+            </mat-form-field>
+            <mat-form-field class="pl-3" appearance="fill">
+              <mat-label>Code</mat-label>
+              <input matInput placeholder="GET50OFF" maxlength="20" [formControl]="code" required />
+              <mat-error *ngIf="code.invalid">{{
+                getErrorMessage(code)
+                }}</mat-error>
+            </mat-form-field>
+          </div>
+
+          <div class="form-group">
+            <mat-form-field appearance="fill" style="width: 100% !important">
+              <mat-label>Description</mat-label>
+              <textarea rows="3" maxlength="200" cols="40" matInput [formControl]="description"
+                placeholder="Ex. It makes me feel..."></textarea>
+              <mat-error *ngIf="description.invalid">{{
+                getErrorMessage(description)
+                }}</mat-error>
+            </mat-form-field>
+          </div>
+
+          <div class="row">
+            <div class="col">
+              <div class="form-group formradiogroup fullwidth" [ngClass]="[
+                  requesttype.invalid && !displayerror
+                    ? 'formradiogroup-invalid'
+                    : ''
+                ]">
+                <h5>Request Type</h5>
+                <mat-radio-group aria-label="request type" [formControl]="requesttype" required>
+                  <div class="row">
+                    <div class="col">
+                      <mat-radio-button value="permit">Permit</mat-radio-button>
+                    </div>
+                    <div class="col">
+                      <mat-radio-button value="prelim">Sales Proposal</mat-radio-button>
+                    </div>
+                  </div>
+                </mat-radio-group>
+              </div>
+              <mat-error class="custom-mat-error" [hidden]="displayerror" *ngIf="requesttype.invalid">
+                {{ getErrorMessage(requesttype) }}
+              </mat-error>
+            </div>
+
+            <div class="col" *ngIf="requesttype.value == 'prelim'">
+              <div class="form-group formradiogroup fullwidth" [ngClass]="[
+                  discounttype.invalid && !displayerror
+                    ? 'formradiogroup-invalid'
+                    : ''
+                ]">
+                <h5>Discount Type</h5>
+                <mat-radio-group aria-label="discount type" [formControl]="discounttype" required>
+                  <div class="row">
+                    <div class="col">
+                      <mat-radio-button value="percentage">Percentage</mat-radio-button>
+                    </div>
+                    <!-- <div class="col">
+                      <mat-radio-button *ngIf="requesttype.value != 'permit'" value="amount">Amount</mat-radio-button>
+                    </div> -->
+                  </div>
+                </mat-radio-group>
+              </div>
+              <mat-error class="custom-mat-error" [hidden]="displayerror" *ngIf="discounttype.invalid">
+                {{ getErrorMessage(discounttype) }}
+              </mat-error>
+            </div>
+
+            <div class="col" *ngIf="requesttype.value == 'permit'">
+              <div class="form-group formradiogroup fullwidth" [ngClass]="[
+                  discounttype.invalid && !displayerror
+                    ? 'formradiogroup-invalid'
+                    : ''
+                ]">
+                <h5>Discount Type</h5>
+                <mat-radio-group aria-label="discount type" [formControl]="discounttype" required>
+                  <div class="row">
+                    <div class="col">
+                      <mat-radio-button value="percentage">Percentage</mat-radio-button>
+                    </div>
+                  </div>
+                </mat-radio-group>
+              </div>
+              <mat-error class="custom-mat-error" [hidden]="displayerror" *ngIf="discounttype.invalid">
+                {{ getErrorMessage(discounttype) }}
+              </mat-error>
+            </div>
+          </div>
+
+          <div class="form-group" style="margin-top: 20px">
+            <mat-form-field appearance="fill">
+              <mat-label>Expirydate</mat-label>
+              <input matInput [min]="minToDate" placeholder="DD/MM/YYYY" [matDatepicker]="picker4"
+                [formControl]="expirydate" required readonly />
+              <mat-datepicker-toggle matSuffix [for]="picker4"></mat-datepicker-toggle>
+              <mat-datepicker #picker4></mat-datepicker>
+              <mat-error *ngIf="expirydate.invalid">{{
+                getErrorMessage(expirydate)
+                }}</mat-error>
+            </mat-form-field>
+
+            <mat-form-field class="pl-3" appearance="fill" *ngIf="
+                requesttype.value == 'prelim' && discounttype.value == 'amount'
+              ">
+              <mat-label>Amount</mat-label>
+              <input autocomplete="off" type="number" maxlength="2" min="1" max="99" matInput placeholder="eg.10"
+                [formControl]="amount" required>
+              <mat-error class="custom-mat-error" [hidden]="displayerror" *ngIf="amount.invalid">
+                {{getErrorMessage(amount)}}</mat-error>
+            </mat-form-field>
+
+            <mat-form-field class="pl-3" appearance="fill" *ngIf="
+                requesttype.value == 'prelim' &&
+                discounttype.value == 'percentage'
+              ">
+              <mat-label>Percentage</mat-label>
+
+              <input autocomplete="off" type="number" maxlength="2" min="1" matInput placeholder="eg.10"
+                [formControl]="amount" required>
+              <mat-error class="custom-mat-error" [hidden]="displayerror" *ngIf="amount.invalid">
+                {{getErrorMessage(amount)}}</mat-error>
+
+            </mat-form-field>
+
+            <mat-form-field class="pl-3" appearance="fill" *ngIf="requesttype.value == 'permit'">
+              <mat-label>Percentage</mat-label>
+
+              <input type="number" maxlength="2" min="1" max="99" autocomplete="off" matInput placeholder="eg.10"
+                [formControl]="amount" required />
+
+              <mat-error class="custom-mat-error" [hidden]="displayerror" *ngIf="amount.invalid">
+                {{ getErrorMessage(amount) }}</mat-error>
+            </mat-form-field>
+          </div>
+
+          <div class="row">
+            <div class="col">
+              <div class="form-group formradiogroup fullwidth" [ngClass]="[
+                  usestype.invalid && !displayerror
+                    ? 'formradiogroup-invalid'
+                    : ''
+                ]">
+                <h5>User Type</h5>
+                <mat-radio-group aria-label="uses type" [formControl]="usestype" required>
+                  <div class="row">
+                    <div class="col">
+                      <mat-radio-button value="multiple">Multiple</mat-radio-button>
+                    </div>
+                    <div class="col">
+                      <mat-radio-button value="single">Single</mat-radio-button>
+                    </div>
+                  </div>
+                </mat-radio-group>
+              </div>
+              <mat-error class="custom-mat-error" [hidden]="displayerror" *ngIf="usestype.invalid">
+                {{ getErrorMessage(usestype) }}
+              </mat-error>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<mat-dialog-actions align="end">
+  <button mat-raised-button type="submit" (click)="onAddCoupon($event)" style="width: 128px; float: left;">Save</button>
+</mat-dialog-actions>

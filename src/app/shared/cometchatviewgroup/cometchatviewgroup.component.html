@@ -1,0 +1,98 @@
+<div class="topcontainer">
+  <!-- <div class="cometchat-conversation-list-header-text-container"> -->
+  <p class="cometchat-conversation-list-header-text">Messages</p>
+  <!-- </div> -->
+  <!-- <input class="cometchat-groups-search-input" type="text" placeholder="Search" [(ngModel)]="searchChats" /> -->
+</div>
+
+<div class="chatskeleton" style="height: 25vh" *ngIf="dashboardchatskeleton">
+  <div *ngFor="let number of [0, 1]">
+    <div class="row mt-2">
+      <div class="col-3">
+        <ngx-skeleton-loader
+          count="1"
+          class="overviewsectionicon"
+          appearance="circle"
+          [theme]="{ 'background-color': '#DBDAD8' }"
+        >
+        </ngx-skeleton-loader>
+      </div>
+      <div class="col-9">
+        <div class="row">
+          <ngx-skeleton-loader
+            class="col-12 overviewcount"
+            [theme]="{
+              'border-radius': '5px',
+              height: '8px',
+              width: '80%',
+              'background-color': '#DBDAD8'
+            }"
+          >
+          </ngx-skeleton-loader>
+
+          <ngx-skeleton-loader
+            class="col-12 overviewheading"
+            [theme]="{
+              'border-radius': '5px',
+              height: '8px',
+              width: '30%',
+              'background-color': '#DBDAD8'
+            }"
+          >
+          </ngx-skeleton-loader>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div
+  class="cometchat-conversation-list-container"
+  *ngIf="!dashboardchatskeleton"
+>
+  <ul
+    *ngIf="unreadGroups?.length > 0"
+    class="cometchat-conversation-list-decoration"
+  >
+    <li
+      *ngFor="let conversation of unreadGroups; let i = index"
+      (click)="onMessageClick(conversation.conversationWith.guid, i)"
+    >
+      <div class="cometchat-conversation-item-container">
+        <div class="cometchat-conversation-item">
+          <div class="avatar" [ngStyle]="getMyAvStyle()">
+            <img [src]="conversation.conversationWith.icon" alt="" />
+          </div>
+
+          <div class="cometchat-conversation-item-details">
+            <p class="cometchat-conversation-name">
+              {{ conversation.conversationWith.name }}
+            </p>
+            <p class="cometchat-conversation-text">
+              {{ conversation.lastMessage.text }}
+            </p>
+          </div>
+          <div
+            class="cometchat-conversation-unread-count"
+            *ngIf="conversation.unreadMessageCount > 0"
+          >
+            <div class="badge-class" textColor="#AAA" [ngStyle]="getMyStyle()">
+              {{ conversation.unreadMessageCount }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div
+        class="cometchat-conversation-list-seperator"
+        *ngIf="conversation"
+      ></div>
+    </li>
+  </ul>
+
+  <div *ngIf="unreadGroups.length == 0">
+    <div class="text-center" style="padding: 50px">
+      <img src="../../../../../assets/sad.svg" width="30px" height="30px" />
+      <p style="font-size: 10px">Yet to break the ice</p>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,47 @@
+<div class="main-content">
+  <div class="container">
+    <div class="row">
+      <div class="col">
+        <h2 class="mt-4">Welcome. Let's take your business to a new level.</h2>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-8">
+        <h4 class="mt-4">
+          Explore our platform and its all new exciting features.
+        </h4>
+        <ul class="featureslist">
+          <li>Fastest and easiest way to raise a design request.</li>
+          <li>
+            No more followups, as each design request action enabled with time
+            tracking.
+          </li>
+          <li>
+            Get notified on status update of your design request via Push
+            notifications.
+          </li>
+          <li>Chat support against each design request.</li>
+          <li>Hassle free revision of any design request.</li>
+        </ul>
+      </div>
+      <div class="col" style="padding-right: 0px">
+        <img class="rocketimage" src="../../../assets/rocket.png" />
+      </div>
+    </div>
+  </div>
+  <div class="mt-4">
+    <button mat-raised-button (click)="openAddDesignDialog()">
+      Add Site Assessment
+    </button>
+    <button
+      mat-raised-button
+      class="ml-2"
+      (click)="openAddPrelimProposalDialog()"
+    >
+      Add Sales Proposal
+    </button>
+    <button class="ml-2" mat-raised-button (click)="openAutocadDialog()">
+      Add Permit Design
+    </button>
+  </div>
+</div>

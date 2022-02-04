@@ -1,0 +1,163 @@
+<div class="main-content">
+    <div class="container">
+        <div class="row mt-2" *ngIf="designerCritera.length != 0">
+            <div class="col-12 pb-5" *ngIf="designerCritera.length != 0">
+                <p class="subtitle fullwidth"><img src="../../../assets/checklist.svg" width="15px" height="12px">
+                    CheckList*<span style="color: red;" *ngIf="displayerror">Required</span>
+                </p>
+                <div class="" style="height: 255px; overflow-y: auto; overflow-x: hidden;">
+                    <div class="row pr-2" *ngFor="let item of designerCritera; let i = index">
+
+                        <div class="col-12">
+
+                            <div class="row">
+                                <div class="col-9">
+                                    <div class="d-flex">
+                                        <img src="../../../assets/double-tick.svg" width="13px" height="20px"
+                                            class="mr-2" *ngIf="item.feedback">
+                                        <img src="../../../assets/close.svg" width="13px" height="20px" class="mr-2"
+                                            *ngIf="!item.feedback">
+                                        <p class="mb-1">{{item.criteriatitle}}</p>
+                                    </div>
+                                </div>
+                                <div class="col-3 d-flex justify-content-end checkbox">
+                                    <input type="checkbox" class="mt-1 mr-2" [checked]="item.feedback"
+                                        (change)="item.feedback == false ? item.feedback = true : item.feedback == true? item.feedback = false: null; onSaveCritetria(item,i)">
+                                    <img src="../../../assets/message.svg" width="23px" height="20px"
+                                        (click)="ShowCommentCriteria(item)"
+                                        *ngIf="!item.feedback && (item.comments[item.comments.length-1]?.createdby.id != loggedInUser.id || item.comments.length == 0)">
+                                </div>
+
+                            </div>
+
+
+                            <ng-container *ngIf="!item.feedback">
+                                <div *ngFor="let comment of item.comments; let j = index;"
+                                    style="color: #666666; padding-left: 21px; margin-bottom: 0px;">
+                                    <div class="col-12">
+
+                                        <div class="row">
+                                            <div class="col-8">
+                                                <p style="font-weight: 500;margin:0px;color: #666666;">
+                                                    {{comment.createdby?.firstname | titlecase}}
+                                                    {{comment.createdby?.lastname | titlecase}}</p>
+                                                <small
+                                                    style="font-style: italic;font-weight: bold;color: #6666;">{{comment.updated_at
+                                                    | date:'dd MMM yy- HH:mm'}}</small><br />
+                                                <p>
+                                                    {{comment.message}}</p>
+                                            </div>
+                                            <div class="col-4 d-flex justify-content-end"
+                                                *ngIf="loggedInUser.id==comment.createdby?.id && j==item.comments.length-1">
+                                                <button mat-icon-button><img class="content-icon"
+                                                        src="../../../../../assets/edit.svg"
+                                                        (click)="editChecklistCommentForAnalyst(comment,i,j,item)"></button>
+                                                <button mat-icon-button><img class="content-icon"
+                                                        src="../../../../../assets/delete.svg"
+                                                        (click)="deleteChecklistComment(comment,i,j)"></button>
+                                            </div>
+
+                                            <!-- <hr /> -->
+                                        </div>
+                                        <mat-divider class="divider"></mat-divider>
+                                    </div>
+                                </div>
+                            </ng-container>
+
+
+                        </div>
+
+
+
+                        <div class="col-12 pl-3 mt-2"
+                            *ngIf="(isciteriacommentshow && selectedCriteria.id == item.id) || (isEditChecklist && selectedCriteria.id == item.id)">
+                            <!-- <p class="col-11">{{item.checklistcriteriaid.criteria}}</p> -->
+                            <div class="row mx-0">
+                                <div class="col-10">
+                                    <mat-form-field appearance="fill" class="fullwidth">
+                                        <textarea style="height: 22px;" matInput placeholder="Add your comments here..."
+                                            [formControl]="anyalistchecklistcomments"></textarea>
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-2 d-flex align-items-end justify-content-end pl-0 pb-4">
+                                    <button class="mr-2" mat-raised-button (click)="onCancelCriteria()">Cancel</button>
+                                    <button mat-raised-button *ngIf="!isEditChecklist"
+                                        (click)="onSaveCritetria(item,i)">Save</button>
+                                    <button mat-raised-button *ngIf="isEditChecklist"
+                                        (click)="onEditComments()">Save</button>
+                                </div>
+                            </div>
+                        </div>
+                        <hr class="w-100 mr-2">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-2">
+            <div *ngIf="isselfupdatepermit" class="col align-items-center">
+                <p class="subtitle fullwidth" *ngIf="!this.genericService.specificclient">Upload Permit Design*
+                    <span style="color: red; " *ngIf="displayerror">Required</span>
+                </p>
+                <p class="subtitle fullwidth" *ngIf="this.genericService.specificclient">Upload Design*s
+                    <span style="color: red; " *ngIf="displayerror">Required</span>
+                </p>
+                <div class="custom-dropzone" ngx-dropzone [multiple]="false" (change)="onSelect($event)"
+                    [accept]="' .pdf,.zip'" *ngIf="!isPermitDesignSelected ;
+">
+                    <ngx-dropzone-label>
+                        <div>
+                            <img class="addimage" src="../../../../../assets/add.svg">
+                            <h5>Drag and drop your sales proposal here or click to browse</h5>
+                        </div>
+                    </ngx-dropzone-label>
+                </div>
+                <div class="row pdfselectionpreview align-items-center" *ngIf="  isPermitDesignSelected
+">
+                    <div class="col-2">
+                        <img *ngIf="extension == 'pdf'" class="material-icons file-icon" src="./../assets/pdf.svg">
+                        <img *ngIf="extension == 'png'" class="material-icons file-icon" src="./../assets/png.svg">
+                        <img *ngIf="extension == 'zip'" class="material-icons file-icon" src="./../assets/zip.svg">
+                        <img *ngIf="extension == 'doc'" class="material-icons file-icon" src="./../assets/doc.svg">
+                        <img *ngIf="extension == 'docx'" class="material-icons file-icon" src="./../assets/doc.svg">
+                        <img *ngIf="extension == 'odt'" class="material-icons file-icon" src="./../assets/pdf.svg">
+                        <img *ngIf="extension == 'rtf'" class="material-icons file-icon" src="./../assets/rtf.svg">
+                        <img *ngIf="extension == 'txt'" class="material-icons file-icon" src="./../assets/txt.svg">
+                        <img *ngIf="extension!== 'png' && extension !== 'pdf' && extension !== 'zip' && extension !== 'doc' && extension !== 'docx' && extension !== 'odt' && extension !== 'rtf' && extension !== 'txt'"
+                            class="material-icons file-icon" src="./../assets/file.svg">
+
+                    </div>
+                    <div class="col-7">
+                        <p>{{permitfiles[0].name}}</p>
+                    </div>
+                    <div class="col-3">
+                        <button class="float-right bluebutton" mat-raised-button (click)="onRemove()">Remove</button>
+                    </div>
+                </div>
+                <button class="float-right ml-1" mat-button (click)="selfUpdateCancelClick()">Cancel</button>
+            </div>
+            <div class="col">
+                <p class="subtitle fullwidth">Issues</p>
+                <div class="row subbody">
+                    <div class="col">
+                        <mat-form-field appearance="fill" class="fullwidth">
+                            <mat-label>comments</mat-label>
+                            <textarea class="largetextarea" matInput placeholder="Enter your issues here..."
+                                [formControl]="reviewissues"></textarea>
+                        </mat-form-field>
+                        <p style="color: red;font-size: smaller;" *ngIf="reviewissuesinvalid==true">Please Enter
+                            issue</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <button class="float-right ml-1" *ngIf="!isselfupdatepermit" mat-raised-button
+                            (click)="reportDesignReviewFailure()">Failed</button>
+                        <button class="float-right" mat-raised-button
+                            (click)="updateDesignReviewSuccess()">Passed</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

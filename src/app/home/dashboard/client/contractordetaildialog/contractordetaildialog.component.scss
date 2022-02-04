@@ -1,0 +1,113 @@
+.user-card {
+  width: 100%;
+  padding: 0%;
+  padding-left: 16px;
+}
+
+.border-curve {
+  border-radius: 10px;
+  box-shadow: none !important;
+}
+.fontweight {
+  font-weight: 500;
+}
+
+.photo {
+  height: 100%;
+  display: flex;
+  text-align: center;
+  border-radius: 10px;
+  box-shadow: 0 5px 15px -8px rgba(0, 0, 0, 0.24),
+    0 8px 10px -5px rgba(0, 0, 0, 0.2);
+}
+
+.photo p {
+  font-size: 2rem;
+  margin: auto;
+}
+
+.dollarsign {
+  background: rgb(211, 211, 211, 0.3);
+  padding: 4px 6px;
+  border-radius: 3px;
+  font-size: 15px;
+}
+
+.user-card:hover {
+  background-color: #edc773;
+  cursor: pointer;
+}
+
+.teamoverviewbutton {
+  border-color: #d9d9d9;
+  background-color: #ffffff;
+  border-width: 1px;
+  width: 95%;
+  border-radius: 10px;
+  border-style: solid;
+  color: #2b313f;
+  text-align: start;
+}
+.teamoverviewbutton img {
+  width: 36px;
+  position: absolute;
+  right: 10px;
+  top: 16px;
+}
+.teamoverviewbutton h1 {
+  margin-top: 2.5em;
+  margin-bottom: 0;
+  font-weight: 500;
+}
+.teamoverviewbutton h4 {
+  font-size: 0.7rem;
+  margin-bottom: 10px;
+  font-weight: 500;
+}
+.cards {
+  width: 20%;
+}
+
+.noticeheading {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.activenotice {
+  font-size: 0.7em;
+  padding: 2px 10px;
+  border-radius: 12px;
+  text-align: center;
+  height: 24px;
+  color: #fff;
+  margin-bottom: 0px;
+  display: inline-block;
+}
+
+::ng-deep .mat-menu-content {
+  padding-top: 0% !important;
+  padding-bottom: 0% !important;
+}
+
+::ng-deep .mat-menu-panel {
+  min-width: 93px;
+  max-width: none;
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+  max-height: calc(100vh - 48px);
+  border-radius: 4px;
+  outline: 0;
+  min-height: 46px;
+}
+.clientchip {
+  background-color: #edc773;
+  font-size: 0.8em;
+  font-weight: 500;
+  width: 76px;
+  padding: 6px 10px;
+  border-radius: 4px;
+  text-align: center;
+  height: 33px;
+  color: black;
+  vertical-align: text-bottom;
+}

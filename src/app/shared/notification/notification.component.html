@@ -1,0 +1,174 @@
+<div class="notificationresult" style="top: -73px; margin-top: 8px">
+  <div class="notification-content" style="background: #f7f1e2">
+    <div class="row notificationheader justify-content-between align-items-center" style="
+        margin-top: -8px;
+        margin-right: 0px;
+        margin-left: 0px;
+        margin-bottom: 0px;
+      ">
+      <div>
+        <span class="notificationtitle" style="font-weight: 600">Notifications</span>
+      </div>
+      <div class="d-flex align-items-center">
+        <p class="mr-2 mb-0" (click)="markAllAsRead($event)" *ngIf="markAllAsReadbtn"
+          style="font-size: 12px; cursor: pointer">
+          Mark all as Read
+        </p>
+        <button mat-icon-button (click)="onCloseClick()" class="float-right" style="width: 23px; height: 39px">
+          <img class="dialogclose" src="../../../../../assets/close.svg" width="15px" height="15px" />
+        </button>
+        <!-- <button class="notificationmark" *ngIf="(notifications.length >=8 && !allNotificationfetched) ||  markAllAsReadbtn"
+                  (click)="markAllAsRead($event)">Mark all as Read</button> -->
+      </div>
+      <!-- <div *ngIf="notifications.length==0">
+                <a class="dropdown-item">No Notification yet</a>         
+              </div> -->
+    </div>
+
+    <div *ngIf="isnotificationloading">
+      <div class="row mx-0">
+        <div class="col-12 py-3" *ngFor="let number of [0, 1, 2]">
+          <div class="row">
+            <div class="col-2">
+              <ngx-skeleton-loader count="1" appearance="circle" [theme]="{ 'background-color': '#d8d8d8' }">
+              </ngx-skeleton-loader>
+            </div>
+            <div class="col-10">
+              <ngx-skeleton-loader [theme]="{
+                  'border-radius': '5px',
+                  'background-color': '#E6E5E5',
+                  height: '10px',
+                  width: '80%',
+                  'margin-bottom': '7px'
+                }">
+              </ngx-skeleton-loader>
+              <ngx-skeleton-loader [theme]="{
+                  'border-radius': '5px',
+                  'background-color': '#E6E5E5',
+                  height: '10px',
+                  width: '65%',
+                  'margin-bottom': '17px'
+                }">
+              </ngx-skeleton-loader>
+              <ngx-skeleton-loader [theme]="{
+                  'border-radius': '5px',
+                  'background-color': '#E6E5E5',
+                  height: '10px',
+                  width: '55%',
+                  'margin-bottom': '7px'
+                }">
+              </ngx-skeleton-loader>
+              <ngx-skeleton-loader [theme]="{
+                  'border-radius': '5px',
+                  'background-color': '#E6E5E5',
+                  height: '10px',
+                  width: '55%',
+                  'margin-bottom': '7px'
+                }">
+              </ngx-skeleton-loader>
+              <ngx-skeleton-loader [theme]="{
+                  'border-radius': '5px',
+                  'background-color': '#E6E5E5',
+                  height: '10px',
+                  width: '55%',
+                  'margin-bottom': '40px'
+                }">
+              </ngx-skeleton-loader>
+              <ngx-skeleton-loader [theme]="{
+                  'border-radius': '5px',
+                  'background-color': '#E6E5E5',
+                  height: '10px',
+                  width: '55%',
+                  'margin-bottom': '10px'
+                }">
+              </ngx-skeleton-loader>
+            </div>
+            <div class="col-10 justify-content-center">
+              <div style="height: 1px; background-color: #a5a9abaa; width: 478px"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- my code -->
+    <div *ngIf="!isnotificationloading">
+      <div class="row">
+        <div class="col">
+          <cdk-virtual-scroll-viewport (scrolledIndexChange)="onScroll()" itemSize="200" class="activityitems-viewport"
+            *ngIf="notifications.length != 0" #notificationscroll>
+            <div *cdkVirtualFor="let notification of notifications; let i = index">
+              <div class="stepper d-flex flex-column">
+                <div class="d-flex">
+                  <div class="d-flex flex-column align-items-center ml-2">
+                    <div class="line pt-4" [ngStyle]="
+                        i == 0
+                          ? { visibility: 'hidden' }
+                          : { visibility: 'visible' }
+                      "></div>
+                    <div class="rounded-circle p-1"></div>
+                    <div class="line h-100"></div>
+                    <div class="line h-100"></div>
+                  </div>
+                  <div class="col activitycol" (click)="notificationStatusRead($event, notification)" [ngStyle]="{
+                      color: notification.status == 'read' ? '#ccc' : '#111'
+                    }">
+                    <div class="row px-2 py-3">
+                      <div class="col-2">
+                        <img *ngIf="
+                            notification.type == 'design' &&
+                            notification.status == 'unread'
+                          " class="notificationimg" src="./../assets/prelim.svg" width="19px" />
+                        <img *ngIf="
+                            notification.type == 'design' &&
+                            notification.status == 'read'
+                          " class="notificationimg" src="./../assets/prelim_1.svg" width="19px" />
+                        <img *ngIf="notification.type == 'survey'" class="notificationimg"
+                          src="./../assets/Group417.svg" width="19px" />
+                        <img *ngIf="
+                            notification.type == 'pestamp' &&
+                            notification.status == 'unread'
+                          " class="notificationimg" src="./../assets/Group416.svg" width="19px" />
+                        <img *ngIf="
+                            notification.type == 'pestamp' &&
+                            notification.status == 'read'
+                          " class="notificationimg" src="./../assets/Group416_1.svg" width="19px" />
+                        <img *ngIf="notification.type == 'newuser'" class="notificationimg" src="./../assets/user.svg"
+                          width="19px" />
+                      </div>
+                      <div class="col-10 pl-0">
+                        <p class="notificationtext1" *ngIf="notifications.length == 0">
+                          No Notification yet
+                        </p>
+
+                        <p class="notificationtext1">
+                          {{ notification.title }}
+                        </p>
+                        <p class="notificationtext2">
+                          {{ notification.message }}
+                        </p>
+                        <p class="notificationdate mb-0">
+                          {{ notification.created_at | date: "dd/MMM/yyyy" }}
+                          {{ notification.created_at | date: "shortTime" }}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </cdk-virtual-scroll-viewport>
+          <div class="row activityitems-viewport justify-content-center align-items-center"
+            *ngIf="notifications.length === 0" style="overflow-x: hidden; margin-left: 0px">
+            <div class="notificationcontent">
+              <img src="./../assets/sad.svg" style="margin-left: 50px; margin-bottom: 10px; width: 35px" />
+              <div style="font-size: 14px; font-weight: bold">
+                Yet to break the ice
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

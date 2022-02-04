@@ -1,0 +1,68 @@
+<div class="container">
+  <div class="row">
+    <div class="col-11">
+      <h4 class="dialogformtitle">Access Rights</h4>
+    </div>
+
+    <div class="col-1">
+      <button mat-icon-button (click)="onCloseClick()">
+        <img class="dialogclose" src="../../../../../assets/close.svg" />
+      </button>
+    </div>
+  </div>
+</div>
+<div mat-dialog-content>
+  <div class="container">
+    <div class="row">
+      <div class="col">
+        <section class="inputSection mb-0">
+          <mat-checkbox value="true" [formControl]="pdfautogenerationaccess"
+            >PDF Autogeneration
+          </mat-checkbox>
+        </section>
+      </div>
+      <div class="col mt-3"></div>
+    </div>
+
+    <!-- <div class="row">
+      <div class="col-1">
+        <p class="initials">
+          {{
+            userinitials
+          }}
+        </p>
+      </div>
+      <div class="col-7">
+        <h4 class="title">
+          {{ data.user.firstname }} {{ data.user.lastname }}
+        </h4>
+      </div>
+      <div class="col-4">
+        <button mat-icon-button (click)="onEditClick()">
+          <img class="dialogclose" src="../../../../../assets/edit.svg" />
+        </button>
+        <span class="tableactionbutton">
+          <button mat-icon-button (click)="onDeleteClick()">
+            <img class="dialogclose" src="../../../../../assets/delete.svg" />
+          </button>
+        </span>
+        <span class="tableactionbutton">
+          <button mat-icon-button (click)="onCloseClick()">
+            <img class="dialogclose" src="../../../../../assets/close.svg" />
+          </button>
+        </span>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        <p class="subtitle">Profile Details</p>
+        <div class="row subbody">
+          <div class="col">
+            <p class="contentvalue">{{ data.user.email }}</p>
+            <p class="contentvalue" *ngIf="data.user.address != null">{{ data.user.address }}</p>
+             <p class="contentvalue" *ngIf="data.user.address == null">No address found</p> -->
+  </div>
+</div>
+<mat-dialog-actions align="end">
+  <button mat-raised-button (click)="onConfirm()">Confirm</button>
+</mat-dialog-actions>

@@ -1,0 +1,215 @@
+.name-skeleton {
+  color: #a8a8a8;
+  margin-bottom: 0px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.name {
+  // color: #A8A8A8;
+  margin-bottom: 3%;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.city-skeleton {
+  color: #a8a8a8;
+}
+.designlistitems-viewport {
+  height: 83vh;
+  margin: auto;
+  overflow-x: hidden;
+  overflow-y: auto;
+  width: 100%;
+}
+.center-text {
+  top: 55%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  font-size: 0.8rem;
+  font-family: "Titillium Web", Verdana, Tahoma, sans-serif;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.ct {
+  top: 59%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  font-size: 0.8rem;
+  font-family: "Titillium Web", Verdana, Tahoma, sans-serif;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+@media only screen and (min-width: 1062px) {
+  .ct {
+    top: 44%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    font-size: 0.8rem;
+    font-family: "Titillium Web", Verdana, Tahoma, sans-serif;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
+}
+
+@media only screen and (min-width: 1280px) {
+  .ct {
+    top: 53%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    font-size: 0.8rem;
+    font-family: "Titillium Web", Verdana, Tahoma, sans-serif;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
+}
+
+@media only screen and (min-width: 1380px) {
+  .ct {
+    top: 60%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    font-size: 0.8rem;
+    font-family: "Titillium Web", Verdana, Tahoma, sans-serif;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
+}
+
+.designdialogcontent {
+  max-height: 83vh;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+
+.ft {
+  font-size: 12px;
+  font-weight: 500;
+}
+.dot {
+  height: 10px;
+  width: 10px;
+  background-color: #ff823c;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.action-buttons {
+  background: white;
+  border: 1px solid #edc773;
+  box-shadow: none;
+  margin-right: 5px;
+  margin-top: 5px;
+}
+
+.action-buttons:hover {
+  background: #edc773;
+  // border: 1px solid #edc773;
+  box-shadow: none;
+  margin-right: 5px;
+  margin-top: 5px;
+}
+
+.img {
+  height: 21px;
+  width: 21px;
+}
+
+.percentage {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.request-raised {
+  font-style: italic;
+  font-size: 12px;
+  color: #808182;
+}
+
+.anchor-action {
+  font-size: 12px;
+  color: #0984e3;
+  // display: table;
+  // overflow: hidden;
+  text-overflow: ellipsis;
+  // text-align: left !important;
+  cursor: pointer;
+}
+
+.vl {
+  border-left: 2px solid lightgray;
+  margin-top: 3%;
+  // height: 500px;
+}
+
+.anchor {
+  font-size: 11px;
+  font-weight: 600;
+  color: grey;
+  float: right;
+  cursor: pointer;
+}
+
+.labels {
+  color: grey;
+  margin-bottom: 0px;
+  font-size: 10px;
+  font-weight: 500;
+}
+
+.cl {
+  align-self: "";
+  border-left: 2px solid lightgrey;
+}
+
+.cl-1 {
+  align-self: center;
+}
+
+.missing-details {
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  font-size: 0.8rem;
+  font-family: "Titillium Web", Verdana, Tahoma, sans-serif;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}

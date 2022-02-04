@@ -1,0 +1,418 @@
+<!-- <div *ngIf="isLoading" class="overlay">
+    <mat-progress-bar class="commonprogressbar" mode="indeterminate"></mat-progress-bar>
+  </div>
+<div mat-dialog-content>
+    <div class="container">
+        <div class="row">
+            <div class="col-6">
+                <h4 class="dialogformtitle" *ngIf="data.isDesign">Assign Design Request Review</h4>
+                <h4 class="dialogformtitle" *ngIf="!data.isDesign">Assign Survey Request Review</h4>
+            </div>
+            <div class="col-5 mt-2 search">
+                <input class="search__input" [(ngModel)]="searchTerm" placeholder="Search here"
+                    (ngModelChange)="search()" />
+            </div>
+            <div class="col-1">
+                <button mat-icon-button (click)="onCloseClick()">
+                    <img class="dialogclose" src="../../../../../assets/close.svg" />
+                </button>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <h4 class="dialoginfoheader" *ngIf="data.isDesign">{{data.design.address}}</h4>
+                <h4 class="dialoginfoheader" *ngIf="!data.isDesign">{{data.survey.address}}</h4>
+            </div>
+        </div>
+        <div class="row mt-4 mb-4">
+            <div class="col">
+                <div class="analystslist">
+                    <cdk-virtual-scroll-viewport orientation="horizontal" itemSize="50" class="analystslist-viewport">
+                        <div *cdkVirtualFor="let analyst of analysts; let i = index"  class="style">
+                        <button mat-button class="analystitem" matBadge="{{analyst.jobcount}}"
+                            matBadgePosition="after" (click)="setSelectedAssignee(analyst, i)">
+                            <div *ngIf="analyst.contractorlogo != null" class="logo">
+                                <img src="{{analyst.contractorlogo.logo.url}}" />
+                            </div>
+                            <div *ngIf="analyst.contractorlogo == null" class="initials">
+                                <p>{{genericService.getInitials(analyst.firstname, analyst.lastname)}}</p>
+                            </div>
+                            <div class="selectionbackground" *ngIf="analyst.isDisplayed">
+                                <img src="../../../../../assets/whitetick.svg" />
+                            </div>
+                        </button>
+                        <div class="size namedetails" >
+                            <P>{{analyst.firstname}} {{analyst.lastname}}</P>
+                        </div>
+                    </div>
+                    </cdk-virtual-scroll-viewport>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-3">
+                <button mat-raised-button (click)="assignUser()">Confirm</button>
+            </div>
+        </div>
+    </div>
+</div>
+ -->
+
+<!-- <div *ngIf="isLoading" class="overlay">
+    <mat-progress-bar class="commonprogressbar" mode="indeterminate"></mat-progress-bar>
+</div> -->
+<!-- <div *ngIf="isLoading" class="overlay">
+    <mat-card class="spinnercard" align-items-center>
+        <div class="row">
+            <div class="col-3">
+                <mat-progress-spinner diameter="50" color="primary" mode="indeterminate" strokeWidth="5">
+                </mat-progress-spinner>
+            </div>
+            <div class="col">
+                <h4 class="spinnertext">{{loadingmessage}}</h4>
+            </div>
+        </div>
+    </mat-card>
+  </div> -->
+<div *ngIf="isLoading" class="progress-loader">
+  <div id="pause" class="d-flex align-items-center justify-content-center">
+    <div
+      id="spinner"
+      style="background: #fff; padding: 25px; border-radius: 5px; width: 17rem"
+      class="row"
+    >
+      <div class="loading-message bkgg col-9">{{ loadingmessage }}</div>
+      <div class="col-3" style="top: 5px">
+        <div class="snippet" data-title=".dot-pulse">
+          <div class="stage">
+            <div class="dot-pulse"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="container">
+  <div class="row">
+    <div class="col-6">
+      <h4 class="dialogformtitle" style="margin-bottom: 0% !important">
+        Assign Design Request Review
+      </h4>
+    </div>
+    <div class="col-5 mt-2 search">
+      <input
+        class="search__input"
+        [(ngModel)]="searchTerm"
+        placeholder="Search here"
+        (ngModelChange)="search()"
+      />
+      <!-- <i style="cursor: pointer;" class="material-icons" >search</i> -->
+    </div>
+    <div class="col-1">
+      <button mat-icon-button (click)="onCloseClick()">
+        <img class="dialogclose" src="../../../../../assets/close.svg" />
+      </button>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col">
+      <h4 class="dialoginfoheader" style="margin-top: 0% !important">
+        {{ data.design.address }}
+      </h4>
+    </div>
+  </div>
+</div>
+<div mat-dialog-content>
+  <div class="container">
+    <div class="row mt-4 mb-4">
+      <div
+        class="col"
+        [ngClass]="selectedAnalyst != undefined ? 'col-7' : 'col'"
+      >
+        <div *ngIf="!isAnalystSelcted" style="color: red">
+          Please select Analyst from the given list
+        </div>
+        <div class="designerslist">
+          <cdk-virtual-scroll-viewport
+            *ngIf="!isAnalystLoad"
+            itemSize="10"
+            class="designerslist-viewport"
+          >
+            <div class="row pl-3">
+              <div *cdkVirtualFor="let number of [0, 1, 2]" class="style">
+                <button
+                  mat-button
+                  class="designeritem px-0"
+                  matBadge="0"
+                  matBadgePosition="after"
+                >
+                  <ngx-skeleton-loader
+                    class="d-block"
+                    [theme]="{
+                      'border-radius': '5px',
+                      'background-color': '#DBDAD8',
+                      height: '60px',
+                      width: '50px',
+                      'margin-top': '5px'
+                    }"
+                  >
+                  </ngx-skeleton-loader>
+                </button>
+              </div>
+            </div>
+          </cdk-virtual-scroll-viewport>
+          <cdk-virtual-scroll-viewport
+            *ngIf="isAnalystLoad"
+            itemSize="10"
+            class="designerslist-viewport"
+          >
+            <div class="row pl-3">
+              <div
+                *cdkVirtualFor="let analyst of analysts; let i = index"
+                class="style"
+              >
+                <button
+                  mat-button
+                  class="designeritem px-0"
+                  matBadge="{{ analyst.jobcount }}"
+                  matBadgePosition="after"
+                  (click)="setSelectedAssignee(analyst, i)"
+                >
+                  <div
+                    *ngIf="analyst.logo != null && analyst.logo != null"
+                    class="logo"
+                  >
+                    <img src="{{ analyst.logo.url }}" />
+                  </div>
+
+                  <div
+                    *ngIf="analyst.logo == null || analyst.logo == null"
+                    class="initials"
+                  >
+                    <p>
+                      {{
+                        genericService.getInitials(
+                          analyst.firstname,
+                          analyst.lastname
+                        )
+                      }}
+                    </p>
+                  </div>
+                  <div class="selectionbackground" *ngIf="analyst.isDisplayed">
+                    <img src="../../../../../assets/whitetick.svg" />
+                  </div>
+                  <div class="namedetails">
+                    <p class="mb-0 text-center">
+                      {{ analyst.firstname }} {{ analyst.lastname }}
+                    </p>
+                    <span class="mb-0">{{ analyst.email }}</span>
+                  </div>
+                </button>
+              </div>
+            </div>
+            <!-- <button mat-button *cdkVirtualFor="let designer of designers; let i = index" class="designeritem" matBadge="{{designer.jobcount}}"
+                            matBadgePosition="after" (click)="setSelectedAssignee(designer, i)">
+                            <div *ngIf="designer.contractorlogo != null && designer.contractorlogo.logo != null" class="logo">
+                                <img src="{{designer.contractorlogo.logo.url}}" />
+                            </div>
+                            <div *ngIf="designer.contractorlogo == null || designer.contractorlogo.logo == null" class="initials">
+                                <p>{{genericService.getInitials(designer.firstname, designer.lastname)}}</p>
+                            </div>
+                            <div class="selectionbackground" *ngIf="designer.isDisplayed">
+                                <img src="../../../../../assets/whitetick.svg" />
+                            </div>
+                        </button> -->
+          </cdk-virtual-scroll-viewport>
+          <div *ngIf="analysts.length == 0 && isAnalystLoad">
+            No Analyst Found
+          </div>
+        </div>
+      </div>
+      <div
+        class="col-5 taskcontainer"
+        *ngIf="selectedAnalyst != undefined && analysts.length != 0"
+      >
+        <div
+          class="row-mt-1"
+          style="
+            display: flex;
+            margin-top: 20px;
+            font-size: 12px;
+            font-weight: 600;
+          "
+        >
+          <div class="col-6">
+            <div class="row">
+              <div class="col-12" style="font-size: 14px">
+                Total Design {{ analystsjoblist.length }}
+              </div>
+              <div class="col-5" style="width: 60px">
+                <h4 class="taskcard-header">
+                  <img
+                    class="jobcard-icon"
+                    src="../../../../../assets/revisionicon.svg"
+                  />
+                  {{ revisionJobs }}
+                </h4>
+              </div>
+              <div class="col-4" style="width: 60px">
+                <h4 class="taskcard-header">
+                  <img
+                    class="jobcard-polygon-icon"
+                    src="../../../../../assets/Polygon 32.svg"
+                  />
+                  {{ otherJobs }}
+                </h4>
+              </div>
+            </div>
+          </div>
+          <!-- <div class="col-6">
+                        <div class="row text-right">
+                            <div class="col-12">
+                                Shift Time
+                            </div>
+                            <div class="col-12">
+                                10:00 AM
+                            </div>
+                        </div>
+                    </div> -->
+        </div>
+        <mat-divider style="background-color: white"></mat-divider>
+        <div class="row jobcontainer" *ngIf="!isanalystsjobsavailable">
+          <mat-card
+            class="jobcard"
+            style="height: 16vh"
+            *ngFor="let number of [0, 1, 2]"
+          >
+            <div class="row">
+              <div class="col text-center">
+                <ngx-skeleton-loader
+                  [theme]="{
+                    'margin-top': '4px',
+                    'margin-bottom': '0px',
+                    'border-radius': '4px',
+                    height: '8px',
+                    width: '60px',
+                    'background-color': '#EDDBB2'
+                  }"
+                >
+                </ngx-skeleton-loader>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col text-center jobcardheader">
+                <ngx-skeleton-loader
+                  [theme]="{
+                    'margin-top': '7px',
+                    'border-radius': '4px',
+                    'margin-bottom': '0px',
+                    height: '8px',
+                    'background-color': '#EDDBB2'
+                  }"
+                >
+                </ngx-skeleton-loader>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col text-center jobcard-content">
+                <ngx-skeleton-loader
+                  [theme]="{
+                    'margin-top': '7px',
+                    'border-radius': '4px',
+                    'margin-bottom': '0px',
+                    height: '8px',
+                    'background-color': '#EDDBB2'
+                  }"
+                >
+                </ngx-skeleton-loader>
+              </div>
+            </div>
+            <div class="row mt-2">
+              <div class="col text-center jobcard-footer">
+                <ngx-skeleton-loader
+                  [theme]="{
+                    'margin-top': '7px',
+                    'border-radius': '4px',
+                    'margin-bottom': '0px',
+                    height: '8px',
+                    'background-color': '#EDDBB2'
+                  }"
+                >
+                </ngx-skeleton-loader>
+              </div>
+            </div>
+          </mat-card>
+        </div>
+        <div *ngIf="isanalystsjobsavailable">
+          <ng-container *ngIf="analystsjoblist.length; else nodesignerjobs">
+            <div class="row jobcontainer">
+              <mat-card
+                class="jobcard"
+                *ngFor="let jobs of analystsjoblist; let i = index"
+                (click)="openDetailPage(jobs)"
+              >
+                <div class="row">
+                  <div class="col text-center">
+                    <img
+                      *ngIf="jobs.isinrevisionstate"
+                      class="jobcard-icon"
+                      src="../../../../../assets/revisionicon.svg"
+                    />
+                    <img
+                      *ngIf="!jobs.isinrevisionstate"
+                      class="jobcard-icon"
+                      style="padding-left: 4px; padding-top: 4px"
+                      src="../../../../../assets/Polygon 32.svg"
+                    />
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col text-center jobcardheader">
+                    {{ jobs.name }}
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col text-center jobcard-content">
+                    {{ jobs.company }}
+                  </div>
+                </div>
+                <div class="row mt-2" *ngIf="jobs.reviewstarttime">
+                  <div class="col text-center jobcard-footer">
+                    {{ jobs.reviewstarttime.slice(8, 10) }}-{{
+                      genericService.formateMonth(
+                        jobs.reviewstarttime.slice(5, 7)
+                      )
+                    }}-{{ jobs.reviewstarttime.slice(0, 4) }}
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col text-center jobcard-footer">
+                    {{
+                      jobs.requesttype == "permit"
+                        ? "Permit"
+                        : (jobs.requirementtype | titlecase)
+                    }}
+                  </div>
+                </div>
+              </mat-card>
+            </div>
+          </ng-container>
+        </div>
+        <ng-template #nodesignerjobs>
+          <div class="nodatafound">
+            <img
+              src="./../assets/sad.svg"
+              style="margin-bottom: 10px; width: 35px"
+            />
+            <div style="font-size: 14px; font-weight: bold">
+              Yet to break the ice
+            </div>
+          </div>
+        </ng-template>
+      </div>
+    </div>
+  </div>
+</div>
+<mat-dialog-actions class="mb-1" align="end" *ngIf="analysts.length != 0">
+  <button mat-raised-button (click)="assignUser()">Confirm</button>
+</mat-dialog-actions>

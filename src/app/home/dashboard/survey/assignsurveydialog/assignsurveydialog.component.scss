@@ -1,0 +1,61 @@
+@import "../../../../shared/loader/loader.component.scss";
+.surveyorslist .surveyorslist-viewport {
+  height: 129px;
+}
+
+.surveyorslist .surveyorslist-viewport .cdk-virtual-scroll-content-wrapper {
+  display: flex;
+  flex-direction: row;
+}
+.style {
+  display: inline-block;
+  font-size: xx-small;
+}
+.size {
+  margin: 7px;
+}
+
+.surveyorslist .surveyoritem {
+  width: 74px;
+  height: 74px;
+  background-color: #fff8e5;
+  border-radius: 8px;
+  margin-right: 16px;
+  text-align: center;
+  margin-top: 16px;
+}
+
+.surveyoritem img {
+  width: 48px;
+  margin-top: 16%;
+}
+
+.surveyoritem .initials {
+  color: #434343;
+  font-size: 1.5em;
+}
+
+.surveyoritem .initials p {
+  margin-bottom: 0px;
+}
+
+.namedetails {
+  text-align: center;
+  margin-right: 16px;
+  font-weight: 600;
+}
+
+.selectionbackground {
+  background-color: #6666668a;
+  position: absolute;
+  border-radius: 8px;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+.selectionbackground img {
+  width: 40%;
+  margin-top: 28%;
+}

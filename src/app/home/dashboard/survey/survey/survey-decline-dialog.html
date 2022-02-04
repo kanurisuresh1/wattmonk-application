@@ -1,0 +1,21 @@
+<h1 mat-dialog-title>Confirm</h1>
+<div mat-dialog-content>
+  <p>Decline the survey request</p>
+  <mat-form-field appearance="fill" class="fullwidth">
+    <mat-label>Reason</mat-label>
+    <textarea
+      style="height: 200px"
+      matInput
+      [(ngModel)]="data.reason"
+      [formControl]="declinereason"
+      required
+    ></textarea>
+    <mat-error *ngIf="declinereason.invalid"
+      >"Field input is required."</mat-error
+    >
+  </mat-form-field>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="onNoClick()">Cancel</button>
+  <button mat-button (click)="onSubmit()" cdkFocusInitial>Submit</button>
+</div>

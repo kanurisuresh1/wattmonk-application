@@ -1,0 +1,117 @@
+<div class="activitybar activitybar-close">
+  <div class="container">
+    <div class="d-flex mainrow">
+      <div class="col" style="padding-left: 0px; padding-right: 0px">
+        <div class="row toprow align-items-center" style="padding-top: 15px; background: #edc773">
+          <div class="col-9">
+            <p class="recordname">Activities</p>
+          </div>
+          <div class="col-3 text-right">
+            <button class="closebutton" mat-icon-button (click)="onCloseClick()">
+              <img class="dialogclose" src="../../../assets/close.svg" />
+            </button>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="w-100 pt-2" *ngIf="isactivityloading">
+            <div class="stepper d-flex flex-column col-12" *ngFor="let number of [0, 1, 2]">
+              <div class="d-flex">
+                <div class="d-flex flex-column align-items-center ml-2">
+                  <div class="line"></div>
+                  <div class="rounded-circle p-1"></div>
+                  <div class="line h-100"></div>
+                  <div class="line h-100"></div>
+                </div>
+                <div class="col activitycol mt-0">
+                  <ngx-skeleton-loader class="d-block" [theme]="{
+                      'border-radius': '5px',
+                      'background-color': '#DBDAD9',
+                      height: '8px',
+                      width: '80px'
+                    }">
+                  </ngx-skeleton-loader>
+                  <ngx-skeleton-loader class="d-block" [theme]="{
+                      'border-radius': '5px',
+                      'background-color': '#DBDAD9',
+                      height: '8px',
+                      width: '60%',
+                      'margin-bottom': '0px'
+                    }">
+                  </ngx-skeleton-loader>
+                  <ngx-skeleton-loader class="d-block" [theme]="{
+                      'border-radius': '5px',
+                      'background-color': '#DBDAD9',
+                      height: '8px',
+                      width: '60px',
+                      'margin-bottom': '0px'
+                    }">
+                  </ngx-skeleton-loader>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col" *ngIf="!isactivityloading">
+            <cdk-virtual-scroll-viewport itemSize="50" class="activityitems-viewport" *ngIf="activities.length > 0">
+              <div *cdkVirtualFor="let activity of activities; let i = index">
+                <div class="stepper d-flex flex-column">
+                  <div class="d-flex">
+                    <div class="d-flex flex-column align-items-center ml-2">
+                      <div class="line pt-4" [ngStyle]="
+                          i == 0
+                            ? { visibility: 'hidden' }
+                            : { visibility: 'visible' }
+                        "></div>
+                      <div class="rounded-circle p-1"></div>
+                      <div class="line h-100"></div>
+                      <div class="line h-100"></div>
+                    </div>
+                    <div class="col activitycol">
+                      <div class="date mb-2">
+                        {{
+                        genericService.formatDateInDisplayFormat(
+                        activity.created_at
+                        )
+                        }}
+                        |
+                        {{
+                        genericService.formatDateInTimeAgo(
+                        activity.created_at
+                        )
+                        }}
+                      </div>
+                      <b>
+                        <div *ngIf="!isClient" class="activityuser mb-2">
+                          {{ activity.performer.firstname }}
+                          {{ activity.performer.lastname }}
+                        </div>
+                      </b>
+                      <p class="activitystatus">{{ activity.activity }}</p>
+                      <p *ngIf="
+                          isClient &&
+                          activity.performer.parent == loggedInUser.parent.id
+                        " class="activityuser">
+                        {{ activity.performer.firstname }}
+                        {{ activity.performer.lastname }}
+                      </p>
+                      <p *ngIf="
+                          isClient &&
+                          activity.performer.parent != loggedInUser.parent.id
+                        " class="activityuser">
+                        {{ activity.performer.firstname }}
+                        {{ activity.performer.lastname }}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </cdk-virtual-scroll-viewport>
+            <p class="listplaceholder" *ngIf="activities.length == 0">
+              No activities found
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

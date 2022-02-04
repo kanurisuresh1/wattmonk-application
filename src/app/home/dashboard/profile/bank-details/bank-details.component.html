@@ -1,0 +1,148 @@
+<div *ngIf="isLoading" class="overlay">
+  <mat-card class="spinnercard" align-items-center>
+    <div class="row">
+      <div class="col-3">
+        <mat-progress-spinner diameter="50" color="primary" mode="indeterminate" strokeWidth="5"></mat-progress-spinner>
+      </div>
+      <div class="col">
+        <h4 class="spinnertext">{{ loadingmessage }}</h4>
+      </div>
+    </div>
+  </mat-card>
+</div>
+
+<div class="container" [hidden]="!data.isbank">
+  <div class="row">
+    <div class="col-7">
+      <h4 class="dialogformtitle">Bank Detail</h4>
+    </div>
+    <!-- <div class="col-3">
+        <span class="tableactionbutton">
+           <button mat-icon-button  class="float-right"  >
+            <img class="dialogclose" src="../../../../../assets/delete.svg" />
+             </button>
+            </span>
+       </div> -->
+    <div class="col-5">
+      <button mat-icon-button (click)="onCloseClick()" class="float-right">
+        <img class="dialogclose" src="../../../../../assets/close.svg" />
+      </button>
+    </div>
+  </div>
+  <div mat-dialog-content>
+    <div class="container">
+      <div class="row mt-10">
+        <form style="width: 97%; margin-left: 15px;" [formGroup]="bankdetailform" (submit)="onAddBankDetail($event)">
+          <div class="row mt-4">
+            <div class="col-4">
+              <mat-form-field appearance="fill" class="fullwidth" style="display: initial">
+                <mat-label>name</mat-label>
+                <input type="text" autocomplete="off" matInput placeholder="eg. John" [formControl]="name" />
+                <mat-error *ngIf="name.invalid">{{
+                  getErrorMessage(name)
+                  }}</mat-error>
+              </mat-form-field>
+            </div>
+            <div class="col-4">
+              <mat-form-field appearance="fill" class="fullwidth" style="display: initial">
+                <mat-label>accountnumber</mat-label>
+                <input type="text" autocomplete="off" matInput placeholder="eg. 0123456789" required
+                  [formControl]="accountnumber" />
+                <mat-error *ngIf="accountnumber.invalid">{{
+                  getErrorMessage(accountnumber)
+                  }}</mat-error>
+              </mat-form-field>
+            </div>
+            <div class="col-4">
+              <mat-form-field appearance="fill" class="fullwidth" style="display: initial">
+                <mat-label>bank</mat-label>
+                <input type="text" autocomplete="off" matInput placeholder="bank name" required [formControl]="bank" />
+                <mat-error *ngIf="bank.invalid">{{
+                  getErrorMessage(bank)
+                  }}</mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="row mt-4">
+            <div class="col-4">
+              <mat-form-field appearance="fill" class="fullwidth" style="display: initial">
+                <mat-label>branch</mat-label>
+                <input type="text" autocomplete="off" matInput placeholder="eg. branch name" [formControl]="branch" />
+                <mat-error *ngIf="branch.invalid">{{
+                  getErrorMessage(branch)
+                  }}</mat-error>
+              </mat-form-field>
+            </div>
+            <div class="col-4">
+              <mat-form-field appearance="fill" class="fullwidth" style="display: initial">
+                <mat-label>phonenumber</mat-label>
+                <input type="tel" autocomplete="off" matInput placeholder="eg. 0123456789" required
+                  [formControl]="phonenumber" />
+                <mat-error *ngIf="phonenumber.invalid">{{
+                  getErrorMessage(phonenumber)
+                  }}</mat-error>
+              </mat-form-field>
+            </div>
+            <div class="col-4">
+              <mat-form-field appearance="fill" class="fullwidth" style="display: initial">
+                <mat-label>swiftcode</mat-label>
+                <input type="text" autocomplete="off" matInput placeholder="eg. swiftcode" required
+                  [formControl]="swiftcode" />
+                <mat-error *ngIf="swiftcode.invalid">{{
+                  getErrorMessage(swiftcode)
+                  }}</mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="row mt-4">
+            <div class="col-6">
+              <mat-form-field appearance="fill" class="fullwidth" style="display: initial">
+                <mat-label>bankcode</mat-label>
+                <input type="text" autocomplete="off" matInput placeholder="eg. bankcode" [formControl]="bankcode" />
+                <mat-error *ngIf="bankcode.invalid">{{
+                  getErrorMessage(bankcode)
+                  }}</mat-error>
+              </mat-form-field>
+            </div>
+            <div class="col-6">
+              <mat-form-field appearance="fill" class="fullwidth" style="display: initial">
+                <mat-label>typeofaccount</mat-label>
+                <input type="text" autocomplete="off" matInput placeholder="eg. typeofaccount" required
+                  [formControl]="typeofaccount" />
+                <mat-error *ngIf="typeofaccount.invalid">{{
+                  getErrorMessage(typeofaccount)
+                  }}</mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="row mt-4">
+            <div class="col-12">
+              <button style="float: right" mat-raised-button>Save</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container" [hidden]="data.isbank">
+  <div class="col-3">
+    <img class="image-responsive" src="../../../../../assets/paypal.png" alt="..." />
+  </div>
+  <div class="row">
+    <form [formGroup]="bankdetailform" (submit)="onAddBankDetail($event)">
+      <div class="col-12">
+        <div class="col sm-6 mt-3">
+          <input class="paypalinput" placeholder="eg. pat@example.com" required [formControl]="paypalemail" />
+        </div>
+      </div>
+      <mat-error style="margin-left: 25%" *ngIf="paypalemail.invalid">{{
+        getErrorMessage(paypalemail)
+        }}</mat-error>
+      <div class="col sm-6 mt-3">
+        <button class="buttonpaypal" type="submit">Save</button>
+      </div>
+    </form>
+  </div>
+</div>

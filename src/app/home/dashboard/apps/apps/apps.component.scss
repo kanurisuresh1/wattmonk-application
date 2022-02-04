@@ -1,0 +1,33 @@
+.skeletoncard {
+  width: 98%;
+  border-radius: 8px;
+  background-color: #eeedec;
+  padding: 20px 26px;
+
+  p {
+    font-size: 12px;
+    font-weight: 600;
+  }
+}
+.mat-card-header-text {
+  margin-left: 0% !important;
+}
+
+.card:hover {
+  background-color: #edc773 !important;
+  cursor: pointer;
+}
+
+.heading {
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.card-title {
+  font-size: 12px;
+}
+
+.card-content {
+  font-size: 14px;
+  font-weight: 600;
+}

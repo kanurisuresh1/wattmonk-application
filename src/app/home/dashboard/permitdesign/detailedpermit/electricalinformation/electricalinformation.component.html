@@ -1,0 +1,662 @@
+<form class="designform" [formGroup]="electricalFormGroup">
+  <div class="row mt-2">
+    <div class="col">
+      <div class="form-group formradiogroup fullwidth" [ngClass]="[
+          acdisconnect.invalid && !displayerror ? 'formradiogroup-invalid' : ''
+        ]">
+        <h5>Utility AC Disconnect *</h5>
+        <mat-radio-group name="acdisconnect" aria-label="acdisconnect" [formControl]="acdisconnect" required
+          (change)="radioChange($event)">
+          <div class="row">
+            <div class="col">
+              <mat-radio-button value="true">Yes</mat-radio-button>
+            </div>
+            <div class="col">
+              <mat-radio-button value="false">No</mat-radio-button>
+            </div>
+          </div>
+        </mat-radio-group>
+      </div>
+      <mat-error class="custom-mat-error" [hidden]="displayerror" *ngIf="acdisconnect.invalid">{{
+        getErrorMessage(acdisconnect) }}
+      </mat-error>
+    </div>
+    <div class="col">
+      <div class="form-group formradiogroup fullwidth" [ngClass]="[
+          pvmeter.invalid && !displayerror ? 'formradiogroup-invalid' : ''
+        ]">
+        <h5>PV Meter *</h5>
+        <mat-radio-group name="pvmeter" aria-label="pvmeter" [formControl]="pvmeter" required
+          (change)="radioChange($event)">
+          <div class="row">
+            <div class="col">
+              <mat-radio-button value="true">Yes</mat-radio-button>
+            </div>
+            <div class="col">
+              <mat-radio-button value="false">No</mat-radio-button>
+            </div>
+          </div>
+        </mat-radio-group>
+      </div>
+      <mat-error class="custom-mat-error" [hidden]="displayerror" *ngIf="pvmeter.invalid">{{ getErrorMessage(pvmeter) }}
+      </mat-error>
+    </div>
+    <div class="col">
+      <div class="form-group formradiogroup fullwidth" [ngClass]="[
+          servicefeedsource.invalid && !displayerror
+            ? 'formradiogroup-invalid'
+            : ''
+        ]">
+        <h5>Service feed source *</h5>
+        <mat-radio-group aria-label="servicefeedsource" [formControl]="servicefeedsource" required>
+          <div class="row">
+            <div class="col">
+              <mat-radio-button value="overhead">Overhead</mat-radio-button>
+            </div>
+            <div class="col">
+              <mat-radio-button value="underground">Underground</mat-radio-button>
+            </div>
+          </div>
+        </mat-radio-group>
+      </div>
+      <mat-error class="custom-mat-error" [hidden]="displayerror" *ngIf="servicefeedsource.invalid">{{
+        getErrorMessage(servicefeedsource) }}
+      </mat-error>
+    </div>
+  </div>
+  <div class="row mt-2">
+    <div class="col" *ngIf="!ismpurequired">
+      <div class="form-group formradiogroup fullwidth"
+        [ngClass]="[(msp.invalid && !displayerror) ? 'formradiogroup-invalid' : '']">
+        <h5>MSP * </h5>
+        <mat-radio-group aria-label="msp" [formControl]="msp" required>
+          <div class="row">
+            <div class="col">
+              <mat-radio-button value="existing">Existing</mat-radio-button>
+            </div>
+            <div class="col">
+              <mat-radio-button value="upgraded">New</mat-radio-button>
+            </div>
+          </div>
+        </mat-radio-group>
+      </div>
+      <mat-error class="custom-mat-error" [hidden]="displayerror" *ngIf="msp.invalid">{{ getErrorMessage(msp) }}
+      </mat-error>
+    </div>
+    <div class="col-2">
+      <mat-form-field appearance="fill" class="fullwidth" style="margin-top: 22px">
+        <mat-label>MSP Brand</mat-label>
+        <input type="text" matInput [matAutocomplete]="auto12" [formControl]="mspbrand" required />
+        <mat-error *ngIf="mspbrand.invalid">{{
+          getErrorMessage(mspbrand)
+          }}</mat-error>
+        <mat-autocomplete #auto12="matAutocomplete">
+          <mat-option *ngFor="let msp of filteredmspbrands | async" [value]="msp.name"
+            (onSelectionChange)="setSelectedMSPBrand(msp)">{{ msp.name }}
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+    </div>
+    <div class="col-2">
+      <mat-form-field appearance="fill" class="fullwidth" style="margin-top: 22px">
+        <mat-label>MSP Bus Size (Amp)</mat-label>
+        <input autocomplete="off" type="number" (keyup)="MspBusSize($event)" matInput placeholder="eg. 100"
+          [formControl]="mspsize" required />
+        <mat-error *ngIf="mspsize.invalid">{{
+          getErrorMessage(mspsize)
+          }}</mat-error>
+      </mat-form-field>
+    </div>
+    <div class="col-2" *ngIf="projecttype == 'commercial'">
+      <mat-form-field appearance="fill" class="fullwidth" style="margin-top: 22px">
+        <mat-label> Supply voltage (V)*</mat-label>
+        <mat-select [formControl]="supplyvoltage">
+          <mat-option value="twoforty">240V</mat-option>
+          <mat-option value="twohundredeight">208V</mat-option>
+          <mat-option value="foureighty">480V</mat-option>
+        </mat-select>
+        <mat-error *ngIf="supplyvoltage.invalid">{{
+          getErrorMessage(supplyvoltage)
+          }}</mat-error>
+      </mat-form-field>
+    </div>
+    <div class="col">
+      <mat-form-field appearance="fill" class="fullwidth" style="margin-top: 22px">
+        <mat-label>Main breaker size (Amp)</mat-label>
+        <input autocomplete="off" type="number" matInput placeholder="eg. 100" [formControl]="mainbreakersize"
+          required />
+        <mat-error *ngIf="mainbreakersize.invalid">{{
+          getErrorMessage(mainbreakersize)
+          }}</mat-error>
+      </mat-form-field>
+    </div>
+  </div>
+  <div class="row mt-2" *ngIf="!isjobtypepv">
+    <div class="col">
+      <mat-form-field appearance="fill" class="fullwidth">
+        <mat-label>Battery make*</mat-label>
+        <input type="text" matInput [matAutocomplete]="auto13" [formControl]="batterymake" />
+        <mat-error *ngIf="batterymake.invalid">{{
+          getErrorMessage(batterymake)
+          }}</mat-error>
+        <mat-autocomplete #auto13="matAutocomplete">
+          <mat-option *ngFor="let battery of filteredbatterymakes | async" [value]="battery.name"
+            (onSelectionChange)="setSelectedBatteryMake(battery)">
+            {{ battery.name }}</mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+    </div>
+    <div class="col">
+      <mat-form-field appearance="fill" class="fullwidth">
+        <mat-label>Battery model*</mat-label>
+        <input autocomplete="off" type="text" matInput [matAutocomplete]="auto14" [formControl]="batterymodel" />
+        <mat-error *ngIf="batterymodel.invalid">{{
+          getErrorMessage(batterymodel)
+          }}</mat-error>
+        <mat-autocomplete #auto14="matAutocomplete">
+          <mat-option *ngFor="let battery of filteredbatterymodels | async" [value]="battery.name"
+            (onSelectionChange)="setSelectedBatteryModel(battery)">
+            {{ battery.name }}</mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+    </div>
+    <div class="col">
+      <mat-form-field appearance="fill" class="fullwidth">
+        <mat-label>Number of batteries*</mat-label>
+        <input autocomplete="off" type="number" min="1" matInput placeholder="eg. 12" [formControl]="batteriescount"
+          (change)="batteriescountChange()" />
+        <mat-error *ngIf="batteriescount.invalid">{{
+          getErrorMessage(batteriescount)
+          }}</mat-error>
+      </mat-form-field>
+    </div>
+    <div class="col"></div>
+  </div>
+  <div class="row">
+    <div class="col" *ngIf="batteriescount.value > 1">
+      <div class="form-group formradiogroup fullwidth" [ngClass]="[
+          combinerbox.invalid && !displayerror ? 'formradiogroup-invalid' : ''
+        ]">
+        <h5>Combiner box for batteries? *</h5>
+        <mat-radio-group aria-label="combinerbox" [formControl]="combinerbox" required>
+          <div class="row">
+            <div class="col">
+              <mat-radio-button value="true">Yes</mat-radio-button>
+            </div>
+            <div class="col">
+              <mat-radio-button value="false">No</mat-radio-button>
+            </div>
+          </div>
+        </mat-radio-group>
+      </div>
+      <mat-error class="custom-mat-error" [hidden]="displayerror" *ngIf="combinerbox.invalid">{{
+        getErrorMessage(combinerbox) }}
+      </mat-error>
+    </div>
+    <div class="col">
+      <div class="form-group formradiogroup fullwidth" [ngClass]="[
+          conduitrun.invalid && !displayerror ? 'formradiogroup-invalid' : ''
+        ]">
+        <h5>Conduit run *</h5>
+        <mat-radio-group aria-label="conduitrun" [formControl]="conduitrun" required>
+          <div class="row">
+            <div class="col">
+              <mat-radio-button value="roof">Roof</mat-radio-button>
+            </div>
+            <div class="col">
+              <mat-radio-button value="attic">Attic</mat-radio-button>
+            </div>
+            <div class="col">
+              <mat-radio-button value="groundtrench">Ground(Trench)</mat-radio-button>
+            </div>
+          </div>
+        </mat-radio-group>
+      </div>
+      <mat-error class="custom-mat-error" [hidden]="displayerror" *ngIf="conduitrun.invalid">{{
+        getErrorMessage(conduitrun) }}
+      </mat-error>
+    </div>
+    <div class="col">
+      <div class="form-group formradiogroup fullwidth" [ngClass]="[
+          conduitruntype.invalid && !displayerror
+            ? 'formradiogroup-invalid'
+            : ''
+        ]">
+        <h5>Conduit run type *</h5>
+        <mat-radio-group aria-label="conduitruntype" [formControl]="conduitruntype" required>
+          <div class="row">
+            <div class="col">
+              <mat-radio-button value="emt">EMT</mat-radio-button>
+            </div>
+            <div class="col">
+              <mat-radio-button value="sch80pvc">SCH 80 PVC</mat-radio-button>
+            </div>
+            <div class="col">
+              <mat-radio-button value="sch40pvc">SCH 40 PVC</mat-radio-button>
+            </div>
+          </div>
+        </mat-radio-group>
+      </div>
+      <mat-error class="custom-mat-error" [hidden]="displayerror" *ngIf="conduitruntype.invalid">{{
+        getErrorMessage(conduitruntype) }}
+      </mat-error>
+    </div>
+  </div>
+  <div class="row mt-2">
+    <div class="col">
+      <div class="form-group formradiogroup fullwidth" [ngClass]="[
+          interconnection.invalid && !displayerror
+            ? 'formradiogroup-invalid'
+            : ''
+        ]">
+        <h5>Interconnection *</h5>
+        <mat-radio-group aria-label="interconnection" [formControl]="interconnection" required>
+          <div class="row">
+            <div class="col">
+              <mat-radio-button value="backfed">Backfed</mat-radio-button>
+            </div>
+            <div class="col">
+              <mat-radio-button value="supplysidetap">Supply Side Tap</mat-radio-button>
+            </div>
+            <div class="col">
+              <mat-radio-button value="loadsidetap">Load Side Tap</mat-radio-button>
+            </div>
+            <div class="col">
+              <mat-radio-button value="more">More</mat-radio-button>
+            </div>
+          </div>
+        </mat-radio-group>
+      </div>
+      <mat-error class="custom-mat-error" [hidden]="displayerror" *ngIf="interconnection.invalid">{{
+        getErrorMessage(interconnection) }}
+      </mat-error>
+    </div>
+    <div class="col" *ngIf="interconnection.value == 'more'">
+      <mat-form-field appearance="fill" class="fullwidth" style="margin-top: 22px">
+        <mat-label>Interconnection Detail</mat-label>
+        <input autocomplete="off" matInput placeholder="eg. XYZ" [formControl]="interconnection_input" required />
+        <mat-error *ngIf="interconnection_input.invalid">{{
+          getErrorMessage(interconnection_input)
+          }}</mat-error>
+      </mat-form-field>
+    </div>
+    <div class="col" *ngIf="isSolarEdgeInverterSelected">
+      <mat-form-field appearance="fill" class="fullwidth">
+        <mat-label>Optimizer model*</mat-label>
+        <input type="text" matInput [matAutocomplete]="auto15" [formControl]="optimizermodel" />
+        <mat-error *ngIf="optimizermodel.invalid">{{
+          getErrorMessage(optimizermodel)
+          }}</mat-error>
+        <mat-autocomplete #auto15="matAutocomplete">
+          <mat-option *ngFor="let model of filteredoptimizermodels | async" [value]="model.name"
+            (onSelectionChange)="setSelectedOptimizer(model)">
+            {{ model.name }}</mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+    </div>
+  </div>
+  <div class="row mt-2">
+    <div class="col" *ngIf="
+        isDisplayMode &&
+        this.generateddesign.electricalinformation.mspphotos.length > 0
+      ">
+      <p class="subtitle">MSP Photos</p>
+      <div class="row subbody" *ngFor="let file of this.generateddesign.electricalinformation.mspphotos;let i = index">
+        <div class="col-2">
+          <p class="contentheader" style="margin: 0px;">
+            <img *ngIf="file.ext == '.pdf'" class="material-icons file-icon" src="./../assets/pdf.svg">
+            <img *ngIf="file.ext == '.png'" class="material-icons file-icon" src="./../assets/png.svg">
+            <img *ngIf="file.ext == '.zip'" class="material-icons file-icon" src="./../assets/zip.svg">
+            <img *ngIf="file.ext == '.doc'" class="material-icons file-icon" src="./../assets/doc.svg">
+            <img *ngIf="file.ext == '.docx'" class="material-icons file-icon" src="./../assets/doc.svg">
+            <img *ngIf="file.ext == '.odt'" class="material-icons file-icon" src="./../assets/pdf.svg">
+            <img *ngIf="file.ext == '.rtf'" class="material-icons file-icon" src="./../assets/rtf.svg">
+            <img *ngIf="file.ext == '.txt'" class="material-icons file-icon" src="./../assets/txt.svg">
+            <img
+              *ngIf="file.ext !== '.png' && file.ext !== '.pdf' && file.ext !== '.zip' && file.ext !== '.doc' && file.ext !== '.docx' && file.ext !== '.odt' && file.ext !== '.rtf' && file.ext !== '.txt'"
+              class="material-icons file-icon" src="./../assets/file.svg">
+
+          </p>
+        </div>
+        <div class="col-7">
+          <a href="{{file.url}}" target="_blank" class="contentvalue float-right" style="margin-top: 8px;">{{ file.name
+            | uppercase }}</a>
+        </div>
+        <div class="col-3">
+          <span class="float-right delete-btn" (click)="onDeleteMspphotos(file.id,i)"><img
+              src="../../../../../assets/delete.svg" class="dialogclose"></span>
+        </div>
+      </div>
+    </div>
+    <div class="col" *ngIf="!isDisplayMode" [ngStyle]="
+        isEditMode ? { 'margin-right': '16px' } : { 'margin-right': '0px' }
+      ">
+      <div class="row architectureuploadrow">
+        <div class="col align-items-center">
+          <mat-error [hidden]="displayerror" style="font-size: 10px; margin-left: 16px">You have to upload file.
+          </mat-error>
+          <div class="multiple-dropzone" style="width: 100%; margin-bottom: 16px;" ngx-dropzone [multiple]="true"
+            [disabled]="electricalFormGroup.disabled" (change)="onMspPhotosSelect($event)" accept="image/*">
+            <ngx-dropzone-label>
+              <div>
+                <img class="addimage" src="../../../../../assets/add.svg" />
+                <h5>Drag and drop or click to browse MSP Photos.</h5>
+              </div>
+            </ngx-dropzone-label>
+            <div *ngFor="let f of mspphotos">
+              {{ f.type }}
+              <ngx-dropzone-preview *ngIf="!f.isImage" class="imagepreview" ngProjectAs="ngx-dropzone-preview"
+                [file]="f" [removable]="true" (removed)="onMspPhotosRemove(f)">
+                <ngx-dropzone-label class="previewlabel">{{ f.name }} ({{ f.type }})</ngx-dropzone-label>
+              </ngx-dropzone-preview>
+              <ngx-dropzone-image-preview *ngIf="f.isImage" class="imagepreview" ngProjectAs="ngx-dropzone-preview"
+                [file]="f" [removable]="true" (removed)="onMspPhotosRemove(f)">
+              </ngx-dropzone-image-preview>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col" *ngIf="
+        isDisplayMode &&
+        this.generateddesign.electricalinformation.subpanelphotos.length > 0
+      ">
+      <p class="subtitle">Subpanel Photos</p>
+      <div class="row subbody"
+        *ngFor="let file of this.generateddesign.electricalinformation.subpanelphotos;let i = index">
+        <div class="col-2">
+          <p class="contentheader" style="margin: 0px;">
+            <img *ngIf="file.ext == '.pdf'" class="material-icons file-icon" src="./../assets/pdf.svg">
+            <img *ngIf="file.ext == '.png'" class="material-icons file-icon" src="./../assets/png.svg">
+            <img *ngIf="file.ext == '.zip'" class="material-icons file-icon" src="./../assets/zip.svg">
+            <img *ngIf="file.ext == '.doc'" class="material-icons file-icon" src="./../assets/doc.svg">
+            <img *ngIf="file.ext == '.docx'" class="material-icons file-icon" src="./../assets/doc.svg">
+            <img *ngIf="file.ext == '.odt'" class="material-icons file-icon" src="./../assets/pdf.svg">
+            <img *ngIf="file.ext == '.rtf'" class="material-icons file-icon" src="./../assets/rtf.svg">
+            <img *ngIf="file.ext == '.txt'" class="material-icons file-icon" src="./../assets/txt.svg">
+            <img
+              *ngIf="file.ext !== '.png' && file.ext !== '.pdf' && file.ext !== '.zip' && file.ext !== '.doc' && file.ext !== '.docx' && file.ext !== '.odt' && file.ext !== '.rtf' && file.ext !== '.txt'"
+              class="material-icons file-icon" src="./../assets/file.svg">
+
+          </p>
+        </div>
+        <div class="col-7">
+          <a href="{{file.url}}" target="_blank" class="contentvalue float-right" style="margin-top: 8px;">{{ file.name
+            | uppercase }}</a>
+        </div>
+        <div class="col-3">
+          <span class="float-right delete-btn" (click)="onDeleteSubpanelphotos(file.id,i)"><img
+              src="../../../../../assets/delete.svg" class="dialogclose"></span>
+        </div>
+      </div>
+    </div>
+    <div class="col" *ngIf="!isDisplayMode" [ngStyle]="
+        isEditMode ? { 'margin-right': '16px' } : { 'margin-right': '0px' }
+      ">
+      <div class="row architectureuploadrow">
+        <div class="col align-items-center">
+          <mat-error [hidden]="displayerror" style="font-size: 10px; margin-left: 16px">You have to upload file.
+          </mat-error>
+          <div class="multiple-dropzone" style="width: 100%; margin-bottom: 16px;" ngx-dropzone [multiple]="true"
+            [disabled]="electricalFormGroup.disabled" (change)="onSubpanelPhotosSelect($event)" accept="image/*">
+            <ngx-dropzone-label>
+              <div>
+                <img class="addimage" src="../../../../../assets/add.svg" />
+                <h5>Drag and drop or click to browse Subpanel photos.</h5>
+              </div>
+            </ngx-dropzone-label>
+            <div *ngFor="let f of subpanelphotos">
+              {{ f.type }}
+              <ngx-dropzone-preview *ngIf="!f.isImage" class="imagepreview" ngProjectAs="ngx-dropzone-preview"
+                [file]="f" [removable]="true" (removed)="onSubpanelPhotosRemove(f)">
+                <ngx-dropzone-label class="previewlabel">{{ f.name }} ({{ f.type }})</ngx-dropzone-label>
+              </ngx-dropzone-preview>
+              <ngx-dropzone-image-preview *ngIf="f.isImage" class="imagepreview" ngProjectAs="ngx-dropzone-preview"
+                [file]="f" [removable]="true" (removed)="onSubpanelPhotosRemove(f)">
+              </ngx-dropzone-image-preview>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col" *ngIf="
+        isDisplayMode &&
+        this.generateddesign.electricalinformation.singlelinediagram.length > 0
+      ">
+      <p class="subtitle">Single Line Diagram</p>
+      <div class="row subbody"
+        *ngFor="let file of this.generateddesign.electricalinformation.singlelinediagram;let i = index">
+        <div class="col-2">
+          <p class="contentheader" style="margin: 0px;">
+            <img *ngIf="file.ext == '.pdf'" class="material-icons file-icon" src="./../assets/pdf.svg">
+            <img *ngIf="file.ext == '.png'" class="material-icons file-icon" src="./../assets/png.svg">
+            <img *ngIf="file.ext == '.zip'" class="material-icons file-icon" src="./../assets/zip.svg">
+            <img *ngIf="file.ext == '.doc'" class="material-icons file-icon" src="./../assets/doc.svg">
+            <img *ngIf="file.ext == '.docx'" class="material-icons file-icon" src="./../assets/doc.svg">
+            <img *ngIf="file.ext == '.odt'" class="material-icons file-icon" src="./../assets/pdf.svg">
+            <img *ngIf="file.ext == '.rtf'" class="material-icons file-icon" src="./../assets/rtf.svg">
+            <img *ngIf="file.ext == '.txt'" class="material-icons file-icon" src="./../assets/txt.svg">
+            <img
+              *ngIf="file.ext !== '.png' && file.ext !== '.pdf' && file.ext !== '.zip' && file.ext !== '.doc' && file.ext !== '.docx' && file.ext !== '.odt' && file.ext !== '.rtf' && file.ext !== '.txt'"
+              class="material-icons file-icon" src="./../assets/file.svg">
+
+          </p>
+        </div>
+        <div class="col-7">
+          <a href="{{file.url}}" target="_blank" class="contentvalue float-right" style="margin-top: 8px;">{{ file.name
+            | uppercase }}</a>
+        </div>
+        <div class="col-3">
+          <span class="float-right delete-btn" (click)="onDeleteSinglelinediagram(file.id,i)"><img
+              src="../../../../../assets/delete.svg" class="dialogclose"></span>
+        </div>
+      </div>
+    </div>
+    <div class="col" *ngIf="!isDisplayMode" [ngStyle]="
+        isEditMode ? { 'margin-right': '16px' } : { 'margin-right': '0px' }
+      ">
+      <div class="row architectureuploadrow">
+        <div class="col align-items-center">
+          <mat-error [hidden]="displayerror" style="font-size: 10px; margin-left: 16px">You have to upload file.
+          </mat-error>
+          <div class="multiple-dropzone" style="width: 100%; margin-bottom: 16px;" ngx-dropzone [multiple]="false"
+            [disabled]="electricalFormGroup.disabled" (change)="onSingleLinePhotosSelect($event)" accept="image/*">
+            <ngx-dropzone-label>
+              <div>
+                <img class="addimage" src="../../../../../assets/add.svg" />
+                <h5>
+                  Drag and drop or click to browse sketch of Single Line
+                  Diagram.
+                </h5>
+              </div>
+            </ngx-dropzone-label>
+            <div *ngFor="let f of singlelinephotos">
+              {{ f.type }}
+              <ngx-dropzone-preview *ngIf="!f.isImage" class="imagepreview" ngProjectAs="ngx-dropzone-preview"
+                [file]="f" [removable]="true" (removed)="onSingleLinePhotosRemove(f)">
+                <ngx-dropzone-label class="previewlabel">{{ f.name }} ({{ f.type }})</ngx-dropzone-label>
+              </ngx-dropzone-preview>
+              <ngx-dropzone-image-preview *ngIf="f.isImage" class="imagepreview" ngProjectAs="ngx-dropzone-preview"
+                [file]="f" [removable]="true" (removed)="onSingleLinePhotosRemove(f)">
+              </ngx-dropzone-image-preview>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <mat-form-field appearance="fill" class="fullwidth">
+        <mat-label>Comments</mat-label>
+        <textarea style="min-height: 94px" matInput placeholder="Start typing here..."
+          [formControl]="electricalcomments"></textarea>
+      </mat-form-field>
+    </div>
+  </div>
+</form>
+<!--
+      <div class="col">
+        <div class="row">
+          <p>OTHER DETAILS</p>
+        </div>
+        <div class="row">
+          <mat-form-field appearance="fill" class="ninetywidth">
+            <mat-label>comments</mat-label>
+            <textarea matInput placeholder="Ex. Start typing here..."
+              [formControl]="electricalcomments"></textarea>
+          </mat-form-field>
+        </div>
+      </div>
+    </div>
+    <div class="row designrow mt-4">
+      <p>UPLOAD AREA</p>
+    </div>
+    <div class="row uploadrow">
+      <div class="col-4 align-items-center">
+        <div *ngIf="isEditMode && this.generateddesign.electricalinformation.mspphotos.length > 0">
+          <div class="row  mt-3">
+            <p>MSP PHOTOS</p>
+          </div>
+          <div class="row pdfselectionpreview align-items-center"
+            *ngFor="let file of this.generateddesign.electricalinformation.mspphotos; let i = index">
+            <div class="col-2 pdfpreviewcol">
+              <img *ngIf="file.ext == '.pdf'" class="material-icons file-icon" src="./../assets/pdf.svg">
+                    <img *ngIf="file.ext == '.png'" class="material-icons file-icon" src="./../assets/png.svg">
+                    <img *ngIf="file.ext == '.zip'" class="material-icons file-icon" src="./../assets/zip.svg">
+                    <img *ngIf="file.ext == '.doc'" class="material-icons file-icon" src="./../assets/doc.svg">
+                    <img *ngIf="file.ext == '.docx'" class="material-icons file-icon" src="./../assets/doc.svg">
+                    <img *ngIf="file.ext == '.odt'" class="material-icons file-icon" src="./../assets/pdf.svg">
+                    <img *ngIf="file.ext == '.rtf'" class="material-icons file-icon" src="./../assets/rtf.svg">
+                    <img *ngIf="file.ext == '.txt'" class="material-icons file-icon" src="./../assets/txt.svg">
+                    <img *ngIf="file.ext != '.png' && file.ext != '.pdf' && file.ext != '.zip' && file.ext != '.doc' && file.ext != '.docx' && file.ext != '.odt' && file.ext != '.rtf' && file.ext != '.txt'" class="material-icons file-icon" src="./../assets/file.svg">
+            </div>
+            <div class="col-6">
+              <p>{{(file.name.length>26)? (file.name | slice:0:26)+'..':(file.name)}}</p>
+            </div>
+            <div class="col-4">
+              <button class="float-right bluebutton" mat-raised-button
+                (click)="onRemoveMSPPhotos(file, i)">Remove</button>
+            </div>
+          </div>
+        </div>
+        <div class="multiple-dropzone" ngx-dropzone [multiple]="true" (change)="onMspPhotosSelect($event)">
+          <ngx-dropzone-label>
+            <div>
+              <img class="addimage" src="../../../../../assets/add.svg">
+              <h5>Drag and drop or click to browse MSP photos.</h5>
+            </div>
+          </ngx-dropzone-label>
+          <div *ngFor="let f of mspphotos">
+            {{ f.type }}
+            <ngx-dropzone-preview *ngIf="!f.isImage" class="imagepreview" ngProjectAs="ngx-dropzone-preview"
+             [file]="f" [removable]="true"
+            (removed)="onMspPhotosRemove(f)">
+            <ngx-dropzone-label class="previewlabel">{{ f.name }} ({{ f.type }})</ngx-dropzone-label>
+            </ngx-dropzone-preview>
+            <ngx-dropzone-image-preview *ngIf="f.isImage" class="imagepreview" ngProjectAs="ngx-dropzone-preview"
+              [file]="f" [removable]="true" (removed)="onMspPhotosRemove(f)">
+            </ngx-dropzone-image-preview>
+          </div>
+        </div>
+        <mat-error class="formerror" [hidden]="mspfilesuploaded">You have to upload file.</mat-error>
+      </div>
+      <div class="col-4 align-items-center">
+        <div *ngIf="isEditMode && this.generateddesign.electricalinformation.subpanelphotos.length > 0">
+          <div class="row  mt-3">
+            <p>SUBPANEL PHOTOS</p>
+          </div>
+          <div class="row pdfselectionpreview align-items-center"
+            *ngFor="let file of this.generateddesign.electricalinformation.subpanelphotos; let i = index">
+            <div class="col-2 pdfpreviewcol">
+              <img *ngIf="file.ext == '.pdf'" class="material-icons file-icon" src="./../assets/pdf.svg">
+                    <img *ngIf="file.ext == '.png'" class="material-icons file-icon" src="./../assets/png.svg">
+                    <img *ngIf="file.ext == '.zip'" class="material-icons file-icon" src="./../assets/zip.svg">
+                    <img *ngIf="file.ext == '.doc'" class="material-icons file-icon" src="./../assets/doc.svg">
+                    <img *ngIf="file.ext == '.docx'" class="material-icons file-icon" src="./../assets/doc.svg">
+                    <img *ngIf="file.ext == '.odt'" class="material-icons file-icon" src="./../assets/pdf.svg">
+                    <img *ngIf="file.ext == '.rtf'" class="material-icons file-icon" src="./../assets/rtf.svg">
+                    <img *ngIf="file.ext == '.txt'" class="material-icons file-icon" src="./../assets/txt.svg">
+                    <img *ngIf="file.ext != '.png' && file.ext != '.pdf' && file.ext != '.zip' && file.ext != '.doc' && file.ext != '.docx' && file.ext != '.odt' && file.ext != '.rtf' && file.ext != '.txt'" class="material-icons file-icon" src="./../assets/file.svg">
+            </div>
+            <div class="col-6">
+              <p>{{(file.name.length>26)? (file.name | slice:0:26)+'..':(file.name)}}</p>
+            </div>
+            <div class="col-4">
+              <button class="float-right bluebutton" mat-raised-button
+                (click)="onRemoveSubpanelPhotos(file, i)">Remove</button>
+            </div>
+          </div>
+        </div>
+        <div class="multiple-dropzone" ngx-dropzone [multiple]="true" (change)="onSubpanelPhotosSelect($event)">
+          <ngx-dropzone-label>
+            <div>
+              <img class="addimage" src="../../../../../assets/add.svg">
+              <h5>Drag and drop or click to browse Subpanel photos.</h5>
+            </div>
+          </ngx-dropzone-label>
+          <div *ngFor="let f of subpanelphotos">
+            {{ f.type }}
+            <ngx-dropzone-preview *ngIf="!f.isImage" class="imagepreview" ngProjectAs="ngx-dropzone-preview"
+             [file]="f" [removable]="true"
+            (removed)="onSubpanelPhotosRemove(f)">
+            <ngx-dropzone-label class="previewlabel">{{ f.name }} ({{ f.type }})</ngx-dropzone-label>
+            </ngx-dropzone-preview>
+            <ngx-dropzone-image-preview *ngIf="f.isImage" class="imagepreview" ngProjectAs="ngx-dropzone-preview"
+              [file]="f" [removable]="true" (removed)="onSubpanelPhotosRemove(f)">
+            </ngx-dropzone-image-preview>
+          </div>
+        </div>
+        <mat-error class="formerror" [hidden]="subpanelsfilesuploaded">You have to upload file.</mat-error>
+      </div>
+      <div class="col-4 align-items-center">
+        <div *ngIf="isEditMode && this.generateddesign.electricalinformation.singlelinediagram.length > 0">
+          <div class="row  mt-3">
+            <p>SINGLE LINE DIAGRAM</p>
+          </div>
+          <div class="row pdfselectionpreview align-items-center"
+            *ngFor="let file of this.generateddesign.electricalinformation.singlelinediagram; let i = index">
+            <div class="col-2 pdfpreviewcol">
+              <img *ngIf="file.ext == '.pdf'" class="material-icons file-icon" src="./../assets/pdf.svg">
+                    <img *ngIf="file.ext == '.png'" class="material-icons file-icon" src="./../assets/png.svg">
+                    <img *ngIf="file.ext == '.zip'" class="material-icons file-icon" src="./../assets/zip.svg">
+                    <img *ngIf="file.ext == '.doc'" class="material-icons file-icon" src="./../assets/doc.svg">
+                    <img *ngIf="file.ext == '.docx'" class="material-icons file-icon" src="./../assets/doc.svg">
+                    <img *ngIf="file.ext == '.odt'" class="material-icons file-icon" src="./../assets/pdf.svg">
+                    <img *ngIf="file.ext == '.rtf'" class="material-icons file-icon" src="./../assets/rtf.svg">
+                    <img *ngIf="file.ext == '.txt'" class="material-icons file-icon" src="./../assets/txt.svg">
+                    <img *ngIf="file.ext != '.png' && file.ext != '.pdf' && file.ext != '.zip' && file.ext != '.doc' && file.ext != '.docx' && file.ext != '.odt' && file.ext != '.rtf' && file.ext != '.txt'" class="material-icons file-icon" src="./../assets/file.svg">
+            </div>
+            <div class="col-6">
+              <p>{{(file.name.length>26)? (file.name | slice:0:26)+'..':(file.name)}}</p>
+            </div>
+            <div class="col-4">
+              <button class="float-right bluebutton" mat-raised-button
+                (click)="onRemoveSingleLineDiagramPhotos(file, i)">Remove</button>
+            </div>
+          </div>
+        </div>
+        <div class="multiple-dropzone" ngx-dropzone [multiple]="false"
+          (change)="onSingleLinePhotosSelect($event)">
+          <ngx-dropzone-label>
+            <div>
+              <img class="addimage" src="../../../../../assets/add.svg">
+              <h5>Drag and drop or click to browse sketch of Single Line Diagram.</h5>
+            </div>
+          </ngx-dropzone-label>
+          <div *ngFor="let f of singlelinephotos">
+            {{ f.type }}
+            <ngx-dropzone-preview *ngIf="!f.isImage" class="imagepreview" ngProjectAs="ngx-dropzone-preview"
+             [file]="f" [removable]="true"
+            (removed)="onSingleLinePhotosRemove(f)">
+            <ngx-dropzone-label class="previewlabel">{{ f.name }} ({{ f.type }})</ngx-dropzone-label>
+            </ngx-dropzone-preview>
+            <ngx-dropzone-image-preview *ngIf="f.isImage" class="imagepreview" ngProjectAs="ngx-dropzone-preview"
+              [file]="f" [removable]="true" (removed)="onSingleLinePhotosRemove(f)">
+            </ngx-dropzone-image-preview>
+          </div>
+        </div>
+        <mat-error class="formerror" [hidden]="sketchlinefileuploaded">You have to upload file.</mat-error>
+      </div>
+    </div>
+  </form> -->

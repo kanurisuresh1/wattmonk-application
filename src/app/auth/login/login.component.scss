@@ -1,0 +1,67 @@
+.loginbackground {
+  background-color: #fbf9f4;
+  .visibility {
+    top: 3px;
+  }
+}
+
+.brandrow {
+  margin-left: 0px;
+  margin-top: -50px;
+  p {
+    font-weight: 600;
+    font-size: 16px;
+    margin-top: 20%;
+  }
+
+  img {
+    margin-right: 8px;
+  }
+}
+
+.logincard {
+  padding: 48px;
+
+  .mat-card-title {
+    font-size: 24px;
+    font-weight: 600;
+    line-height: 32px;
+  }
+
+  .loginform {
+    padding: 0px 8px;
+    margin-top: 20px;
+
+    p {
+      margin-bottom: 4px;
+      color: #3c4257;
+      font-size: 12px;
+    }
+
+    .mediumtext {
+      font-size: 0.7rem;
+      color: #3c4257;
+    }
+  }
+}
+
+.actionlink {
+  color: rgb(241, 173, 26);
+}
+
+.actionlink:hover {
+  text-decoration: none;
+}
+
+.registrationtext {
+  color: #3c4257;
+  font-size: 13px;
+}
+
+.footerrow {
+  bottom: 16px;
+  span {
+    font-size: 12px;
+    color: #3c4257;
+  }
+}

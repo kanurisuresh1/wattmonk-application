@@ -1,0 +1,21 @@
+.example-button-row {
+  display: table-cell;
+  width: 490px;
+}
+
+.example-button-row .mat-button-base {
+  margin: 8px 8px 8px 0;
+}
+
+.highlightedtext {
+  text-align: right;
+  color: #666666;
+  font-size: 12px;
+}
+
+.superhighlightedtext {
+  text-align: right;
+  font-weight: 600;
+  color: #000000;
+  font-size: 15px;
+}

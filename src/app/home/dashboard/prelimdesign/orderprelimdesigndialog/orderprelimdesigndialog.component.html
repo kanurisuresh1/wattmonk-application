@@ -1,0 +1,350 @@
+<div *ngIf="isLoading || ispaymentLoading">
+  <mat-spinner
+    style="margin: auto; margin-top: 16px"
+    [diameter]="50"
+  ></mat-spinner>
+</div>
+<div class="container">
+  <div class="row" *ngIf="!isLoading && !ispaymentLoading">
+    <div class="col-8">
+      <h4 class="orderformtitle">Order Details</h4>
+    </div>
+    <div class="col-4">
+      <button mat-icon-button (click)="onCloseClick()" class="float-right">
+        <img
+          class="dialogclose"
+          src="../../../../../assets/close.svg"
+          style="font-weight: bold"
+        />
+      </button>
+    </div>
+  </div>
+</div>
+<div mat-dialog-content>
+  <div class="container" *ngIf="!isLoading && !ispaymentLoading">
+    <div class="row">
+      <div>
+        <img class="sidecardicon" src="../../../../../assets/Group 2254.svg" />
+      </div>
+      <div>
+        <h5
+          class="orderformsubtitle"
+          *ngIf="data.design.requirementtype == 'proposal'"
+        >
+          Sales Proposal
+        </h5>
+        <h5
+          class="orderformsubtitle"
+          *ngIf="data.design.requirementtype == 'assessment'"
+        >
+          Site Assessment
+        </h5>
+      </div>
+    </div>
+    <div class="row mt-3">
+      <div class="col">
+        <p
+          *ngIf="!loggedinuser.parent.ispaymentmodeprepay"
+          style="font-size: 13px; color: #666666"
+        >
+          Design request purchase will be add to your monthly invoice. Please
+          find below the summary of your purchase.
+        </p>
+      </div>
+    </div>
+    <div class="row mt-3">
+      <div class="col">
+        <div class="row">
+          <div class="col">
+            <p class="ordertext">Service Charges:</p>
+          </div>
+          <div class="col">
+            <p class="highlightedtext">${{ servicecharge.toFixed(2) }}</p>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">
+            <p class="ordertext">Discount:</p>
+          </div>
+          <div class="col">
+            <p class="highlightedtext">${{ discountamount.toFixed(2) }}</p>
+          </div>
+        </div>
+        <div
+          class="row"
+          *ngIf="userdesignscount >= genericService.numberoffreedesign"
+        >
+          <div class="col coupon-applied" *ngIf="iscoupanapplied">
+            <h4 style="font-size: small; font-weight: 600">
+              {{ appliedcoupan.code }}
+              <span
+                ><button
+                  mat-icon-button
+                  (click)="OnRemoveCoupan()"
+                  style="font-size: xxx-large"
+                >
+                  <img
+                    style="width: 10px; margin-top: 18px"
+                    src="../../../../../assets/close.svg"
+                  />
+                </button>
+              </span>
+            </h4>
+            <p
+              *ngIf="invalidcouponmessage"
+              style="color: red; font-size: 12px; margin: 0px"
+            >
+              {{ invalidcouponmessage }}
+            </p>
+          </div>
+          <div class="col" *ngIf="!iscoupanapplied && !NoActivecoupan">
+            <button
+              mat-button
+              (click)="openapplypromocodedialog()"
+              style="padding: 0px"
+            >
+              Have a promocode ?
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row mt-4">
+      <div class="col">
+        <div class="row">
+          <div class="col">
+            <p class="ordersubtitle">Total Amount:</p>
+          </div>
+          <div class="col">
+            <p class="highlightedamount">${{ amounttopay.toFixed(2) }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<section
+  *ngIf="
+    loggedinuser.parent.ispaymentmodeprepay && !isLoading && !ispaymentLoading
+  "
+>
+  <mat-dialog-actions>
+    <div
+      class="example-button-row mt-2"
+      *ngIf="
+        walletamount < amounttopay &&
+        (loggedinuser.role.id == 6 || loggedinuser.role.id == 7)
+      "
+    >
+      <div class="row mt-2">
+        <div class="col">
+          <div class="row mx-1">
+            <div class="col" style="padding-left: 11px">
+              <p class="ordersubtitle">Payment Option:</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="row mb-2"
+        *ngIf="
+          loggedinuser.parent.ispaymentmodeprepay &&
+          (loggedinuser.role.id == 6 || loggedinuser.role.id == 7)
+        "
+      >
+        <div class="row" style="margin: 10px 0 0px 13px; width: 100%">
+          <button
+            mat-stroked-button
+            class="col balancebtn"
+            (click)="openAddMoneyUsingPaypal()"
+          >
+            <div class="row">
+              <div class="col">
+                <p style="margin-bottom: -6px; margin-top: 17px">Paypal</p>
+              </div>
+              <div class="col" style="display: flex; justify-content: flex-end">
+                <img
+                  class="balanceimg1"
+                  src="../../../../../assets/paypal-seeklogo.com.svg"
+                />
+              </div>
+            </div>
+          </button>
+        </div>
+        <div class="row" style="margin: 10px 0 15px 10px; width: 100%">
+          <button
+            mat-stroked-button
+            class="w-100 balancebtn"
+            (click)="openAddMoneyToWalletDialogpaypal(1)"
+          >
+            <div class="row">
+              <div class="col">
+                <p style="margin-bottom: -6px">Wallet</p>
+                <p>Available bal: ${{ walletamount.toFixed(2) }}</p>
+              </div>
+              <div
+                class="col"
+                style="
+                  display: flex;
+                  justify-content: flex-end;
+                  align-items: center;
+                "
+              >
+                <img
+                  class="balanceimg2"
+                  src="../../../../../assets/Group 2274.svg"
+                />
+              </div>
+            </div>
+          </button>
+        </div>
+      </div>
+    </div>
+    <p
+      class="subtitle"
+      *ngIf="
+        loggedinuser.role.id != 6 &&
+        loggedinuser.role.id != 7 &&
+        loggedinuser.parent.amount < amounttopay
+      "
+      style="color: red; font-size: 12px"
+    >
+      Insufficent Amount
+    </p>
+    <button
+      class="w-100 mt-2 mb-4"
+      mat-raised-button
+      mat-button
+      *ngIf="walletamount >= amounttopay"
+      (click)="onConfirmationClick()"
+    >
+      Confirm
+    </button>
+  </mat-dialog-actions>
+</section>
+
+<section *ngIf="!loggedinuser.parent.ispaymentmodeprepay">
+  <mat-dialog-actions>
+    <button
+      class="w-100 mt-2 mb-4"
+      mat-raised-button
+      mat-button
+      (click)="onProceedClick()"
+    >
+      Confirm
+    </button>
+  </mat-dialog-actions>
+</section>
+
+<!-- <div class="container">
+  <div class="row">
+    <div class="col-8">
+      <h4 class="dialogformtitle">Confirm your order</h4>
+    </div>
+    <div class="col-4" style="padding-right: 0px;">
+      <button mat-icon-button (click)="onCloseClick()" class="float-right">
+        <img class="dialogclose" src="../../../../../assets/close.svg" />
+      </button>
+    </div>
+  </div>
+</div>
+
+<div mat-dialog-content>
+  <div *ngIf="isLoading || ispaymentLoading">
+    <mat-spinner style=" margin: auto; margin-top: 16px;" [diameter]="50"></mat-spinner>
+  </div>
+  <div class="container" *ngIf="!isLoading && !ispaymentLoading">
+    <div class="row mt-2">
+      <div class="col">
+        <p *ngIf="loggedinuser.parent.ispaymentmodeprepay" style="font-size: 13px; color: #666666;">Please make the
+          payment to
+          process your design request with WattMonk.</p>
+        <p *ngIf="!loggedinuser.parent.ispaymentmodeprepay" style="font-size: 13px; color: #666666;">On confirmation,
+          your
+          design request purchase will be add to your monthly invoice. Please find below the summary of your purchase.
+        </p>
+      </div>
+    </div>
+    <div class="row mt-4">
+      <div class="col">
+        <div class="row">
+          <div class="col">
+            <p class="subtitle" style="color: #666666; font-size: 12px;">Service Charges</p>
+          </div>
+          <div class="col">
+            <p class="highlightedtext">${{servicecharge}}</p>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">
+            <p class="subtitle" style="color: #666666; font-size: 12px;">Discount</p>
+          </div>
+          <div class="col">
+            <p class="highlightedtext">${{discountamount}}</p>
+          </div>
+        </div>
+        <div class="row" *ngIf="userdesignscount >= genericService.numberoffreedesign">
+          <div class="col coupon-applied" *ngIf="iscoupanapplied">
+            <h4 style="font-size: small; font-weight: 600;">{{appliedcoupan.code}}
+              <span><button mat-icon-button (click)="OnRemoveCoupan()" style="font-size: xxx-large;">
+                  <img style="width: 10px;
+                  margin-top: 18px;" src="../../../../../assets/close.svg" />
+                </button>
+              </span>
+            </h4>
+          </div>
+          <div class="col" *ngIf="!iscoupanapplied && !NoActivecoupan && data.requiremnttype=='assessment'">
+            <button class="coupon-text" mat-button (click)="openapplypromocodedialog()">Have a promocode ?</button>
+          </div>
+        </div>
+        <div class="row mt-2">
+          <div class="col">
+            <div style="height: 1px; background-color: #A5A9ABAA;"></div>
+          </div>
+        </div>
+        <div class="row mt-3">
+          <div class="col">
+            <p style="color: #000000; font-size: 15px; font-weight: 600;">You have to pay</p>
+          </div>
+          <div class="col">
+            <p class="superhighlightedtext">${{amounttopay.toFixed(2)}}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row mb-4" *ngIf="loggedinuser.parent.ispaymentmodeprepay && loggedinuser.role.id==6">
+      <div class="col">
+        <div class="row" style="background-color: #DFEFFD; border-radius: 10px;">
+          <div class="col">
+            <p class="subtitle" style="color: #667785; font-size: 12px; margin: 5px 0px !important;">Amount in wallet
+            </p>
+          </div>
+          <div class="col">
+            <p class="highlightedtext" style="color: #667785; margin: 5px 0px !important;">${{walletamount.toFixed(2)}}
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<section *ngIf="loggedinuser.parent.ispaymentmodeprepay">
+  <mat-dialog-actions align="end">
+    <div class="example-button-row"
+      *ngIf="walletamount < amounttopay && (loggedinuser.role.id==6 ||loggedinuser.role.id==7)">
+      <button mat-raised-button (click)="openAddMoneyToWalletDialogpaypal(1)">Add money to wallet </button>
+      <button mat-raised-button (click)='openAddMoneyUsingPaypal()'>Pay via Paypal</button>
+    </div>
+    <p class="subtitle"
+      *ngIf='(loggedinuser.role.id!=6 && loggedinuser.role.id !=7) && loggedinuser.parent.amount < amounttopay'
+      style="color: #667785; font-size: 12px; ">Insufficent Amount</p>
+    <button *ngIf="walletamount >= amounttopay" mat-raised-button mat-button
+      (click)="onConfirmationClick()">Confirm</button>
+  </mat-dialog-actions>
+</section>
+<section *ngIf="!loggedinuser.parent.ispaymentmodeprepay">
+  <mat-dialog-actions align="end">
+    <button mat-raised-button mat-button (click)="onProceedClick()">Confirm</button>
+  </mat-dialog-actions>
+</section> -->

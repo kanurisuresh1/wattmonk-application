@@ -1,0 +1,212 @@
+<div class="col taskcontainer">
+  <div
+    class="row-mt-1"
+    style="display: flex; font-size: 12px; font-weight: 600"
+  >
+    <div class="col-12">
+      <div class="row" style="padding-left: 15px">
+        <div
+          class="col-6"
+          style="
+            font-size: 16px;
+            display: flex;
+            align-self: center;
+            padding-left: 0px;
+          "
+        >
+          Total Design {{ joblist.length }}
+        </div>
+        <div class="col-5 mt-2 search">
+          <input
+            class="search__input"
+            [(ngModel)]="searchTerm"
+            placeholder="Search here"
+            (ngModelChange)="search()"
+          />
+          <!-- <i style="cursor: pointer;" class="material-icons" >search</i> -->
+        </div>
+        <div class="col-1" style="padding-right: 0px; margin-top: 0.2rem">
+          <button mat-icon-button (click)="onCloseClick()" class="float-right">
+            <img class="dialogclose" src="../../../../../assets/close.svg" />
+          </button>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-2">
+          <h4
+            style="background-color: #edc773; padding: 1px; border-radius: 5px"
+          >
+            <img
+              style="height: 14px; padding-bottom: 2px; margin-left: 5px"
+              src="../../../../../assets/newrevision.svg"
+            /><span> {{ revisionJobs }}</span>
+          </h4>
+        </div>
+        <!-- {width:12vh} : {(revisionJobs > 99 ? {width:16vh} : {width:10vh})} -->
+        <div class="col-2">
+          <h4 style="background-color: #edc773; border-radius: 5px">
+            <img
+              style="height: 26px; padding-top: 4px; padding-left: 6px"
+              src="../../../../../assets/Polygon 32.svg"
+            /><span>{{ otherJobs }}</span>
+          </h4>
+        </div>
+      </div>
+    </div>
+    <!-- <div class="col-6">
+            <div class="row text-right">
+                <div class="col-12">
+                    Shift Time
+                </div>
+                <div class="col-12">
+                    10:00 AM
+                </div>
+            </div>
+        </div> -->
+  </div>
+  <!-- <mat-divider style="background-color: white;"></mat-divider> -->
+  <div class="row jobcontainer" *ngIf="!isjobsavailable">
+    <mat-card
+      class="jobcard"
+      style="height: 16vh"
+      *ngFor="let number of [0, 1, 2]"
+    >
+      <div class="row">
+        <div class="col text-center">
+          <ngx-skeleton-loader
+            [theme]="{
+              'margin-top': '4px',
+              'margin-bottom': '0px',
+              'border-radius': '4px',
+              height: '8px',
+              width: '60px',
+              'background-color': '#EDDBB2'
+            }"
+          >
+          </ngx-skeleton-loader>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col text-center jobcardheader">
+          <ngx-skeleton-loader
+            [theme]="{
+              'margin-top': '7px',
+              'border-radius': '4px',
+              'margin-bottom': '0px',
+              height: '8px',
+              'background-color': '#EDDBB2'
+            }"
+          >
+          </ngx-skeleton-loader>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col text-center jobcard-content">
+          <ngx-skeleton-loader
+            [theme]="{
+              'margin-top': '7px',
+              'border-radius': '4px',
+              'margin-bottom': '0px',
+              height: '8px',
+              'background-color': '#EDDBB2'
+            }"
+          >
+          </ngx-skeleton-loader>
+        </div>
+      </div>
+      <div class="row mt-2">
+        <div class="col text-center jobcard-footer">
+          <ngx-skeleton-loader
+            [theme]="{
+              'margin-top': '7px',
+              'border-radius': '4px',
+              'margin-bottom': '0px',
+              height: '8px',
+              'background-color': '#EDDBB2'
+            }"
+          >
+          </ngx-skeleton-loader>
+        </div>
+      </div>
+    </mat-card>
+  </div>
+  <div *ngIf="isjobsavailable">
+    <ng-container *ngIf="joblist.length; else nodesignerjobs">
+      <div class="row jobcontainer">
+        <mat-card
+          class="jobcard"
+          *ngFor="let jobs of joblist; let i = index"
+          (click)="openDetailPage(jobs)"
+        >
+          <div class="row">
+            <div class="col text-center">
+              <img
+                *ngIf="jobs.isinrevisionstate"
+                class="jobcard-icon"
+                src="../../../../../assets/revisionicon.svg"
+              />
+              <img
+                *ngIf="!jobs.isinrevisionstate"
+                class="jobcard-icon"
+                style="padding-left: 4px; padding-top: 4px"
+                src="../../../../../assets/Polygon 32.svg"
+              />
+            </div>
+          </div>
+          <div class="row">
+            <div class="col text-center jobcardheader">
+              {{ jobs.name }}
+            </div>
+          </div>
+          <div class="row">
+            <div
+              class="col text-center jobcard-content"
+              [ngStyle]="
+                jobs.company.length > 12
+                  ? { 'font-size': '7px' }
+                  : { 'font-size': '10px' }
+              "
+            >
+              {{ jobs.company }}
+            </div>
+          </div>
+          <footer
+            class="row mt-2"
+            *ngIf="data.data.role.id == 8 && jobs.designstarttime"
+          >
+            <div class="col text-center jobcard-footer">
+              {{ jobs.designstarttime.slice(8, 10) }}-{{
+                genericService.formateMonth(jobs.designstarttime.slice(5, 7))
+              }}-{{ jobs.designstarttime.slice(0, 4) }}
+            </div>
+          </footer>
+          <footer
+            class="row mt-2"
+            *ngIf="data.data.role.id == 10 && jobs.reviewstarttime"
+          >
+            <div class="col text-center jobcard-footer">
+              {{ jobs.reviewstarttime.slice(8, 10) }}-{{
+                genericService.formateMonth(jobs.reviewstarttime.slice(5, 7))
+              }}-{{ jobs.reviewstarttime.slice(0, 4) }}
+            </div>
+          </footer>
+          <div class="row">
+            <div class="col text-center jobcard-footer">
+              {{
+                jobs.requesttype == "permit"
+                  ? "Permit"
+                  : (jobs.requirementtype | titlecase)
+              }}
+            </div>
+          </div>
+        </mat-card>
+      </div>
+    </ng-container>
+  </div>
+  <ng-template #nodesignerjobs>
+    <div class="nodatafound" style="height: 41vh !important">
+      <img src="./../assets/sad.svg" style="margin-bottom: 10px; width: 35px" />
+      <div style="font-size: 14px; font-weight: bold">Yet to break the ice</div>
+    </div>
+  </ng-template>
+</div>

@@ -1,0 +1,367 @@
+<div *ngIf="isLoading" class="progress-loader">
+  <div id="pause" class="d-flex align-items-center justify-content-center">
+    <div
+      id="spinner"
+      style="background: #fff; padding: 28px; border-radius: 5px"
+      class="row"
+    >
+      <div class="loading-message bkgg col-9 pl-0">{{ loadingmessage }}</div>
+      <div class="col-3" style="top: 5px">
+        <div class="snippet" data-title=".dot-pulse">
+          <div class="stage">
+            <div class="dot-pulse"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div mat-dialog-content class="add">
+  <div class="container py-3">
+    <div class="row">
+      <div class="col-10 mb-3" *ngIf="!this.data.isEditMode">
+        <h1 class="dialogformtitle" style="color: black">Add Client</h1>
+      </div>
+      <div class="col-10" *ngIf="this.data.isEditMode">
+        <h4 class="dialogformtitle">Edit Client</h4>
+      </div>
+
+      <div class="col-2 justify-content-end">
+        <button mat-icon-button (click)="onCloseClick()">
+          <img class="dialogclose" src="../../../../../assets/close.svg" />
+        </button>
+      </div>
+    </div>
+    <div class="row logincard addclientcard">
+      <div class="col-12">
+        <form
+          [formGroup]="addContractorDialogForm"
+          (submit)="onAddContractor($event)"
+        >
+          <!-- <div class="form-group">
+            <mat-form-field appearance="fill">
+              <mat-label>Firstname</mat-label>
+              <input matInput placeholder="eg. john" [formControl]="firstname" required>
+              <mat-error *ngIf="firstname.invalid">{{getErrorMessage(firstname)}}</mat-error>
+            </mat-form-field>
+            <mat-form-field class="pl-3" appearance="fill">
+              <mat-label>Lastname</mat-label>
+              <input matInput placeholder="eg. doe" [formControl]="lastname" required>
+              <mat-error *ngIf="lastname.invalid">{{getErrorMessage(lastname)}}</mat-error>
+            </mat-form-field>
+          </div> -->
+          <div class="row">
+            <div class="col-md-6 inputSection">
+              <label>First name*</label>
+              <mat-form-field appearance="outline" class="fullwidth">
+                <input
+                  autocomplete="off"
+                  placeholder="eg. doe"
+                  matInput
+                  [formControl]="firstname"
+                  required
+                />
+                <mat-error *ngIf="firstname.invalid">{{
+                  getErrorMessage(firstname)
+                }}</mat-error>
+              </mat-form-field>
+            </div>
+            <div class="col-md-6 inputSection">
+              <label>Last name*</label>
+              <mat-form-field appearance="outline" class="fullwidth">
+                <input
+                  autocomplete="off"
+                  placeholder="eg. xyz"
+                  matInput
+                  [formControl]="lastname"
+                  required
+                />
+                <mat-error *ngIf="lastname.invalid">{{
+                  getErrorMessage(lastname)
+                }}</mat-error>
+              </mat-form-field>
+            </div>
+            <div class="col-md-6 inputSection">
+              <label>Email*</label>
+              <mat-form-field appearance="outline" class="fullwidth">
+                <input
+                  autocomplete="off"
+                  placeholder="abc@gmail.com"
+                  matInput
+                  [formControl]="workemail"
+                  required
+                  [readonly]="data.isEditMode"
+                />
+                <mat-error *ngIf="workemail.invalid">{{
+                  getErrorMessage(workemail)
+                }}</mat-error>
+              </mat-form-field>
+            </div>
+
+            <div class="col-md-6 inputSection">
+              <label>Address *</label>
+              <mat-form-field appearance="outline" class="fullwidth">
+                <input
+                  style="resize: none"
+                  matInput
+                  matGoogleMapsAutocomplete
+                  country="us"
+                  (onAutocompleteSelected)="onAutocompleteSelected($event)"
+                  [formControl]="address"
+                />
+                <mat-error *ngIf="address.invalid">{{
+                  getErrorMessage(address)
+                }}</mat-error>
+              </mat-form-field>
+            </div>
+
+            <!-- <div class="col-md-6 inputSection">
+              <label>Country *</label>
+                <mat-form-field appearance="outline" class="fullwidth">
+                  <mat-select  [formControl]="countrycontrol"  disableOptionCentering>
+                    <mat-option *ngFor="let country of filteredOptions | async" [value]="country" 
+                      >{{country.country}}</mat-option>
+                </mat-select>
+               <mat-error *ngIf="countrycontrol.invalid">{{getErrorMessage(countrycontrol)}}</mat-error>
+              </mat-form-field>           
+            </div> -->
+
+            <div class="col-md-6 inputSection">
+              <label>Payment mode *</label>
+              <mat-form-field appearance="outline" class="fullwidth">
+                <mat-select [formControl]="paymentmode" required>
+                  <mat-option value="prepaid">Prepaid</mat-option>
+                  <mat-option value="postpaid">Postpaid</mat-option>
+                </mat-select>
+                <mat-error *ngIf="paymentmode.invalid">{{
+                  getErrorMessage(paymentmode)
+                }}</mat-error>
+              </mat-form-field>
+            </div>
+            <!-- <div class="col-md-6 inputSection" >
+            <label>Account type *</label>
+            <mat-form-field appearance="outline" class="fullwidth">  
+              <mat-select  [formControl]="usertype"  required [disabled]="true">
+                <mat-option value="company">Company</mat-option>
+                <mat-option value="individual">Individual</mat-option>
+              </mat-select>
+            <mat-error *ngIf="usertype.invalid">{{getErrorMessage(usertype)}}</mat-error>
+          </mat-form-field>  
+       
+        </div> -->
+            <div
+              class="col-md-12 inputSection"
+              *ngIf="usertype.value == 'company'"
+            >
+              <!-- <label>Upload Company logo*</label>
+          <div class="custom-file">
+            <input (change)="onFileSelect($event)" type="file" class="custom-file-input" required>
+            <label class="custom-file-label" for="validatedCustomFile">Drag & Drop file here</label>
+            <div class="invalid-feedback">Example invalid custom file feedback</div>
+          </div> -->
+              <label>Upload Company logo*</label>
+              <div style="height: 68px">
+                <mat-form-field appearance="outline" class="fullwidth">
+                  <input
+                    [hidden]="true"
+                    (change)="onFileSelect($event)"
+                    type="file"
+                    id="imageUpload"
+                    accept="image/jpeg,image/jpg,image/png,image/*"
+                    #fileSelect
+                  />
+                  <input
+                    readonly
+                    matInput
+                    appearance="outline"
+                    [(ngModel)]="filename"
+                    [ngModelOptions]="{ standalone: true }"
+                    placeholder="Drag & Drop files here"
+                  />
+                  <span matPrefix *ngIf="imageUrl != null"
+                    ><img
+                      src="{{ imageUrl }}"
+                      style="position: relative; top: 1px; margin-bottom: 5px"
+                      width="42px "
+                      height="44px"
+                  /></span>
+                  <button
+                    *ngIf="this.logo || edituploadlogofile"
+                    (click)="onRemove($event)"
+                    matSuffix
+                    matTooltip="Remove selected file"
+                    [matTooltipPosition]="'above'"
+                    type="button"
+                    color="warn"
+                    mat-icon-button
+                  >
+                    <mat-icon>close</mat-icon>
+                  </button>
+                  <button
+                    type="button"
+                    matSuffix
+                    class="btn btn-secondary"
+                    style="margin-bottom: 6px !important"
+                    (click)="fileSelect.click()"
+                    matTooltip="Select a file"
+                    [matTooltipPosition]="'above'"
+                  >
+                    Choose file
+                  </button>
+                </mat-form-field>
+                <mat-error
+                  class="companyLogoError"
+                  *ngIf="showError && !edituploadlogofile"
+                  >{{ imagenotuploaded }}</mat-error
+                >
+                <mat-error
+                  class="companyLogoError"
+                  *ngIf="ispdf && isLogoUploaded"
+                  >{{ pdfErrormsg }}
+                </mat-error>
+              </div>
+            </div>
+            <div
+              class="col-12 input Section"
+              *ngIf="
+                data.user != null && data.user.paymentmodeupdateddate != null
+              "
+            >
+              <label>Remaining Balance*</label>
+              <mat-form-field appearance="outline" class="fullwidth">
+                <input
+                  matInput
+                  [formControl]="remainingBalance"
+                  style="font-weight: 500"
+                  required
+                />
+                <span
+                  style="
+                    font-weight: 500;
+                    position: relative;
+                    top: -3px;
+                    left: -1px;
+                    font-size: 13px;
+                  "
+                  matPrefix
+                  >$</span
+                >
+                <button
+                  class="text-secondary"
+                  type="button"
+                  mat-button
+                  matSuffix
+                  style="top: -3px"
+                  (click)="remainingBalance.setValue(0)"
+                >
+                  clear
+                </button>
+                <mat-error *ngIf="remainingBalance.invalid">{{
+                  getErrorMessage(remainingBalance)
+                }}</mat-error>
+              </mat-form-field>
+            </div>
+            <!-- <div class="col-md-12 inputSection">
+            
+          <label>Account type *</label>
+          <mat-form-field appearance="outline" class="fullwidth">  
+            <input type="radio" placeholder="Drag and files here">
+          <mat-error></mat-error>
+        </mat-form-field>  
+           </div> -->
+            <!-- <div class="col-md-6 inputSection">
+          <label>Upload Company logo *</label>
+          <mat-form-field appearance="outline" class="fullwidth">  
+            <mat-select [formControl]="usertype" required>
+              <mat-option value="company">Company</mat-option>
+              <mat-option value="individual">Individual</mat-option>
+            </mat-select>
+          <mat-error></mat-error>
+        </mat-form-field>  
+     
+        </div> -->
+          </div>
+          <!-- <div class="form-group">
+            <mat-form-field appearance="fill">
+              <mat-label>Work Email</mat-label>
+              <input matInput placeholder="eg. pat@example.com" [formControl]="workemail" required>
+              <mat-error *ngIf="workemail.invalid">{{getErrorMessage(workemail)}}</mat-error>
+            </mat-form-field>
+            <mat-form-field class="pl-3" appearance="fill">
+              <mat-label>Company</mat-label>
+              <input matInput placeholder="eg. XYZ Pvt. Ltd." [formControl]="company" required>
+              <mat-error *ngIf="company.invalid">{{getErrorMessage(company)}}</mat-error>
+            </mat-form-field>
+          </div>
+          <div class="form-group">
+            <mat-form-field appearance="fill">
+              <mat-label>Country</mat-label>
+              <input type="text" matInput [matAutocomplete]="auto" [formControl]="countrycontrol" required>
+              <mat-error *ngIf="countrycontrol.invalid">{{getErrorMessage(countrycontrol)}}</mat-error>
+              <mat-autocomplete #auto="matAutocomplete">
+                <mat-option *ngFor="let country of filteredOptions | async" [value]="country.country"
+                  (onSelectionChange)="setSelectedCountry(country)">{{country.country}}</mat-option>
+              </mat-autocomplete>
+            </mat-form-field>
+            <mat-form-field class="pl-3" appearance="fill">
+              <mat-label>Phone</mat-label>
+              <input matInput autocomplete="off" placeholder="eg. 9876543210" maxlength="15" min="8" [formControl]="phone" required>
+              <mat-error *ngIf="phone.invalid">{{getErrorMessage(phone)}}</mat-error>
+            </mat-form-field>
+          </div>
+          <div class="form-group">
+            <mat-form-field appearance="fill">
+              <mat-label>Address</mat-label>
+              <input matInput placeholder="eg. 32, XYZ" [formControl]="address" required>
+              <mat-error *ngIf="address.invalid">{{getErrorMessage(address)}}</mat-error>
+            </mat-form-field>
+            <mat-form-field class="pl-3" appearance="fill">
+              <mat-label>Lic#</mat-label>
+              <input matInput placeholder="eg. 678546" maxlength="15" min="10" [formControl]="lic" required>
+              <mat-error *ngIf="lic.invalid">{{getErrorMessage(lic)}}</mat-error>
+            </mat-form-field>
+          </div>
+
+          <div class="form-group" *ngIf="this.data.isEditMode">
+            <mat-form-field appearance="fill">
+              <mat-label>Prelim Design Discount</mat-label>
+              <input matInput autocomplete="off" placeholder="eg. 100" maxlength="5" min="1" [formControl]="prelimdesigndiscount">
+            </mat-form-field>
+
+            <mat-form-field class="pl-3" appearance="fill">
+              <mat-label>Permit Design Discount</mat-label>
+              <input matInput autocomplete="off" placeholder="eg. 150" maxlength="5" min="1" [formControl]="permitdesigndiscount">
+            </mat-form-field>
+          </div> -->
+
+          <div
+            class="form-group"
+            [ngStyle]="
+              data.user != null && data.user.paymentmodeupdateddate != null
+                ? { 'margin-top': '0.8rem' }
+                : { 'margin-top': '3rem' }
+            "
+          >
+            <button type="submit" mat-raised-button class="fullwidth">
+              Submit
+            </button>
+          </div>
+        </form>
+      </div>
+      <!-- <div class="col-4 mt-5 align-items-center">
+        <div class="custom-dropzone" ngx-dropzone [multiple]="false" [accept]="'image/*'" (change)="onSelect($event)">
+          <ngx-dropzone-label>
+            <div>
+              <img class="addimage" src="../../../../../assets/add.svg">
+              <h5>Drag and drop your logo here or click to browse.</h5>
+            </div>
+          </ngx-dropzone-label>
+          <ngx-dropzone-image-preview class="imagepreview" ngProjectAs="ngx-dropzone-preview" *ngFor="let f of files"
+            [file]="f" [removable]="true" (removed)="onRemove(f)">
+          </ngx-dropzone-image-preview>
+        </div>
+      </div> -->
+    </div>
+  </div>
+</div>

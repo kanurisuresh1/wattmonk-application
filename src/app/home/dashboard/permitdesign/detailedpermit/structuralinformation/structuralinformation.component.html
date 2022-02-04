@@ -1,0 +1,811 @@
+<form class="designform" [formGroup]="structuralFormGroup">
+  <div class="row" *ngIf="isroofboth">
+    <div class="col">
+      <h5 style="margin: 8px 0px 0px 8px">FLAT ROOF DETAILS</h5>
+    </div>
+  </div>
+  <div class="row mt-2">
+    <div class="col">
+      <mat-form-field appearance="fill" class="fullwidth">
+        <mat-label>Roof Material</mat-label>
+        <input type="text" matInput [matAutocomplete]="auto4" [formControl]="roofmaterial" required />
+        <mat-error *ngIf="roofmaterial.invalid">{{
+          getErrorMessage(roofmaterial)
+          }}</mat-error>
+        <mat-autocomplete #auto4="matAutocomplete">
+          <mat-option *ngFor="let roofmaterial of filteredRoofMaterials | async" [value]="roofmaterial.name"
+            (onSelectionChange)="setSelectedRoofMaterial(roofmaterial)">{{ roofmaterial.name }}</mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+    </div>
+    <div class="col">
+      <mat-form-field appearance="fill" class="fullwidth">
+        <mat-label>Azimuth (degree)</mat-label>
+        <input type="number" min="1" autocomplete="off" matInput placeholder="eg. 160" [formControl]="roofazimuth"
+          required />
+        <mat-error *ngIf="roofazimuth.invalid">{{
+          getErrorMessage(roofazimuth)
+          }}</mat-error>
+      </mat-form-field>
+    </div>
+    <div class="col">
+      <mat-form-field appearance="fill" class="fullwidth">
+        <mat-label>Max span spacing</mat-label>
+        <input type="number" min="1" autocomplete="off" matInput placeholder="eg. 100" [formControl]="maxspanspacing" />
+        <mat-error *ngIf="maxspanspacing.invalid">{{
+          getErrorMessage(maxspanspacing)
+          }}</mat-error>
+      </mat-form-field>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col" *ngIf="isroofpitched">
+      <mat-form-field appearance="fill" class="fullwidth">
+        <mat-label>Pitch (degree)*</mat-label>
+        <input type="number" min="1" autocomplete="off" matInput placeholder="eg. 160" [formControl]="roofpitch" />
+        <mat-error *ngIf="roofpitch.invalid">{{
+          getErrorMessage(roofpitch)
+          }}</mat-error>
+      </mat-form-field>
+    </div>
+    <div class="col">
+      <mat-form-field appearance="fill" class="fullwidth"
+        *ngIf="(roofmaterial.value | lowercase).startsWith('comp shingle')">
+        <mat-label>Number of layers</mat-label>
+        <input type="number" min="1" autocomplete="off" matInput placeholder="eg. 100" [formControl]="numberoflayers"
+          required />
+        <mat-error *ngIf="numberoflayers.invalid">{{
+          getErrorMessage(numberoflayers)
+          }}</mat-error>
+      </mat-form-field>
+    </div>
+    <div class="col"></div>
+  </div>
+  <div class="row" *ngIf="roofmaterial.value != ''">
+    <div class="col">
+      <mat-form-field appearance="fill" class="fullwidth">
+        <mat-label>Racking Name</mat-label>
+        <input type="text" matInput [matAutocomplete]="auto5" [formControl]="rackingname" required />
+        <mat-error *ngIf="rackingname.invalid">{{
+          getErrorMessage(rackingname)
+          }}</mat-error>
+        <mat-autocomplete #auto5="matAutocomplete">
+          <mat-option *ngFor="let rackingname of filteredRackingNames | async" [value]="rackingname.name"
+            (onSelectionChange)="setSelectedRackingName(rackingname)">{{ rackingname.name }}</mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+    </div>
+    <div class="col">
+      <mat-form-field appearance="fill" class="fullwidth">
+        <mat-label>Racking Model</mat-label>
+        <input type="text" matInput [matAutocomplete]="auto6" [formControl]="rackingmodel" required />
+        <mat-error *ngIf="rackingmodel.invalid">{{
+          getErrorMessage(rackingmodel)
+          }}</mat-error>
+        <mat-autocomplete #auto6="matAutocomplete">
+          <mat-option *ngFor="let rackingmodel of filteredRackingModels | async" [value]="rackingmodel.name"
+            (onSelectionChange)="setSelectedRackingModel(rackingmodel)">{{ rackingmodel.name }}</mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+    </div>
+  </div>
+  <div class="row" *ngIf="roofmaterial.value != ''">
+    <div class="col">
+      <mat-form-field appearance="fill" class="fullwidth" style="margin-top: 22px">
+        <mat-label>Attachment type</mat-label>
+        <input type="text" matInput [matAutocomplete]="auto7" [formControl]="attachmenttype" required />
+        <mat-error *ngIf="attachmenttype.invalid">{{
+          getErrorMessage(attachmenttype)
+          }}</mat-error>
+        <mat-autocomplete #auto7="matAutocomplete">
+          <mat-option *ngFor="let attachmenttype of filteredAttachmentTypes | async" [value]="attachmenttype.name"
+            (onSelectionChange)="setSelectedAttachmentType(attachmenttype)">
+            {{ attachmenttype.name }}</mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+    </div>
+    <div class="col">
+      <div class="form-group formradiogroup fullwidth" [ngClass]="[
+          attachmentdistance.invalid && !displayerror
+            ? 'formradiogroup-invalid'
+            : ''
+        ]">
+        <h5>Attachment distance *</h5>
+        <mat-radio-group aria-label="attachmentdistance" [formControl]="attachmentdistance" required>
+          <div class="row">
+            <div class="col">
+              <mat-radio-button value="fortyeight">48"</mat-radio-button>
+            </div>
+            <div class="col">
+              <mat-radio-button class="ml-3" value="seventytwo">72"</mat-radio-button>
+            </div>
+            <div class="col">
+              <mat-radio-button class="ml-3" value="spantable">Span table</mat-radio-button>
+            </div>
+          </div>
+        </mat-radio-group>
+      </div>
+      <mat-error class="custom-mat-error" [hidden]="displayerror" *ngIf="attachmentdistance.invalid">
+        {{ getErrorMessage(attachmentdistance) }}
+      </mat-error>
+    </div>
+    <div class="col">
+      <div class="form-group formradiogroup fullwidth" [ngClass]="[
+          attachmentmountingplacement.invalid && !displayerror
+            ? 'formradiogroup-invalid'
+            : ''
+        ]">
+        <h5>Attachment mounting placement *</h5>
+        <mat-radio-group aria-label="attachmentmountingplacement" [formControl]="attachmentmountingplacement" required>
+          <div class="row">
+            <div class="col">
+              <mat-radio-button value="staggered">Staggered</mat-radio-button>
+            </div>
+            <div class="col">
+              <mat-radio-button class="ml-3" value="nonstaggered">Non-Staggered</mat-radio-button>
+            </div>
+          </div>
+        </mat-radio-group>
+      </div>
+      <mat-error class="custom-mat-error" [hidden]="displayerror" *ngIf="attachmentmountingplacement.invalid">
+        {{ getErrorMessage(attachmentmountingplacement) }}
+      </mat-error>
+    </div>
+  </div>
+  <div class="row" *ngIf="isroofpitched">
+    <div class="col">
+      <div class="form-group formradiogroup fullwidth" [ngClass]="[
+          framing.invalid && !displayerror ? 'formradiogroup-invalid' : ''
+        ]">
+        <h5>Framing *</h5>
+        <mat-radio-group aria-label="framing" [formControl]="framing" required>
+          <div class="row">
+            <div class="col">
+              <mat-radio-button value="truss">Truss</mat-radio-button>
+            </div>
+            <div class="col">
+              <mat-radio-button value="rafter">Rafter</mat-radio-button>
+            </div>
+          </div>
+        </mat-radio-group>
+      </div>
+      <mat-error class="custom-mat-error" [hidden]="displayerror" *ngIf="framing.invalid">{{ getErrorMessage(framing) }}
+      </mat-error>
+    </div>
+    <div class="col">
+      <mat-form-field appearance="fill" class="fullwidth" style="margin-top: 22px">
+        <mat-label>Size</mat-label>
+        <input type="text" matInput [matAutocomplete]="auto16" [formControl]="framingsize" required />
+        <mat-error *ngIf="framingsize.invalid">{{
+          getErrorMessage(framingsize)
+          }}</mat-error>
+        <mat-autocomplete #auto16="matAutocomplete">
+          <mat-option *ngFor="let framingsize of filteredFramingSizes | async" [value]="framingsize"
+            (onSelectionChange)="setSelectedFramingSize(framingsize)">{{ framingsize }}</mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+    </div>
+    <div class="col">
+      <mat-form-field appearance="fill" class="fullwidth" style="margin-top: 22px">
+        <mat-label>Spacing (inch)</mat-label>
+        <input type="number" min="1" autocomplete="off" matInput placeholder="eg. 20" [formControl]="spacing"
+          required />
+        <mat-error *ngIf="spacing.invalid">{{
+          getErrorMessage(spacing)
+          }}</mat-error>
+      </mat-form-field>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col" *ngIf="
+        isDisplayMode &&
+        this.generateddesign.structuralinformations[0]
+          .roofdimensionsandobstacles.length > 0
+      ">
+      <p class="subtitle">Roof Dimensions & Obstacles Photos</p>
+      <div class="row subbody"
+        *ngFor="let file of this.generateddesign.structuralinformations[0].roofdimensionsandobstacles;let i =index">
+        <div class="col-2">
+          <p class="contentheader" style="margin: 0px;">
+            <img *ngIf="file.ext == '.pdf'" class="material-icons file-icon" src="./../assets/pdf.svg">
+            <img *ngIf="file.ext == '.png'" class="material-icons file-icon" src="./../assets/png.svg">
+            <img *ngIf="file.ext == '.zip'" class="material-icons file-icon" src="./../assets/zip.svg">
+            <img *ngIf="file.ext == '.doc'" class="material-icons file-icon" src="./../assets/doc.svg">
+            <img *ngIf="file.ext == '.docx'" class="material-icons file-icon" src="./../assets/doc.svg">
+            <img *ngIf="file.ext == '.odt'" class="material-icons file-icon" src="./../assets/pdf.svg">
+            <img *ngIf="file.ext == '.rtf'" class="material-icons file-icon" src="./../assets/rtf.svg">
+            <img *ngIf="file.ext == '.txt'" class="material-icons file-icon" src="./../assets/txt.svg">
+            <img
+              *ngIf="file.ext !== '.png' && file.ext !== '.pdf' && file.ext !== '.zip' && file.ext !== '.doc' && file.ext !== '.docx' && file.ext !== '.odt' && file.ext !== '.rtf' && file.ext !== '.txt'"
+              class="material-icons file-icon" src="./../assets/file.svg">
+
+          </p>
+        </div>
+        <div class="col-7">
+          <a href="{{file.url}}" target="_blank" class="contentvalue float-right" style="margin-top: 8px;">{{ file.name
+            | uppercase }}</a>
+        </div>
+        <div class="col-3">
+          <span class="float-right delete-btn" (click)="onDeleteRoofObstacles(file.id,i)"><img
+              src="../../../../../assets/delete.svg" class="dialogclose"></span>
+        </div>
+      </div>
+    </div>
+    <div class="col" *ngIf="!isDisplayMode || isEditMode"
+      [ngStyle]="isEditMode ? {'margin-right': '16px'} : {'margin-right': '0px'}">
+      <div class="row architectureuploadrow">
+        <div class="col align-items-center">
+          <mat-error [hidden]="displayerror" style="font-size: 10px; margin-left: 16px">You have to upload file.
+          </mat-error>
+          <div class="multiple-dropzone" style="width: 100%; margin-bottom: 16px;" ngx-dropzone [multiple]="true"
+            [disabled]="structuralFormGroup.disabled" (change)="onRoofFileSelect($event)" accept="image/*">
+            <ngx-dropzone-label>
+              <div>
+                <img class="addimage" src="../../../../../assets/add.svg" />
+                <h5>
+                  Drag and drop or click to browse the roof dimensions and
+                  obstacles.
+                </h5>
+              </div>
+            </ngx-dropzone-label>
+            <div *ngFor="let f of rooffiles">
+              {{ f.type }}
+              <ngx-dropzone-preview *ngIf="!f.isImage" class="imagepreview" ngProjectAs="ngx-dropzone-preview"
+                [file]="f" [removable]="true" (removed)="onRoofFileRemove(f)">
+                <ngx-dropzone-label class="previewlabel">{{ f.name }} ({{ f.type }})</ngx-dropzone-label>
+              </ngx-dropzone-preview>
+              <ngx-dropzone-image-preview *ngIf="f.isImage" class="imagepreview" ngProjectAs="ngx-dropzone-preview"
+                [file]="f" [removable]="true" (removed)="onRoofFileRemove(f)">
+              </ngx-dropzone-image-preview>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col" *ngIf="
+        isDisplayMode &&
+        this.generateddesign.structuralinformations[0].roofphotos.length > 0
+      ">
+      <p class="subtitle">Roof Photos</p>
+      <div class="row subbody"
+        *ngFor="let file of this.generateddesign.structuralinformations[0].roofphotos;let i =index">
+        <div class="col-2">
+          <p class="contentheader" style="margin: 0px;">
+            <img *ngIf="file.ext == '.pdf'" class="material-icons file-icon" src="./../assets/pdf.svg">
+            <img *ngIf="file.ext == '.png'" class="material-icons file-icon" src="./../assets/png.svg">
+            <img *ngIf="file.ext == '.zip'" class="material-icons file-icon" src="./../assets/zip.svg">
+            <img *ngIf="file.ext == '.doc'" class="material-icons file-icon" src="./../assets/doc.svg">
+            <img *ngIf="file.ext == '.docx'" class="material-icons file-icon" src="./../assets/doc.svg">
+            <img *ngIf="file.ext == '.odt'" class="material-icons file-icon" src="./../assets/pdf.svg">
+            <img *ngIf="file.ext == '.rtf'" class="material-icons file-icon" src="./../assets/rtf.svg">
+            <img *ngIf="file.ext == '.txt'" class="material-icons file-icon" src="./../assets/txt.svg">
+            <img
+              *ngIf="file.ext !== '.png' && file.ext !== '.pdf' && file.ext !== '.zip' && file.ext !== '.doc' && file.ext !== '.docx' && file.ext !== '.odt' && file.ext !== '.rtf' && file.ext !== '.txt'"
+              class="material-icons file-icon" src="./../assets/file.svg">
+
+          </p>
+        </div>
+        <div class="col-7">
+          <a href="{{file.url}}" target="_blank" class="contentvalue float-right" style="margin-top: 8px;">{{ file.name
+            | uppercase }}</a>
+        </div>
+        <div class="col-3">
+          <span class="float-right delete-btn" (click)="onDeleteRoofphotos(file.id,i)"><img
+              src="../../../../../assets/delete.svg" class="dialogclose"></span>
+        </div>
+      </div>
+    </div>
+    <div class="col" *ngIf="!isDisplayMode || isEditMode"
+      [ngStyle]="isEditMode ? {'margin-right': '16px'} : {'margin-right': '0px'}">
+      <div class="row architectureuploadrow">
+        <div class="col align-items-center">
+          <mat-error [hidden]="displayerror" style="font-size: 10px; margin-left: 16px">You have to upload file.
+          </mat-error>
+          <div class="multiple-dropzone" style="width: 100%; margin-bottom: 16px;" ngx-dropzone [multiple]="true"
+            [disabled]="structuralFormGroup.disabled" (change)="onRoofPhotosSelect($event)" accept="image/*">
+            <ngx-dropzone-label>
+              <div>
+                <img class="addimage" src="../../../../../assets/add.svg" />
+                <h5>Drag and drop or click to browse roof photos.</h5>
+              </div>
+            </ngx-dropzone-label>
+            <div *ngFor="let f of roofphotos">
+              {{ f.type }}
+              <ngx-dropzone-preview *ngIf="!f.isImage" class="imagepreview" ngProjectAs="ngx-dropzone-preview"
+                [file]="f" [removable]="true" (removed)="onRoofPhotosRemove(f)">
+                <ngx-dropzone-label class="previewlabel">{{ f.name }} ({{ f.type }})</ngx-dropzone-label>
+              </ngx-dropzone-preview>
+              <ngx-dropzone-image-preview *ngIf="f.isImage" class="imagepreview" ngProjectAs="ngx-dropzone-preview"
+                [file]="f" [removable]="true" (removed)="onRoofPhotosRemove(f)">
+              </ngx-dropzone-image-preview>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col" *ngIf="
+        isDisplayMode &&
+        this.generateddesign.structuralinformations[0].atticphotos.length > 0
+      ">
+      <p class="subtitle">Attic Photos</p>
+      <div class="row subbody"
+        *ngFor="let file of this.generateddesign.structuralinformations[0].atticphotos;let i =index">
+        <div class="col-2">
+          <p class="contentheader" style="margin: 0px;">
+            <img *ngIf="file.ext == '.pdf'" class="material-icons file-icon" src="./../assets/pdf.svg">
+            <img *ngIf="file.ext == '.png'" class="material-icons file-icon" src="./../assets/png.svg">
+            <img *ngIf="file.ext == '.zip'" class="material-icons file-icon" src="./../assets/zip.svg">
+            <img *ngIf="file.ext == '.doc'" class="material-icons file-icon" src="./../assets/doc.svg">
+            <img *ngIf="file.ext == '.docx'" class="material-icons file-icon" src="./../assets/doc.svg">
+            <img *ngIf="file.ext == '.odt'" class="material-icons file-icon" src="./../assets/pdf.svg">
+            <img *ngIf="file.ext == '.rtf'" class="material-icons file-icon" src="./../assets/rtf.svg">
+            <img *ngIf="file.ext == '.txt'" class="material-icons file-icon" src="./../assets/txt.svg">
+            <img
+              *ngIf="file.ext !== '.png' && file.ext !== '.pdf' && file.ext !== '.zip' && file.ext !== '.doc' && file.ext !== '.docx' && file.ext !== '.odt' && file.ext !== '.rtf' && file.ext !== '.txt'"
+              class="material-icons file-icon" src="./../assets/file.svg">
+
+          </p>
+        </div>
+        <div class="col-7">
+          <a href="{{file.url}}" target="_blank" class="contentvalue float-right" style="margin-top: 8px;">{{ file.name
+            | uppercase }}</a>
+        </div>
+        <div class="col-3">
+          <span class="float-right delete-btn" (click)="onDeleteAtticphotos(file.id,i)"><img
+              src="../../../../../assets/delete.svg" class="dialogclose"></span>
+        </div>
+      </div>
+    </div>
+    <div class="col" *ngIf="!isDisplayMode || isEditMode"
+      [ngStyle]="isEditMode ? {'margin-right': '16px'} : {'margin-right': '0px'}">
+      <div class="row architectureuploadrow">
+        <div class="col align-items-center">
+          <mat-error [hidden]="displayerror" style="font-size: 10px; margin-left: 16px">You have to upload file.
+          </mat-error>
+          <div class="multiple-dropzone" style="width: 100%; margin-bottom: 16px;" ngx-dropzone [multiple]="true"
+            [disabled]="structuralFormGroup.disabled" (change)="onAtticPhotosSelect($event)" accept="image/*">
+            <ngx-dropzone-label>
+              <div>
+                <img class="addimage" src="../../../../../assets/add.svg" />
+                <h5>Drag and drop or click to browse attic photos.</h5>
+              </div>
+            </ngx-dropzone-label>
+            <div *ngFor="let f of atticphotos">
+              {{ f.type }}
+              <ngx-dropzone-preview *ngIf="!f.isImage" class="imagepreview" ngProjectAs="ngx-dropzone-preview"
+                [file]="f" [removable]="true" (removed)="onAtticPhotosRemove(f)">
+                <ngx-dropzone-label class="previewlabel">{{ f.name }} ({{ f.type }})</ngx-dropzone-label>
+              </ngx-dropzone-preview>
+              <ngx-dropzone-image-preview *ngIf="f.isImage" class="imagepreview" ngProjectAs="ngx-dropzone-preview"
+                [file]="f" [removable]="true" (removed)="onAtticPhotosRemove(f)">
+              </ngx-dropzone-image-preview>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <mat-form-field appearance="fill" class="fullwidth">
+        <mat-label>Comments</mat-label>
+        <textarea style="min-height: 94px" matInput placeholder="Start typing here..."
+          [formControl]="structuralcomments"></textarea>
+      </mat-form-field>
+    </div>
+  </div>
+</form>
+<form class="designform" [formGroup]="structuralFormGroup" [formGroup]="structural1FormGroup" *ngIf="isroofboth">
+  <div class="row">
+    <div class="col">
+      <h5 style="margin: 8px 0px 0px 8px">PITCH ROOF DETAILS</h5>
+    </div>
+  </div>
+  <div class="row mt-2">
+    <div class="col">
+      <mat-form-field appearance="fill" class="fullwidth">
+        <mat-label>Roof Material</mat-label>
+        <input type="text" matInput [matAutocomplete]="auto4" [formControl]="roofmaterial1" required />
+        <mat-error *ngIf="roofmaterial1.invalid">{{
+          getErrorMessage(roofmaterial)
+          }}</mat-error>
+        <mat-autocomplete #auto4="matAutocomplete">
+          <mat-option *ngFor="let roofmaterial1 of filteredRoofMaterials1 | async" [value]="roofmaterial1.name"
+            (onSelectionChange)="setSelectedPitchRoofMaterial(roofmaterial1)">{{ roofmaterial1.name }}</mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+    </div>
+    <div class="col">
+      <mat-form-field appearance="fill" class="fullwidth">
+        <mat-label>Azimuth (degree)</mat-label>
+        <input type="number" min="1" autocomplete="off" matInput placeholder="eg. 160" [formControl]="roofazimuth1"
+          required />
+        <mat-error *ngIf="roofazimuth1.invalid">{{
+          getErrorMessage(roofazimuth1)
+          }}</mat-error>
+      </mat-form-field>
+    </div>
+    <div class="col">
+      <mat-form-field appearance="fill" class="fullwidth">
+        <mat-label>Max span spacing</mat-label>
+        <input type="number" min="1" autocomplete="off" matInput placeholder="eg. 100"
+          [formControl]="maxspanspacing1" />
+        <mat-error *ngIf="maxspanspacing1.invalid">{{
+          getErrorMessage(maxspanspacing1)
+          }}</mat-error>
+      </mat-form-field>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col">
+      <mat-form-field appearance="fill" class="fullwidth">
+        <mat-label>Pitch (degree)</mat-label>
+        <input type="number" min="1" autocomplete="off" matInput placeholder="eg. 160" [formControl]="roofpitch1"
+          required />
+        <mat-error *ngIf="roofpitch1.invalid">{{
+          getErrorMessage(roofpitch1)
+          }}</mat-error>
+      </mat-form-field>
+    </div>
+    <div class="col">
+      <mat-form-field appearance="fill" class="fullwidth"
+        *ngIf="(roofmaterial1.value | lowercase).startsWith('comp shingle')">
+        <mat-label>Number of layers</mat-label>
+        <input type="number" min="1" autocomplete="off" matInput placeholder="eg. 100" [formControl]="numberoflayers1"
+          required />
+        <mat-error *ngIf="numberoflayers1.invalid">{{
+          getErrorMessage(numberoflayers1)
+          }}</mat-error>
+      </mat-form-field>
+    </div>
+    <div class="col"></div>
+  </div>
+  <div class="row" *ngIf="roofmaterial1.value != ''">
+    <div class="col">
+      <mat-form-field appearance="fill" class="fullwidth">
+        <mat-label>Racking Name</mat-label>
+        <input type="text" matInput [matAutocomplete]="auto8" [formControl]="rackingname1" required />
+        <mat-error *ngIf="rackingname1.invalid">{{
+          getErrorMessage(rackingname1)
+          }}</mat-error>
+        <mat-autocomplete #auto8="matAutocomplete">
+          <mat-option *ngFor="let rackingname of filteredRackingNames | async" [value]="rackingname.name"
+            (onSelectionChange)="setSelectedRackingName1(rackingname)">{{ rackingname.name }}</mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+    </div>
+    <div class="col">
+      <mat-form-field appearance="fill" class="fullwidth">
+        <input type="text" matInput [matAutocomplete]="auto9" [formControl]="rackingmodel1" required />
+        <mat-error *ngIf="rackingmodel1.invalid">{{
+          getErrorMessage(rackingmodel1)
+          }}</mat-error>
+        <mat-autocomplete #auto9="matAutocomplete">
+          <mat-option *ngFor="let rackingmodel of filteredRackingModels1 | async" [value]="rackingmodel.name"
+            (onSelectionChange)="setSelectedRackingModel1(rackingmodel)">
+            {{ rackingmodel.name }}</mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+    </div>
+  </div>
+  <div class="row" *ngIf="roofmaterial.value != ''">
+    <div class="col">
+      <mat-form-field appearance="fill" class="fullwidth" style="margin-top: 22px">
+        <mat-label>Attachment type</mat-label>
+        <input type="text" matInput [matAutocomplete]="auto10" [formControl]="attachmenttype1" required />
+        <mat-error *ngIf="attachmenttype1.invalid">{{
+          getErrorMessage(attachmenttype1)
+          }}</mat-error>
+        <mat-autocomplete #auto10="matAutocomplete">
+          <mat-option *ngFor="let attachmenttype of filteredAttachmentTypes1 | async" [value]="attachmenttype.name"
+            (onSelectionChange)="setSelectedAttachmentType1(attachmenttype)">
+            {{ attachmenttype.name }}</mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+    </div>
+    <div class="col">
+      <div class="form-group formradiogroup fullwidth" [ngClass]="[
+          attachmentdistance1.invalid && !displayerror
+            ? 'formradiogroup-invalid'
+            : ''
+        ]">
+        <h5>Attachment distance *</h5>
+        <mat-radio-group aria-label="attachmentdistance1" [formControl]="attachmentdistance1" required>
+          <div class="row">
+            <div class="col">
+              <mat-radio-button value="fortyeight">48"</mat-radio-button>
+            </div>
+            <div class="col">
+              <mat-radio-button class="ml-3" value="seventytwo">72"</mat-radio-button>
+            </div>
+            <div class="col">
+              <mat-radio-button class="ml-3" value="spantable">Span table</mat-radio-button>
+            </div>
+          </div>
+        </mat-radio-group>
+      </div>
+      <mat-error class="custom-mat-error" [hidden]="displayerror" *ngIf="attachmentdistance1.invalid">
+        {{ getErrorMessage(attachmentdistance1) }}
+      </mat-error>
+    </div>
+    <div class="col">
+      <div class="form-group formradiogroup fullwidth" [ngClass]="[
+          attachmentmountingplacement1.invalid && !displayerror
+            ? 'formradiogroup-invalid'
+            : ''
+        ]">
+        <h5>Attachment mounting placement *</h5>
+        <mat-radio-group aria-label="attachmentmountingplacement1" [formControl]="attachmentmountingplacement1"
+          required>
+          <div class="row">
+            <div class="col">
+              <mat-radio-button value="staggered">Staggered</mat-radio-button>
+            </div>
+            <div class="col">
+              <mat-radio-button class="ml-3" value="nonstaggered">Non-Staggered</mat-radio-button>
+            </div>
+          </div>
+        </mat-radio-group>
+      </div>
+      <mat-error class="custom-mat-error" [hidden]="displayerror" *ngIf="attachmentmountingplacement1.invalid">
+        {{ getErrorMessage(attachmentmountingplacement1) }}
+      </mat-error>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col">
+      <div class="form-group formradiogroup fullwidth" [ngClass]="[
+          framing1.invalid && !displayerror ? 'formradiogroup-invalid' : ''
+        ]">
+        <h5>Framing *</h5>
+        <mat-radio-group aria-label="framing1" [formControl]="framing1" required>
+          <div class="row">
+            <div class="col">
+              <mat-radio-button value="truss">Truss</mat-radio-button>
+            </div>
+            <div class="col">
+              <mat-radio-button value="rafter">Rafter</mat-radio-button>
+            </div>
+          </div>
+        </mat-radio-group>
+      </div>
+      <mat-error class="custom-mat-error" [hidden]="displayerror" *ngIf="framing1.invalid">{{ getErrorMessage(framing1)
+        }}
+      </mat-error>
+    </div>
+    <div class="col">
+      <mat-form-field appearance="fill" class="fullwidth" style="margin-top: 22px">
+        <mat-label>Size</mat-label>
+        <input type="text" matInput [matAutocomplete]="auto16" [formControl]="framingsize1" required />
+        <mat-error *ngIf="framingsize1.invalid">{{
+          getErrorMessage(framingsize1)
+          }}</mat-error>
+        <mat-autocomplete #auto16="matAutocomplete">
+          <mat-option *ngFor="let framingsize of filteredFramingSizes1 | async" [value]="framingsize"
+            (onSelectionChange)="setSelectedFramingSize1(framingsize)">{{ framingsize }}</mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+    </div>
+    <div class="col">
+      <mat-form-field appearance="fill" class="fullwidth" style="margin-top: 22px">
+        <mat-label>Spacing (inch)</mat-label>
+        <input type="number" min="1" autocomplete="off" matInput placeholder="eg. 20" [formControl]="spacing1"
+          required />
+        <mat-error *ngIf="spacing1.invalid">{{
+          getErrorMessage(spacing1)
+          }}</mat-error>
+      </mat-form-field>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col" *ngIf="
+        isDisplayMode &&
+        this.generateddesign.structuralinformations[1]
+          .roofdimensionsandobstacles.length > 0
+      ">
+      <p class="subtitle">Roof Dimensions & Obstacles Photos</p>
+      <div class="row subbody" *ngFor="
+          let file of this.generateddesign.structuralinformations[1]
+            .roofdimensionsandobstacles
+        ">
+        <div class="col-4">
+          <p class="contentheader" style="margin: 0px">
+            <img *ngIf="file.ext == '.pdf'" class="material-icons file-icon" src="./../assets/pdf.svg" />
+            <img *ngIf="file.ext == '.png'" class="material-icons file-icon" src="./../assets/png.svg" />
+            <img *ngIf="file.ext == '.zip'" class="material-icons file-icon" src="./../assets/zip.svg" />
+            <img *ngIf="file.ext == '.doc'" class="material-icons file-icon" src="./../assets/doc.svg" />
+            <img *ngIf="file.ext == '.docx'" class="material-icons file-icon" src="./../assets/doc.svg" />
+            <img *ngIf="file.ext == '.odt'" class="material-icons file-icon" src="./../assets/pdf.svg" />
+            <img *ngIf="file.ext == '.rtf'" class="material-icons file-icon" src="./../assets/rtf.svg" />
+            <img *ngIf="file.ext == '.txt'" class="material-icons file-icon" src="./../assets/txt.svg" />
+            <img *ngIf="
+                file.ext !== '.png' &&
+                file.ext !== '.pdf' &&
+                file.ext !== '.zip' &&
+                file.ext !== '.doc' &&
+                file.ext !== '.docx' &&
+                file.ext !== '.odt' &&
+                file.ext !== '.rtf' &&
+                file.ext !== '.txt'
+              " class="material-icons file-icon" src="./../assets/file.svg" />
+          </p>
+        </div>
+        <div class="col">
+          <a href="{{ file.url }}" target="_blank" class="contentvalue float-right" style="margin-top: 8px">{{ file.name
+            | uppercase }}</a>
+        </div>
+      </div>
+    </div>
+    <div class="col" *ngIf="!isDisplayMode" [ngStyle]="
+        isEditMode ? { 'margin-right': '16px' } : { 'margin-right': '0px' }
+      ">
+      <div class="row architectureuploadrow">
+        <div class="col align-items-center">
+          <mat-error [hidden]="displayerror" style="font-size: 10px; margin-left: 16px">You have to upload file.
+          </mat-error>
+          <div class="multiple-dropzone" style="width: 100%; margin-bottom: 16px;" ngx-dropzone [multiple]="true"
+            [disabled]="structuralFormGroup.disabled" (change)="onPitchRoofFileSelect($event)" accept="image/*">
+            <ngx-dropzone-label>
+              <div>
+                <img class="addimage" src="../../../../../assets/add.svg" />
+                <h5>
+                  Drag and drop or click to browse the roof dimensions and
+                  obstacles.
+                </h5>
+              </div>
+            </ngx-dropzone-label>
+            <div *ngFor="let f of pitchrooffiles">
+              {{ f.type }}
+              <ngx-dropzone-preview *ngIf="!f.isImage" class="imagepreview" ngProjectAs="ngx-dropzone-preview"
+                [file]="f" [removable]="true" (removed)="onPitchRoofFileRemove(f)">
+                <ngx-dropzone-label class="previewlabel">{{ f.name }} ({{ f.type }})</ngx-dropzone-label>
+              </ngx-dropzone-preview>
+              <ngx-dropzone-image-preview *ngIf="f.isImage" class="imagepreview" ngProjectAs="ngx-dropzone-preview"
+                [file]="f" [removable]="true" (removed)="onPitchRoofFileRemove(f)">
+              </ngx-dropzone-image-preview>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col" *ngIf="
+        isDisplayMode &&
+        this.generateddesign.structuralinformations[1].roofphotos.length > 0
+      ">
+      <p class="subtitle">Roof Photos</p>
+      <div class="row subbody" *ngFor="
+          let file of this.generateddesign.structuralinformations[1].roofphotos
+        ">
+        <div class="col-4">
+          <p class="contentheader" style="margin: 0px">
+            <img *ngIf="file.ext == '.pdf'" class="material-icons file-icon" src="./../assets/pdf.svg" />
+            <img *ngIf="file.ext == '.png'" class="material-icons file-icon" src="./../assets/png.svg" />
+            <img *ngIf="file.ext == '.zip'" class="material-icons file-icon" src="./../assets/zip.svg" />
+            <img *ngIf="file.ext == '.doc'" class="material-icons file-icon" src="./../assets/doc.svg" />
+            <img *ngIf="file.ext == '.docx'" class="material-icons file-icon" src="./../assets/doc.svg" />
+            <img *ngIf="file.ext == '.odt'" class="material-icons file-icon" src="./../assets/pdf.svg" />
+            <img *ngIf="file.ext == '.rtf'" class="material-icons file-icon" src="./../assets/rtf.svg" />
+            <img *ngIf="file.ext == '.txt'" class="material-icons file-icon" src="./../assets/txt.svg" />
+            <img *ngIf="
+                file.ext !== '.png' &&
+                file.ext !== '.pdf' &&
+                file.ext !== '.zip' &&
+                file.ext !== '.doc' &&
+                file.ext !== '.docx' &&
+                file.ext !== '.odt' &&
+                file.ext !== '.rtf' &&
+                file.ext !== '.txt'
+              " class="material-icons file-icon" src="./../assets/file.svg" />
+          </p>
+        </div>
+        <div class="col">
+          <a href="{{ file.url }}" target="_blank" class="contentvalue float-right" style="margin-top: 8px">{{ file.name
+            | uppercase }}</a>
+        </div>
+      </div>
+    </div>
+    <div class="col" *ngIf="!isDisplayMode" [ngStyle]="
+        isEditMode ? { 'margin-right': '16px' } : { 'margin-right': '0px' }
+      ">
+      <div class="row architectureuploadrow">
+        <div class="col align-items-center">
+          <mat-error [hidden]="displayerror" style="font-size: 10px; margin-left: 16px">You have to upload file.
+          </mat-error>
+          <div class="multiple-dropzone" style="width: 100%; margin-bottom: 16px;" ngx-dropzone [multiple]="true"
+            [disabled]="structuralFormGroup.disabled" (change)="onPitchRoofPhotosSelect($event)" accept="image/*">
+            <ngx-dropzone-label>
+              <div>
+                <img class="addimage" src="../../../../../assets/add.svg" />
+                <h5>Drag and drop or click to browse roof photos.</h5>
+              </div>
+            </ngx-dropzone-label>
+            <div *ngFor="let f of pitchroofphotos">
+              {{ f.type }}
+              <ngx-dropzone-preview *ngIf="!f.isImage" class="imagepreview" ngProjectAs="ngx-dropzone-preview"
+                [file]="f" [removable]="true" (removed)="onPitchRoofPhotosRemove(f)">
+                <ngx-dropzone-label class="previewlabel">{{ f.name }} ({{ f.type }})</ngx-dropzone-label>
+              </ngx-dropzone-preview>
+              <ngx-dropzone-image-preview *ngIf="f.isImage" class="imagepreview" ngProjectAs="ngx-dropzone-preview"
+                [file]="f" [removable]="true" (removed)="onPitchRoofPhotosRemove(f)">
+              </ngx-dropzone-image-preview>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col" *ngIf="
+        isDisplayMode &&
+        this.generateddesign.structuralinformations[1].atticphotos.length > 0
+      ">
+      <p class="subtitle">Attic Photos</p>
+      <div class="row subbody" *ngFor="
+          let file of this.generateddesign.structuralinformations[1].atticphotos
+        ">
+        <div class="col-4">
+          <p class="contentheader" style="margin: 0px">
+            <img *ngIf="file.ext == '.pdf'" class="material-icons file-icon" src="./../assets/pdf.svg" />
+            <img *ngIf="file.ext == '.png'" class="material-icons file-icon" src="./../assets/png.svg" />
+            <img *ngIf="file.ext == '.zip'" class="material-icons file-icon" src="./../assets/zip.svg" />
+            <img *ngIf="file.ext == '.doc'" class="material-icons file-icon" src="./../assets/doc.svg" />
+            <img *ngIf="file.ext == '.docx'" class="material-icons file-icon" src="./../assets/doc.svg" />
+            <img *ngIf="file.ext == '.odt'" class="material-icons file-icon" src="./../assets/pdf.svg" />
+            <img *ngIf="file.ext == '.rtf'" class="material-icons file-icon" src="./../assets/rtf.svg" />
+            <img *ngIf="file.ext == '.txt'" class="material-icons file-icon" src="./../assets/txt.svg" />
+            <img *ngIf="
+                file.ext !== '.png' &&
+                file.ext !== '.pdf' &&
+                file.ext !== '.zip' &&
+                file.ext !== '.doc' &&
+                file.ext !== '.docx' &&
+                file.ext !== '.odt' &&
+                file.ext !== '.rtf' &&
+                file.ext !== '.txt'
+              " class="material-icons file-icon" src="./../assets/file.svg" />
+          </p>
+        </div>
+        <div class="col">
+          <a href="{{ file.url }}" target="_blank" class="contentvalue float-right" style="margin-top: 8px">{{ file.name
+            | uppercase }}</a>
+        </div>
+      </div>
+    </div>
+    <div class="col" *ngIf="!isDisplayMode" [ngStyle]="
+        isEditMode ? { 'margin-right': '16px' } : { 'margin-right': '0px' }
+      ">
+      <div class="row architectureuploadrow">
+        <div class="col align-items-center">
+          <mat-error [hidden]="displayerror" style="font-size: 10px; margin-left: 16px">You have to upload file.
+          </mat-error>
+          <div class="multiple-dropzone" style="width: 100%; margin-bottom: 16px;" ngx-dropzone [multiple]="true"
+            [disabled]="structuralFormGroup.disabled" (change)="onPitchAtticPhotosSelect($event)" accept="image/*">
+            <ngx-dropzone-label>
+              <div>
+                <img class="addimage" src="../../../../../assets/add.svg" />
+                <h5>Drag and drop or click to browse attic photos.</h5>
+              </div>
+            </ngx-dropzone-label>
+            <div *ngFor="let f of pitchatticphotos">
+              {{ f.type }}
+              <ngx-dropzone-preview *ngIf="!f.isImage" class="imagepreview" ngProjectAs="ngx-dropzone-preview"
+                [file]="f" [removable]="true" (removed)="onPitchAtticPhotosRemove(f)">
+                <ngx-dropzone-label class="previewlabel">{{ f.name }} ({{ f.type }})</ngx-dropzone-label>
+              </ngx-dropzone-preview>
+              <ngx-dropzone-image-preview *ngIf="f.isImage" class="imagepreview" ngProjectAs="ngx-dropzone-preview"
+                [file]="f" [removable]="true" (removed)="onPitchAtticPhotosRemove(f)">
+              </ngx-dropzone-image-preview>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <mat-form-field appearance="fill" class="fullwidth">
+        <mat-label>Comments</mat-label>
+        <textarea style="min-height: 94px" matInput placeholder="Start typing here..."
+          [formControl]="structuralcomments1"></textarea>
+      </mat-form-field>
+    </div>
+  </div>
+</form>

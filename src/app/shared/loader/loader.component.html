@@ -1,0 +1,19 @@
+<div *ngIf="isLoading | async" class="progress-loader">
+  <!-- <mat-progress-bar class="commonprogressbar" mode="indeterminate"></mat-progress-bar> -->
+  <div id="pause" class="d-flex align-items-center justify-content-center">
+    <div
+      id="spinner"
+      style="background: #fff; padding: 35px; border-radius: 5px"
+      class="row"
+    >
+      <div class="loading-message bkgg col-9">Please wait</div>
+      <div class="col-3" style="top: 5px">
+        <div class="snippet" data-title=".dot-pulse">
+          <div class="stage">
+            <div class="dot-pulse"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

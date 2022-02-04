@@ -1,0 +1,24 @@
+.dialogformtitle {
+  color: black;
+  size: 18px;
+  font-weight: 500 !important;
+}
+
+.headings {
+  color: #666666;
+  font-weight: 500;
+}
+
+::ng-deep .addappusercard mat-radio-button.mat-accent .mat-radio-inner-circle,
+.addappusercard
+  .mat-radio-button.mat-accent
+  .mat-radio-ripple
+  .mat-ripple-element:not(.mat-radio-persistent-ripple),
+.addappusercard
+  .mat-radio-button.mat-accent.mat-radio-checked
+  .mat-radio-persistent-ripple,
+.addappusercard
+  .mat-radio-button.mat-accent:active
+  .mat-radio-persistent-ripple {
+  background-color: #ad7205;
+}

@@ -1,0 +1,84 @@
+.cardicon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 30px;
+  height: 28px;
+  margin: 0px 13px 0px 13px;
+  border-radius: 50%;
+  background-color: #edc773;
+}
+
+.highlightedtext {
+  text-align: right;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.balancebtn {
+  background-color: #ffffff;
+  color: #666666;
+  border: none;
+  border-radius: 8px;
+}
+
+.balancebtn :hover {
+  border: 2px solid #ddc471;
+  background: rgb(231, 201, 117, 0.5);
+  color: black;
+  border-radius: 8px;
+}
+
+.balanceimg1 {
+  width: 95px;
+  height: 69px;
+}
+​ .highlightedamount {
+  font-size: 18px;
+  font-weight: bold;
+  text-align: right;
+}
+
+.card {
+  width: 100%;
+  border: none;
+  background: #ececec;
+  color: #666666;
+  font-weight: 600;
+  .heading {
+    font-size: 13px;
+  }
+}
+
+.card:hover {
+  background: rgb(231, 201, 117, 0.5);
+  color: black;
+}
+
+.card:focus {
+  border: 2px solid #ddc471;
+  background: rgb(231, 201, 117, 0.5);
+  color: black;
+}
+
+.orderformtitle {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.ordersubtitle {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.ordertext {
+  font-size: 12px;
+  color: #666666;
+  font-weight: 500;
+}
+
+.orderformsubtitle {
+  // margin: 10px 0 0px 0px;
+  font-size: 14px;
+  font-weight: 600;
+}

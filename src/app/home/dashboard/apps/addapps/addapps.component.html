@@ -1,0 +1,72 @@
+<div *ngIf="isLoading" class="overlay">
+  <mat-card class="spinnercard" align-items-center>
+    <div class="row">
+      <div class="col-3">
+        <mat-progress-spinner
+          diameter="50"
+          color="primary"
+          mode="indeterminate"
+          strokeWidth="5"
+        ></mat-progress-spinner>
+      </div>
+      <div class="col">
+        <h4 class="spinnertext">{{ loadingmessage }}</h4>
+      </div>
+    </div>
+  </mat-card>
+</div>
+
+<div mat-dialog-content>
+  <div class="container pb-3">
+    <div class="row">
+      <div class="col-10">
+        <h1 class="dialogfzormtitle" *ngIf="!data.isEditMode">Add New App</h1>
+        <h1 class="dialogfzormtitle" *ngIf="data.isEditMode">Edit App</h1>
+      </div>
+      <div class="col-2 d-flex justify-content-end d-flex align-items-center">
+        <img
+          src="../../../../../assets/close.svg"
+          width="15px"
+          height="15px"
+          (click)="onCloseClick()"
+        />
+      </div>
+    </div>
+    <form
+      class="addappusercard pt-3"
+      [formGroup]="addAppsDialogForm"
+      (submit)="addNewApp()"
+    >
+      <div class="col-12 pl-0">
+        <p class="mb-0 headings">Name*</p>
+        <mat-form-field appearance="outline" class="fullwidth">
+          <input
+            autocomplete="off"
+            placeholder="eg. doe"
+            [formControl]="name"
+            matInput
+            required
+          />
+          <mat-error *ngIf="name.invalid">{{
+            getErrorMessage(name)
+          }}</mat-error>
+        </mat-form-field>
+      </div>
+      <div class="col-12 pl-0">
+        <p class="headings">Mode</p>
+        <mat-radio-group aria-label="Select an option" [formControl]="mode">
+          <!-- <mat-radio-button value="test" class="mr-3">Test</mat-radio-button> -->
+          <mat-radio-button value="live">Live</mat-radio-button>
+        </mat-radio-group>
+        <mat-error [hidden]="displayerror" *ngIf="mode.invalid">{{
+          getErrorMessage(mode)
+        }}</mat-error>
+      </div>
+      <div class="col-12 px-0 mt-3">
+        <button mat-raised-button type="submit" class="fullwidth">
+          Submit
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

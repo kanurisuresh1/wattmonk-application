@@ -1,0 +1,71 @@
+.skeletoncard {
+  width: 98%;
+  border-radius: 10px;
+  background-color: #eeedec;
+}
+
+.green-font-small {
+  color: rgb(26, 155, 26);
+  font-weight: 550;
+  font-size: 13px;
+}
+
+.card-style {
+  width: 98%;
+  border-radius: 10px;
+  margin-bottom: 10px;
+  margin-right: 5px;
+}
+
+.detailheight {
+  height: 55px;
+}
+
+.bg-color {
+  background-color: #edc773;
+}
+
+.tag-font {
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.font-small {
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.fixed-height {
+  height: 65vh;
+  padding-left: 2.5rem;
+  margin-top: 0.8rem;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.design-width {
+  font-size: 11px;
+  width: 8.2rem;
+}
+
+::ng-deep .cdk-global-overlay-wrapper {
+  backdrop-filter: blur(4px) !important;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 8px;
+}
+::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 8px;
+}
+
+@media screen and (max-width: 1300px) {
+  .design-width {
+    width: 10.2rem !important;
+  }
+}

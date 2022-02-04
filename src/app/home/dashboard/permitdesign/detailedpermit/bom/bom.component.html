@@ -1,0 +1,51 @@
+<div class="container bomcontainer pb-2 pt-2">
+    <div class="row">
+        <div class="col-3 tableheadings">
+            Equipments
+        </div>
+        <div class="col-1 tableheadings">
+            Quantity
+        </div>
+        <div class="col-7 tableheadings">
+            Description
+        </div>
+        <div class="col-1" *ngIf="!disabledinputs">
+            <button mat-button aria-label="Clear" style="width: 0px; top:-9px;" matTooltip="Add New BOM"
+                (click)="addBom()">
+                + BOM
+            </button>
+        </div>
+    </div>
+    <ng-container *ngFor="let bom of bominputs; let i = index">
+        <div class="row designreportcard">
+            <div class="col-3 ">
+                <mat-form-field class="fullwidth mt-2 mr-2" appearance="outline">
+                    <input type="text" placeholder="eg. XYZ " [value]="bom.equipment" aria-label="Number" matInput
+                        (keyup)="addEquipment($event,i)" [disabled]="disabledinputs" />
+                </mat-form-field>
+            </div>
+            <div class="col-1 ">
+                <mat-form-field class="fullwidth mt-2 mr-2" appearance="outline">
+                    <input type="text" placeholder="eg. 2." [value]="bom.quantity" aria-label="Number" matInput
+                        (keyup)="addQuantity($event,i)" [disabled]="disabledinputs" />
+                </mat-form-field>
+            </div>
+            <div class="col-8 ">
+                <mat-form-field class="descriptionwidth mt-2 mr-2" appearance="outline">
+                    <input type="text" placeholder="eg. XYZ " [value]="bom.description" aria-label="Number" matInput
+                        (keyup)="addDescription($event,i)" [disabled]="disabledinputs" />
+                </mat-form-field>
+                <button matSuffix mat-icon-button aria-label="Clear" *ngIf="!disabledinputs" style="width: 0px;"
+                    matTooltip="Delete" (click)="deleteBOM(i,bom)">
+                    <mat-icon>delete_forever</mat-icon>
+                </button>
+            </div>
+        </div>
+    </ng-container>
+    <div class="row">
+        <div class="col">
+            <button mat-raised-button aria-label="Clear" class="float-right" *ngIf="!disabledinputs"
+                (click)="onSaveBOM()">Save</button>
+        </div>
+    </div>
+</div>

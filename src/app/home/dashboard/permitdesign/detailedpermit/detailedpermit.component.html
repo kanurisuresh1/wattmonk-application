@@ -1,0 +1,131 @@
+<div *ngIf="isLoading" class="overlay">
+  <mat-card class="spinnercard" align-items-center>
+    <div class="row">
+      <div class="col-3">
+        <mat-progress-spinner diameter="50" color="primary" mode="indeterminate" strokeWidth="5">
+        </mat-progress-spinner>
+      </div>
+      <div class="col">
+        <h4 class="spinnertext">{{ loadingmessage }}</h4>
+      </div>
+    </div>
+  </mat-card>
+</div>
+<div class="container">
+  <div class="row">
+    <div class="col-10">
+      <h4 class="dialogformtitle">Request Details</h4>
+
+    </div>
+
+    <div class="col-2">
+      <button mat-icon-button (click)="onCloseClick()" class="float-right">
+        <img class="dialogclose" src="../../../../../assets/close.svg" />
+      </button>
+      <span class="float-right"
+        *ngIf="((data.design.designgeneralinformation != null) && (data.design.status=='requestaccepted' || data.design.status=='outsourced'))">
+        <button mat-icon-button (click)="OnEditClick()">
+          <img class="dialogclose" src="../../../../../assets/edit.svg" />
+        </button>
+      </span>
+      <span class="float-right" *ngIf="data.design.status=='designassigned'">
+        <button mat-icon-button (click)="OnDesignerEditClick()">
+          <img class="dialogclose" src="../../../../../assets/edit.svg" />
+        </button>
+      </span>
+    </div>
+  </div>
+</div>
+<div mat-dialog-content class="designdialogcontent">
+  <div class="container mb-2">
+    <mat-accordion multi>
+      <mat-expansion-panel [expanded]="issiteinfoexpanded">
+        <mat-expansion-panel-header>
+          <mat-panel-title> Site Information </mat-panel-title>
+        </mat-expansion-panel-header>
+        <app-siteinformation #stepsiteinformation></app-siteinformation>
+      </mat-expansion-panel>
+      <mat-expansion-panel [expanded]="isgeneralinfoexpanded">
+        <mat-expansion-panel-header>
+          <mat-panel-title> General Information </mat-panel-title>
+        </mat-expansion-panel-header>
+        <app-generalinformation #stepgeneralinformation></app-generalinformation>
+      </mat-expansion-panel>
+      <mat-expansion-panel *ngIf="selectedjobtype != 2" [expanded]="isstructuralinfoexpanded">
+        <mat-expansion-panel-header>
+          <mat-panel-title> Structural Information </mat-panel-title>
+        </mat-expansion-panel-header>
+        <app-structuralinformation #stepstructuralinformation></app-structuralinformation>
+      </mat-expansion-panel>
+      <mat-expansion-panel [expanded]="iselectricalinfoexpanded">
+        <mat-expansion-panel-header>
+          <mat-panel-title> Electrical Information </mat-panel-title>
+        </mat-expansion-panel-header>
+        <app-electricalinformation #stepelectricalinformation></app-electricalinformation>
+      </mat-expansion-panel>
+      <!-- <mat-expansion-panel *ngIf="!isnewconstruction && data.design.latitude!=null && !isClient" [expanded]="islocationinfoexpanded">
+        <mat-expansion-panel-header>
+          <mat-panel-title> Equipments Location Marking </mat-panel-title>
+        </mat-expansion-panel-header>
+        <app-locationmarking #steplocationmarking></app-locationmarking>
+      </mat-expansion-panel> -->
+      <mat-expansion-panel *ngIf="isDesigner" [expanded]="designerinfoexpanded">
+        <mat-expansion-panel-header>
+          <mat-panel-title> Designer Information </mat-panel-title>
+        </mat-expansion-panel-header>
+        <app-designerinformation (designerdetailsaved)="setDesignerdetailId($event)" #stepdesignerinformation>
+        </app-designerinformation>
+      </mat-expansion-panel>
+      <mat-expansion-panel *ngIf="isdesignerdetailsaved" [expanded]="bomexpanded">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            BOM
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <app-bom #stepbom [generateddesign]="data.design"></app-bom>
+      </mat-expansion-panel>
+      <mat-expansion-panel
+        *ngIf="((isDesigner && this.data.design.status =='designassigned' && (data.design.autopermitdesign || isdesignbomdetailsaved)) ||((this.data.design.status =='designcompleted' || this.data.design.status == 'reviewassigned' || this.data.design.status == 'reviewpassed' || this.data.design.status == 'reviewfailed' ||  this.data.design.status == 'delivered') && !isClient))"
+        [expanded]="uploadpermitexpanded">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            {{uploadpermitplan}}
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <app-permitplanuploader [generateddesign]="data.design" #stepuploadpermitplan></app-permitplanuploader>
+      </mat-expansion-panel>
+      <mat-expansion-panel
+        *ngIf="generateddesign.reviewassignedto?.id ==this.loggedInUser.id && generateddesign.status=='reviewassigned'"
+        [expanded]="qualitycheckexpanded">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            Quality Check
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <app-pdfqualitycheck [generateddesign]="data.design"></app-pdfqualitycheck>
+      </mat-expansion-panel>
+    </mat-accordion>
+  </div>
+</div>
+
+<mat-dialog-actions align="center"
+  *ngIf="((generateddesign.status == 'outsourced' || generateddesign.status =='created' ||  generateddesign.status =='requestaccepted' ) && !allinformationfilled ) || data.isEditMode">
+  <button mat-raised-button class="prominentbutton float-right mr-3" (click)="onSaveDesign($event)">Save</button>
+</mat-dialog-actions>
+
+<mat-dialog-actions align="center" *ngIf="allinformationfilled && !isClient && generateddesign.status == 'outsourced' ">
+  <button mat-raised-button class="prominentbutton float-right mr-3"
+    (click)="acceptDesignRequest($event)">Accept</button>
+  <button mat-raised-button class="prominentbutton lightgreybutton float-right mr-2"
+    (click)="declineDesignRequest($event)">On Hold</button>
+</mat-dialog-actions>
+
+<mat-dialog-actions align="center" *ngIf="generateddesign.status == 'requestaccepted' && !isClient">
+  <button mat-raised-button class="float-right mr-2" (click)="assigndesign($event)">Assign</button>
+</mat-dialog-actions>
+
+<!-- <mat-dialog-actions align="center"
+  *ngIf="((isDesigner && this.data.design.status =='designassigned') && this.data.design.autopermitdesign ==null) || isDesignerEditMode">
+  <button mat-raised-button class="prominentbutton float-right mr-2"
+    (click)="onSaveDesignerDetails($event)">Save</button>
+</mat-dialog-actions> -->

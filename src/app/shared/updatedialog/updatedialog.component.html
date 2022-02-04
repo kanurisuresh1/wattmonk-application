@@ -1,0 +1,55 @@
+<div mat-dialog-content>
+  <div class="container">
+    <div class="row mt-4">
+      <div class="col-9">
+        <h2 style="margin-left: 16px" class="updatedialogformtitle">
+          {{ data.title }}
+        </h2>
+      </div>
+      <div class="col" *ngIf="data.loginrequired">
+        <countdown-timer
+          class=""
+          class="ml-4 float-right"
+          [countDownTimerConfig]="remainingtimeconfig"
+        ></countdown-timer>
+      </div>
+      <div class="col" *ngIf="!data.loginrequired">
+        <button mat-icon-button (click)="onCloseClick()" class="float-right">
+          <img class="dialogclose" src="../../../../../assets/close.svg" />
+        </button>
+      </div>
+    </div>
+    <div class="row updatecontent">
+      <div class="col">
+        <div
+          style="
+            margin-top: 16px;
+            margin-bottom: 16px;
+            font-size: 14px;
+            line-height: 2rem;
+          "
+          [innerHTML]="data.message"
+        ></div>
+        <!-- <p>{{data.message}}</p> -->
+      </div>
+    </div>
+    <div class="row mt-2" *ngIf="data.loginrequired">
+      <div class="col">
+        <h5 style="color: #f44336; margin-left: 16px; margin-right: 16px">
+          *Important - For changes to take effect, we request you to login again
+          to the dashboard once logged out automatically.
+        </h5>
+      </div>
+    </div>
+  </div>
+  <div></div>
+  <button
+    *ngIf="data.loginrequired"
+    mat-raised-button
+    class="float-right"
+    (click)="handleusersignout()"
+  >
+    Signout now
+  </button>
+  <!--  <button *ngIf="!data.loginrequired" mat-raised-button class="float-right" (click)='handleskip()'>Skip</button> -->
+</div>

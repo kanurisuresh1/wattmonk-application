@@ -1,0 +1,508 @@
+<div class="main-content">
+  <div class="container">
+    <div class="col-12">
+      <div class="row">
+        <button mat-button class="backbutton mr-1 mt-1" (click)="handleBack()">
+          <img src="../../../../../assets/back.svg" />
+        </button>
+        <div class="col-lg-3 col-md-4 logincard">
+          <mat-form-field appearance="outline" style="width: 100%">
+            <input matInput placeholder="search by name ,address and mail" [ngModel]="searchdata"
+              (ngModelChange)="filterusers($event)" />
+            <span style="position: relative; top: -3px; margin-right: 7px" matSuffix><img
+                src="../../../../../assets/search.svg" width="15px" height="15px" /></span>
+          </mat-form-field>
+        </div>
+      </div>
+    </div>
+    <div class="container">
+      <div *ngIf="isjoblistingloading">
+        <div class="row">
+          <div class="col-9">
+            <div class="row" style="margin-left: 15px">
+              <div class="col-4 mb-3" *ngFor="let number of [0, 1, 2]">
+                <div class="col-12 pt-3 pb-3" style="border-radius: '15px'; background-color: #e6e5e58c">
+                  <div class="row">
+                    <div class="col-2">
+                      <ngx-skeleton-loader count="1" appearance="circle" [theme]="{ 'background-color': '#d8d8d8' }">
+                      </ngx-skeleton-loader>
+                    </div>
+                    <div class="col-10 mt-3">
+                      <ngx-skeleton-loader class="d-block" [theme]="{
+                          'border-radius': '5px',
+                          'background-color': '#d8d8d8',
+                          height: '10px',
+                          width: '50%',
+                          'margin-bottom': '7px',
+                          'margin-left': '10px'
+                        }">
+                      </ngx-skeleton-loader>
+                    </div>
+                  </div>
+                  <ngx-skeleton-loader class="d-block" [theme]="{
+                      'border-radius': '5px',
+                      'background-color': '#d8d8d8',
+                      height: '10px',
+                      width: '80%',
+                      'margin-bottom': '7px'
+                    }">
+                  </ngx-skeleton-loader>
+                  <ngx-skeleton-loader class="d-block" [theme]="{
+                      'border-radius': '5px',
+                      'background-color': '#d8d8d8',
+                      height: '10px',
+                      width: '70%',
+                      'margin-bottom': '25px'
+                    }">
+                  </ngx-skeleton-loader>
+                  <ngx-skeleton-loader class="d-block" [theme]="{
+                      'border-radius': '5px',
+                      'background-color': '#d8d8d8',
+                      height: '10px',
+                      width: '60%',
+                      'margin-bottom': '7px'
+                    }">
+                  </ngx-skeleton-loader>
+                  <ngx-skeleton-loader class="d-block" [theme]="{
+                      'border-radius': '5px',
+                      'background-color': '#d8d8d8',
+                      height: '10px',
+                      width: '50%',
+                      'margin-bottom': '30px'
+                    }">
+                  </ngx-skeleton-loader>
+                  <ngx-skeleton-loader class="d-block" [theme]="{
+                      'border-radius': '5px',
+                      'background-color': '#d8d8d8',
+                      height: '10px',
+                      width: '40%',
+                      'margin-bottom': '7px'
+                    }">
+                  </ngx-skeleton-loader>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-3">
+            <div class="row taskstyle" style="
+                margin-left: 15px;
+                border-radius: 15px;
+                background-color: #e6e5e58c;
+              ">
+              <h4 class="selected-heading pl-4 pt-3">Our Tasks</h4>
+              <div class="col-12 pt-3 pb-3" *ngFor="let number of [0, 1, 2]">
+                <div class="row">
+                  <div class="col-2">
+                    <ngx-skeleton-loader count="1" appearance="circle" [theme]="{ 'background-color': '#d8d8d8' }">
+                    </ngx-skeleton-loader>
+                  </div>
+                  <div class="col-10 mt-2">
+                    <ngx-skeleton-loader [theme]="{
+                        'border-radius': '5px',
+                        'background-color': '#E6E5E5',
+                        height: '10px',
+                        width: '80%',
+                        'margin-bottom': '7px'
+                      }">
+                    </ngx-skeleton-loader>
+                    <ngx-skeleton-loader [theme]="{
+                        'border-radius': '5px',
+                        'background-color': '#E6E5E5',
+                        height: '10px',
+                        width: '50%',
+                        'margin-bottom': '17px'
+                      }">
+                    </ngx-skeleton-loader>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row taskstyle mt-2" style="
+                margin-left: 15px;
+                border-radius: 15px;
+                background-color: #e6e5e58c;
+              ">
+              <h4 class="selected-heading pl-4 pt-3">Selected Items</h4>
+              <div class="col-12 pt-3 pb-3" *ngFor="let number of [0, 1, 2]">
+                <div class="row">
+                  <div class="col-2">
+                    <ngx-skeleton-loader count="1" appearance="circle" [theme]="{ 'background-color': '#d8d8d8' }">
+                    </ngx-skeleton-loader>
+                  </div>
+                  <div class="col-10">
+                    <ngx-skeleton-loader [theme]="{
+                        'border-radius': '5px',
+                        'background-color': '#E6E5E5',
+                        height: '10px',
+                        width: '50%',
+                        'margin-bottom': '7px'
+                      }">
+                    </ngx-skeleton-loader>
+                    <ngx-skeleton-loader [theme]="{
+                        'border-radius': '5px',
+                        'background-color': '#E6E5E5',
+                        height: '10px',
+                        width: '80%',
+                        'margin-bottom': '7px'
+                      }">
+                    </ngx-skeleton-loader>
+                    <ngx-skeleton-loader [theme]="{
+                        'border-radius': '5px',
+                        'background-color': '#E6E5E5',
+                        height: '10px',
+                        width: '50%',
+                        'margin-bottom': '17px'
+                      }">
+                    </ngx-skeleton-loader>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- <div class="col-sm-6">
+           <mat-paginator [pageSizeOptions]="[10, 20]" showFirstLastButtons></mat-paginator>
+         </div> -->
+    <div class="container" *ngIf="!isjoblistingloading">
+      <div class="row">
+        <div class="col-xl-9 col-lg-8 col-md-6 col-sm-6" style="height: 76vh; overflow-x: hidden; overflow-y: auto">
+          <div class="row" *ngIf="currentJobListing == 'salesproposal'">
+            <div class="joblistingcard" *ngFor="let design of salesproposallist | filter: searchJob">
+              <div (click)="openPrelimDetail(design)">
+                <div class="row">
+                  <div class="col">
+                    <img class="joblistcardicon" src="../../../../../assets/jobsalesproposal.svg" />
+                  </div>
+                  <div class="col">
+                    <h3 style="
+                        margin-left: -106px;
+                        font-size: 15px;
+                        font-weight: 600;
+                      ">
+                      {{ design?.company }}
+                    </h3>
+                    <!-- <div class="joblistingcarchip">{{design.source}}</div> -->
+                  </div>
+                </div>
+                <div class="col">
+                  <h4 class="joblistcardtitle">{{ design.name }}</h4>
+                </div>
+                <div class="col">
+                  <h5 class="joblistcardfooter">{{ design.email }}</h5>
+                </div>
+                <div class="col">
+                  <h6 class="content">{{ design.address }}</h6>
+                </div>
+                <div class="row">
+                  <div class="col mt-5">
+                    <p style="font-size: 14px; font-weight: 500">
+                      {{ design.created_at | date: "dd MMM yyyy" }}
+                    </p>
+                  </div>
+                  <div class="col mt-5">
+                    <button class="selectbutton" (click)="pushSelectedJob(design,$event)">
+                      Select
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row" *ngIf="
+                salesproposallist.length == 0 &&
+                currentJobListing == 'salesproposal'
+              " style="height: 80%; width: 100%">
+              <div class="col md-12">
+                <div class="row" style="margin-top: 150px">
+                  <div class="col" style="
+                      display: flex;
+                      justify-content: center;
+                      align-items: center;
+                    ">
+                    <img src="./../assets/sad.svg" style="width: 35px; justify-self: center" />
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col" style="
+                      display: flex;
+                      justify-content: center;
+                      align-items: center;
+                    ">
+                    <div style="font-size: 15px; font-weight: 600">
+                      Yet to break the ice
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- <p class="listplaceholder" *ngIf="salesproposallist.length == 0">No New Design Requests</p> -->
+
+          <div class="row" *ngIf="currentJobListing == 'siteassessment'">
+            <div class="joblistingcard" *ngFor="let design of assessmentlist | filter: searchJob">
+              <div (click)="openPrelimDetail(design)">
+                <div class="row">
+                  <div class="col">
+                    <img class="joblistcardicon" src="../../../../../assets/jobsiteassement.svg" />
+                  </div>
+                  <div class="col">
+                    <h3 style="
+                        margin-left: -106px;
+                        font-size: 15px;
+                        font-weight: 600;
+                      ">
+                      {{ design?.company }}
+                    </h3>
+                    <!-- <div class="joblistingcarchip">{{design.source}}</div> -->
+                  </div>
+                </div>
+                <h4 class="joblistcardtitle">{{ design.name }}</h4>
+                <h5 class="joblistcardfooter">{{ design.email }}</h5>
+                <h6 class="content">{{ design.address }}</h6>
+                <div class="row">
+                  <div class="col mt-5">
+                    <p style="font-size: 14px; font-weight: 500">
+                      {{ design.created_at | date: "dd MMM yyyy" }}
+                    </p>
+                  </div>
+                  <div class="col mt-5">
+                    <button class="selectbutton" (click)="pushSelectedJob(design,$event)">
+                      Select
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- <p class="listplaceholder" *ngIf="assessmentlist.length == 0">No New Design Requests</p> -->
+            <div class="row" *ngIf="
+                assessmentlist.length == 0 &&
+                currentJobListing == 'siteassessment'
+              " style="height: 80%; width: 100%">
+              <div class="col md-12">
+                <div class="row" style="margin-top: 150px">
+                  <div class="col" style="
+                      display: flex;
+                      justify-content: center;
+                      align-items: center;
+                    ">
+                    <img src="./../assets/sad.svg" style="width: 35px; justify-self: center" />
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col" style="
+                      display: flex;
+                      justify-content: center;
+                      align-items: center;
+                    ">
+                    <div style="font-size: 15px; font-weight: 600">
+                      Yet to break the ice
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row" *ngIf="currentJobListing == 'permitdesign'">
+            <div class="joblistingcard" *ngFor="let design of permitlist | filter: searchJob">
+              <div (click)="openPermitdetailDialog(design)">
+                <div class="row">
+                  <div class="col">
+                    <img class="joblistcardicon" src="../../../../../assets/jobpermit.svg" />
+                  </div>
+                  <div class="col">
+                    <h3 style="
+                        margin-left: -106px;
+                        font-size: 15px;
+                        font-weight: 600;
+                      ">
+                      {{ design?.company }}
+                    </h3>
+                    <!-- <div class="joblistingcarchip">{{design.source}}</div> -->
+                  </div>
+                </div>
+                <h4 class="joblistcardtitle">{{ design.name }}</h4>
+                <h5 class="joblistcardfooter">{{ design.email }}</h5>
+                <h6 class="content">{{ design.address }}</h6>
+                <div class="row">
+                  <div class="col mt-5">
+                    <p style="font-size: 14px; font-weight: 500">
+                      {{ design.created_at | date: "dd MMM yyyy" }}
+                    </p>
+                  </div>
+                  <div class="col mt-5">
+                    <button class="selectbutton" (click)="pushSelectedJob(design,$event)">
+                      Select
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- <p class="listplaceholder" *ngIf="permitlist.length == 0">No New Design Requests</p> -->
+            <div class="row" *ngIf="
+                permitlist.length == 0 && currentJobListing == 'permitdesign'
+              " style="height: 80%; width: 100%">
+              <div class="col md-12">
+                <div class="row" style="margin-top: 150px">
+                  <div class="col" style="
+                      display: flex;
+                      justify-content: center;
+                      align-items: center;
+                    ">
+                    <img src="./../assets/sad.svg" style="width: 35px; justify-self: center" />
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col" style="
+                      display: flex;
+                      justify-content: center;
+                      align-items: center;
+                    ">
+                    <div style="font-size: 15px; font-weight: 600">
+                      Yet to break the ice
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-xl-3 col-lg-4 col-md-5 col-sm-5 task-options">
+          <div class="sidecard">
+            <h3 class="selected-heading">Our Tasks</h3>
+            <div class="sidecardblock" (click)="changeJobListing('salesproposal')" [ngClass]="[
+                currentJobListing == 'salesproposal'
+                  ? 'selctedbackground'
+                  : 'unselctedbackground'
+              ]">
+              <div class="row">
+                <div>
+                  <div class="row">
+                    <div>
+                      <img class="sidecardicon" src="../../../../../assets/jobsalesproposal.svg" width="30px"
+                        height="30px" />
+                    </div>
+                    <div>
+                      <h5 class="sidecardtitle">Sales Proposal</h5>
+                      <p class="sidecardcontent">
+                        {{ salesproposal }}
+                        <small class="sidecardcontent"> remains</small>
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="sidecardblock" (click)="changeJobListing('siteassessment')" [ngClass]="[
+                currentJobListing == 'siteassessment'
+                  ? 'selctedbackground'
+                  : 'unselctedbackground'
+              ]">
+              <div class="row">
+                <div>
+                  <div class="row">
+                    <div>
+                      <img class="sidecardicon" src="../../../../../assets/jobsiteassement.svg" width="30px"
+                        height="30px" />
+                    </div>
+                    <div>
+                      <h5 class="sidecardtitle">Site Assessment</h5>
+                      <p class="sidecardcontent">
+                        {{ assessment }}
+                        <small class="sidecardcontent"> remains</small>
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="sidecardblock" (click)="changeJobListing('permitdesign')" [ngClass]="[
+                currentJobListing == 'permitdesign'
+                  ? 'selctedbackground'
+                  : 'unselctedbackground'
+              ]">
+              <div class="row">
+                <div>
+                  <div class="row">
+                    <div>
+                      <img class="sidecardicon" width="30px" height="30px" src="../../../../../assets/jobpermit.svg" />
+                    </div>
+                    <div>
+                      <h5 class="sidecardtitle">Permit Design</h5>
+                      <p class="sidecardcontent">
+                        {{ permit }}
+                        <small class="sidecardcontent"> remains</small>
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div>
+            <div class="sidecard mt-4">
+              <h3 class="selected-heading">Selected Items</h3>
+              <button type="button" (click)="applySelectedDesign()" *ngIf="selectedJob.length > 0"
+                style="margin-top: -51px; margin-right: 10px; float: right" class="selectbutton">
+                Apply
+              </button>
+              <div *ngIf="this.selectedJob.length > 0">
+                <div class="selected-item-card" style="height: 105px" *ngFor="let design of selectedJob">
+                  <div class="row">
+                    <h5 class="selected-card-title">{{ design.name }}</h5>
+                    <h5 class="selected-card-title">{{ design.email }}</h5>
+                  </div>
+                  <div class="row">
+                    <div class="col">
+                      <p class="selected-card-dates">
+                        {{
+                        genericService.formatDateInDisplayFormat(
+                        design.created_at
+                        )
+                        }}
+                        |
+                        {{
+                        genericService.formatTimeInDisplayFormat(
+                        design.created_at
+                        )
+                        }}
+                      </p>
+                      <button type="button" style="background: #edc77300; border: 0px; float: right"
+                        (click)="removeSelectedJob(design)">
+                        <img style="margin-top: -125px; width: 15px" src="../../../../../assets/deletenew.svg" />
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row" *ngIf="this.selectedJob.length == 0" style="height: 80%">
+                <div class="col md-12">
+                  <div class="row" style="margin-top: 10px">
+                    <div class="col" style="
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                      ">
+                      <img src="./../assets/sad.svg" style="width: 35px; justify-self: center" />
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col" style="
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                      ">
+                      <div style="font-size: 15px; font-weight: 600">
+                        Yet to break the ice
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

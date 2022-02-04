@@ -1,0 +1,42 @@
+<div class="container">
+  <div class="row">
+    <div class="col-8">
+      <h4 class="dialogformtitle">Assign Sales Manager</h4>
+    </div>
+    <div class="col-4" style="padding-right: 0px">
+      <button mat-icon-button (click)="onCloseClick()" class="float-right">
+        <img class="dialogclose" src="../../../../../assets/close.svg" />
+      </button>
+    </div>
+  </div>
+</div>
+
+<div mat-dialog-content>
+  <form>
+    <div class="form-group salesmanagerformradiogroup">
+      <mat-radio-group
+        name="Sales Manger"
+        aria-label="Sales Manger"
+        [formControl]="selecteduser"
+        required
+      >
+        <div class="row">
+          <div class="col-12" *ngFor="let user of data.salesManager">
+            <mat-radio-button
+              matTooltip="{{ user.email }}"
+              matTooltipPosition="right"
+              value="{{ user.id }}"
+              >{{ user.firstname }} {{ user.lastname }}</mat-radio-button
+            >
+          </div>
+        </div>
+      </mat-radio-group>
+      <mat-error [hidden]="displayerror" *ngIf="selecteduser.invalid">{{
+        getErrorMessage(selecteduser)
+      }}</mat-error>
+    </div>
+  </form>
+</div>
+<mat-dialog-actions align="end">
+  <button mat-raised-button (click)="assignsalesManager()">Assign</button>
+</mat-dialog-actions>

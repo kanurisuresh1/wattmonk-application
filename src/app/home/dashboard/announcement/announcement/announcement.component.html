@@ -1,0 +1,333 @@
+<div class="main-content">
+  <div class="topactionbar">
+    <button
+      class="primarymatbutton"
+      style="border: none; border-radius: 5px"
+      mat-raised-button
+      (click)="openAddannouncementDialog()"
+    >
+      + Broadcast
+    </button>
+  </div>
+
+  <div *ngIf="!placeholder">
+    <div class="col-12 mt-5 border" *ngIf="isLoading">
+      <div
+        class="row bg-light"
+        style="height: 60px; display: flex; align-items: center"
+      >
+        <div class="col-2 d-flex justify-content-start">
+          <p count="1" class="d-block">Type</p>
+        </div>
+        <div class="col-4 d-flex justify-content-start">
+          <p count="1" class="d-block">Description</p>
+        </div>
+        <div class="col-1 d-flex justify-content-center">
+          <p count="1" class="d-block">Status</p>
+        </div>
+        <div class="col-2 d-flex justify-content-center">
+          <p count="1" class="d-block">Background Colour</p>
+        </div>
+        <div class="col-2 d-flex justify-content-center">
+          <p count="1" class="d-block">Text Colour</p>
+        </div>
+        <div class="col-1 d-flex justify-content-center">
+          <p count="1" class="d-block">Action</p>
+        </div>
+      </div>
+
+      <div
+        class="row bg-white"
+        *ngFor="let number of [0, 1, 2, 3]"
+        style="height: 60px; display: flex; align-items: center"
+      >
+        <div class="col-2 d-flex justify-content-start">
+          <ngx-skeleton-loader
+            count="1"
+            class="d-block"
+            [theme]="{
+              'border-radius': '8px',
+              'background-color': '#DBDAD8',
+              height: '12px',
+              width: '60px',
+              'margin-top': '1.1rem'
+            }"
+          >
+          </ngx-skeleton-loader>
+        </div>
+        <div class="col-4 d-flex justify-content-start">
+          <ngx-skeleton-loader
+            count="1"
+            class="d-block"
+            [theme]="{
+              'border-radius': '8px',
+              'background-color': '#DBDAD8',
+              height: '12px',
+              width: '300px',
+              'margin-top': '1.1rem'
+            }"
+          >
+          </ngx-skeleton-loader>
+        </div>
+        <div class="col-1 d-flex justify-content-center">
+          <ngx-skeleton-loader
+            count="1"
+            class="d-block"
+            [theme]="{
+              'border-radius': '8px',
+              'background-color': '#DBDAD8',
+              height: '12px',
+              width: '45px',
+              'margin-top': '1.1rem'
+            }"
+          >
+          </ngx-skeleton-loader>
+        </div>
+        <div class="col-2 d-flex justify-content-center">
+          <ngx-skeleton-loader
+            count="1"
+            class="d-block"
+            [theme]="{
+              'border-radius': '8px',
+              'background-color': '#DBDAD8',
+              height: '12px',
+              width: '45px',
+              'margin-top': '1.1rem'
+            }"
+          >
+          </ngx-skeleton-loader>
+        </div>
+        <div class="col-2 d-flex justify-content-center">
+          <ngx-skeleton-loader
+            count="1"
+            class="d-block"
+            [theme]="{
+              'border-radius': '8px',
+              'background-color': '#DBDAD8',
+              height: '12px',
+              width: '55px',
+              'margin-top': '1.1rem'
+            }"
+          >
+          </ngx-skeleton-loader>
+        </div>
+        <div class="col-1 d-flex justify-content-center">
+          <ngx-skeleton-loader
+            count="1"
+            class="d-block"
+            [theme]="{
+              'border-radius': '8px',
+              'background-color': '#DBDAD8',
+              height: '12px',
+              width: '55px',
+              'margin-top': '1.1rem'
+            }"
+          >
+          </ngx-skeleton-loader>
+        </div>
+      </div>
+    </div>
+
+    <div
+      infiniteScroll
+      [infiniteScrollDistance]="1"
+      [scrollWindow]="false"
+      [infiniteScrollThrottle]="100"
+      (scrolled)="onTablescroll()"
+      class="scroll-container"
+      *ngIf="!isLoading"
+    >
+      <table
+        mat-table
+        [dataSource]="allAnnouncement"
+        class="w-100"
+        sticky="true"
+      >
+        <ng-container matColumnDef="Type">
+          <mat-header-cell
+            style="
+              font-size: 13px;
+              font-weight: 500;
+              color: black;
+              background: lightgray;
+              padding: 14px;
+            "
+            *matHeaderCellDef
+            class="col-2 justify-content-start"
+          >
+            Type
+          </mat-header-cell>
+          <mat-cell
+            *matCellDef="let element"
+            class="col-2 justify-content-start"
+          >
+            {{
+              (element.type == "alert" ? "Notice" : "Broadcast") | titlecase
+            }}</mat-cell
+          >
+        </ng-container>
+        <ng-container matColumnDef="Description">
+          <mat-header-cell
+            style="
+              font-size: 13px;
+              font-weight: 500;
+              color: black;
+              background: lightgray;
+              padding: 14px;
+            "
+            *matHeaderCellDef
+            class="col-4 justify-content-start"
+          >
+            Description
+          </mat-header-cell>
+
+          <mat-cell
+            *matCellDef="let element"
+            class="col-4 justify-content-start"
+          >
+            {{ element.announcement }}</mat-cell
+          >
+        </ng-container>
+        <ng-container matColumnDef="status">
+          <mat-header-cell
+            *matHeaderCellDef
+            style="
+              font-size: 13px;
+              font-weight: 500;
+              color: black;
+              background: lightgray;
+              text-align: left;
+              padding: 14px;
+            "
+            class="col-1 justify-content-start"
+          >
+            Status
+          </mat-header-cell>
+          <mat-cell
+            *matCellDef="let element"
+            style="text-align: center; padding: 13px"
+            class="col-1 justify-content-start"
+          >
+            {{ element.status_type }}
+          </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="Colorcode">
+          <mat-header-cell
+            *matHeaderCellDef
+            style="
+              font-size: 13px;
+              font-weight: 500;
+              color: black;
+              background: lightgray;
+              text-align: center;
+              padding: 14px;
+            "
+            class="col-2 justify-content-center"
+            >Background Colour</mat-header-cell
+          >
+          <mat-cell *matCellDef="let element" class="col-2">
+            <span
+              style="
+                height: 24px;
+                width: 49px;
+                border-radius: 8px;
+                padding: 13px;
+                margin-left: 35px;
+              "
+              [style.background-color]="element.colorcode"
+            ></span>
+            &nbsp;&nbsp;{{ element.colorcode }}</mat-cell
+          >
+        </ng-container>
+        <ng-container matColumnDef="Text Color">
+          <mat-header-cell
+            *matHeaderCellDef
+            style="
+              font-size: 13px;
+              font-weight: 500;
+              color: black;
+              background: lightgray;
+              text-align: center;
+              padding: 14px;
+            "
+            class="col-2 justify-content-center"
+            >Text Colour</mat-header-cell
+          >
+          <mat-cell *matCellDef="let element" class="col-2">
+            <span
+              style="
+                height: 24px;
+                width: 49px;
+                border-radius: 8px;
+                padding: 13px;
+                margin-left: 62px;
+              "
+              [style.background-color]="element.textcolor"
+            ></span
+            >&nbsp;&nbsp;{{ element.textcolor }}
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="Action">
+          <mat-header-cell
+            mat-header-cell
+            *matHeaderCellDef
+            style="
+              font-size: 13px;
+              font-weight: 500;
+              color: black;
+              background: lightgray;
+              text-align: center;
+              padding: 14px;
+            "
+            class="col-1 justify-content-center"
+          >
+            Action
+          </mat-header-cell>
+          <td
+            mat-cell
+            *matCellDef="let element"
+            class="col-2 justify-content-start"
+            (click)="$event.stopPropagation()"
+          >
+            <span class="tableactionbutton">
+              <button mat-icon-button>
+                <img
+                  class="dialogclose"
+                  src="../../../../../assets/edit.svg"
+                  (click)="openEditAnnouncement(element)"
+                />
+              </button>
+              <button mat-icon-button>
+                <img
+                  class="dialogclose"
+                  src="../../../../../assets/delete.svg"
+                  (click)="deleteAnnouncement(element)"
+                />
+              </button>
+            </span>
+          </td>
+        </ng-container>
+
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+      </table>
+      <mat-spinner
+        *ngIf="scrolling"
+        style="position: absolute; left: 49%; bottom: 1%"
+        [diameter]="35"
+      ></mat-spinner>
+    </div>
+  </div>
+
+  <div
+    class="container-fluid d-flex justify-content-center align-items-center"
+    style="height: 70vh"
+    *ngIf="placeholder"
+  >
+    <img
+      src="../../../../../assets/Report-Work Status Placholder.jpg"
+      width="700px"
+    />
+  </div>
+</div>

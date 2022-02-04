@@ -1,0 +1,52 @@
+<div class="main-content">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-9">
+        <div class="row d-flex align-items-center pt-1 pl-3">
+          <h2 class="mb-0 title">Add Rows</h2>
+        </div>
+      </div>
+      <div class="col-3 d-flex justify-content-end pr-0">
+        <span class="tableactionbutton">
+          <button mat-icon-button (click)="onCloseClick()">
+            <img class="dialogclose" src="../../../../../assets/close.svg" />
+          </button>
+        </span>
+      </div>
+    </div>
+  </div>
+  <div class="col-12 py-3">
+    <form class="logincard" [formGroup]="addRowsDialogForm">
+      <p class="title para">Number of Rows*</p>
+      <mat-form-field appearance="outline" class="fullwidth">
+        <input
+          type="tel"
+          maxlength="2"
+          min="1"
+          autocomplete="off"
+          placeholder="eg. 1-99"
+          [formControl]="numberItems"
+          matInput
+          required
+        />
+        <mat-error *ngIf="numberItems.invalid">{{
+          getErrorMessage(numberItems)
+        }}</mat-error>
+      </mat-form-field>
+      <div class="d-flex justify-content-start">
+        <button class="formbutton" (click)="onSaveRow()" mat-raised-button>
+          Save
+        </button>
+
+        <button
+          style="background: red; color: #fff; margin-left: 10px"
+          class="mr-2 formbutton"
+          (click)="onCloseClick()"
+          mat-raised-button
+        >
+          Cancel
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,203 @@
+.websurveycontainer {
+  background-color: #999999;
+}
+
+.surveyprogressbar {
+  height: 10px !important;
+}
+
+.surveyprogressbar .mat-progress-bar-fill::after {
+  background-color: #8bc34aff;
+}
+
+.helparea {
+  position: absolute;
+  top: 10px;
+  margin-left: 0px;
+  margin-right: 0px;
+  width: 100%;
+}
+.helparea p {
+  color: #ffffff;
+  font-size: 9px;
+  margin-left: 12px;
+  margin-top: 2px;
+  margin-bottom: 2px;
+  margin-right: 12px;
+}
+.helparea p img {
+  width: 16px;
+  height: 16px;
+  margin-bottom: 2px;
+}
+.helpactive {
+  background-color: #2ecc7080;
+  border-top: 0.8px solid #16a085;
+  border-bottom: 0.8px solid #16a085;
+}
+.helpnormal {
+  background-color: #ff767588;
+  border-top: 0.8px solid #d63031;
+  border-bottom: 0.8px solid #d63031;
+}
+
+.questionarea {
+  background-color: #ffffff;
+  position: absolute;
+  top: 35px;
+  margin-left: 0px;
+  margin-right: 0px;
+  width: 100%;
+}
+
+.questionarea p {
+  margin-top: 10px;
+  margin-bottom: 0px;
+  font-size: 12px;
+}
+
+.actionarea {
+  position: absolute;
+  bottom: 0em;
+  /* background-color: brown; */
+  margin-left: 0px;
+  margin-right: 0px;
+}
+
+.actionareacol {
+  padding-left: 0px;
+  padding-right: 0px;
+}
+
+.actionarea .capturebutton {
+  background-color: #ffffffaa;
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  min-width: 0px;
+  border: 4px solid #ffffff;
+  margin: 0px 0px 20px 0px;
+}
+
+.actionarea .gallerybutton {
+  background-color: transparent;
+  width: 70px;
+  height: 70px;
+  position: absolute;
+  right: 32px;
+  padding: 0px;
+}
+
+.actionarea .gallerybutton .dummyimagearea {
+  background-color: #ffffffaa;
+  border-radius: 4px;
+  padding: 4px;
+  height: 100%;
+}
+
+.actionarea .gallerybutton img {
+  border-radius: 4px;
+  position: absolute;
+  top: 7px;
+  left: 7px;
+  width: 66px;
+  height: 66px;
+}
+
+.actionarea .mainbuttons {
+  /* background-color: black; */
+  margin-left: 0px;
+  margin-right: 0px;
+}
+
+.actionarea .mainbuttons .active {
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 0 4px;
+}
+
+.actionarea .mainbuttons .normal {
+  color: #ffffff;
+  font-size: 14px;
+  opacity: 0.5;
+  font-weight: 100;
+  padding: 0 4px;
+}
+
+.cdk-virtual-scroll-data-source-submenu .submenu-viewport {
+  height: 40px;
+}
+
+.cdk-virtual-scroll-data-source-submenu
+  .submenu-viewport
+  .cdk-virtual-scroll-content-wrapper {
+  display: flex;
+  flex-direction: row;
+}
+
+.cdk-virtual-scroll-data-source-submenu .submenuactive {
+  color: #ffffff;
+  opacity: 1;
+  font-size: 0.8rem;
+  font-weight: 600;
+  width: auto;
+  height: 100%;
+}
+
+.cdk-virtual-scroll-data-source-submenu .submenunormal {
+  color: #ffffff;
+  opacity: 0.5;
+  font-size: 0.8rem;
+  font-weight: 100;
+  width: auto;
+  height: 100%;
+}
+
+.cdk-virtual-scroll-data-source-capturedimages .capturedimages-viewport {
+  height: 40px;
+}
+
+.cdk-virtual-scroll-data-source-capturedimages
+  .capturedimages-viewport
+  .cdk-virtual-scroll-content-wrapper {
+  display: flex;
+  flex-direction: row;
+}
+
+.cdk-virtual-scroll-data-source-capturedimages .capturedimagesactive {
+  color: #ffffff;
+  opacity: 1;
+  font-size: 0.8rem;
+  font-weight: 600;
+  width: auto;
+  height: 100%;
+}
+
+.cdk-virtual-scroll-data-source-capturedimages .capturedimagesnormal {
+  color: #ffffff;
+  opacity: 0.5;
+  font-size: 0.8rem;
+  font-weight: 100;
+  width: auto;
+  height: 100%;
+}
+
+.actionBtn {
+  margin-top: 5px;
+  margin-bottom: 2px;
+  font-size: 1.2em;
+}
+
+.snapshot {
+  text-align: center;
+}
+
+.snapshot img {
+  max-width: 800px;
+  max-height: 800px;
+}
+
+ul.links {
+  padding-bottom: 20px;
+}

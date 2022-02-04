@@ -1,0 +1,137 @@
+<div *ngIf="isLoading" class="overlay">
+  <mat-progress-bar
+    class="commonprogressbar"
+    mode="indeterminate"
+  ></mat-progress-bar>
+</div>
+<div class="fullscreen loginbackground">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-xs-10 col-sm-8 col-md-8 col-lg-4">
+        <div class="row brandrow">
+          <p>
+            <img src="../../../assets/wattmonklogo.png" width="40px" />WattMonk
+          </p>
+        </div>
+        <div class="row">
+          <div class="col">
+            <mat-card class="logincard mat-elevation-z7">
+              <mat-card-header>
+                <mat-card-title>Sign in to your account</mat-card-title>
+              </mat-card-header>
+              <mat-card-content>
+                <form
+                  class="loginform"
+                  [formGroup]="loginForm"
+                  (keydown.enter)="onLogin($event)"
+                >
+                  <div class="form-group">
+                    <p>Email*</p>
+                    <mat-form-field appearance="outline" class="fullwidth">
+                      <input
+                        matInput
+                        placeholder="eg. pat@example.com"
+                        [formControl]="email"
+                        required
+                      />
+                      <mat-error *ngIf="email.invalid">{{
+                        getEmailErrorMessage()
+                      }}</mat-error>
+                    </mat-form-field>
+                  </div>
+                  <div class="form-group mt-3">
+                    <p>
+                      Password*
+                      <a
+                        class="float-right actionlink"
+                        tabindex="-1"
+                        [routerLink]="['/auth/forgotpassword']"
+                        >Forgot Password?</a
+                      >
+                    </p>
+                    <mat-form-field appearance="outline" class="fullwidth">
+                      <input
+                        matInput
+                        [type]="hide ? 'password' : 'text'"
+                        [formControl]="password"
+                        required
+                      />
+                      <button
+                        class="visibility"
+                        tabindex="-1"
+                        mat-icon-button
+                        matSuffix
+                        (click)="onPasswordVisiblityToggle($event)"
+                        [attr.aria-label]="'Hide password'"
+                        [attr.aria-pressed]="hide"
+                      >
+                        <mat-icon>{{
+                          hide ? "visibility_off" : "visibility"
+                        }}</mat-icon>
+                      </button>
+                      <mat-error *ngIf="password.invalid">{{
+                        getPasswordErrorMessage()
+                      }}</mat-error>
+                    </mat-form-field>
+                  </div>
+                  <div class="form-group">
+                    <mat-checkbox
+                      class="mediumtext"
+                      [formControl]="keepmesignin"
+                      (change)="keepLogin()"
+                      >Keep me signed in</mat-checkbox
+                    >
+                  </div>
+                </form>
+              </mat-card-content>
+              <mat-card-actions>
+                <button
+                  type="submit"
+                  mat-raised-button
+                  (click)="onLogin($event)"
+                  class="fullwidth"
+                >
+                  Sign in
+                </button>
+              </mat-card-actions>
+            </mat-card>
+          </div>
+        </div>
+        <div class="row mt-4">
+          <div class="col">
+            <p class="registrationtext">
+              Don't have an account yet?
+              <a class="actionlink" [routerLink]="['/auth/register']"
+                >Sign up</a
+              >
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row footerrow fullwidth">
+      <div class="col text-center">
+        <span class="mt-2"
+          >&copy; 2020 WattMonk Technologies Private Limited. All Rights
+          Reserved.</span
+        >
+        <div class="row justify-content-center">
+          <a
+            href="https://www.wattmonk.com/privacy-policy"
+            target="_blank"
+            class="greyactionlink"
+            style="border-right: 1px solid #697386"
+            >Privacy Policy</a
+          >
+          <a
+            href="https://www.wattmonk.com/service-agreement"
+            target="_blank"
+            class="greyactionlink"
+            >Service Agreement</a
+          >
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

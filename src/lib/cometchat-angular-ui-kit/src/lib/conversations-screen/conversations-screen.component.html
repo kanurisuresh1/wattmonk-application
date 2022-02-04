@@ -1,0 +1,162 @@
+<div class="cometchat-embedded-container">
+  <div class="cometchat-embedded-sidebar" style="width: 400px !important">
+    <div class="row">
+      <div class="col">
+        <button mat-button style="background: transparent; color: black; font-size: 16px" class="backbutton"
+          (click)="searchChatDialog()">
+          <img style="height: 19px; width: 18px; margin-bottom: 5px" src="../../../../../assets/search.svg " />
+          Search
+        </button>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col text-left">
+        <button mat-button (click)="openMentions()" [ngStyle]="
+            genericService.mentionbuttonselected == true
+              ? {
+                  background: '#EDC773',
+                  color: 'black',
+                  'font-size': '16px',
+                  padding: '0px',
+                  'font-weight': '500'
+                }
+              : {
+                  background: 'transparent',
+                  color: 'black',
+                  'font-size': '16px',
+                  padding: '0px',
+                  'font-weight': '500'
+                }
+          ">
+          @ Mentions
+        </button>
+      </div>
+    </div>
+    <div *ngIf="unreadGroups.length > 0" style="height: 32vh">
+      <app-unread-conversation-list [unreadGroups]="unreadGroups" #unreadconversationslist
+        [actionRequired]="messagesActions" (actionPerformed)="onItemSelected($event)" (click)="unreadClick()">
+      </app-unread-conversation-list>
+    </div>
+    <div [ngStyle]="
+        unreadGroups.length > 0 ? { height: '41vh' } : { height: '72vh' }
+      ">
+      <cometchat-conversations-list #conversationslist [actionRequired]="messagesActions"
+        (actionPerformed)="onItemSelected($event)" [isunreadmessage]="isunreadmessage" (click)="readClick()">
+      </cometchat-conversations-list>
+    </div>
+  </div>
+
+  <div class="cometchat-embedded-chat-screen" [ngStyle]="
+      router.url == '/home/inbox/messages'
+        ? { 'min-width': '70%', 'max-width': '100%' }
+        : ''
+    ">
+    <cometchat-conversation-screen (actionPerformed)="handleActionByConversationScreen($event)" *ngIf="user"
+      user="{{ json.stringify(user) }}">
+    </cometchat-conversation-screen>
+
+    <cometchat-conversation-screen (actionPerformed)="handleActionByConversationScreen($event)" *ngIf="group"
+      group="{{ json.stringify(group) }}">
+    </cometchat-conversation-screen>
+    <div *ngIf="showmentions" style="margin-left: 1%; background: white; height: 100%">
+      <div class="row">
+        <div class="col">
+          <h2 style="padding-left: 10px">Mentions</h2>
+        </div>
+      </div>
+      <ng-container *ngIf="isMentionLoading">
+        <div class="mt-1 row mentioncontainer" *ngFor="let number of [0, 1, 2, 3, 4, 5, 6, 7]">
+          <div class="col-12">
+            <div class="row">
+              <ngx-skeleton-loader [theme]="{
+                  'margin-top': '4px',
+                  'margin-bottom': '0px',
+                  'border-radius': '4px',
+                  height: '15px',
+                  width: '480px',
+                  'background-color': '#EDDBB2'
+                }">
+              </ngx-skeleton-loader>
+            </div>
+            <div class="row">
+              <ngx-skeleton-loader [theme]="{
+                  'margin-top': '4px',
+                  'margin-bottom': '0px',
+                  'border-radius': '4px',
+                  height: '15px',
+                  width: '130px',
+                  'background-color': '#EDDBB2'
+                }">
+              </ngx-skeleton-loader>
+            </div>
+            <div class="row">
+              <ngx-skeleton-loader [theme]="{
+                  'margin-top': '4px',
+                  'margin-bottom': '0px',
+                  'border-radius': '4px',
+                  height: '15px',
+                  width: '260px',
+                  'background-color': '#EDDBB2'
+                }">
+              </ngx-skeleton-loader>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+
+      <ng-container *ngIf="!isMentionLoading && !isPlaceholder">
+        <div style="overflow: auto; height: 79vh">
+          <div class="mt-1 row mentioncontainer" *ngFor="let data of mentions.messages" (click)="onMEntionClick(data)">
+            <div class="col-12">
+              <div class="row">
+                <span class="mentionheader">{{ data.data.entities.sender.entity.name
+                  }}<span style="font-weight: 300"> mention you in </span>{{ data.data.entities.receiver.entity.name }}
+                </span>
+              </div>
+              <div class="row">
+                <span class="mentionheader" style="font-weight: 600">{{ data.data.entities.sender.entity.name
+                  }}&nbsp;<span style="font-weight: 400; font-size: 11px; color: darkgrey">{{
+                    data.sentAt * 1000 | date:'yyyy-MM-dd HH:mm:ss '
+                    }}</span>
+                </span>
+              </div>
+              <div class="row" style="border-bottom: 1px solid black">
+                <p style="font-size: 13px; font-family: 'Montserrat'">
+                  {{ data.data.text }}
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+      <ng-container *ngIf="isPlaceholder">
+        <div class="col md-12" style="margin-top: 30vh">
+          <div class="row" style="margin-top: 70px">
+            <div class="col" style="
+                display: flex;
+                justify-content: center;
+                align-items: center;
+              ">
+              <img src="./../assets/sad.svg" style="width: 35px; justify-self: center" />
+            </div>
+          </div>
+          <div class="row" style="margin-bottom: 70px">
+            <div class="col" style="
+                display: flex;
+                justify-content: center;
+                align-items: center;
+              ">
+              <div style="font-size: 15px; font-weight: 600">
+                Yet to break the ice
+              </div>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+</div>
+
+<app-calling-screen *ngIf="isadmin && incomingScreen" (actionPerformed)="handleCallScreenActions($event)"
+  inProgressCall="{{ inProgressCall }}" incomingScreen="{{ incomingScreen }}">
+</app-calling-screen>

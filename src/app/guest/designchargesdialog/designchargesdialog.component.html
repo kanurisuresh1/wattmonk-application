@@ -1,0 +1,246 @@
+<!-- <div class="container">
+  <div class="row">
+    <div class="col-8">
+      <h4 class="dialogformtitle">Confirm your order</h4>
+    </div> -->
+<!-- <div class="col-4" style="padding-right: 0px;">
+      <button mat-icon-button (click)="onCloseClick()" class="float-right">
+        <img class="dialogclose" src="../../../../../assets/close.svg" />
+      </button>
+    </div> -->
+<!-- </div>
+</div>
+​
+<div mat-dialog-content>
+  <div class="container">
+    <div class="row mt-2">
+      <div class="col">
+        <p>Please make the payment to process your order with WattMonk.</p>
+      </div>
+    </div>
+    <div class="row mt-4">
+      <div class="col">
+       
+        <div class="row mt-1"  *ngIf="!this.data.isprelim">
+          <div class="col">
+            <div style="height: 1px; background-color: #A5A9ABAA;"></div>
+          </div>
+        </div>
+        <div class="row mt-3">
+          <div class="col">
+            <p class="subtitle" style="color: #666666; font-size: 12px;">Service Charges</p>
+          </div>
+          <div class="col">
+            <p class="highlightedtext">${{servicecharge}}</p>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">
+            <p class="subtitle" style="color: #666666; font-size: 12px;">Discount</p>
+          </div>
+          <div class="col">
+            <p class="highlightedtext">${{discountamount}}</p>
+          </div>
+        </div>
+       
+        <div class="row mt-2">
+          <div class="col">
+            <div style="height: 1px; background-color: #A5A9ABAA;"></div>
+          </div>
+        </div>
+        <div class="row mt-3">
+          <div class="col">
+            <p style="color: #000000; font-size: 15px; font-weight: 600;">You have to pay</p>
+          </div>
+          <div class="col">
+            <p class="superhighlightedtext">${{amounttopay.toFixed(2)}}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+​
+  </div>
+</div>
+<section>
+  <mat-dialog-actions align="end">
+      <button mat-raised-button mat-button
+          (click)="onConfirmationClick()">Confirm</button>
+    
+  </mat-dialog-actions>
+</section> -->
+​ ​ ​ ​ ​ ​ ​
+<!-- <div class="container">
+    <div class="row">
+      <div class="col-8">
+        <h4 class="dialogformtitle">Confirm your order</h4>
+      </div>
+    </div>
+  </div>
+  
+  <div mat-dialog-content>
+    <div class="container">
+      <div class="row mt-2">
+        <div class="col">
+          <p>Please make the payment to process your order with Wattmonk.</p>
+        </div>
+  
+      </div>
+      <div class="row mt-4 mb-4">
+        <div class="col">
+          <mat-card style="background-color: #4C95E9;">
+            <div class="row">
+              <div class="col">
+                <div>
+                  <p class="subtitle" style="color: #FFFFFFAA;">Service Price</p>
+                  <p class="highlightedtext">$ {{servicecharge}}</p>
+                </div>
+                <div class="mt-4">
+                  <p class="subtitle" style="color: #FFFFFFAA;">Discount</p>
+                  <p class="highlightedtext">$ {{discountamount}}</p>
+                </div>
+                <div class="mt-4">
+                  <p class="subtitle" style="color: #FFFFFFAA;">You have to pay</p>
+                  <p class="highlightedtext">$ {{amounttopay}}</p>
+                </div>
+              </div>
+              <div class="col">
+                <div>
+                  <p class="subtitle" style="color: #FFFFFFAA;">Service used</p>
+                  <p *ngIf="this.data.isprelim" class="highlightedtext">Prelim design</p>
+                  <p *ngIf="!this.data.isprelim" class="highlightedtext">Permit design</p>
+                </div>
+                <div class="mt-4">
+                  <p class="subtitle" style="color: #FFFFFFAA;">Design ID</p>
+                  <p class="highlightedtext">{{this.data.designid}}</p>
+                </div>
+              </div>
+            </div>
+          </mat-card>
+        </div>
+      </div>
+    </div>
+  </div>
+  <section>
+    <mat-dialog-actions align="end">
+        <button mat-raised-button mat-button
+            (click)="onConfirmationClick()">Confirm</button>
+      
+    </mat-dialog-actions>
+  </section> -->
+​ ​ ​
+<div class="container">
+  <div class="row">
+    <div class="col-8">
+      <p class="orderformtitle">Order Details</p>
+    </div>
+    <div class="col-4">
+      <!-- <button mat-icon-button class="float-right">
+          <img class="dialogclose" (click)="onCloseClick()" src="../../../../../assets/close.svg">
+        </button> -->
+    </div>
+  </div>
+</div>
+<div mat-dialog-content>
+  <div class="container py-3">
+    <div
+      class="row d-flex d-flex align-items-center"
+      *ngIf="!this.data.isprelim"
+    >
+      <div class="cardicon">
+        <img
+          src="../../../../../assets/permit.svg"
+          width="13px"
+          height="15px"
+        />
+      </div>
+      <span class="font-weight-bold">Permit Design</span>
+    </div>
+    <div
+      class="row d-flex d-flex align-items-center"
+      *ngIf="this.data.isprelim"
+    >
+      <div class="cardicon">
+        <img
+          src="../../../../../assets/prelim.svg"
+          width="13px"
+          height="15px"
+        />
+      </div>
+      <span class="orderformsubtitle" *ngIf="data.designtype == 'proposal'"
+        >Sales Proposal
+      </span>
+      <span class="orderformsubtitle" *ngIf="data.designtype == 'assessment'"
+        >Site Assessment</span
+      >
+    </div>
+    <div class="row mt-4">
+      <div class="col">
+        <div class="row">
+          <div class="col">
+            <p class="ordertext">Service Charges:</p>
+          </div>
+          <div class="col">
+            <p class="highlightedtext text-black font-weight-bold">
+              ${{ servicecharge }}
+            </p>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">
+            <p class="ordertext">Discount:</p>
+          </div>
+          <div class="col">
+            <p class="highlightedtext text-black font-weight-bold">
+              ${{ discountamount }}
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row mt-4">
+      <div class="col">
+        <div class="row">
+          <div class="col">
+            <p class="ordersubtitle">Total Amount:</p>
+          </div>
+          <div class="col">
+            <p class="highlightedtext" style="font-weight: 600">
+              ${{ amounttopay.toFixed(2) }}
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<section class="px-3">
+  <mat-dialog-actions class="fullwidth">
+    <div class="col-12 px-0 mb-4" *ngIf="amounttopay > 0">
+      <p class="ordersubtitle">Payment Option:</p>
+      <button
+        mat-raised-button
+        class="card"
+        (click)="openAddMoneyUsingPaypal()"
+      >
+        <div
+          class="col-12 d-flex justify-content-between align-items-center pl-0 pr-3"
+        >
+          <p class="ordersubtitle mb-0">Paypal</p>
+          <img
+            src="../../../../../assets/paypal-seeklogo.com.svg"
+            width="95px"
+            height="65px"
+          />
+        </div>
+      </button>
+    </div>
+    <button
+      mat-raised-button
+      mat-button
+      class="w-100 mb-4"
+      (click)="onConfirmationClick()"
+    >
+      Confirm
+    </button>
+  </mat-dialog-actions>
+</section>

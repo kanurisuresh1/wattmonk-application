@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="43.305" height="48" viewBox="0 0 43.305 48">
+  <g id="All" transform="translate(11014.659 -11996)">
+    <g id="Group_106" data-name="Group 106" transform="translate(-11010.792 12015.388)">
+      <rect id="Rectangle_69" data-name="Rectangle 69" width="31.705" height="1.547" transform="translate(0)" fill="#edc773"/>
+      <rect id="Rectangle_70" data-name="Rectangle 70" width="31.705" height="1.547" transform="translate(0 3.866)" fill="#edc773"/>
+      <rect id="Rectangle_71" data-name="Rectangle 71" width="31.705" height="1.547" transform="translate(0 7.733)" fill="#edc773"/>
+      <rect id="Rectangle_72" data-name="Rectangle 72" width="1.547" height="1.547" transform="translate(30.159 11.599)" fill="#edc773"/>
+      <rect id="Rectangle_73" data-name="Rectangle 73" width="1.547" height="1.547" transform="translate(26.292 11.599)" fill="#edc773"/>
+      <rect id="Rectangle_74" data-name="Rectangle 74" width="1.547" height="1.547" transform="translate(22.426 11.599)" fill="#edc773"/>
+    </g>
+    <g id="Group_107" data-name="Group 107" transform="translate(-11014.659 11996)">
+      <path id="Path_194" data-name="Path 194" d="M63.725,8.562V4.7H48.186l.039-.29a3.89,3.89,0,1,0-7.712-1.028L40.336,4.7H24.287V44.133h3.866V48H67.592V8.562ZM42.045,3.582a2.344,2.344,0,1,1,4.646.619l-.065.493H44.285l.1-.659a.774.774,0,0,0-1.53-.23l-.133.889H41.9ZM25.834,6.242h14.3L39.788,8.8a3.892,3.892,0,0,0,3.374,4.375A3.889,3.889,0,0,0,47.5,9.824a.773.773,0,1,0-1.533-.2,2.343,2.343,0,0,1-4.179,1.121A2.328,2.328,0,0,1,41.323,9l.367-2.758H62.178V42.587H25.834V6.242ZM66.045,46.453H29.7v-2.32H63.725V10.108h2.32Z" transform="translate(-24.287 0)" fill="#362d1e"/>
+      <rect id="Rectangle_75" data-name="Rectangle 75" width="31.705" height="1.547" transform="translate(3.866 17.841)" fill="#362d1e"/>
+      <rect id="Rectangle_76" data-name="Rectangle 76" width="31.705" height="1.547" transform="translate(3.866 21.708)" fill="#362d1e"/>
+      <rect id="Rectangle_77" data-name="Rectangle 77" width="31.705" height="1.547" transform="translate(3.866 25.574)" fill="#362d1e"/>
+      <rect id="Rectangle_78" data-name="Rectangle 78" width="1.547" height="1.547" transform="translate(34.025 29.441)" fill="#362d1e"/>
+      <rect id="Rectangle_79" data-name="Rectangle 79" width="1.547" height="1.547" transform="translate(30.159 29.441)" fill="#362d1e"/>
+      <rect id="Rectangle_80" data-name="Rectangle 80" width="1.547" height="1.547" transform="translate(26.292 29.441)" fill="#362d1e"/>
+    </g>
+  </g>
+</svg>

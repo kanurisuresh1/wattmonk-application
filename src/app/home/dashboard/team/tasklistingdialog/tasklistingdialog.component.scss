@@ -1,0 +1,94 @@
+.taskcontainer {
+  background-color: white;
+  border-radius: 8px;
+  max-height: 54vh;
+  height: 54vh;
+  overflow-y: auto;
+  padding: 0px;
+}
+.taskcard-header {
+  font-weight: 600;
+  width: 50px;
+  height: 37px;
+  background: #edc773;
+  border-radius: 5px;
+}
+.jobcard {
+  background-color: #f8f8f8;
+  border-radius: 5px;
+  margin: 12px 6px 0px 6px;
+  // width: 46%;
+  width: 124px;
+  height: 124px;
+  padding: 10px;
+}
+.jobcard-icon {
+  width: 22px;
+  background: #edc773;
+  border-radius: 5px;
+}
+.jobcontainer {
+  margin: 0px;
+  padding-left: 10px;
+  padding-bottom: 10px;
+}
+.jobcardheader {
+  font-weight: 500;
+  font-size: 12px;
+  word-break: break-all;
+}
+.jobcard-content {
+  font-weight: 600;
+  font-size: 12px;
+  word-break: break-all;
+}
+.jobcard-footer {
+  font-weight: 500;
+  font-size: 11px;
+  color: grey;
+  word-break: break-all;
+}
+.nodatafound {
+  right: 106px;
+  background-color: white !important;
+  height: 42vh;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+}
+.jobcard :hover {
+  cursor: pointer;
+}
+.jobcard-polygon-icon {
+  // width: 22px;
+  background: #edc773;
+  border-radius: 5px;
+  // height: 15px;
+  //   width: 15px;
+  height: 14px;
+  width: 18px;
+}
+
+.search {
+  flex: 0 0 40%;
+
+  &__input {
+    font-family: inherit;
+    font-size: inherit;
+    color: inherit;
+    background-color: #f4f2f2;
+    border: none;
+    outline: none;
+    padding: 0.7em 2em;
+    border-radius: 100px;
+    width: 90%;
+    transition: all 0.2s;
+
+    &:focus {
+      outline: none;
+      width: 100%;
+      background-color: #dbdada;
+    }
+  }
+}

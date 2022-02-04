@@ -1,0 +1,325 @@
+<div *ngIf="isLoading" class="overlay">
+  <mat-card class="spinnercard" align-items-center>
+    <div class="row">
+      <div class="col-3">
+        <mat-progress-spinner
+          diameter="50"
+          color="primary"
+          mode="indeterminate"
+          strokeWidth="5"
+        ></mat-progress-spinner>
+      </div>
+      <div class="col">
+        <h4 class="spinnertext">{{ loadingmessage }}</h4>
+      </div>
+    </div>
+  </mat-card>
+</div>
+<div class="container">
+  <div class="row">
+    <div class="col-10">
+      <h4 class="dialogformtitle" *ngIf="!data.isEditMode">
+        Add Inverter Model
+      </h4>
+      <h4 class="dialogformtitle" *ngIf="data.isEditMode">
+        Edit Inverter Model
+      </h4>
+    </div>
+    <div class="col-2">
+      <button mat-icon-button (click)="onCloseClick()" class="float-right">
+        <img class="dialogclose" src="../../../../../assets/close.svg" />
+      </button>
+    </div>
+  </div>
+</div>
+
+<div mat-dialog-content>
+  <div class="container">
+    <div class="row">
+      <form [formGroup]="inverterModelFormGroup">
+        <div class="row">
+          <div class="col">
+            <mat-form-field appearance="fill" class="fullwidth">
+              <mat-label>Inverter Make</mat-label>
+              <mat-select [formControl]="invertermake" required>
+                <mat-option
+                  *ngFor="let inverter of invertermakedata"
+                  [value]="inverter"
+                  >{{ inverter.name }}</mat-option
+                >
+              </mat-select>
+              <mat-error *ngIf="invertermake.invalid">{{
+                invertermakeerror
+              }}</mat-error>
+            </mat-form-field>
+          </div>
+          <div class="col">
+            <mat-form-field appearance="fill" class="fullwidth">
+              <mat-label>Name</mat-label>
+              <input
+                [formControl]="name"
+                autocomplete="off"
+                matInput
+                required
+              />
+              <mat-error *ngIf="name.invalid">{{
+                getErrorMessage(name)
+              }}</mat-error>
+            </mat-form-field>
+          </div>
+          <div class="col">
+            <mat-form-field appearance="fill" class="fullwidth">
+              <mat-label>Phase</mat-label>
+              <input [formControl]="phase" autocomplete="off" matInput />
+              <mat-error *ngIf="phase.invalid">{{
+                getErrorMessage(phase)
+              }}</mat-error>
+            </mat-form-field>
+          </div>
+          <div class="col">
+            <mat-form-field appearance="fill" class="fullwidth">
+              <mat-label>Ratedacvoltage</mat-label>
+              <input
+                [formControl]="ratedacvoltage"
+                autocomplete="off"
+                matInput
+              />
+              <mat-error *ngIf="ratedacvoltage.invalid">{{
+                getErrorMessage(ratedacvoltage)
+              }}</mat-error>
+            </mat-form-field>
+          </div>
+          <div class="col">
+            <mat-form-field appearance="fill" class="fullwidth">
+              <mat-label>Rateoutputpower</mat-label>
+              <input
+                [formControl]="rateoutputpower"
+                autocomplete="off"
+                matInput
+              />
+              <mat-error *ngIf="rateoutputpower.invalid">{{
+                getErrorMessage(rateoutputpower)
+              }}</mat-error>
+            </mat-form-field>
+          </div>
+          <div class="col">
+            <mat-form-field appearance="fill" class="fullwidth">
+              <mat-label>Number of mppt channels</mat-label>
+              <input
+                [formControl]="numberofmpptchannels"
+                autocomplete="off"
+                matInput
+              />
+              <mat-error *ngIf="numberofmpptchannels.invalid"
+                >{{ getErrorMessage(numberofmpptchannels) }}
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div class="col">
+            <mat-form-field appearance="fill" class="fullwidth">
+              <mat-label>Currentpermppta</mat-label>
+              <input
+                [formControl]="currentpermppta"
+                autocomplete="off"
+                matInput
+              />
+              <mat-error *ngIf="currentpermppta.invalid">{{
+                getErrorMessage(currentpermppta)
+              }}</mat-error>
+            </mat-form-field>
+          </div>
+          <div class="col">
+            <mat-form-field appearance="fill" class="fullwidth">
+              <mat-label>Maximum input voltage</mat-label>
+              <input
+                [formControl]="maximuminputvoltage"
+                autocomplete="off"
+                matInput
+              />
+              <mat-error *ngIf="maximuminputvoltage.invalid">{{
+                getErrorMessage(maximuminputvoltage)
+              }}</mat-error>
+            </mat-form-field>
+          </div>
+          <div class="col">
+            <mat-form-field appearance="fill" class="fullwidth">
+              <mat-label>Nominal input voltage</mat-label>
+              <input
+                [formControl]="nominalinputvoltage"
+                autocomplete="off"
+                matInput
+              />
+              <mat-error *ngIf="nominalinputvoltage.invalid">{{
+                getErrorMessage(nominalinputvoltage)
+              }}</mat-error>
+            </mat-form-field>
+          </div>
+          <div class="col">
+            <mat-form-field appearance="fill" class="fullwidth">
+              <mat-label>Startup voltage</mat-label>
+              <input
+                [formControl]="startupvoltage"
+                autocomplete="off"
+                matInput
+              />
+              <mat-error *ngIf="startupvoltage.invalid">{{
+                getErrorMessage(startupvoltage)
+              }}</mat-error>
+            </mat-form-field>
+          </div>
+          <div class="col">
+            <mat-form-field appearance="fill" class="fullwidth">
+              <mat-label>Maximum input current</mat-label>
+              <input
+                [formControl]="maximuminputcurrent"
+                autocomplete="off"
+                matInput
+              />
+              <mat-error *ngIf="maximuminputcurrent.invalid">{{
+                getErrorMessage(maximuminputcurrent)
+              }}</mat-error>
+            </mat-form-field>
+          </div>
+          <div class="col">
+            <mat-form-field appearance="fill" class="fullwidth">
+              <mat-label>Maximum output current</mat-label>
+              <input
+                [formControl]="maximumoutputcurrent"
+                autocomplete="off"
+                matInput
+              />
+              <mat-error *ngIf="maximumoutputcurrent.invalid"
+                >{{ getErrorMessage(maximumoutputcurrent) }}
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div class="col">
+            <mat-form-field appearance="fill" class="fullwidth">
+              <mat-label>Cecefficiency</mat-label>
+              <input
+                [formControl]="cecefficiency"
+                autocomplete="off"
+                matInput
+              />
+              <mat-error *ngIf="cecefficiency.invalid">{{
+                getErrorMessage(cecefficiency)
+              }}</mat-error>
+            </mat-form-field>
+          </div>
+          <div class="col">
+            <mat-form-field appearance="fill" class="fullwidth">
+              <mat-label>Maximum ocpd rating</mat-label>
+              <input
+                [formControl]="maximumocpdrating"
+                autocomplete="off"
+                matInput
+              />
+              <mat-error *ngIf="maximumocpdrating.invalid">{{
+                getErrorMessage(maximumocpdrating)
+              }}</mat-error>
+            </mat-form-field>
+          </div>
+          <div class="col-12">
+            <div class="form-group formradiogroup fullwidth">
+              <h5>Datasheet available</h5>
+              <mat-radio-group
+                aria-label="project type"
+                [formControl]="datasheetavailable"
+              >
+                <div class="row">
+                  <div class="col">
+                    <mat-radio-button [value]="true">Yes</mat-radio-button>
+                  </div>
+                  <div class="col">
+                    <mat-radio-button [value]="false">No</mat-radio-button>
+                  </div>
+                </div>
+              </mat-radio-group>
+            </div>
+            <mat-error *ngIf="datasheetavailable.invalid">{{
+              getErrorMessage(datasheetavailable)
+            }}</mat-error>
+          </div>
+          <div
+            class="col-6"
+            style="margin: 0px; padding-left: 30px; margin-top: 2%"
+          >
+            <div class="row architectureuploadrow">
+              <div class="col align-items-center architectureuploadcol">
+                <div
+                  class="multiple-dropzone"
+                  style="width: 97%"
+                  ngx-dropzone
+                  [multiple]="true"
+                  (change)="onSolarModuleSelect($event)"
+                  accept=".jpeg,.jpg,.png"
+                >
+                  <ngx-dropzone-label>
+                    <div>
+                      <img
+                        class="addimage"
+                        src="../../../../../assets/add.svg"
+                      />
+                      <h5>
+                        Drag and drop or click to browse the solar module
+                        catalogue images.
+                      </h5>
+                    </div>
+                  </ngx-dropzone-label>
+                  <div *ngFor="let f of solarinvertercataloguefiles">
+                    {{ f.type }}
+                    <ngx-dropzone-preview
+                      *ngIf="!f.isImage"
+                      class="imagepreview"
+                      ngProjectAs="ngx-dropzone-preview"
+                      [file]="f"
+                      [removable]="true"
+                      (removed)="onSolarModuleRemove(f)"
+                    >
+                      <ngx-dropzone-label class="previewlabel"
+                        >{{ f.name }} ({{ f.type }})
+                      </ngx-dropzone-label>
+                    </ngx-dropzone-preview>
+                    <ngx-dropzone-image-preview
+                      *ngIf="f.isImage"
+                      class="imagepreview"
+                      ngProjectAs="ngx-dropzone-preview"
+                      [file]="f"
+                      [removable]="true"
+                      (removed)="onSolarModuleRemove(f)"
+                    >
+                    </ngx-dropzone-image-preview>
+                  </div>
+                </div>
+                <mat-error
+                  class="formerror uploadmargin"
+                  [hidden]="solarinvertercataloguefileuploaded"
+                  >You have to upload file.</mat-error
+                >
+              </div>
+            </div>
+          </div>
+          <div
+            class="col-6"
+            *ngIf="data.isEditMode"
+            style="display: flex; margin-top: 2%; overflow-x: auto"
+          >
+            <div
+              class="appliancescontainers d-flex justify-content-center"
+              *ngFor="let item of catalogues; index as i"
+            >
+              <img
+                [lightbox]="i"
+                [src]="item.data.thumb"
+                [gallery]="'catalogues'"
+              />
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<mat-dialog-actions align="end">
+  <button mat-raised-button (click)="saveInverterModelData()">Save</button>
+</mat-dialog-actions>

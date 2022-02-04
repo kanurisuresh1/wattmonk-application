@@ -1,0 +1,381 @@
+<ng-container>
+  <div class="container" style="padding-left: 10px">
+    <div class="row">
+      <div class="col-8">
+        <h2 class="dialogformtitle" style="margin-bottom: 0px !important">
+          Customer Probability
+        </h2>
+        <h6>Enter your end customer details</h6>
+      </div>
+      <div class="col-2">
+        <!-- <mat-slide-toggle class="prioritybutton float-right" style="margin-left: -13px;"  color="warn" [formControl]="prioritytoggle">High Priority
+            </mat-slide-toggle> -->
+      </div>
+      <div class="col-2" *ngIf="loggedInUser">
+        <button mat-icon-button (click)="onCloseClick()" class="float-right">
+          <img class="dialogclose" src="../../../../../assets/close.svg" />
+        </button>
+      </div>
+    </div>
+  </div>
+  <div mat-dialog-content style="padding-bottom: 20px">
+    <div class="container">
+      <div class="row mt-1">
+        <form class="designform" [formGroup]="customerForm">
+          <div class="row">
+            <div class="col">
+              <h5 style="font-weight: 600">Personal Details</h5>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-6">
+              <mat-form-field appearance="fill" class="fullwidth">
+                <mat-label>Customer Name</mat-label>
+                <input
+                  [ngStyle]="
+                    data.isEditMode && data.customer?.name != null
+                      ? { color: 'rgba(0,0,0,0.7)' }
+                      : { color: '#000000' }
+                  "
+                  autocomplete="off"
+                  matInput
+                  placeholder="eg. john"
+                  [formControl]="name"
+                  [readonly]="data.isEditMode && data.customer.name != null"
+                  required
+                />
+                <mat-error *ngIf="name.invalid">{{
+                  getErrorMessage(name)
+                }}</mat-error>
+              </mat-form-field>
+            </div>
+            <div class="col-6">
+              <mat-form-field appearance="fill" class="fullwidth">
+                <mat-label>Phone</mat-label>
+                <input
+                  [ngStyle]="
+                    data.isEditMode && data.customer?.phone != null
+                      ? { color: 'rgba(0,0,0,0.7)' }
+                      : { color: '#000000' }
+                  "
+                  type="text"
+                  (keypress)="numberOnly($event)"
+                  autocomplete="off"
+                  maxlength="15"
+                  min="8"
+                  matInput
+                  placeholder="eg. 98775534220"
+                  [formControl]="phone"
+                  [readonly]="data.isEditMode && data.customer.phone != null"
+                  required
+                />
+                <mat-error *ngIf="phone.invalid">{{
+                  getErrorMessage(phone)
+                }}</mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-6">
+              <mat-form-field appearance="fill" class="fullwidth">
+                <mat-label>Email Address</mat-label>
+                <input
+                  [ngStyle]="
+                    data.isEditMode && data.customer?.email != null
+                      ? { color: 'rgba(0,0,0,0.7)' }
+                      : { color: '#000000' }
+                  "
+                  autocomplete="off"
+                  matInput
+                  placeholder="eg. pat@example.com"
+                  [formControl]="email"
+                  [readonly]="data.isEditMode && data.customer.email != null"
+                  required
+                />
+                <mat-error *ngIf="email.invalid">{{
+                  getErrorMessage(email)
+                }}</mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div class="row" style="margin-top: 10px">
+            <div class="col">
+              <h5 style="font-weight: 600">Address Details</h5>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-6">
+              <mat-form-field appearance="fill" class="fullwidth">
+                <mat-label>Address</mat-label>
+
+                <input
+                  *ngIf="
+                    !data.isEditMode ||
+                    (data.isEditMode && data.customer.address == null)
+                  "
+                  matInput
+                  matGoogleMapsAutocomplete
+                  country="us"
+                  (onAutocompleteSelected)="onAutocompleteSelected($event)"
+                  (onLocationSelected)="onLocationSelected($event)"
+                  [formControl]="address"
+                  required
+                />
+
+                <!-- <textarea readonly style="min-height: 41px; resize: none;" matInput
+                         [formControl]="address" required></textarea> -->
+                <input
+                  [ngStyle]="
+                    data.isEditMode
+                      ? { color: 'rgba(0,0,0,0.7)' }
+                      : { color: '#000000' }
+                  "
+                  *ngIf="data.isEditMode && data.customer.address != null"
+                  readonly
+                  matInput
+                  [formControl]="address"
+                />
+
+                <mat-error *ngIf="address.invalid">{{
+                  getErrorMessage(address)
+                }}</mat-error>
+                <mat-error *ngIf="address.value.length > 300"
+                  >Max 300 characters are allowed.</mat-error
+                >
+              </mat-form-field>
+            </div>
+            <div class="col-6">
+              <mat-form-field appearance="fill" class="fullwidth">
+                <mat-label>County</mat-label>
+                <input
+                  [ngStyle]="
+                    data.isEditMode && data.customer?.county != null
+                      ? { color: 'rgba(0,0,0,0.7)' }
+                      : { color: '#000000' }
+                  "
+                  [readonly]="data.isEditMode && data.customer?.county != null"
+                  autocomplete="off"
+                  matInput
+                  placeholder="eg. country"
+                  [formControl]="county"
+                  required
+                />
+                <mat-error *ngIf="county.invalid">{{
+                  getErrorMessage(county)
+                }}</mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-4">
+              <mat-form-field appearance="fill" class="fullwidth">
+                <mat-label>City</mat-label>
+                <input
+                  [ngStyle]="
+                    data.isEditMode && data.customer?.city != null
+                      ? { color: 'rgba(0,0,0,0.7)' }
+                      : { color: '#000000' }
+                  "
+                  [readonly]="data.isEditMode && data.customer?.city != null"
+                  autocomplete="off"
+                  matInput
+                  placeholder="eg. city"
+                  [formControl]="city"
+                  required
+                />
+                <mat-error *ngIf="city.invalid">{{
+                  getErrorMessage(city)
+                }}</mat-error>
+              </mat-form-field>
+            </div>
+            <div class="col-4">
+              <mat-form-field appearance="fill" class="fullwidth">
+                <mat-label>State</mat-label>
+                <input
+                  [ngStyle]="
+                    data.isEditMode && data.customer?.state != null
+                      ? { color: 'rgba(0,0,0,0.7)' }
+                      : { color: '#000000' }
+                  "
+                  [readonly]="data.isEditMode && data.customer?.state != null"
+                  autocomplete="off"
+                  matInput
+                  placeholder="eg. state"
+                  [formControl]="state"
+                  required
+                />
+                <mat-error *ngIf="state.invalid">{{
+                  getErrorMessage(state)
+                }}</mat-error>
+              </mat-form-field>
+            </div>
+            <div class="col-4">
+              <mat-form-field appearance="fill" class="fullwidth">
+                <mat-label>Zip Code</mat-label>
+                <input
+                  [ngStyle]="
+                    data.isEditMode && data.customer?.zipcode != null
+                      ? { color: 'rgba(0,0,0,0.7)' }
+                      : { color: '#000000' }
+                  "
+                  [readonly]="data.isEditMode && data.customer?.zipcode != null"
+                  type="text"
+                  (keypress)="numberOnly($event)"
+                  autocomplete="off"
+                  matInput
+                  placeholder="eg. 21001"
+                  [formControl]="zipcode"
+                  minlength="4"
+                  maxlength="5"
+                  required
+                />
+                <mat-error *ngIf="zipcode.invalid">{{
+                  getErrorMessage(zipcode)
+                }}</mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div class="row" style="margin-top: 10px">
+            <div class="col">
+              <h5 style="font-weight: 600">Solar Details</h5>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-6">
+              <mat-form-field appearance="fill" class="fullwidth">
+                <mat-label>Proposed Solar Capacity (kW)</mat-label>
+                <input
+                  autocomplete="off"
+                  type="number"
+                  matInput
+                  placeholder="eg. 9.45"
+                  [formControl]="solarcapacity"
+                  required
+                />
+                <mat-error *ngIf="solarcapacity.invalid">{{
+                  getErrorMessage(solarcapacity)
+                }}</mat-error>
+              </mat-form-field>
+            </div>
+
+            <div class="col-6">
+              <mat-form-field appearance="fill" class="fullwidth">
+                <mat-label>Estimated Annual Production (kWh)</mat-label>
+                <input
+                  autocomplete="off"
+                  type="number"
+                  matInput
+                  placeholder="eg. 11002"
+                  [formControl]="annualprod"
+                  required
+                />
+                <mat-error *ngIf="annualprod.invalid">{{
+                  getErrorMessage(annualprod)
+                }}</mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-6">
+              <mat-form-field appearance="fill" class="fullwidth">
+                <mat-label>Number of Roofs</mat-label>
+                <input
+                  type="text"
+                  type="number"
+                  (keypress)="numberOnly($event)"
+                  autocomplete="off"
+                  matInput
+                  placeholder="eg. 6"
+                  [formControl]="noofroof"
+                  required
+                />
+                <mat-error *ngIf="noofroof.invalid">{{
+                  getErrorMessage(noofroof)
+                }}</mat-error>
+              </mat-form-field>
+            </div>
+
+            <div class="col-6">
+              <mat-form-field appearance="fill" class="fullwidth">
+                <mat-label>Number of Detached Buildings</mat-label>
+                <input
+                  autocomplete="off"
+                  type="number"
+                  matInput
+                  (keypress)="numberOnly($event)"
+                  placeholder="eg. 0"
+                  [formControl]="detachedbuildings"
+                  required
+                />
+                <mat-error *ngIf="detachedbuildings.invalid">{{
+                  getErrorMessage(detachedbuildings)
+                }}</mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-6">
+              <mat-form-field appearance="fill" class="fullwidth">
+                <mat-label>Solar Array Area (sq ft)</mat-label>
+                <input
+                  autocomplete="off"
+                  type="number"
+                  matInput
+                  placeholder="eg. 528.55"
+                  [formControl]="solararea"
+                  required
+                />
+                <mat-error *ngIf="solararea.invalid">{{
+                  getErrorMessage(solararea)
+                }}</mat-error>
+              </mat-form-field>
+            </div>
+
+            <div class="col-6">
+              <mat-form-field appearance="fill" class="fullwidth">
+                <mat-label>Contract Type</mat-label>
+                <!-- <input type="text" autocomplete="off" matInput
+                  placeholder="eg. lease" [formControl]="contract" required>
+                  , 'PPA', 'PPA-EZ', 'Lease', 'Loan Storage
+                <mat-error *ngIf="contract.invalid">{{getErrorMessage(contract)}}</mat-error> -->
+                <mat-select
+                  [formControl]="contract"
+                  style="font-size: 0.8em"
+                  required
+                >
+                  <mat-option value="Loan">Loan</mat-option>
+                  <mat-option value="PPA">PPA</mat-option>
+                  <mat-option value="PPA-EZ">PPA-EZ</mat-option>
+                  <mat-option value="Lease">Lease</mat-option>
+                  <mat-option value="Loan Storage">Loan Storage</mat-option>
+                </mat-select>
+                <mat-error *ngIf="contract.invalid">{{
+                  contracterror
+                }}</mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <mat-dialog-actions
+    align="end"
+    style="padding-bottom: 20px; padding-left: 10px; padding-right: 15px"
+  >
+    <button
+      mat-raised-button
+      style="width: 100%"
+      (click)="generateProbability()"
+    >
+      Generate Customer Probability Report
+    </button>
+  </mat-dialog-actions>
+</ng-container>

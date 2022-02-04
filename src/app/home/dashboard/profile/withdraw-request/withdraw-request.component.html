@@ -1,0 +1,50 @@
+<div class="container">
+  <div class="row">
+    <div class="col-8">
+      <h4 class="dialogformtitle wr">Withdrow Request</h4>
+    </div>
+
+    <div class="col-4">
+      <button mat-icon-button (click)="onCloseClick()" class="float-right">
+        <img class="dialogclose" src="../../../../../assets/close.svg" />
+      </button>
+    </div>
+  </div>
+</div>
+
+<mat-card class="example-card ">
+  <mat-card-header style="margin-left: -16px;">
+    <h4>Availbale Balance {{withdrow.available | currency}} </h4>
+  </mat-card-header>
+  <form class="example-form" [formGroup]="withdrawlrequestform" (submit)="onsubmit($event)">
+    <mat-form-field class="example-form-field">
+      <mat-label>Amount to Withdrow</mat-label>
+      <input matInput type="number" [formControl]="amount">
+    </mat-form-field>
+    <h5>payment type* </h5>
+    <mat-radio-group aria-label="payment type" name="paymenttype" required [formControl]="paymenttype">
+      <div class="row">
+        <div class="col-sm-3">
+          <mat-radio-button value="paypal">Paypal</mat-radio-button>
+        </div>
+        <div class="col-sm-1">
+          <mat-radio-button value="bank">Bank</mat-radio-button>
+        </div>
+      </div>
+    </mat-radio-group>
+    <mat-form-field class="example-full-width" *ngIf="this.paymenttype.value == 'paypal'">
+      <mat-label>Email</mat-label>
+      <input matInput placeholder="eg. pat@example.com" type="email" required [formControl]="email">
+    </mat-form-field>
+    <!-- <mat-form-field class="example-full-width">
+            <mat-label>User Id</mat-label>
+            <input matInput placeholder="eg. 012345" required  [formControl]="userid">
+        </mat-form-field> -->
+    <div class="example-button-row">
+      <button mat-raised-button type="submit">Submit</button>
+      <button mat-raised-button color="primary" class="close-button" (click)="onCloseClick()">
+        Close
+      </button>
+    </div>
+  </form>
+</mat-card>

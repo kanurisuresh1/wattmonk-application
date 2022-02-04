@@ -1,0 +1,60 @@
+.designerinputtable {
+  width: 95%;
+  margin-left: 32px;
+  margin-right: 32px;
+  tr.mat-header-row {
+    height: 30px;
+  }
+  tr.mat-row,
+  tr.mat-footer-row {
+    height: 30px;
+  }
+}
+
+.mat-header-cell {
+  color: #2c2b2b !important;
+  font-weight: 300 !important;
+  font-size: 10px;
+}
+
+.uploadmargin {
+  margin-left: 15px;
+}
+
+agm-map {
+  height: 400px;
+  width: 400px;
+}
+
+  .dialogclose {
+    width: 16px;
+    height: 16px;
+  }
+
+  .electricalinputtable{
+    width: 195%;
+    border-spacing: 0px 0px !important;
+    text-align: center;
+    tr.mat-header-row{
+        height: 30px;
+    }
+    tr.mat-row, tr.mat-footer-row{
+        height: 30px;
+    }
+    th.mat-header-cell{
+        color: #2c2b2b !important;
+        font-weight: 300 !important;
+        font-size: 10px;
+        text-align: center;
+    }
+    
+    th.mat-header-cell, td.mat-cell {
+    text-align: center;
+    border: 1px solid #CCC;
+    padding: 0 !important;
+} 
+  }
+  .slidetoggletext{
+    font-size: 12px;
+    font-weight: 300;
+  }

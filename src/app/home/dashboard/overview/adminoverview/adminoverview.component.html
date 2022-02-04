@@ -1,0 +1,939 @@
+<div class="main-content d-flex" *ngIf="routeOnOnboarding()">
+  <div class="container admin-overview">
+    <div class="row mb-2">
+      <p class="bold-heading">Welcome, {{ loginUserName | titlecase }}!</p>
+    </div>
+    <div class="row announcementText">
+      <mat-card style="max-height: 33px" *ngIf="!isLoading && announcementData.length > 0">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="d-flex justify-content-between align-items-center bg-white announcementtext">
+              <div class="d-flex flex-row flex-grow-1 flex-fill justify-content-center py-2 text-dark px-1 announcement"
+                style="background-color: #edc773">
+                <span class="d-flex align-items-center">&nbsp;Announcement</span>
+              </div>
+              <marquee class="marquee" scrollAmount="6">
+                <ul class="inlineList">
+                  <li style="
+                      margin-right: 30px;
+                      padding: 5px 10px;
+                      border-radius: 10px;
+                    " [style.background-color]="data.colorcode" *ngFor="let data of announcementData">
+                    <span [style.color]="data.textcolor">
+                      {{ data.announcement }}
+                    </span>
+                  </li>
+                </ul>
+              </marquee>
+            </div>
+          </div>
+        </div>
+      </mat-card>
+      <mat-card style="max-height: 33px" *ngIf="isLoading">
+        <div class="row">
+          <div class="col-1">
+            <div class="d-flex justify-content-between align-items-center bg-white announcementtext">
+              <div class="d-flex flex-row flex-grow-1 flex-fill justify-content-center py-2 text-dark px-1 announcement"
+                style="background-color: #edc773">
+                <span class="d-flex align-items-center">&nbsp;Announcement</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-11">
+            <div class="row" style="display: flex; align-items: center">
+              <div class="col d-flex justify-content-center">
+                <ngx-skeleton-loader count="1" [theme]="{
+                    'border-radius': '5px',
+                    'background-color': '#DBDAD8',
+                    height: '12px',
+                    width: '60%',
+                    'margin-right': '90px',
+                    'margin-left': '90px',
+                    'margin-top': '3px'
+                  }">
+                </ngx-skeleton-loader>
+              </div>
+              <div class="col d-flex justify-content-center">
+                <ngx-skeleton-loader count="1" [theme]="{
+                    'border-radius': '5px',
+                    'background-color': '#DBDAD8',
+                    height: '12px',
+                    width: '60%',
+                    'margin-right': '90px',
+                    'margin-left': '90px',
+                    'margin-top': '3px'
+                  }">
+                </ngx-skeleton-loader>
+              </div>
+              <div class="col d-flex justify-content-center">
+                <ngx-skeleton-loader count="1" [theme]="{
+                    'border-radius': '5px',
+                    'background-color': '#DBDAD8',
+                    height: '12px',
+                    width: '60%',
+                    'margin-right': '90px',
+                    'margin-left': '90px',
+                    'margin-top': '3px'
+                  }">
+                </ngx-skeleton-loader>
+              </div>
+            </div>
+          </div>
+        </div>
+      </mat-card>
+    </div>
+    <div class="row d-flex mt-3">
+      <div class="row">
+        <div class="col-md-8 col-sm-8">
+          <div class="mb-3 row" style="margin-right: -23px" *ngIf="isLoading">
+            <div class="headerbutton" style="background-color: #eeedeb" *ngFor="let data of tabData; let i = index"
+              (click)="activeButton(i)">
+              <!-- <div class="mt-2"> -->
+              <div class="col-9" *ngIf="i == 0">
+                <div class="row loadericon">
+                  <img class="buttonsection" width="20px" src="../../../../../assets/prelim1.svg" />
+                </div>
+                <div class="row">
+                  <div class="col-12 counts mt-1">
+                    <ngx-skeleton-loader class="d-block" [theme]="{
+                        'border-radius': '5px',
+                        'background-color': '#DBDAD8',
+                        height: '9px',
+                        width: '30%'
+                      }">
+                    </ngx-skeleton-loader>
+                  </div>
+                </div>
+                <div class="row heading">
+                  <div class="col-12">
+                    {{ data.name }}
+                  </div>
+                </div>
+              </div>
+              <div class="col-9" *ngIf="i == 1">
+                <div class="row loadericon">
+                  <img class="buttonsection" width="15px" src="../../../../../assets/permit.svg" />
+                </div>
+                <div class="row">
+                  <div class="col-12 counts mt-1">
+                    <ngx-skeleton-loader class="d-block" [theme]="{
+                        'border-radius': '5px',
+                        'background-color': '#DBDAD8',
+                        height: '9px',
+                        width: '30%'
+                      }">
+                    </ngx-skeleton-loader>
+                  </div>
+                </div>
+                <div class="row heading">
+                  <div class="col-12">
+                    {{ data.name }}
+                  </div>
+                </div>
+              </div>
+              <div class="col-9" *ngIf="i == 2">
+                <div class="row loadericon">
+                  <img class="buttonsection" width="20px" src="../../../../../assets/pe stamps.svg" />
+                </div>
+                <div class="row">
+                  <div class="col-12 counts mt-1">
+                    <ngx-skeleton-loader class="d-block" [theme]="{
+                        'border-radius': '5px',
+                        'background-color': '#DBDAD8',
+                        height: '9px',
+                        width: '30%'
+                      }">
+                    </ngx-skeleton-loader>
+                  </div>
+                </div>
+                <div class="row heading">
+                  <div class="col-12">
+                    {{ data.name }}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="mb-3 row d-flex" style="margin-right: -23px" *ngIf="!isLoading">
+            <div class="headerbutton" [ngStyle]="{
+                'background-color': data.active ? '#EDC773' : 'white'
+              }" *ngFor="let data of tabData; let i = index" (click)="activeButton(i)">
+              <div *ngIf="data.name == userSettings.nameprelim">
+                <div class="row d-flex">
+                  <div class="col-12">
+                    <img style="margin-left: 25px" width="20px" src="../../../../../assets/prelim1.svg" />
+                  </div>
+                </div>
+                <div class="row d-flex">
+                  <div class="col-6 mtl">
+                    {{ data.totalPrelim }}
+                  </div>
+                  <div class="col-6">
+                    <img width="40px" src="../../../../../assets/Vector 1.png" />
+                  </div>
+                </div>
+                <div class="row d-flex">
+                  <div class="col-12 heading">
+                    {{ data.name }}
+                  </div>
+                </div>
+              </div>
+
+              <div *ngIf="data.name == userSettings.namepermit">
+                <div class="row d-flex">
+                  <div class="col-12">
+                    <img style="margin-left: 25px" width="20px" src="../../../../../assets/permit.svg" />
+                  </div>
+                </div>
+
+                <div class="row d-flex">
+                  <div class="col-6 mtl">
+                    {{ data.totalPermit }}
+                  </div>
+                  <div class="col-6">
+                    <img width="40px" src="../../../../../assets/Vector 2.png" />
+                  </div>
+                </div>
+                <div class="row d-flex">
+                  <div class="col-12 heading">
+                    {{ data.name }}
+                  </div>
+                </div>
+              </div>
+
+              <div *ngIf="data.name == userSettings.namepestamp">
+                <div class="row d-flex">
+                  <div class="col-12">
+                    <img style="margin-left: 25px" width="25px" src="../../../../../assets/pe stamps.svg" />
+                  </div>
+                </div>
+
+                <div class="row d-flex">
+                  <div class="col-6 mtl">
+                    {{ data.totalPestamp }}
+                  </div>
+                  <div class="col-6">
+                    <img width="40px" src="../../../../../assets/Vector 3.png" />
+                  </div>
+                </div>
+                <div class="row d-flex">
+                  <div class="col-12 heading">
+                    {{ data.name }}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <mat-card class="mt-2" style="background-color: #eeedeb" *ngIf="isLoading">
+            <div class="row d-flex" style="padding: 25px">
+              <div class="col-1">
+                <div class="row" *ngFor="let data of [0, 1, 2, 3, 4, 5]">
+                  <ngx-skeleton-loader count="1" class="d-block" [theme]="{
+                      'border-radius': '8px',
+                      'background-color': '#DBDAD8',
+                      height: '12px',
+                      width: '64px',
+                      'margin-top': '1.1rem'
+                    }">
+                  </ngx-skeleton-loader>
+                </div>
+              </div>
+              <div class="col-11">
+                <div class="row d-flex" style="justify-content: space-around">
+                  <div style="margin-top: 73px" *ngFor="let data of [0, 1, 2, 3, 4, 5]">
+                    <ngx-skeleton-loader count="1" [theme]="{
+                        'background-color': '#DBDAD8',
+                        height: '54px',
+                        width: '14px',
+                        'border-radius': 'initial'
+                      }">
+                    </ngx-skeleton-loader>
+                    <ngx-skeleton-loader count="1" [theme]="{
+                        'background-color': '#c5c4c2',
+                        height: '100px',
+                        width: '14px',
+                        'border-radius': 'initial'
+                      }">
+                    </ngx-skeleton-loader>
+                    <ngx-skeleton-loader count="1" [theme]="{
+                        'background-color': '#afaeac',
+                        height: '150px',
+                        width: '14px',
+                        'border-radius': 'initial'
+                      }">
+                    </ngx-skeleton-loader>
+                    <ngx-skeleton-loader count="1" [theme]="{
+                        'background-color': '#999897',
+                        height: '100px',
+                        width: '14px',
+                        'border-radius': 'initial'
+                      }">
+                    </ngx-skeleton-loader>
+                    <ngx-skeleton-loader count="1" [theme]="{
+                        'background-color': '#838281',
+                        height: '180px',
+                        width: '14px',
+                        'border-radius': 'initial'
+                      }">
+                    </ngx-skeleton-loader>
+                  </div>
+                </div>
+                <div class="row d-flex">
+                  <div class="col d-flex" *ngFor="let data of [0, 1, 2, 3, 4, 5]">
+                    <div class="row d-flex" style="justify-content: space-around">
+                      <ngx-skeleton-loader count="1" class="d-block" [theme]="{
+                          'border-radius': '8px',
+                          'background-color': '#DBDAD8',
+                          height: '12px',
+                          width: '59px',
+                          'margin-top': '1.1rem',
+                          'margin-left': '14px'
+                        }">
+                      </ngx-skeleton-loader>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col">
+                    <div class="row d-flex justify-content-end">
+                      <!-- <ngx-skeleton-loader count="1" class="d-block"
+                  [theme]="{ 'border-radius': '8px','background-color': '#DBDAD8', width: '18px','margin-top': '1.1rem'}">
+                </ngx-skeleton-loader>
+                <p class="d-block" style="align-self: self-end; padding: 0 56px 0 8px;">Revise</p> -->
+                      <ngx-skeleton-loader count="1" class="d-block" [theme]="{
+                          'border-radius': '8px',
+                          'background-color': '#DBDAD8',
+                          width: '18px',
+                          'margin-top': '1.1rem'
+                        }">
+                      </ngx-skeleton-loader>
+                      <p class="d-block" style="align-self: self-end; padding: 0 56px 0 8px">
+                        Overall
+                      </p>
+                      <ngx-skeleton-loader count="1" class="d-block" [theme]="{
+                          'border-radius': '8px',
+                          'background-color': '#DBDAD8',
+                          width: '18px',
+                          'margin-top': '1.1rem'
+                        }">
+                      </ngx-skeleton-loader>
+                      <p class="d-block" style="align-self: self-end; padding: 0 56px 0 8px">
+                        Today
+                      </p>
+                      <!-- <ngx-skeleton-loader count="1" class="d-block"
+                  [theme]="{ 'border-radius': '8px','background-color': '#DBDAD8', width: '18px','margin-top': '1.1rem'}">
+                </ngx-skeleton-loader>
+                <p class="d-block" style="align-self: self-end; padding: 0 56px 0 8px;">This week</p>
+                <ngx-skeleton-loader count="1" class="d-block"
+                  [theme]="{ 'border-radius': '8px','background-color': '#DBDAD8', width: '18px','margin-top': '1.1rem'}">
+                </ngx-skeleton-loader>
+                <p class="d-block" style="align-self: self-end; padding: 0 56px 0 8px;">This month</p> -->
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </mat-card>
+          <mat-card *ngIf="!isLoading">
+            <!-- Dasboard Filter -->
+            <div class="col-12 d-flex justify-content-end" *ngIf="! isClient">
+              <mat-select panelClass="myPanelClass addAnnouncement" #matselect placeholder="Company Name"
+                disableOptionCentering class="border mb-3" style="width: 10rem; padding: 0.5em;"
+                [(ngModel)]="matselectvalue">
+                <mat-option>
+                  <ngx-mat-select-search [formControl]="clientSearch" class="searchFieldText" placeholderLabel="Search">
+                  </ngx-mat-select-search>
+                </mat-option>
+                <div class="scrollhide">
+                  <mat-option (click)="selectedClientDesign(item.id)" *ngFor="let item of companyList"
+                    [value]="searchcompany(item)">
+                    <p class="mb-0">
+                      <input type="checkbox" class="mr-3" [checked]="item.checked"
+                        (click)="selectedClientDesign(item.id)"> {{item.company ? item.company: (item.firstname |
+                      titlecase)+' '+ (item.lastname | titlecase)}}
+                    </p>
+                  </mat-option>
+                  <div class="text-center overflow" *ngIf="!companyList.length" style="margin-top:67px;">
+                    <img src="../../../../../assets/sad.svg" width="30px" height="30px">
+                    <p style="font-size: 12px; font-weight: 500; " class="text-secondary pt-2 ml-1">
+                      No Company found</p>
+                  </div>
+                </div>
+                <div class="btsns-box d-flex justify-content-between">
+                  <button class="dropdownbutton btn-sm" (click)="clearclientfilter()">Clear
+                    All</button>
+                  <button class="dropdownbutton btn-sm"
+                    (click)="getwattmonkDashboardDesignCounts('prelim','true')">Apply</button>
+                </div>
+              </mat-select>
+            </div>
+            <!-- Dasboard Filter end -->
+
+            <div *ngFor="let data of tabData; let i = index" [ngStyle]="
+                data.active ? { display: 'flex' } : { display: 'none' }
+              ">
+              <div class="row mt-1 workanalytics" *ngIf="data.name == userSettings.nameprelim">
+                <div class="col-md-6">
+                  <p class="headers">{{ data.name }}</p>
+                </div>
+                <div class="col-md-6">
+                  <p class="headers float-right">
+                    Total {{ data.name }} {{ data.totalPrelim }}
+                  </p>
+                </div>
+                <canvas baseChart #baseChart="base-chart" [datasets]="barChartData" [labels]="barChartLabels"
+                  [options]="barChartOptions" [plugins]="barChartPlugins" [chartType]="barChartType" height="350px;"
+                  width="846px;">
+                </canvas>
+                <div class="col-12 float-left mb-2">
+                  <div class="row d-flex justify-content-end">
+                    <mat-radio-group [(ngModel)]="selected" (change)="radioChange($event)">
+                      <mat-radio-button value="overall" [checked]="true" class="smallRadios">
+                        <h5 class="mb-0">Overall</h5>
+                      </mat-radio-button>
+                      <mat-radio-button value="today" class="smallRadios">
+                        <h5 class="mb-0">Today</h5>
+                      </mat-radio-button>
+                    </mat-radio-group>
+                  </div>
+                </div>
+              </div>
+              <div class="row mt-1 workanalytics" *ngIf="data.name == userSettings.namepermit">
+                <div class="col-md-6">
+                  <p class="headers">{{ data.name }}</p>
+                </div>
+                <div class="col-md-6">
+                  <p class="headers float-right">
+                    Total {{ data.name }} {{ data.totalPermit }}
+                  </p>
+                </div>
+                <canvas baseChart #baseChart="base-chart" [datasets]="barChartData" [labels]="barChartLabels"
+                  [options]="barChartOptions" [plugins]="barChartPlugins" [legend]="barChartLegend"
+                  [chartType]="barChartType" height="350px;" width="846px;">
+                </canvas>
+
+                <div class="col-12 float-left mb-2">
+                  <div class="row d-flex justify-content-end">
+                    <mat-radio-group [(ngModel)]="selected" (change)="radioChange($event)">
+                      <mat-radio-button value="overall" [checked]="true" class="smallRadios">
+                        <h5 class="mb-0">Overall</h5>
+                      </mat-radio-button>
+                      <mat-radio-button value="today" class="smallRadios">
+                        <h5 class="mb-0">Today</h5>
+                      </mat-radio-button>
+                    </mat-radio-group>
+                  </div>
+                </div>
+              </div>
+              <div class="row mt-1 workanalytics" *ngIf="data.name == userSettings.namepestamp">
+                <div class="col-md-6">
+                  <p class="headers">{{ data.name }}</p>
+                </div>
+                <div class="col-md-6">
+                  <p class="headers float-right">
+                    Total {{ data.name }} {{ data.totalPestamp }}
+                  </p>
+                </div>
+                <canvas baseChart #baseChart="base-chart" [datasets]="barChartData" [labels]="barChartLabels"
+                  [options]="barChartOptions" [plugins]="barChartPlugins" [legend]="barChartLegend"
+                  [chartType]="barChartType" height="350px;" width="846px;">
+                </canvas>
+
+                <div class="col-12 float-left mb-2">
+                  <div class="row d-flex justify-content-end">
+                    <mat-radio-group [(ngModel)]="selected" (change)="radioChange($event)">
+                      <mat-radio-button value="overall" [checked]="true" class="smallRadios">
+                        <h5 class="mb-0 mr-2" style="margin-right: 20px">
+                          Overall
+                        </h5>
+                      </mat-radio-button>
+                      <mat-radio-button value="today" class="smallRadios">
+                        <h5 class="mb-0">Today</h5>
+                      </mat-radio-button>
+                    </mat-radio-group>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </mat-card>
+          <div class="maincountycard">
+            <mat-card class="mt-2" *ngIf="isLoading" style="background-color: #eeedeb">
+              <div class="row" style="height: 60px; display: flex; align-items: center"
+                *ngFor="let number of [0, 1, 2]">
+                <div class="col-2 d-flex justify-content-center">
+                  <ngx-skeleton-loader count="1" class="d-block" [theme]="{
+                      'border-radius': '8px',
+                      'background-color': '#DBDAD8',
+                      height: '12px',
+                      width: '88px',
+                      'margin-top': '1.1rem'
+                    }">
+                  </ngx-skeleton-loader>
+                </div>
+                <div class="col-8 d-flex justify-content-center">
+                  <ngx-skeleton-loader count="1" class="d-block" [theme]="{
+                      'border-radius': '8px',
+                      'background-color': '#DBDAD8',
+                      height: '12px',
+                      width: '606px',
+                      'margin-top': '1.1rem'
+                    }">
+                  </ngx-skeleton-loader>
+                </div>
+                <div class="col-2 d-flex justify-content-center">
+                  <ngx-skeleton-loader count="1" class="d-block" [theme]="{
+                      'border-radius': '8px',
+                      'background-color': '#DBDAD8',
+                      height: '12px',
+                      width: '70px',
+                      'margin-top': '1.1rem'
+                    }">
+                  </ngx-skeleton-loader>
+                </div>
+              </div>
+            </mat-card>
+            <mat-card class="mt-2 mb-2" *ngIf="!isLoading" [ngStyle]="
+                countyData.length == 0
+                  ? { visibility: 'hidden' }
+                  : { visibility: 'visible' }
+              ">
+              <div *ngFor="let data of tabData; let i = index" [ngStyle]="
+                  data.active ? { display: 'flex' } : { display: 'none' }
+                ">
+                <div class="mt-1 countycard" *ngIf="data.name == userSettings.nameprelim">
+                  <div class="col-11 p-0 placeholder" *ngIf="countyData.length == 0">
+                    <div class="text-center">
+                      <img src="../../../../../assets/sad.svg" width="30px" height="30px" />
+                      <p style="font-size: 10px">Yet to break the ice</p>
+                    </div>
+                  </div>
+                  <div *ngIf="countyData.length > 0">
+                    <div class="row mt-3" *ngFor="let county of countyData">
+                      <div class="col-2 pl-3">
+                        <p class="progressbarcountry">{{ county.state }}</p>
+                      </div>
+                      <div class="col-8 progress">
+                        <div class="progress-bar dashboardprogressbar" role="progressbar"
+                          [style.width]="(county.count / 100) * 100 + '%'" [attr.aria-valuenow]="county.count"
+                          aria-valuemin="0" aria-valuemax="100"></div>
+                      </div>
+                      <div class="col-2 pr-3">
+                        <p class="progressbardata">{{ county.count }}</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="mt-1 countycard" *ngIf="data.name == userSettings.namepermit">
+                  <div class="col-11 p-0 placeholder" *ngIf="countyData.length == 0">
+                    <div class="text-center">
+                      <img src="../../../../../assets/sad.svg" width="30px" height="30px" />
+                      <p style="font-size: 10px">Yet to break the ice</p>
+                    </div>
+                  </div>
+                  <div *ngIf="countyData.length > 0">
+                    <div class="row mt-3" *ngFor="let county of countyData">
+                      <div class="col-2 pl-3">
+                        <p class="progressbarcountry">{{ county.state }}</p>
+                      </div>
+                      <div class="col-8 progress">
+                        <div class="progress-bar dashboardprogressbar" role="progressbar"
+                          [style.width]="(county.count / 100) * 100 + '%'" [attr.aria-valuenow]="county.count"
+                          aria-valuemin="0" aria-valuemax="100"></div>
+                      </div>
+                      <div class="col-2 pr-3">
+                        <p class="progressbardata">{{ county.count }}</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="mt-1 countycard" *ngIf="data.name == userSettings.namepestamp">
+                  <div class="col-11 p-0 placeholder" *ngIf="countyData.length == 0">
+                    <div class="text-center">
+                      <img src="../../../../../assets/sad.svg" width="30px" height="30px" />
+                      <p style="font-size: 10px">Yet to break the ice</p>
+                    </div>
+                  </div>
+                  <div *ngIf="countyData.length > 0">
+                    <div class="row mt-3" *ngFor="let county of countyData">
+                      <div class="col-2 pl-3">
+                        <p class="progressbarcountry">{{ county.state }}</p>
+                      </div>
+                      <div class="col-8 progress">
+                        <div class="progress-bar dashboardprogressbar" role="progressbar"
+                          [style.width]="(county.count / 100) * 100 + '%'" [attr.aria-valuenow]="county.count"
+                          aria-valuemin="0" aria-valuemax="100"></div>
+                      </div>
+                      <div class="col-2 pr-3">
+                        <p class="progressbardata">{{ county.count }}</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </mat-card>
+          </div>
+        </div>
+        <div class="col-4 col-sm-4" style="padding-right: 0px">
+          <!-- <mat-card class="mb-3" style="background-color:#EEEDEB;margin-right: 20px;" *ngIf="isLoading">
+          <p>Messages</p>
+          <div class="row" *ngFor="let number of [0,1,2]">
+            <div class="col-2 d-flex justify-content-center">
+              <ngx-skeleton-loader count="1" class="d-block"
+                [theme]="{ 'border-radius': '8px','background-color': '#DBDAD8', height: '35px', width: '35px','margin-top': '1.1rem'}">
+              </ngx-skeleton-loader>
+            </div>
+            <div class="col-8 d-flex ">
+              <ngx-skeleton-loader count="1" class="d-block"
+                [theme]="{ 'border-radius': '8px','background-color': '#DBDAD8', height: '12px', width: '122px','margin-top': '28px'}">
+              </ngx-skeleton-loader>
+            </div>
+            <div class="col-2 d-flex justify-content-center">
+              <ngx-skeleton-loader count="1" class="d-block"
+                [theme]="{ 'border-radius': '8px','background-color': '#DBDAD8', height: '12px', width: '40px','margin-top': '28px'}">
+              </ngx-skeleton-loader>
+            </div>
+            <div class="col-12">
+              <ngx-skeleton-loader count="1" class="d-block"
+                [theme]="{ 'border-radius': '8px','background-color': '#DBDAD8', height: '12px','margin-top': '0.1rem'}">
+              </ngx-skeleton-loader>
+            </div>
+            <div class="col-12">
+              <ngx-skeleton-loader count="1" class="d-block"
+                [theme]="{ 'border-radius': '8px','background-color': '#DBDAD8', height: '12px', width: '300px','margin-top': '0.1rem'}">
+              </ngx-skeleton-loader>
+            </div>
+          </div>
+        </mat-card> -->
+          <mat-card class="mb-3" style="margin-right: 20px" [ngStyle]="
+              isLoading
+                ? { 'background-color': '#EEEDEB' }
+                : { 'background-color': '#fff' }
+            ">
+            <app-cometchatviewgroup></app-cometchatviewgroup>
+            <!-- </div> -->
+          </mat-card>
+
+          <div class="couponsCard">
+            <mat-card class="mb-3" style="background-color: #eeedeb; margin-right: 20px" *ngIf="isLoading && isClient">
+              <p class="headers">Explore offers and coupons</p>
+              <div class="row" *ngFor="let number of [0, 1, 2]">
+                <div class="col-10 d-flex">
+                  <ngx-skeleton-loader count="1" class="d-block" [theme]="{
+                      'border-radius': '8px',
+                      'background-color': '#DBDAD8',
+                      height: '12px',
+                      width: '122px',
+                      'margin-top': '28px'
+                    }">
+                  </ngx-skeleton-loader>
+                </div>
+                <div class="col-2 d-flex justify-content-center">
+                  <ngx-skeleton-loader count="1" class="d-block" [theme]="{
+                      'border-radius': '8px',
+                      'background-color': '#DBDAD8',
+                      height: '12px',
+                      width: '60px',
+                      'margin-top': '28px'
+                    }">
+                  </ngx-skeleton-loader>
+                </div>
+                <div class="col-12">
+                  <ngx-skeleton-loader count="1" class="d-block" [theme]="{
+                      'border-radius': '8px',
+                      'background-color': '#DBDAD8',
+                      height: '12px',
+                      width: '122px',
+                      'margin-top': '0.1rem'
+                    }">
+                  </ngx-skeleton-loader>
+                </div>
+                <div class="col-12">
+                  <ngx-skeleton-loader count="1" class="d-block" [theme]="{
+                      'border-radius': '8px',
+                      'background-color': '#DBDAD8',
+                      height: '12px',
+                      width: '122px',
+                      'margin-top': '1.1rem'
+                    }">
+                  </ngx-skeleton-loader>
+                </div>
+              </div>
+            </mat-card>
+            <mat-card class="mb-3" style="margin-right: 20px" *ngIf="!isLoading && isClient">
+              <p class="headers">Explore offers and coupons</p>
+              <div class="couponsScroll" *ngIf="couponsData?.length">
+                <div class="row cupondiv p-2" *ngFor="let data of couponsData; let i = index"
+                  (click)="copyCoupan(data,'selected')">
+                  <div class="col-1 pl-2">
+                    <img src="../../../../../assets/double-tick.svg" width="28px" height="40px" style="margin-top: -7px"
+                      *ngIf="iscopied[data.id]" />
+                  </div>
+                  <div class="col-5 pl-1">
+                    <p class="subheading mb-0">{{ data.title }}</p>
+                  </div>
+                  <div class="col-6">
+                    <p class="couponCode">{{ data.code | uppercase }}</p>
+                  </div>
+                  <div class="row mx-2 w-100">
+                    <div class="col-10" style="padding-left: 26px">
+                      <p class="f-12">{{ data.description }}</p>
+                    </div>
+                  </div>
+                  <div class="row mx-2 w-100">
+                    <div class="col-10" style="padding-left: 26px">
+                      <p class="pb-0 f-12">
+                        Valid till {{ data.expirydate | date: "longDate" }}
+                      </p>
+                    </div>
+                    <div class="col-2">
+                      <p *ngIf="genericService.specificclient" class="pb-0 subheading float-right">
+                        {{ (data.requesttype == "permit" ? "Design" : data.requesttype ) | uppercase }}
+                      </p>
+                      <p *ngIf="!genericService.specificclient" class="pb-0 subheading float-right">
+                        {{ data.requesttype | uppercase }}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div *ngIf="!couponsData.length">
+                <div class="text-center">
+                  <img src="../../../../../assets/sad.svg" width="30px" height="30px" />
+                  <p style="font-size: 10px">Yet to break the ice</p>
+                </div>
+              </div>
+            </mat-card>
+            <!--<mat-card class="mb-3" style="margin-right: 20px;" *ngIf="!isLoading">
+          <p class="headers">Explore offer and coupons</p>
+          <div *ngIf="couponsData.length > 0">
+            <div class="row cupondiv" style="padding: 0.8em;" *ngFor="let data of couponsData; let i = index"
+              (click)="copyCoupan(data,i)">
+              <div class="col-1" *ngIf="iscopied[data.id]" style="padding: 0;">
+                <img src="../../../../../assets/double-tick.svg" width="30px" height="40px" style="margin-top: -7px;">
+              </div>
+              <div class="col-5">
+                <p class="subheading mb-0">{{data.title}}</p>
+                <p class="f-12">{{data.description}}</p>
+              </div>
+              <div class="col-6">
+                <p class="couponCode">{{data.code | uppercase}}</p>
+              </div>
+              <div class="row col-12">
+                <div class="col-10">
+                  <p class="f-12">Valid till {{data.expirydate | date:'longDate'}}</p>
+                </div>
+                <div class="col-2">
+                  <p class="subheading float-right">{{data.requesttype |uppercase}}</p>
+                </div>
+              </div>
+              <hr>
+            </div>
+          </div>
+          <div *ngIf="couponsData.length == 0">
+            <div class="text-center">
+              <img src="../../../../../assets/sad.svg" width="30px" height="30px">
+              <p style="font-size: 10px;">Yet to break the ice</p>
+            </div>
+          </div>
+        </div>
+        <div *ngIf="couponsData.length == 0">
+          <div class="text-center">
+            <img src="../../../../../assets/sad.svg" width="30px" height="30px">
+            <p style="font-size: 10px;">Yet to break the ice</p>
+        </div>
+        </div>
+        </mat-card>-->
+          </div>
+          <mat-card class="mb-3" style="background-color: #eeedeb; margin-right: 20px" *ngIf="isLoading">
+            <p class="headers">Recent Activities</p>
+            <div class="row" *ngFor="let number of [0, 1, 2]">
+              <div class="col-12 d-flex">
+                <ngx-skeleton-loader count="1" class="d-block" [theme]="{
+                    'border-radius': '8px',
+                    'background-color': '#DBDAD8',
+                    height: '12px',
+                    width: '122px',
+                    'margin-top': '28px'
+                  }">
+                </ngx-skeleton-loader>
+              </div>
+              <div class="col-2 d-flex justify-content-center">
+                <ngx-skeleton-loader count="1" class="d-block" [theme]="{
+                    'border-radius': '8px',
+                    'background-color': '#DBDAD8',
+                    height: '35px',
+                    width: '35px',
+                    'margin-top': '1.1rem'
+                  }">
+                </ngx-skeleton-loader>
+              </div>
+              <div class="col-8 d-flex">
+                <ngx-skeleton-loader count="1" class="d-block" [theme]="{
+                    'border-radius': '8px',
+                    'background-color': '#DBDAD8',
+                    height: '12px',
+                    width: '122px',
+                    'margin-top': '28px'
+                  }">
+                </ngx-skeleton-loader>
+              </div>
+              <div class="col-2 d-flex justify-content-center">
+                <ngx-skeleton-loader count="1" class="d-block" [theme]="{
+                    'border-radius': '8px',
+                    'background-color': '#DBDAD8',
+                    height: '12px',
+                    width: '40px',
+                    'margin-top': '28px'
+                  }">
+                </ngx-skeleton-loader>
+              </div>
+              <div class="col-12">
+                <ngx-skeleton-loader count="1" class="d-block" [theme]="{
+                    'border-radius': '8px',
+                    'background-color': '#DBDAD8',
+                    height: '12px',
+                    'margin-top': '0.1rem'
+                  }">
+                </ngx-skeleton-loader>
+              </div>
+              <div class="col-12">
+                <ngx-skeleton-loader count="1" class="d-block" [theme]="{
+                    'border-radius': '8px',
+                    'background-color': '#DBDAD8',
+                    height: '12px',
+                    width: '300px',
+                    'margin-top': '0.1rem'
+                  }">
+                </ngx-skeleton-loader>
+              </div>
+            </div>
+          </mat-card>
+          <mat-card class="mb-3" style="margin-right: 20px" *ngIf="!isLoading">
+            <p class="headers">Recent Activities</p>
+            <div class="col-11 p-0" *ngIf="activitiesData.length == 0">
+              <div class="text-center">
+                <img src="../../../../../assets/sad.svg" width="30px" height="30px" />
+                <p style="font-size: 10px">Yet to break the ice</p>
+              </div>
+            </div>
+            <div *ngIf="activitiesData.length > 0">
+              <div class="col-12 ml-3" style="padding-left: 0rem !important">
+                <div infiniteScroll [infiniteScrollDistance]="0.5" [scrollWindow]="false" [infiniteScrollThrottle]="100"
+                  (scrolled)="onRecentActivityScroll()" class="recentactivities">
+                  <!--<div class="col-12 p-0 mb-2" *ngFor="let data of activitiesData">
+                          <div class="d-flex justify-content-between">
+                            <div class="d-flex">
+                              <img src="{{data.photo}}" width="25px" height="25px">
+                              <p class="m-0 ml-2 subheading">{{data.name | titlecase}}</p>
+                            </div>
+                            <p class="mr-1 subheading mr-2 ">{{data.createdondate}}</p>
+                          </div>
+                          <p class="f-12">{{data.activity}}</p>
+                          <div class="d-flex justify-content-between">
+                            <p class=f-12>Updated status</p>
+                            <p class="f-12 mr-2">{{data.updated_at | date : 'shortTime' }}</p>
+                          </div>
+                      </div>-->
+                  <div class="col-12 p-0" *ngFor="let data of activitiesData; let i = index">
+                    <div class="stepper d-flex flex-column">
+                      <div class="d-flex">
+                        <div class="d-flex flex-column align-items-center ml-2">
+                          <div class="line pt-2" [ngStyle]="
+                              i == 0
+                                ? { visibility: 'hidden' }
+                                : { visibility: 'visible' }
+                            "></div>
+                          <div class="rounded-circle p-1"></div>
+                          <div class="line h-100"></div>
+                          <div class="line h-100"></div>
+                        </div>
+                        <div class="col activitycol">
+                          <div class="d-flex justify-content-between">
+                            <div class="d-flex">
+                              <img src="{{ data.photo }}" width="25px" height="25px" />
+                              <p class="m-0 ml-2 subheading">
+                                {{ data.name | titlecase }}
+                              </p>
+                            </div>
+                            <p class="mr-1 subheading mr-2">
+                              {{ data.createdondate }}
+                            </p>
+                          </div>
+                          <p class="f-12">{{ data.activity }}</p>
+                          <div class="d-flex justify-content-between">
+                            <p class="f-12">Updated status</p>
+                            <p class="f-12">
+                              {{ data.updated_at | date: "shortTime" }}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <mat-spinner *ngIf="scrolling" style="position: absolute; left: 49%; bottom: 1%" [diameter]="35">
+              </mat-spinner>
+            </div>
+          </mat-card>
+          <!--<mat-card class="mb-3" style="background-color:#EEEDEB;margin-right: 20px;" *ngIf="isLoading">
+          <p>Logged in User</p>
+          <div class="row" *ngFor="let number of [0,1,2]">
+            <div class="col-1 d-flex justify-content-center">
+              <ngx-skeleton-loader count="1" class="d-block"
+                [theme]="{ 'border-radius': '8px','background-color': '#DBDAD8', height: '10px', width: '10px','margin-top': '28px'}">
+              </ngx-skeleton-loader>
+            </div>
+            <div class="col-2 d-flex justify-content-center">
+              <ngx-skeleton-loader count="1" class="d-block"
+                [theme]="{ 'border-radius': '8px','background-color': '#DBDAD8', height: '35px', width: '35px','margin-top': '1.1rem'}">
+              </ngx-skeleton-loader>
+            </div>
+            <div class="col-9 d-flex ">
+              <ngx-skeleton-loader count="1" class="d-block"
+                [theme]="{ 'border-radius': '8px','background-color': '#DBDAD8', height: '12px', width: '122px','margin-top': '28px'}">
+              </ngx-skeleton-loader>
+            </div>
+            
+          </div>
+        </mat-card>
+        <mat-card class="mb-3" style="margin-right: 20px;" *ngIf="!isLoading">
+          <p>Logged in User</p>
+          <div class="col-1 p-0">
+            <img src="https://www.pngplay.com/wp-content/uploads/5/Dot-Symbol-Free-PNG.png" width="10px" height="10px">
+          </div>
+          <div class="d-flex">
+            <img src="../.../../../../../../assets/user img.jpg" width="25px" height="25px">
+            <p class="m-0"> Brock Lesnar</p>
+          </div>
+          <div class="d-flex">
+            <img src="../.../../../../../../assets/user img.jpg" width="25px" height="25px">
+            <p class="m-0"> Brock Lesnar</p>
+          </div>
+          <div class="d-flex">
+            <img src="../.../../../../../../assets/user img.jpg" width="25px" height="25px">
+            <p class="m-0"> Brock Lesnar</p>
+          </div>
+        </mat-card>-->
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- <div class="main-content d-flex justify-content-center align-items-center" *ngIf="!isClient">
+  <div class="">
+    <div class="col-12 d-flex justify-content-center">
+      <img class="" src="../../../../../assets/comingsoon.png" width="30%" />
+    </div>
+    <div class="col-12 text-center">
+      <h2 class="mb-0">Coming Soon</h2>
+      <h5>
+        Soon your dashboard will have all the required data insights. Stay
+        tuned!!
+      </h5>
+    </div>
+  </div>
+</div> -->

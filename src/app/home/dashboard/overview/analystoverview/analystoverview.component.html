@@ -1,0 +1,1158 @@
+<div class="main-content">
+  <div class="container">
+    <mat-tab-group mat-align-tabs="center">
+      <mat-tab>
+        <ng-template matTabLabel> Designs </ng-template>
+        <div class="mt-4 designoverviewsection widthClass designmaintabs">
+          <mat-tab-group mat-stretch-tabs style="width: 99%" (selectedTabChange)="maintabchange($event)">
+            <mat-tab>
+              <ng-template matTabLabel>
+                <div class="condesignoverviewbutton">
+                  <img src="../../../../../assets/inreview.svg" />
+                  <h1 *ngIf="allinreviewdesigns < 0">
+                    <ngx-skeleton-loader [theme]="{
+                        'border-radius': '5px',
+                        height: '32px',
+                        width: '32px',
+                        'background-color': '#EDDBB2',
+                        position: 'absolute',
+                        top: '16px',
+                        right: '0px'
+                      }">
+                    </ngx-skeleton-loader>
+                  </h1>
+                  <h1 class="conoverviewvalue" *ngIf="allinreviewdesigns >= 0">
+                    {{ allinreviewdesigns }}
+                  </h1>
+                  <h4 style="font-size: 0.7rem">In Review Designs</h4>
+                </div>
+              </ng-template>
+              <mat-tab-group mat-stretch-tabs class="mt-4 innertabs">
+                <mat-tab>
+                  <ng-template matTabLabel>
+                    <span matBadge="{{ inreviewdesigns }}" matBadgeOverlap="false"
+                      [matBadgeHidden]="inreviewdesigns < 0">Sales Proposal</span>
+                  </ng-template>
+                  <div *ngIf="isinreviewdesignslistloading">
+                    <div *ngFor="let number of [0, 1, 2]">
+                      <div class="row">
+                        <div class="col-11">
+                          <ngx-skeleton-loader [theme]="{
+                              'margin-top': '20px',
+                              'margin-bottom': '0px',
+                              'border-radius': '4px',
+                              height: '15px',
+                              width: '60px',
+                              'background-color': '#EDDBB2'
+                            }">
+                          </ngx-skeleton-loader>
+                          <ngx-skeleton-loader [theme]="{
+                              'margin-top': '16px',
+                              'border-radius': '4px',
+                              'margin-bottom': '0px',
+                              height: '15px',
+                              'background-color': '#EDDBB2',
+                              width: '102%'
+                            }">
+                          </ngx-skeleton-loader>
+                          <ngx-skeleton-loader [theme]="{
+                              'border-radius': '4px',
+                              'margin-bottom': '0px',
+                              height: '15px',
+                              'background-color': '#EDDBB2',
+                              width: '102%'
+                            }">
+                          </ngx-skeleton-loader>
+                        </div>
+                        <div class="col">
+                          <ngx-skeleton-loader [theme]="{
+                              'margin-top': '4px',
+                              'border-radius': '4px',
+                              height: '24px',
+                              width: '24px',
+                              'background-color': '#EDDBB2'
+                            }">
+                          </ngx-skeleton-loader>
+                          <ngx-skeleton-loader [theme]="{
+                              'margin-top': '4px',
+                              'margin-left': '6px',
+                              'border-radius': '4px',
+                              height: '24px',
+                              width: '24px',
+                              'background-color': '#EDDBB2'
+                            }">
+                          </ngx-skeleton-loader>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col">
+                          <ngx-skeleton-loader [theme]="{
+                              'margin-top': '16px',
+                              'margin-bottom': '0px',
+                              'border-radius': '8px',
+                              height: '26px',
+                              width: '50px',
+                              'background-color': '#EDDBB2'
+                            }">
+                          </ngx-skeleton-loader>
+                          <ngx-skeleton-loader [theme]="{
+                              'margin-top': '16px',
+                              'margin-left': '8px',
+                              'margin-bottom': '0px',
+                              'border-radius': '8px',
+                              height: '26px',
+                              width: '50px',
+                              'background-color': '#EDDBB2'
+                            }">
+                          </ngx-skeleton-loader>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <cdk-virtual-scroll-viewport itemSize="50" class="designlistitems-viewport" *ngIf="
+                      !isinreviewdesignslistloading &&
+                      inreviewdesignslist.length > 0
+                    ">
+                    <mat-card [ngClass]="applyCardCss(i, design)" *cdkVirtualFor="
+                        let design of inreviewdesignslist;
+                        let i = index
+                      " (click)="
+                        openDesignDetailDialog(design, i)
+                      ">
+                      <mat-card-header>
+                        <div class="row align-items-center headerrow">
+                          <div class="col-10 headercol">
+                            <img style="width: 24px; margin-right: 8px" *ngIf="design.isonpriority"
+                              src="../../../../../assets/redflag.svg" />
+                            <mat-card-title style="font-size: 0.9em">{{ design.name }}
+                              <span class="chipdetail ml-1" *ngIf="
+                                  design.status == 'outsourced' && isClient
+                                ">{{ design.designcurrentstatus }}</span>
+                              <span class="chipdetail ml-1" *ngIf="
+                                  (design.requirementtype == 'assessment' ||
+                                    design.requirementtype == 'proposal') &&
+                                  design.requesttype == 'prelim'
+                                " style="background-color: rgb(204, 153, 0)">{{ design.requirementtype | titlecase
+                                }}</span>
+                              <span class="chipdetail ml-1" style="background-color: #1289a7"
+                                *ngIf="design.status == 'created'">Unassigned</span>
+                              <span class="chipdetail ml-1" style="background-color: #3c78d8" *ngIf="
+                                  design.status == 'designassigned' ||
+                                  design.status == 'reviewassigned'
+                                ">{{ design.designcurrentstatus }}</span>
+                              <span class="chipdetail ml-1" style="background-color: rgb(109, 187, 26)" *ngIf="
+                                  design.status == 'requestaccepted' ||
+                                  design.status == 'designcompleted' ||
+                                  design.status == 'reviewpassed' ||
+                                  design.status == 'delivered'
+                                ">{{ design.designcurrentstatus }}</span>
+                              <span class="chipdetail ml-1" style="background-color: rgb(246, 77, 10)" *ngIf="
+                                  design.status == 'requestdeclined' ||
+                                  design.status == 'reviewfailed'
+                                ">{{ design.designcurrentstatus }}</span>
+                              <!-- <span class="chipdetail ml-1" style="background-color: rgb(234, 32, 39)"
+                                *ngIf="design.isoverdue">Overdue</span> -->
+                              <span class="chipdetail ml-1 ml-1" style="background-color: rgb(183, 21, 64)"
+                                *ngIf="design.isinrevisionstate">Revision</span>
+                              <span class="chipdetail ml-1 ml-1" style="background-color: rgb(62, 110, 53)"
+                                *ngIf="design.unhold">Un Hold</span>
+                            </mat-card-title>
+                          </div>
+                          <div class="col headercol">
+                            <button class="float-right" mat-icon-button (click)="activitybarToggle(design, $event)">
+                              <img src="../../../../../assets/activitylist.png" width="24px" />
+                            </button>
+                            <button *ngIf="
+                                design.unreadmessagecount == 0 ||
+                                design.unreadmessagecount == null
+                              " class="float-right" mat-icon-button (click)="onChatButtonClick(design, $event)">
+                              <img src="../../../../../assets/chat.svg" width="24px" />
+                            </button>
+                            <button *ngIf="design.unreadmessagecount > 0" class="float-right" mat-icon-button
+                              (click)="onChatButtonClick(design, $event)">
+                              <img src="../../../../../assets/newchat.svg" width="24px" />
+                            </button>
+                          </div>
+                        </div>
+                      </mat-card-header>
+                      <mat-card-content>
+                        <div class="row contentrow">
+                          <div class="col-8 contentcol">
+                            <a class="actiondetail" href="mailto:{{ design.email }}"
+                              (click)="$event.stopPropagation()">{{ design.email }}</a>
+                            <a class="actiondetail" href="https://maps.google.com/?q={{
+                                design.address
+                              }}" target="_blank" (click)="$event.stopPropagation()">{{ design.address }}</a>
+                            <p class="actiondetail silentdetail" *ngIf="design.createdby.company != null">
+                              {{ design.createdby.company }}
+                            </p>
+                          </div>
+                          <div class="col-4 contentcol">
+                            <!-- <p class="timedetail" *ngIf="design.isoverdue">Late by {{ design.lateby }}</p>
+                            <p class="assigneedetails">Assigned to</p>
+                            <p class="assigneedetails" style="font-weight: 600;">{{design.reviewassignedto.firstname}}
+                              {{design.reviewassignedto.lastname}}</p> -->
+                          </div>
+                        </div>
+                        <!-- <p class="silentdetail">Updated {{ design.recordupdatedon }}</p> -->
+                        <p class="timedetail silentdetail" *ngIf="design.expecteddeliverydate">
+                          {{ design.expecteddeliverydate | date: "dd MMM yy" }}
+                        </p>
+                      </mat-card-content>
+                      <mat-card-footer>
+                        <div class="row footerrow align-items-center">
+                          <div class="col-6 footercol">
+                            <div class="row align-items-center">
+                              <!-- <p class="chipdetail ml-1 ml-1">{{design.formattedjobtype}}</p> -->
+                              <!-- <p class="chipdetail ml-1 ml-1">{{design.source | titlecase}}</p> -->
+                              <!-- <p class="chipdetail ml-1" *ngIf="design.company != null">{{design.company}}</p>
+                              <p class="chipdetail ml-1" *ngIf="design.company == null">{{design.createdby.company}}</p> -->
+                            </div>
+                          </div>
+                          <div class="col-6 footercol">
+                            <div style="width: 80px !important;" *ngIf="
+                                design.status == 'reviewassigned' &&
+                                design.reviewassignedto.id == loggedInUser.id && (job?.taskstatus == 'pending' && job?.designid == design.id)
+                              " class="leftovertimerclass float-right">
+                              <!-- <p>{{ design.reviewremainingtime }}</p> -->
+                              <p>{{ display }}</p>
+                            </div>
+                            <button *ngIf="!disablestartbutton && design.status == 'reviewassigned'"
+                              class="prominentbutton float-right ml-1" mat-button
+                              (click)="startTimer($event,design,i)">Start</button>
+                            <button *ngIf="
+                                !isClient &&
+                                (design.status == 'reviewassigned' ||
+                                  design.status == 'reviewpassed' ||
+                                  design.status == 'reviewfailed')
+                              " class="prominentbutton secondarybutton float-right ml-1" mat-button (click)="
+                                declineDesignRequest(
+                                  design,
+                                  $event,
+                                  i,
+                                  listtypes.INREVIEW,
+                                  'onhold'
+                                )
+                              ">
+                              On Hold
+                            </button>
+                          </div>
+                        </div>
+                        <div class="row"
+                          *ngIf="design?.taskoverdue || (totalminutes > prelimanalyst && job?.designid == design.id)"
+                          style="justify-content: center;">
+                          <div style="background-color: red;height: 20px;width: 15%;">
+                            <p style="color: white;text-align: -webkit-center;"><b>Task Exceeded Time</b></p>
+                          </div>
+                        </div>
+                      </mat-card-footer>
+                    </mat-card>
+                  </cdk-virtual-scroll-viewport>
+                  <p class="listplaceholder" *ngIf="
+                      !isinreviewdesignslistloading &&
+                      inreviewdesignslist.length == 0
+                    ">
+                    No Design Reviews In Progress
+                  </p>
+                </mat-tab>
+                <mat-tab>
+                  <ng-template matTabLabel>
+                    <span matBadge="{{ permitinreviewdesigns }}" matBadgeOverlap="false"
+                      [matBadgeHidden]="permitinreviewdesigns < 0">Permit</span>
+                  </ng-template>
+                  <div *ngIf="ispermitinreviewdesignslistloading">
+                    <div *ngFor="let number of [0, 1, 2]">
+                      <div class="row">
+                        <div class="col-10">
+                          <ngx-skeleton-loader [theme]="{
+                              'margin-top': '4px',
+                              'margin-bottom': '0px',
+                              'border-radius': '4px',
+                              height: '15px',
+                              width: '60px',
+                              'background-color': '#EDDBB2'
+                            }">
+                          </ngx-skeleton-loader>
+                          <ngx-skeleton-loader [theme]="{
+                              'margin-top': '16px',
+                              'border-radius': '4px',
+                              'margin-bottom': '0px',
+                              height: '15px',
+                              'background-color': '#EDDBB2'
+                            }">
+                          </ngx-skeleton-loader>
+                          <ngx-skeleton-loader [theme]="{
+                              'border-radius': '4px',
+                              'margin-bottom': '0px',
+                              height: '15px',
+                              'background-color': '#EDDBB2'
+                            }">
+                          </ngx-skeleton-loader>
+                        </div>
+                        <div class="col">
+                          <ngx-skeleton-loader [theme]="{
+                              'margin-top': '4px',
+                              'border-radius': '4px',
+                              height: '24px',
+                              width: '24px',
+                              'background-color': '#EDDBB2'
+                            }">
+                          </ngx-skeleton-loader>
+                          <ngx-skeleton-loader [theme]="{
+                              'margin-top': '4px',
+                              'margin-left': '8px',
+                              'border-radius': '4px',
+                              height: '24px',
+                              width: '24px',
+                              'background-color': '#EDDBB2'
+                            }">
+                          </ngx-skeleton-loader>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col">
+                          <ngx-skeleton-loader [theme]="{
+                              'margin-top': '16px',
+                              'margin-bottom': '0px',
+                              'border-radius': '8px',
+                              height: '26px',
+                              width: '50px',
+                              'background-color': '#EDDBB2'
+                            }">
+                          </ngx-skeleton-loader>
+                          <ngx-skeleton-loader [theme]="{
+                              'margin-top': '16px',
+                              'margin-left': '8px',
+                              'margin-bottom': '0px',
+                              'border-radius': '8px',
+                              height: '26px',
+                              width: '50px',
+                              'background-color': '#EDDBB2'
+                            }">
+                          </ngx-skeleton-loader>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <cdk-virtual-scroll-viewport itemSize="50" class="designlistitems-viewport" *ngIf="
+                      !ispermitinreviewdesignslistloading &&
+                      permitinreviewdesignslist.length > 0
+                    ">
+                    <mat-card [ngClass]="applyCardCss(i, design)" *cdkVirtualFor="
+                        let design of permitinreviewdesignslist;
+                        let i = index
+                      " (click)="
+                        openDesignDetailDialog(design,i)
+                      ">
+                      <mat-card-header>
+                        <div class="row align-items-center headerrow">
+                          <div class="col-10 headercol">
+                            <img style="width: 24px; margin-right: 8px" *ngIf="design.isonpriority"
+                              src="../../../../../assets/redflag.svg" />
+                            <mat-card-title style="font-size: 0.9em">{{ design.name }}
+                              <span class="chipdetail ml-1" *ngIf="
+                                  design.status == 'outsourced' && isClient
+                                ">{{ design.designcurrentstatus }}</span>
+                              <span class="chipdetail ml-1" style="background-color: #1289a7"
+                                *ngIf="design.status == 'created'">Unassigned</span>
+                              <span class="chipdetail ml-1" style="background-color: #3c78d8" *ngIf="
+                                  design.status == 'designassigned' ||
+                                  design.status == 'reviewassigned'
+                                ">{{ design.designcurrentstatus }}</span>
+                              <span class="chipdetail ml-1" style="background-color: rgb(109, 187, 26)" *ngIf="
+                                  design.status == 'requestaccepted' ||
+                                  design.status == 'designcompleted' ||
+                                  design.status == 'reviewpassed' ||
+                                  design.status == 'delivered'
+                                ">{{ design.designcurrentstatus }}</span>
+                              <span class="chipdetail ml-1" style="background-color: rgb(246, 77, 10)" *ngIf="
+                                  design.status == 'requestdeclined' ||
+                                  design.status == 'reviewfailed'
+                                ">{{ design.designcurrentstatus }}</span>
+                              <!-- <span class="chipdetail ml-1" style="background-color: rgb(234, 32, 39)"
+                                *ngIf="design.isoverdue">Overdue</span> -->
+                              <span class="chipdetail ml-1 ml-1" style="background-color: rgb(183, 21, 64)"
+                                *ngIf="design.isinrevisionstate">Revision</span>
+                              <span class="chipdetail ml-1 ml-1" style="background-color: rgb(62, 110, 53)"
+                                *ngIf="design.unhold">Un Hold</span>
+                            </mat-card-title>
+                          </div>
+                          <div class="col headercol">
+                            <button class="float-right" mat-icon-button (click)="activitybarToggle(design, $event)">
+                              <img src="../../../../../assets/activitylist.png" width="24px" />
+                            </button>
+                            <button *ngIf="
+                                design.unreadmessagecount == 0 ||
+                                design.unreadmessagecount == null
+                              " class="float-right" mat-icon-button (click)="onChatButtonClick(design, $event)">
+                              <img src="../../../../../assets/chat.svg" width="24px" />
+                            </button>
+                            <button *ngIf="design.unreadmessagecount > 0" class="float-right" mat-icon-button
+                              (click)="onChatButtonClick(design, $event)">
+                              <img src="../../../../../assets/newchat.svg" width="24px" />
+                            </button>
+                          </div>
+                        </div>
+                      </mat-card-header>
+                      <mat-card-content>
+                        <div class="row contentrow">
+                          <div class="col-8 contentcol">
+                            <!--  <div class="meter"
+                              *ngIf="(!loggedInUser.minpermitdesignaccess && isClient) || (!design.createdby.minpermitdesignaccess && !isClient)">
+                              <div class="metergreen"></div>
+                              <div [ngClass]="[ design.designgeneralinformation != null ? 'metergreen' : 'meterbox']">
+                              </div>
+                              <div *ngIf="design.jobtype != 'battery'"
+                                [ngClass]="[ design.structuralinformations.length > 0 ? 'metergreen' : 'meterbox']">
+                              </div>
+                              <div [ngClass]="[ design.electricalinformation != null ? 'metergreen' : 'meterbox']">
+                              </div>
+                              <div *ngIf="!design.newconstruction"
+                                [ngClass]="[ design.electricalslocation != null ? 'metergreen' : 'meterbox']">
+                              </div>
+                            </div> -->
+                            <a class="actiondetail" href="mailto:{{ design.email }}"
+                              (click)="$event.stopPropagation()">{{ design.email }}</a>
+                            <a class="actiondetail" href="https://maps.google.com/?q={{
+                                design.address
+                              }}" target="_blank" (click)="$event.stopPropagation()">{{ design.address }}</a>
+                            <p class="actiondetail silentdetail" *ngIf="design.createdby.company != null">
+                              {{ design.createdby.company }}
+                            </p>
+                          </div>
+                          <div class="col-4 contentcol">
+                            <!-- <p class="assigneedetails">Assigned to</p>
+                            <p class="assigneedetails" style="font-weight: 600;">{{design.reviewassignedto.firstname}}
+                              {{design.reviewassignedto.lastname}}</p> -->
+                          </div>
+                        </div>
+                        <!-- <p class="silentdetail">Updated {{ design.recordupdatedon }}</p> -->
+                        <p class="timedetail silentdetail" *ngIf="design.expecteddeliverydate">
+                          {{ design.expecteddeliverydate | date: "dd MMM yy" }}
+                        </p>
+                      </mat-card-content>
+                      <mat-card-footer>
+                        <div class="row footerrow align-items-center">
+                          <div class="col-6 footercol">
+                            <div class="row align-items-center">
+                              <p class="chipdetail ml-1 ml-1">
+                                {{ design.formattedjobtype }}
+                              </p>
+                              <!-- <p class="chipdetail ml-1 ml-1">{{design.source | titlecase}}</p> -->
+                              <!-- <p class="chipdetail ml-1" *ngIf="design.company != null">{{design.company}}</p>
+                              <p class="chipdetail ml-1" *ngIf="design.company == null">{{design.createdby.company}}</p> -->
+                            </div>
+                          </div>
+                          <div class="col-6 footercol">
+                            <div style="width: 80px !important;" *ngIf="
+                                design.status == 'reviewassigned' &&
+                                design.reviewassignedto.id == loggedInUser.id && (job?.taskstatus == 'pending' && job?.designid == design.id)
+                              " class="leftovertimerclass float-right">
+                              <!-- <p>{{ design.reviewremainingtime }}</p> -->
+                              <p>{{ display }}</p>
+                            </div>
+                            <button *ngIf="!disablestartbutton && design.status == 'reviewassigned'"
+                              class="prominentbutton float-right ml-1" mat-button
+                              (click)="startTimer($event,design,i)">Start</button>
+                            <button *ngIf="
+                                !isClient &&
+                                (design.status == 'reviewassigned' ||
+                                  design.status == 'reviewpassed' ||
+                                  design.status == 'reviewfailed')
+                              " class="prominentbutton secondarybutton float-right ml-1" mat-button (click)="
+                                declinePermitDesignRequest(
+                                  design,
+                                  $event,
+                                  i,
+                                  listtypes.INREVIEW,
+                                  'onhold'
+                                )
+                              ">
+                              On Hold
+                            </button>
+                          </div>
+                        </div>
+                        <div class="row"
+                          *ngIf="design?.taskoverdue || (totalminutes > permitanalyst && job?.designid == design.id)"
+                          style="justify-content: center;">
+                          <div style="background-color: red;height: 20px;width: 15%;">
+                            <p style="color: white;text-align: -webkit-center;"><b>Task Exceeded Time</b></p>
+                          </div>
+                        </div>
+                      </mat-card-footer>
+                    </mat-card>
+                  </cdk-virtual-scroll-viewport>
+                  <p class="listplaceholder" *ngIf="
+                      !ispermitinreviewdesignslistloading &&
+                      permitinreviewdesignslist.length == 0
+                    ">
+                    No Design Reviews In Progress
+                  </p>
+                </mat-tab>
+              </mat-tab-group>
+            </mat-tab>
+            <mat-tab>
+              <ng-template matTabLabel>
+                <div class="condesignoverviewbutton">
+                  <img src="../../../../../assets/delivered.svg" />
+                  <h1 *ngIf="alldelivereddesigns < 0">
+                    <ngx-skeleton-loader [theme]="{
+                        'border-radius': '5px',
+                        height: '32px',
+                        width: '32px',
+                        'background-color': '#EDDBB2',
+                        position: 'absolute',
+                        top: '16px',
+                        right: '0px'
+                      }">
+                    </ngx-skeleton-loader>
+                  </h1>
+                  <h1 class="conoverviewvalue" *ngIf="alldelivereddesigns >= 0">
+                    {{ alldelivereddesigns }}
+                  </h1>
+                  <h4 style="font-size: 0.7rem">Delivered Designs</h4>
+                </div>
+              </ng-template>
+              <mat-tab-group mat-stretch-tabs class="mt-4 innertabs">
+                <mat-tab>
+                  <ng-template matTabLabel>
+                    <span matBadge="{{ delivereddesigns }}" matBadgeOverlap="false"
+                      [matBadgeHidden]="delivereddesigns < 0">Sales Proposal</span>
+                  </ng-template>
+                  <div *ngIf="isdelivereddesignslistloading">
+                    <div *ngFor="let number of [0, 1, 2]">
+                      <div class="row">
+                        <div class="col-11">
+                          <ngx-skeleton-loader [theme]="{
+                              'margin-top': '20px',
+                              'margin-bottom': '0px',
+                              'border-radius': '4px',
+                              height: '15px',
+                              width: '60px',
+                              'background-color': '#EDDBB2'
+                            }">
+                          </ngx-skeleton-loader>
+                          <ngx-skeleton-loader [theme]="{
+                              'margin-top': '16px',
+                              'border-radius': '4px',
+                              'margin-bottom': '0px',
+                              height: '15px',
+                              'background-color': '#EDDBB2',
+                              width: '102%'
+                            }">
+                          </ngx-skeleton-loader>
+                          <ngx-skeleton-loader [theme]="{
+                              'border-radius': '4px',
+                              'margin-bottom': '0px',
+                              height: '15px',
+                              'background-color': '#EDDBB2',
+                              width: '102%'
+                            }">
+                          </ngx-skeleton-loader>
+                        </div>
+                        <div class="col">
+                          <ngx-skeleton-loader [theme]="{
+                              'margin-top': '4px',
+                              'border-radius': '4px',
+                              height: '24px',
+                              width: '24px',
+                              'background-color': '#EDDBB2'
+                            }">
+                          </ngx-skeleton-loader>
+                          <ngx-skeleton-loader [theme]="{
+                              'margin-top': '4px',
+                              'margin-left': '6px',
+                              'border-radius': '4px',
+                              height: '24px',
+                              width: '24px',
+                              'background-color': '#EDDBB2'
+                            }">
+                          </ngx-skeleton-loader>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col">
+                          <ngx-skeleton-loader [theme]="{
+                              'margin-top': '16px',
+                              'margin-bottom': '0px',
+                              'border-radius': '8px',
+                              height: '26px',
+                              width: '50px',
+                              'background-color': '#EDDBB2'
+                            }">
+                          </ngx-skeleton-loader>
+                          <ngx-skeleton-loader [theme]="{
+                              'margin-top': '16px',
+                              'margin-left': '8px',
+                              'margin-bottom': '0px',
+                              'border-radius': '8px',
+                              height: '26px',
+                              width: '50px',
+                              'background-color': '#EDDBB2'
+                            }">
+                          </ngx-skeleton-loader>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <cdk-virtual-scroll-viewport itemSize="50" class="designlistitems-viewport" *ngIf="
+                      !isdelivereddesignslistloading &&
+                      delivereddesignslist.length > 0
+                    ">
+                    <mat-card [ngClass]="applyCardCss(i, design)" *cdkVirtualFor="
+                        let design of delivereddesignslist;
+                        let i = index
+                      " (click)="
+                        openDesignDetailDialog(design,i)
+                      ">
+                      <mat-card-header>
+                        <div class="row align-items-center headerrow">
+                          <div class="col-10 headercol">
+                            <img style="width: 24px; margin-right: 8px" *ngIf="design.isonpriority"
+                              src="../../../../../assets/redflag.svg" />
+                            <mat-card-title style="font-size: 0.9em">{{ design.name }}
+                              <span class="chipdetail ml-1" *ngIf="
+                                  design.status == 'outsourced' && isClient
+                                ">{{ design.designcurrentstatus }}</span>
+                              <span class="chipdetail ml-1" *ngIf="
+                                  (design.requirementtype == 'assessment' ||
+                                    design.requirementtype == 'proposal') &&
+                                  design.requesttype == 'prelim'
+                                " style="background-color: rgb(204, 153, 0)">{{ design.requirementtype | titlecase
+                                }}</span>
+                              <span class="chipdetail ml-1" style="background-color: #1289a7"
+                                *ngIf="design.status == 'created'">Unassigned</span>
+                              <span class="chipdetail ml-1" style="background-color: #3c78d8" *ngIf="
+                                  design.status == 'designassigned' ||
+                                  design.status == 'reviewassigned'
+                                ">{{ design.designcurrentstatus }}</span>
+                              <span class="chipdetail ml-1" style="background-color: rgb(109, 187, 26)" *ngIf="
+                                  design.status == 'requestaccepted' ||
+                                  design.status == 'designcompleted' ||
+                                  design.status == 'reviewpassed' ||
+                                  design.status == 'delivered'
+                                ">{{ design.designcurrentstatus }}</span>
+                              <span class="chipdetail ml-1" style="background-color: rgb(246, 77, 10)" *ngIf="
+                                  design.status == 'requestdeclined' ||
+                                  design.status == 'reviewfailed'
+                                ">{{ design.designcurrentstatus }}</span>
+                              <!-- <span class="chipdetail ml-1" style="background-color: rgb(234, 32, 39)"
+                                *ngIf="design.isoverdue">Overdue</span> -->
+                              <span class="chipdetail ml-1 ml-1" style="background-color: rgb(183, 21, 64)"
+                                *ngIf="design.isinrevisionstate">Revision</span>
+                              <span class="chipdetail ml-1 ml-1" style="background-color: rgb(62, 110, 53)"
+                                *ngIf="design.unhold">Un Hold</span>
+                            </mat-card-title>
+                          </div>
+                          <div class="col headercol">
+                            <button class="float-right" mat-icon-button (click)="activitybarToggle(design, $event)">
+                              <img src="../../../../../assets/activitylist.png" width="24px" />
+                            </button>
+                            <button *ngIf="
+                                design.unreadmessagecount == 0 ||
+                                design.unreadmessagecount == null
+                              " class="float-right" mat-icon-button (click)="onChatButtonClick(design, $event)">
+                              <img src="../../../../../assets/chat.svg" width="24px" />
+                            </button>
+                            <button *ngIf="design.unreadmessagecount > 0" class="float-right" mat-icon-button
+                              (click)="onChatButtonClick(design, $event)">
+                              <img src="../../../../../assets/newchat.svg" width="24px" />
+                            </button>
+                          </div>
+                        </div>
+                      </mat-card-header>
+                      <mat-card-content>
+                        <div class="row contentrow">
+                          <div class="col-8 contentcol">
+                            <a class="actiondetail" href="mailto:{{ design.email }}"
+                              (click)="$event.stopPropagation()">{{ design.email }}</a>
+                            <a class="actiondetail" href="https://maps.google.com/?q={{
+                                design.address
+                              }}" target="_blank" (click)="$event.stopPropagation()">{{ design.address }}</a>
+                            <p class="actiondetail silentdetail" *ngIf="design.createdby.company != null">
+                              {{ design.createdby.company }}
+                            </p>
+                          </div>
+                          <div class="col-4 contentcol">
+                            <!--  <p class="timedetail" *ngIf="design.isoverdue">Late by {{ design.lateby }}</p>
+                            <p class="assigneedetails">Assigned to</p>
+                            <p class="assigneedetails" style="font-weight: 600;">{{design.reviewassignedto.firstname}}
+                              {{design.reviewassignedto.lastname}}</p> -->
+                          </div>
+                        </div>
+                        <!-- <p class="silentdetail">Updated {{ design.recordupdatedon }}</p> -->
+                        <p class="timedetail silentdetail">
+                          {{
+                          genericService.formatDateInDisplayFormat(
+                          design.actualdelivereddate
+                          )
+                          }}
+                        </p>
+                      </mat-card-content>
+                      <mat-card-footer>
+                        <div class="row footerrow align-items-center">
+                          <div class="col-8 footercol">
+                            <div class="row align-items-center">
+                              <!-- <p class="chipdetail ml-1 ml-1">{{design.formattedjobtype}}</p> -->
+                              <!-- <p class="chipdetail ml-1 ml-1">{{design.source | titlecase}}</p> -->
+                              <!-- <p class="chipdetail ml-1" *ngIf="design.company != null">{{design.company}}</p>
+                              <p class="chipdetail ml-1" *ngIf="design.company == null">{{design.createdby.company}}</p> -->
+                            </div>
+                          </div>
+                          <div class="col-4 footercol"></div>
+                        </div>
+                        <!-- <div class="row"
+                          *ngIf="(design?.tasktimings?.isdesignertimeexceeded || design?.tasktimings?.isanalysttimeexceeded) && design?.tasktimings?.designid == design.id"
+                          style="justify-content: center;"> -->
+                        <div class="row" *ngIf="design?.taskoverdue" style="justify-content: center;">
+                          <div style="background-color: red;height: 20px;width: 15%;">
+                            <p style="color: white;text-align: -webkit-center;"><b>Task Exceeded Time</b></p>
+                          </div>
+                        </div>
+                      </mat-card-footer>
+                    </mat-card>
+                  </cdk-virtual-scroll-viewport>
+                  <p class="listplaceholder" *ngIf="
+                      !isdelivereddesignslistloading &&
+                      delivereddesignslist.length == 0
+                    ">
+                    No Designs Delivered So Far
+                  </p>
+                </mat-tab>
+                <mat-tab>
+                  <ng-template matTabLabel>
+                    <span matBadge="{{ permitdelivereddesigns }}" matBadgeOverlap="false"
+                      [matBadgeHidden]="permitdelivereddesigns < 0">Permit</span>
+                  </ng-template>
+                  <div *ngIf="ispermitdelivereddesignslistloading">
+                    <div *ngFor="let number of [0, 1, 2]">
+                      <div class="row">
+                        <div class="col-11">
+                          <ngx-skeleton-loader [theme]="{
+                              'margin-top': '20px',
+                              'margin-bottom': '0px',
+                              'border-radius': '4px',
+                              height: '15px',
+                              width: '60px',
+                              'background-color': '#EDDBB2'
+                            }">
+                          </ngx-skeleton-loader>
+                          <ngx-skeleton-loader [theme]="{
+                              'margin-top': '16px',
+                              'border-radius': '4px',
+                              'margin-bottom': '0px',
+                              height: '15px',
+                              'background-color': '#EDDBB2',
+                              width: '102%'
+                            }">
+                          </ngx-skeleton-loader>
+                          <ngx-skeleton-loader [theme]="{
+                              'border-radius': '4px',
+                              'margin-bottom': '0px',
+                              height: '15px',
+                              'background-color': '#EDDBB2',
+                              width: '102%'
+                            }">
+                          </ngx-skeleton-loader>
+                        </div>
+                        <div class="col">
+                          <ngx-skeleton-loader [theme]="{
+                              'margin-top': '4px',
+                              'border-radius': '4px',
+                              height: '24px',
+                              width: '24px',
+                              'background-color': '#EDDBB2'
+                            }">
+                          </ngx-skeleton-loader>
+                          <ngx-skeleton-loader [theme]="{
+                              'margin-top': '4px',
+                              'margin-left': '6px',
+                              'border-radius': '4px',
+                              height: '24px',
+                              width: '24px',
+                              'background-color': '#EDDBB2'
+                            }">
+                          </ngx-skeleton-loader>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col">
+                          <ngx-skeleton-loader [theme]="{
+                              'margin-top': '16px',
+                              'margin-bottom': '0px',
+                              'border-radius': '8px',
+                              height: '26px',
+                              width: '50px',
+                              'background-color': '#EDDBB2'
+                            }">
+                          </ngx-skeleton-loader>
+                          <ngx-skeleton-loader [theme]="{
+                              'margin-top': '16px',
+                              'margin-left': '8px',
+                              'margin-bottom': '0px',
+                              'border-radius': '8px',
+                              height: '26px',
+                              width: '50px',
+                              'background-color': '#EDDBB2'
+                            }">
+                          </ngx-skeleton-loader>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <cdk-virtual-scroll-viewport itemSize="50" class="designlistitems-viewport" *ngIf="
+                      !ispermitdelivereddesignslistloading &&
+                      permitdelivereddesignslist.length > 0
+                    ">
+                    <mat-card [ngClass]="applyCardCss(i, design)" *cdkVirtualFor="
+                        let design of permitdelivereddesignslist;
+                        let i = index
+                      " (click)="
+                        openDesignDetailDialog(design,i)
+                      ">
+                      <mat-card-header>
+                        <div class="row align-items-center headerrow">
+                          <div class="col-10 headercol">
+                            <img style="width: 24px; margin-right: 8px" *ngIf="design.isonpriority"
+                              src="../../../../../assets/redflag.svg" />
+                            <mat-card-title style="font-size: 0.9em">{{ design.name }}
+                              <span class="chipdetail ml-1" *ngIf="
+                                  design.status == 'outsourced' && isClient
+                                ">{{ design.designcurrentstatus }}</span>
+                              <span class="chipdetail ml-1" style="background-color: #1289a7"
+                                *ngIf="design.status == 'created'">Unassigned</span>
+                              <span class="chipdetail ml-1" style="background-color: #3c78d8" *ngIf="
+                                  design.status == 'designassigned' ||
+                                  design.status == 'reviewassigned'
+                                ">{{ design.designcurrentstatus }}</span>
+                              <span class="chipdetail ml-1" style="background-color: rgb(109, 187, 26)" *ngIf="
+                                  design.status == 'requestaccepted' ||
+                                  design.status == 'designcompleted' ||
+                                  design.status == 'reviewpassed' ||
+                                  design.status == 'delivered'
+                                ">{{ design.designcurrentstatus }}</span>
+                              <span class="chipdetail ml-1" style="background-color: rgb(246, 77, 10)" *ngIf="
+                                  design.status == 'requestdeclined' ||
+                                  design.status == 'reviewfailed'
+                                ">{{ design.designcurrentstatus }}</span>
+                              <!-- <span class="chipdetail ml-1" style="background-color: rgb(234, 32, 39)"
+                                *ngIf="design.isoverdue">Overdue</span> -->
+                              <span class="chipdetail ml-1 ml-1" style="background-color: rgb(183, 21, 64)"
+                                *ngIf="design.isinrevisionstate">Revision</span>
+                              <span class="chipdetail ml-1 ml-1" style="background-color: rgb(62, 110, 53)"
+                                *ngIf="design.unhold">Un Hold</span>
+                            </mat-card-title>
+                          </div>
+                          <div class="col headercol">
+                            <button class="float-right" mat-icon-button (click)="activitybarToggle(design, $event)">
+                              <img src="../../../../../assets/activitylist.png" width="24px" />
+                            </button>
+                            <button *ngIf="
+                                design.unreadmessagecount == 0 ||
+                                design.unreadmessagecount == null
+                              " class="float-right" mat-icon-button (click)="onChatButtonClick(design, $event)">
+                              <img src="../../../../../assets/chat.svg" width="24px" />
+                            </button>
+                            <button *ngIf="design.unreadmessagecount > 0" class="float-right" mat-icon-button
+                              (click)="onChatButtonClick(design, $event)">
+                              <img src="../../../../../assets/newchat.svg" width="24px" />
+                            </button>
+                          </div>
+                        </div>
+                      </mat-card-header>
+                      <mat-card-content>
+                        <div class="row contentrow">
+                          <div class="col-8 contentcol">
+                            <!-- <div class="meter"
+                              *ngIf="(!loggedInUser.minpermitdesignaccess && isClient) || (!design.createdby.minpermitdesignaccess && !isClient)">
+                              <div class="metergreen"></div>
+                              <div [ngClass]="[ design.designgeneralinformation != null ? 'metergreen' : 'meterbox']">
+                              </div>
+                              <div *ngIf="design.jobtype != 'battery'"
+                                [ngClass]="[ design.structuralinformations.length > 0 ? 'metergreen' : 'meterbox']">
+                              </div>
+                              <div [ngClass]="[ design.electricalinformation != null ? 'metergreen' : 'meterbox']">
+                              </div>
+                              <div *ngIf="!design.newconstruction"
+                                [ngClass]="[ design.electricalslocation != null ? 'metergreen' : 'meterbox']">
+                              </div>
+                            </div> -->
+                            <a class="actiondetail" href="mailto:{{ design.email }}"
+                              (click)="$event.stopPropagation()">{{ design.email }}</a>
+                            <a class="actiondetail" href="https://maps.google.com/?q={{
+                                design.address
+                              }}" target="_blank" (click)="$event.stopPropagation()">{{ design.address }}</a>
+                            <p class="actiondetail silentdetail" *ngIf="design.createdby.company != null">
+                              {{ design.createdby.company }}
+                            </p>
+                          </div>
+                          <div class="col-4 contentcol">
+                            <!--  <p class="assigneedetails">Assigned to</p>
+                            <p class="assigneedetails" style="font-weight: 600;">{{design.reviewassignedto.firstname}}
+                              {{design.reviewassignedto.lastname}}</p> -->
+                          </div>
+                        </div>
+                        <!-- <p class="silentdetail">Updated {{ design.recordupdatedon }}</p> -->
+                        <p class="timedetail silentdetail">
+                          {{
+                          genericService.formatDateInDisplayFormat(
+                          design.actualdelivereddate
+                          )
+                          }}
+                        </p>
+                      </mat-card-content>
+                      <mat-card-footer>
+                        <div class="row footerrow align-items-center">
+                          <div class="col-8 footercol">
+                            <div class="row align-items-center">
+                              <p class="chipdetail ml-1 ml-1">
+                                {{ design.formattedjobtype }}
+                              </p>
+                              <!-- <p class="chipdetail ml-1 ml-1">{{design.source | titlecase}}</p> -->
+                              <!-- <p class="chipdetail ml-1" *ngIf="design.company != null">{{design.company}}</p>
+                              <p class="chipdetail ml-1" *ngIf="design.company == null">{{design.createdby.company}}</p> -->
+                            </div>
+                          </div>
+
+                          <div class="col-4 footercol">
+                            <button
+                              *ngIf="((isClient) || (!isClient && genericService.isPDFAutogenerationAccess) && design.jobtype =='pv')"
+                              class="prominentbutton secondarybutton float-right ml-1" mat-button
+                              (click)="addAdditionalInformation(design, $event)">Additional Information </button>
+                          </div>
+
+                        </div>
+                        <div class="row" *ngIf="design?.taskoverdue" style="justify-content: center;">
+                          <div style="background-color: red;height: 20px;width: 15%;">
+                            <p style="color: white;text-align: -webkit-center;"><b>Task Exceeded Time</b></p>
+                          </div>
+                        </div>
+                      </mat-card-footer>
+                    </mat-card>
+                  </cdk-virtual-scroll-viewport>
+                  <p class="listplaceholder" *ngIf="
+                      !ispermitdelivereddesignslistloading &&
+                      permitdelivereddesignslist.length == 0
+                    ">
+                    No Designs Delivered So Far
+                  </p>
+                </mat-tab>
+              </mat-tab-group>
+            </mat-tab>
+          </mat-tab-group>
+        </div>
+      </mat-tab>
+      <!-- <mat-tab >
+        <ng-template matTabLabel>
+          Surveys
+        </ng-template>
+        <div class="row mt-4 designoverviewsection widthClass designmaintabs">
+          <mat-tab-group mat-stretch-tabs style="width:99%;" (selectedTabChange)="maintabchange($event);">
+            <mat-tab>
+              <ng-template matTabLabel>
+                <div class="condesignoverviewbutton">
+                  <img src="../../../../../assets/inprogress.svg" />
+                  <h1 *ngIf="inreview < 0">
+                    <ngx-skeleton-loader
+                      [theme]="{ 'border-radius': '5px', height: '32px', width: '32px', 'background-color': '#EDDBB2', 'position': 'absolute', 'top': '16px', 'right': '0px' }">
+                    </ngx-skeleton-loader>
+                  </h1>
+                  <h1 class="conoverviewvalue" *ngIf="inreview >= 0">
+                    {{ inreview  }}</h1>
+                    <h4 style="font-size: 0.7rem;">In Review</h4>
+                </div>
+              </ng-template>
+              <div class="mt-4 innertabs">
+                 <div *ngIf="isindesignslistloading">
+                  <div *ngFor="let number of [0,1,2]">
+                    <div class="row">
+                      <div class="col-10">
+                        <ngx-skeleton-loader
+                          [theme]="{ 'margin-top': '4px', 'margin-bottom': '0px', 'border-radius': '4px', height: '15px', width: '60px', 'background-color': '#EDDBB2' }">
+                        </ngx-skeleton-loader>
+                        <ngx-skeleton-loader
+                          [theme]="{ 'margin-top': '16px', 'border-radius': '4px', 'margin-bottom': '0px', height: '15px', 'background-color': '#EDDBB2' }">
+                        </ngx-skeleton-loader>
+                        <ngx-skeleton-loader
+                          [theme]="{ 'border-radius': '4px', 'margin-bottom': '0px', height: '15px', 'background-color': '#EDDBB2' }">
+                        </ngx-skeleton-loader>
+                      </div>
+                      <div class="col">
+                        <ngx-skeleton-loader
+                          [theme]="{ 'margin-top': '4px', 'border-radius': '4px', height: '24px', width: '24px', 'background-color': '#EDDBB2' }">
+                        </ngx-skeleton-loader>
+                        <ngx-skeleton-loader
+                          [theme]="{ 'margin-top': '4px', 'margin-left': '8px', 'border-radius': '4px', height: '24px', width: '24px', 'background-color': '#EDDBB2' }">
+                        </ngx-skeleton-loader>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col">
+                        <ngx-skeleton-loader
+                          [theme]="{ 'margin-top': '16px', 'margin-bottom': '0px', 'border-radius': '8px', height: '26px', width: '50px', 'background-color': '#EDDBB2' }">
+                        </ngx-skeleton-loader>
+                        <ngx-skeleton-loader
+                          [theme]="{ 'margin-top': '16px', 'margin-left': '8px', 'margin-bottom': '0px', 'border-radius': '8px', height: '26px', width: '50px', 'background-color': '#EDDBB2' }">
+                        </ngx-skeleton-loader>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <cdk-virtual-scroll-viewport itemSize="50" class="designlistitems-viewport"
+                    *ngIf="inreviewsurveys.length > 0">
+                      <mat-card [ngClass]="[ i%2 == 0 ? 'itemcard even' : 'itemcard odd']"
+                      *cdkVirtualFor="let survey of inreviewsurveys; let i = index"
+                        (click)="fetchSurveyDetails(survey, listtypes.INREVIEW)">
+                        <mat-card-header>
+
+                          <div class="row align-items-center headerrow">
+                            <div class="col-10 headercol">
+                              <mat-card-title style="font-size: .9em;">{{survey.name}}
+                                <span class="chipdetail ml-1"
+                                  *ngIf="isClient">{{survey.currentstatus}}</span>
+                                <span class="chipdetail ml-1" style="background-color: #1289A7;"
+                                  *ngIf="survey.status == 'created'">Unassigned</span>
+                                <span class="chipdetail ml-1" style="background-color: #3c78d8;"
+                                  *ngIf="survey.status == 'assigned'">{{survey.currentstatus}}</span>
+                                <span class="chipdetail ml-1" style="background-color: rgb(109, 187, 26);"
+                                  *ngIf="survey.status == 'completed'">{{survey.currentstatus}}</span>
+                                <span class="chipdetail ml-1" style="background-color: rgb(246, 77, 10);"
+                                  *ngIf="survey.isoverdue">Overdue</span>
+                              </mat-card-title>
+                            </div>
+                            <div class="col headercol">
+                              <button class="float-right" mat-icon-button (click)="surveyactivitybarToggle(survey, $event)"><img
+                                  src="../../../../../assets/activitylist.png" width="16px" /></button>
+                              <button class="float-right" mat-icon-button (click)="onChatButtonClick(survey, $event)"><img
+                                  src="../../../../../assets/chat.svg" width="24px" /></button>
+
+                            </div>
+                          </div>
+                        </mat-card-header>
+                        <mat-card-content>
+                          <div class="row contentrow">
+                            <div class="col-8 contentcol">
+                              <a class="actiondetail" href="mailto:{{survey.email}}"
+                                (click)="$event.stopPropagation()">{{ survey.email }}</a>
+                              <a class="actiondetail" href="tel:{{survey.phonenumber}}"
+                                (click)="$event.stopPropagation()">{{ survey.phonenumber }}</a>
+                              <a class="actiondetail" href="https://maps.google.com/?q={{survey.address}}"
+                                target="_blank" (click)="$event.stopPropagation()">{{ survey.address }}</a>
+                            </div>
+                            <div class="col-4 contentcol">
+                              <p class="timedetail">{{ survey.formattedtime }}</p>
+                              <p class="assigneedetails">Assigned to</p>
+                              <p class="assigneedetails" style="font-weight: 600;">{{survey.reviewassignedto.firstname}}
+                                {{survey.reviewassignedto.lastname}}</p>
+                            </div>
+                          </div>
+                          <p class="silentdetail">Updated {{ survey.formattedupdatedat }}
+                          </p>
+                        </mat-card-content>
+                        <mat-card-footer>
+                          <div class="row footerrow align-items-center">
+                            <div class="col-8 footercol">
+                              <div class="row align-items-center">
+                                <p class="chipdetail ml-1">{{survey.formattedjobtype}}</p>
+                                <p class="chipdetail ml-1">{{survey.source | titlecase}}</p>
+                              </div>
+                            </div>
+                            <div class="col-4 footercol">
+                            </div>
+                          </div>
+                        </mat-card-footer>
+                      </mat-card>
+                  </cdk-virtual-scroll-viewport>
+                 <p class="listplaceholder" *ngIf="!isindesignslistloading && indesignslist.length == 0">No Pestamp
+                  Requests In Progress</p>
+              </div>
+
+            </mat-tab>
+            <mat-tab>
+              <ng-template matTabLabel>
+                <div class="condesignoverviewbutton">
+                  <img src="../../../../../assets/delivered.svg" />
+                  <h1 *ngIf="deliveredsurveyslist.length >0">
+                    <ngx-skeleton-loader
+                      [theme]="{ 'border-radius': '5px', height: '32px', width: '32px', 'background-color': '#EDDBB2', 'position': 'absolute', 'top': '16px', 'right': '0px' }">
+                    </ngx-skeleton-loader>
+                  </h1>
+                  <h1 class="conoverviewvalue" >
+                    {{delivered}}</h1>
+                  <h4 style="font-size: 0.7rem;">Delivered</h4>
+                </div>
+              </ng-template>
+              <div class="mt-4 innertabs">
+
+                    <cdk-virtual-scroll-viewport itemSize="50" class="designlistitems-viewport"
+                      *ngIf="deliveredsurveyslist.length > 0">
+                        <mat-card [ngClass]="[ i%2 == 0 ? 'itemcard even' : 'itemcard odd']"
+                        *cdkVirtualFor="let survey of deliveredsurveys; let i = index"
+                          (click)="fetchSurveyDetails(survey, listtypes.DELIVERED)">
+                          <mat-card-header>
+                            <div class="row align-items-center headerrow">
+                              <div class="col-10 headercol">
+                                <mat-card-title style="font-size: .9em;">{{survey.name}}
+                                  <span class="chipdetail ml-1"
+                                  *ngIf="isClient">{{survey.currentstatus}}</span>
+                                <span class="chipdetail ml-1" style="background-color: #1289A7;"
+                                  *ngIf="survey.status == 'created'">Unassigned</span>
+                                <span class="chipdetail ml-1" style="background-color: #3c78d8;"
+                                  *ngIf="survey.status == 'assigned'">{{survey.currentstatus}}</span>
+                                <span class="chipdetail ml-1" style="background-color: rgb(109, 187, 26);"
+                                  *ngIf="survey.status == 'completed'">{{survey.currentstatus}}</span>
+                                <span class="chipdetail ml-1" style="background-color: rgb(246, 77, 10);"
+                                  *ngIf="survey.isoverdue">Overdue</span>
+                                </mat-card-title>
+                              </div>
+                              <div class="col headercol">
+                                <button class="float-right" mat-icon-button (click)="surveyactivitybarToggle(survey, $event)"><img
+                                    src="../../../../../assets/activitylist.svg" width="16px" /></button>
+                                <button class="float-right" mat-icon-button (click)="onChatButtonClick(survey, $event)"><img
+                                    src="../../../../../assets/chat.svg" width="24px" /></button>
+
+                              </div>
+                            </div>
+                          </mat-card-header>
+                          <mat-card-content>
+                            <div class="row contentrow">
+                              <div class="col-8 contentcol">
+                                <a class="actiondetail" href="mailto:{{survey.email}}"
+                                  (click)="$event.stopPropagation()">{{ survey.email }}</a>
+                                <a class="actiondetail" href="tel:{{survey.phonenumber}}"
+                                  (click)="$event.stopPropagation()">{{ survey.phonenumber }}</a>
+                                <a class="actiondetail" href="https://maps.google.com/?q={{survey.address}}"
+                                  target="_blank" (click)="$event.stopPropagation()">{{ survey.address }}</a>
+                              </div>
+                              <div class="col-4 contentcol">
+                                <p class="timedetail">{{ survey.formattedtime }}</p>
+                                <p class="assigneedetails">Assigned to</p>
+                                <p class="assigneedetails" style="font-weight: 600;">{{survey.reviewassignedto.firstname}}
+                                  {{survey.reviewassignedto.lastname}}</p>
+                              </div>
+                            </div>
+                            <p class="silentdetail">Updated {{ survey.formattedupdatedat }}
+                            </p>
+                          </mat-card-content>
+                          <mat-card-footer>
+                            <div class="row footerrow align-items-center">
+                              <div class="col-8 footercol">
+                                <div class="row align-items-center">
+                                  <p class="chipdetail ml-1">{{survey.formattedjobtype}}</p>
+                                  <p class="chipdetail ml-1">{{survey.source | titlecase}}</p>
+                                </div>
+                              </div>
+                              <div class="col-4 footercol">
+                              </div>
+                            </div>
+                          </mat-card-footer>
+                        </mat-card>
+
+                    </cdk-virtual-scroll-viewport>
+                    <p class="listplaceholder" *ngIf="deliveredsurveyslist.length == 0">No Survey Requests Delivered</p>
+                   </div>
+      </mat-tab>-->
+    </mat-tab-group>
+  </div>
+</div>

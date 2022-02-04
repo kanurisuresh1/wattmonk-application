@@ -1,0 +1,310 @@
+<div id="overlay" class="main-content overlay"></div>
+
+<!-- <div class="w-100 pl-4 pt-2 pr-3" *ngIf="this.activeNotices > 0" style="background: rgb(255, 245, 228) !important;">
+  <div class="card border-0 mt-1" *ngFor="let notice of clientNotices" >
+    <div class="card-body" style="background-color: rgb(226, 62, 62); color: white;" *ngIf="notice.active">
+      <div class="row px-3">
+        <div class="col-2 d-flex">
+          <p style="font-size: 20px; font-weight: 700;">{{notice.subject }}</p>
+          <span style="font-weight: 500; font-size: 32px;">-</span>
+        </div>
+        <div class="col-9 pl-2">
+          <p class="mb-0" style="font-size: 17px; font-weight: 600;">{{notice.message}}</p>
+        </div>
+        <div class="col-1">
+          <button mat-icon-button style="position:absolute;right:0;margin-top:-10px" (click)="hideNotice(notice)"> 
+            <img class="material-icons" width="15px" src="../../../assets/close.svg " style="filter: brightness(10);">
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> -->
+
+<div class="w-100 pl-4 pt-2 pr-3" *ngIf="allAlertAnnouncment.length > 0">
+  <div
+    class="card border-0 mt-1"
+    *ngFor="let item of allAlertAnnouncment; let i = index"
+  >
+    <div
+      class="card-body"
+      [style.background-color]="item.colorcode"
+      [style.color]="item.textcolor"
+    >
+      <div class="row px-3">
+        <div class="col-11 pl-2">
+          <p class="mb-0" style="font-size: 17px; font-weight: 600">
+            {{ item.announcement }}
+          </p>
+        </div>
+        <div class="col-1">
+          <button
+            mat-icon-button
+            style="position: absolute; right: 0; margin-top: -10px"
+            (click)="hideAnnouncements(i)"
+          >
+            <img
+              class="material-icons"
+              width="15px"
+              src="../../../assets/close.svg "
+              style="filter: brightness(10)"
+            />
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<nav
+  id="mainNav"
+  #navbar
+  class="navbar navbar-expand-lg navbar-transparent navbar-absolute"
+  style="overflow: hidden; background: rgb(255, 245, 228) !important"
+>
+  <div
+    class="container-fluid navContainer"
+    [ngStyle]="
+      !loggedinUser.isonboardingcompleted
+        ? { 'padding-left': '15px' }
+        : { 'padding-left': '15px' }
+    "
+  >
+    <div class="navbar-wrapper">
+      <!--    <div class="navbar-minimize" *ngIf="isadmin">
+        <button mat-icon-button (click)="minimizeSidebar()">
+          <i class="material-icons text_align-center visible-on-sidebar-regular" style="font-size: 28px;">more_vert</i>
+        </button>
+      </div>-->
+      <a class="navbar-brand" *ngIf="isadmin"> {{ maintitle }}</a>
+      <!-- <div class="photo" *ngIf="!isadmin && loggedinUser.logo != null">
+        <img src="{{loggedinUser.logo.url}}" />
+      </div> -->
+      <!-- <div *ngIf="!isadmin && loggedinUser.logo == null" class="photo">
+        <p>{{userinitials}}</p>
+      </div> -->
+      <div class="row">
+        <div class="col">
+          <a class="navbar-username" *ngIf="!isadmin"
+            >{{ loggedinUser.firstname | titlecase }}
+            {{ loggedinUser.lastname | titlecase }}</a
+          >
+          <p
+            style="font-size: 0.8rem; font-weight: 600; line-height: 0px"
+            *ngIf="!isadmin"
+          >
+            {{ userrole }}
+            <span *ngIf="loggedinUser.role.id == 11"
+              >({{ loggedinUser.peengineertype }})</span
+            >
+          </p>
+        </div>
+      </div>
+    </div>
+    <button
+      mat-button
+      class="navbar-toggler"
+      type="button"
+      (click)="sidebarToggle()"
+      *ngIf="isadmin"
+    >
+      <span class="sr-only">Toggle navigation</span>
+      <span class="navbar-toggler-icon icon-bar"></span>
+      <span class="navbar-toggler-icon icon-bar"></span>
+      <span class="navbar-toggler-icon icon-bar"></span>
+    </button>
+    <div class="collapse navbar-collapse justify-content-end" id="navigation">
+      <ul class="navbar-nav navBar">
+        <li class="nav-item" routerLinkActive="active" *ngIf="isDesigner">
+          <button
+            mat-button
+            [routerLink]="['/home/dashboard/overview/joblisting']"
+            matTooltip="Job Listings"
+          >
+            <img
+              class="material-icons"
+              width="22px"
+              src="../../assets/Group 2199.svg"
+            />
+          </button>
+        </li>
+
+        <li class="nav-item" routerLinkActive="active" *ngIf="!isadmin">
+          <a class="nav-link" (click)="onChatButtonClick()">
+            <img
+              src="./../assets/clientchat.svg"
+              width="24px"
+              style="margin-left: 10px"
+            />
+            <p>
+              <span class="d-lg-none d-md-block">Message room</span>
+              <span
+                class="matBadge"
+                *ngIf="genericService.totalcountsforallgroups > 0"
+                >{{ genericService.totalcountsforallgroups }}</span
+              >
+            </p>
+          </a>
+        </li>
+
+        <ng-container *ngIf="disblerightIcons">
+          <li
+            *ngIf="!hasRoute('/home/extras/search')"
+            class="nav-item"
+            routerLinkActive="active"
+          >
+            <button
+              mat-icon-button
+              [routerLink]="['/home/extras/search']"
+              joyrideStep="searchhighlight"
+              stepPosition="bottom"
+              [nextTemplate]="nextButton"
+              matTooltip="Search"
+              text="Search page to help you look for any content that you are looking for, throughout the platform."
+            >
+              <img
+                class="material-icons"
+                width="22px"
+                src="./../assets/search.svg"
+              />
+            </button>
+          </li>
+          <li *ngIf="showSettings" class="nav-item" routerLinkActive="active">
+            <button
+              mat-icon-button
+              [routerLink]="['/home/extras/setting']"
+              joyrideStep="settinghighlight"
+              stepPosition="bottom"
+              [nextTemplate]="nextButton"
+              matTooltip="Settings"
+              text="Change Your settings."
+            >
+              <img
+                class="material-icons"
+                width="22px"
+                src="./../assets/Account Setting.svg"
+              />
+            </button>
+          </li>
+          <li
+            (click)="turnOnNotification()"
+            class="nav-item"
+            routerLinkActive="active"
+          >
+            <button
+              mat-button
+              class="nav-link notification-focus"
+              (click)="openNotificationSnackbar()"
+              href="#pablo"
+              id="navbarDropdownMenuLink"
+              data-toggle="dropdown"
+              aria-haspopup="true"
+              aria-expanded="false"
+              joyrideStep="notificationhighlight"
+              stepPosition="bottom"
+              [nextTemplate]="nextButton"
+              [doneTemplate]="doneButton"
+              (done)="onMainTourDone()"
+              text="All your important platform notifications can be found here."
+              matTooltip="Notifications"
+            >
+              <img class="material-icons" src="./../assets/notification.svg" />
+              <span *ngIf="unreadnotificationscount" class="notification">{{
+                unreadnotificationscount > 99 ? "99+" : unreadnotificationscount
+              }}</span>
+              <!-- <span *ngIf="unreadnotificationscount > 99" class="notification">99+</span> -->
+              <p>
+                <span class="d-lg-none d-md-block">Some Actions</span>
+              </p>
+            </button>
+            <!-- <app-notification *ngIf="onNotification"></app-notification> -->
+          </li>
+          <!-- <li  *ngIf= " showSettings" class="nav-item" routerLinkActive="active">
+            <button mat-icon-button [routerLink]="['/home/extras/setting']" joyrideStep="settinghighlight"
+              stepPosition="bottom" [nextTemplate]="nextButton" matTooltip="Settings"
+              text="Change Your settings.">
+              <img class="material-icons" width="22px" src="./../assets/Account Setting.svg">
+            </button>
+          </li> -->
+        </ng-container>
+        <li
+          *ngIf="!hasRoute('/shared/myaccount')"
+          class="nav-item"
+          routerLinkActive="active"
+        >
+          <!--<a  class="nav-link" href="#pablo" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true"
+              aria-expanded="false" text="All your ProfileI nformation found here." matTooltip="My Account">
+              <button class="photo logoButton" mat-button>
+                   <img *ngIf="loggedinUser.parent.logo != null" style="width: 30px; margin-bottom: 11px;" src="{{loggedinUser.parent.logo.url}}" />
+                   <p *ngIf="loggedinUser.parent.logo == null" >{{userinitials}}</p>
+             </button>
+            </a>-->
+          <a
+            class="nav-link"
+            (click)="profileside()"
+            href="#pablo"
+            id="navbarDropdownMenuLink"
+            data-toggle="dropdown"
+            aria-haspopup="true"
+            aria-expanded="false"
+            text="All your ProfileI nformation found here."
+            matTooltip="My Account"
+          >
+            <img
+              class="profilelogo"
+              *ngIf="loggedinUser.logo != null"
+              src="{{ loggedinUser.logo.url }}"
+            />
+            <div
+              *ngIf="loggedinUser.logo == null"
+              class="profilelogo"
+              style="
+                display: flex;
+                justify-content: center;
+                align-items: center;
+              "
+            >
+              <p style="margin: 0px">{{ userinitials }}</p>
+            </div>
+          </a>
+          <!-- <app-myaccount></app-myaccount> -->
+        </li>
+
+        <!-- <li class="nav-item" *ngIf="!hasRoute('/shared/myaccount')&&!isadmin">
+            <a class="nav-link" href="#" (click)="handleusersignout()" matTooltip="Logout">
+              <img class="material-icons" src="../../assets/logout.svg">
+              <p>
+                <span class="d-lg-none d-md-block">Logout</span>
+              </p>
+            </a>
+          </li>
+       -->
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<ng-template #nextButton>
+  <button
+    mat-raised-button
+    style="font-size: 12px; color: #000; background-color: #fff"
+  >
+    Next
+  </button>
+</ng-template>
+<ng-template #prevButton>
+  <button
+    mat-raised-button
+    style="font-size: 12px; color: #000; background-color: #fff"
+  >
+    Previous
+  </button>
+</ng-template>
+<ng-template #doneButton>
+  <button
+    mat-raised-button
+    style="font-size: 12px; color: #000; background-color: #fff"
+  >
+    Done
+  </button>
+</ng-template>

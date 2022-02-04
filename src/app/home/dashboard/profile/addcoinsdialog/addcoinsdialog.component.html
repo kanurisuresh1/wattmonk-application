@@ -1,0 +1,173 @@
+<div mat-dialog-content>
+  <div class="container">
+    <div class="row">
+      <div class="col-11 mt-3">
+        <h4 class="bold-heading">{{ data.paymenttitle }}</h4>
+      </div>
+      <div class="col-1">
+        <button mat-icon-button (click)="onCloseClick()">
+          <img class="dialogclose" src="../../../../../assets/close.svg" />
+        </button>
+      </div>
+    </div>
+    <div class="col-12">
+      <div class="row">
+        <div class="pr-0 border-right" style="width: 10.5rem">
+          <p class="prominentbutton greycolor mb-1">Current Wallet Balance</p>
+          <span class="prominentbutton greycolor">$</span
+          ><span class="bold-heading ml-1">{{ loggedInUser.amount }}</span>
+        </div>
+        <div class="pl-4" style="width: 12rem">
+          <p class="prominentbutton greycolor mb-1">Last Recharge Amount</p>
+          <span class="prominentbutton greycolor">$</span
+          ><span class="bold-heading ml-1">{{ lastRecharge }}</span>
+        </div>
+      </div>
+    </div>
+    <!-- <div class="row">
+      <div class="col-12">
+        <form [formGroup]="rechargeWalletForm">
+          <mat-form-field appearance="outline">
+            <input class="form-control" autocomplete="off" type="number" matInput [formControl]="amount" min="1" required [readonly]="paymenttype=='direct'">
+            <mat-error *ngIf="amount.invalid">{{getErrorMessage(amount)}}</mat-error>
+          </mat-form-field>
+          <button mat-raised-button style="margin-top: 16%;" class="float-right threefourthwidth" (click)='openAddMoneyUsingPaypal()'>Pay via Paypal</button>
+        </form>
+      </div>
+    </div> -->
+    <div class="row">
+      <!-- <div class="col text-center" *ngIf="isDesktop"> -->
+      <!-- <img class="paymentimage" src="../../../../../assets/securedpayment.jpg"> -->
+      <!-- </div> -->
+      <div class="col-7 mt-5">
+        <form [formGroup]="rechargeWalletForm" class="addmoneywallet">
+          <div class="form-group">
+            <mat-form-field
+              class="fullwidth form-outline mb-0"
+              appearance="outline"
+            >
+              <input
+                autocomplete="off"
+                type="number"
+                [(ngModel)]="addamount"
+                matInput
+                [formControl]="amount"
+                min="1"
+                class="removearrow"
+                required
+                [readonly]="paymenttype == 'direct'"
+              />
+              <span class="prominentbutton text-position greycolor" matPrefix
+                >$&nbsp;</span
+              >
+              <span class="prominentbutton text-position greycolor" matSuffix
+                >USD</span
+              >
+              <mat-error *ngIf="amount.invalid">{{
+                getErrorMessage(amount)
+              }}</mat-error>
+            </mat-form-field>
+            <div class="col-12 px-0">
+              <button
+                class="btnamount mr-2"
+                mat-raised-button
+                (click)="onbuttonselect(1000)"
+              >
+                $1000
+              </button>
+              <button
+                class="btnamount mr-2"
+                mat-raised-button
+                (click)="onbuttonselect(2000)"
+              >
+                $2000
+              </button>
+              <button
+                class="btnamount mr-2"
+                mat-raised-button
+                (click)="onbuttonselect(3000)"
+              >
+                $3000
+              </button>
+              <button
+                class="btnamount"
+                mat-raised-button
+                (click)="onbuttonselect(4000)"
+              >
+                $4000
+              </button>
+            </div>
+          </div>
+        </form>
+        <div class="col-12 mb-5 mt-3 px-0">
+          <button
+            mat-raised-button
+            (click)="openAddMoneyUsingPaypal()"
+            class="fullwidth"
+            style="font-size: medium"
+          >
+            <img
+              style="height: 25px"
+              src="../../../../../assets/paypal checkout.svg"
+            />
+          </button>
+          <span class="prominentbutton greycolor" style="font-weight: 500"
+            >The safer,easier way to pay</span
+          >
+        </div>
+        <!-- <button style="margin-top: 16%;" class="float-right threefourthwidth" mat-raised-button
+              (click)="getSessionID()">Confirm</button> -->
+
+        <!-- <div style="position: absolute;margin-top: -17px;  word-break: normal; "> -->
+        <!-- <P style="position: absolute;margin-top:-3px;font-size:12px;
+        margin-left: -57px;"><b style="font: revert;">Credit card information</b><i class="material-icons md-18">lock</i> Secured by Stripe</P> -->
+        <!-- </div> -->
+
+        <!-- <div class="mt-4 mb-4" [hidden]=hidestripecard
+          style="height: 28px;    margin-left: -98px;  border: 2px solid rgb(185, 184, 184); padding: 4px 6px 4px 4px;">
+          <stripe-card #stripeCard (catch)="onStripeError($event)" [(invalid)]="invalidError"
+            (cardMounted)="cardReady = true" (tokenChange)="setStripeToken($event)"
+            (sourceChange)="setStripeSource($event)"></stripe-card>
+          <div *ngIf="invalidError" style="color:red; font-size: 10px;">
+            {{ invalidError.message }}
+
+          </div>
+          <P style="position: absolute;font-size:12px;margin: 13px 2px 2px 1px;font-weight: 400;"><i
+              class="material-icons md-18" style="font-size: 10px !important;vertical-align: text-top;margin-right: 3px;">lock</i>Payments are processed Secured through<a
+              href="https://stripe.com/en-in" style="color: blue;font-weight:400px; "> Stripe</a></P>
+        </div>
+
+        <div class="row">
+          <div class="col">
+            <button style="margin-top: 16%;" class="float-right threefourthwidth" mat-raised-button
+              (click)="stripeCard.createToken()">Confirm</button>
+          </div>
+        </div> -->
+      </div>
+      <div class="col-5 px-0 overflow-hidden">
+        <img
+          class="float-right"
+          style="position: relative; right: -68px; top: 37px"
+          src="../../../../../assets/wallet_1.svg"
+          width="90%"
+        />
+      </div>
+    </div>
+  </div>
+</div>
+<!-- <section *ngIf="loggedinuser.parent.ispaymentmodeprepay">
+  <mat-dialog-actions align="end">
+    <div class="example-button-row" *ngIf="walletamount < amounttopay &&loggedinuser.role.id==6">
+      <button mat-raised-button style="margin-top: 16%;" class="float-right threefourthwidth" (click)='openAddMoneyUsingPaypal()'>Pay via Pay pal</button> 
+    </div>
+    <p class="subtitle" *ngIf='loggedinuser.role.id !=6 &&loggedinuser.parent.amount < amounttopay' style="color: #667785; font-size: 12px; ">Insufficent Amount</p>
+    <button *ngIf="walletamount >= amounttopay" mat-raised-button mat-button
+      (click)="onConfirmationClick()">Confirm</button>
+  </mat-dialog-actions>
+</section>
+<section *ngIf="!loggedinuser.parent.ispaymentmodeprepay">
+  <mat-dialog-actions align="end">
+    <button mat-raised-button mat-button
+      (click)="onProceedClick()">Confirm</button>
+  </mat-dialog-actions>
+</section> -->

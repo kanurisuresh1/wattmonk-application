@@ -1,0 +1,235 @@
+<div class="container-fluid d-flex justify-content-end designreportcard">
+  <div class="col-12 pt-4" *ngIf="!isoverviewloading">
+    <div class="row px-2 d-flex justify-content-between">
+      <div class="col-3">
+        <mat-form-field appearance="outline" style="width: 100%">
+          <input
+            matInput
+            placeholder="search"
+            [ngModel]="searchdata"
+            (ngModelChange)="filterusers($event)"
+          />
+          <span
+            style="position: relative; top: -3px; margin-right: 7px"
+            matPrefix
+            ><img
+              src="../../../../../assets/search.svg"
+              width="15px"
+              height="15px"
+          /></span>
+        </mat-form-field>
+      </div>
+      <div class="col-5" style="padding-top: 5px">
+        <div class="row align-items-center">
+          <div
+            class="col-12 d-flex justify-content-end align-items-center pr-0 monthfilter"
+          >
+            <mat-select
+              #matselect
+              [multiple]="false"
+              class="form-control"
+              placeholder="Current Month"
+              [(ngModel)]="matselectvalue"
+              style="border: 0px; width: 11rem"
+            >
+              <mat-option
+                *ngFor="let item of calenderVariables; let i = index"
+                value="item.name"
+                (click)="checkboxValueChange(i)"
+              >
+                <div class="d-flex justify-content-between">
+                  <span class="text-secondary tag-font">{{ item.name }}</span>
+                  <input
+                    type="checkbox"
+                    [checked]="item.value"
+                    class="mt-3"
+                    (change)="clearcheckboxValue(i, $event)"
+                  />
+                </div>
+              </mat-option>
+              <div class="col-12 py-3">
+                <div class="row">
+                  <div class="col d-flex align-items-center">
+                    <a
+                      class="ml-1 text-dark font-weight-bold tag-font"
+                      (click)="clearAll()"
+                      style="cursor: pointer"
+                      >Clear All</a
+                    >
+                  </div>
+                  <div class="col d-flex justify-content-end">
+                    <button
+                      class="primarymatbutton"
+                      style="line-height: 1px !important; padding: 13px 0px"
+                      (click)="selectedcheckboxValue()"
+                      mat-raised-button
+                    >
+                      Apply
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </mat-select>
+            <img
+              src="../../../../../assets/filter-black.svg"
+              width="20px"
+              height="22px"
+              class="ml-3 mr-4"
+            />
+            <span class="mr-2 font-weight-bold design-width"
+              >Total Delivered Design</span
+            >
+            <span
+              class="bg-color tag-font text-white rounded"
+              style="padding: 5px 9px"
+              >{{ workstatusdataResult.length }}</span
+            >
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container-fluid fixed-height">
+  <div class="col-12" *ngIf="isoverviewloading">
+    <div class="row" *ngIf="!placeholder">
+      <div
+        class="col-lg-4 col-md-6 col-sm-12 pt-2 pl-1"
+        *ngFor="let number of [0, 1, 2]"
+      >
+        <div class="col-12 skeletoncard pl-3 py-3 mr-3 mb-3">
+          <div class="row mb-3">
+            <div class="col-8">
+              <ngx-skeleton-loader
+                class="d-block"
+                [theme]="{
+                  'border-radius': '5px',
+                  'background-color': '#DBDAD9',
+                  height: '8px',
+                  width: '80%',
+                  'margin-bottom': '0px'
+                }"
+              >
+              </ngx-skeleton-loader>
+              <ngx-skeleton-loader
+                class="d-block"
+                [theme]="{
+                  'border-radius': '5px',
+                  'background-color': '#DBDAD9',
+                  height: '8px',
+                  width: '45%',
+                  'margin-bottom': '5px'
+                }"
+              >
+              </ngx-skeleton-loader>
+              <ngx-skeleton-loader
+                class="d-block"
+                [theme]="{
+                  'border-radius': '5px',
+                  'background-color': '#DBDAD9',
+                  height: '8px',
+                  width: '30%'
+                }"
+              >
+              </ngx-skeleton-loader>
+            </div>
+            <div class="col-4 d-flex justify-content-end pt-2">
+              <ngx-skeleton-loader
+                class="d-block"
+                [theme]="{
+                  'border-radius': '5px',
+                  'background-color': '#DBDAD9',
+                  height: '35px',
+                  width: '36px'
+                }"
+              >
+              </ngx-skeleton-loader>
+            </div>
+          </div>
+          <ngx-skeleton-loader
+            class="d-block"
+            [theme]="{
+              'border-radius': '5px',
+              'background-color': '#DBDAD9',
+              height: '8px',
+              width: '30%',
+              'margin-top': '50px'
+            }"
+          >
+          </ngx-skeleton-loader>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-12" *ngIf="!isoverviewloading">
+    <div class="row">
+      <div
+        class="col-lg-4 col-md-6 col-sm-12 pl-1 mb-3"
+        *ngFor="let item of workstatusdataResult"
+      >
+        <div class="card card-style p-3">
+          <div class="row">
+            <div class="col-7 detailheight pr-0" style="height: 92px">
+              <p class="h5 font-weight-bold mb-0">{{ item.filename }}</p>
+              <p class="text-secondary mb-0 font-small">
+                {{
+                  item.address.length > 60
+                    ? (item.address | slice: 0:58) + "..."
+                    : item.address
+                }}
+              </p>
+            </div>
+            <div
+              class="col-5 text-right pt-1 pl-1"
+              *ngIf="item.requesttype == 'Permit'"
+            >
+              <span class="bg-dark tag-font rounded text-white p-2">{{
+                item.mountingtype
+              }}</span>
+            </div>
+          </div>
+          <div
+            class="row d-flex justify-content-between pt-2"
+            style="padding: 0px 10px"
+          >
+            <div class="">
+              <img
+                src="../../../../../assets/double-tick.svg"
+                width="11px"
+                height="12px"
+              />
+              <span class="green-font-small ml-1">{{
+                item.status | titlecase
+              }}</span>
+              <p class="font-small text-secondary mb-0">
+                {{ item.expecteddeliverydate }}
+              </p>
+            </div>
+            <div class="">
+              <div class="topactionbar">
+                <button
+                  class="primarymatbutton mr-1"
+                  mat-raised-button
+                  (click)="detailreportToggle(item)"
+                >
+                  View Details
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        *ngIf="workstatusdataResult.length == 0"
+        class="col-12 pt-5 d-flex justify-content-center align-items-center"
+      >
+        <img
+          src="../../../../../assets/Report-Work Status Placholder.jpg"
+          width="400px"
+          height="300px"
+        />
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,82 @@
+.transaction {
+  table {
+    width: 100%;
+  }
+  // ::ng-deep {
+  //   .mat-row, .mat-header-row {
+
+  //     background-color: white;
+  //   }
+
+  //   .mat-select-value {
+  //     color: #007bff;
+  //     font-weight: 700;
+  // }
+  //   .mat-row {
+  //     border: none;
+  //     background-color: #fff;
+  //     &:nth-child(even) {
+  //       background-color: #f6f7fa;
+  //     }
+  //   }
+  //   .mat-paginator {
+  //     background: #f6f7fa;
+  // }
+  //   .mat-paginator-page-size {
+
+  //     font-weight: 700;
+  //     color: #8f9095;
+  //   }
+  //   .mat-paginator-container {
+  //     justify-content: flex-start;
+  //     .mat-paginator-page-size::after {
+  //       content: "entries";
+  //     }
+  //     .mat-paginator-navigation-previous,
+  //     .mat-paginator-navigation-next {
+  //       display: none;
+  //     }
+  //   }
+  // }
+  .navigation-btn {
+    display: flex;
+    justify-content: center;
+    margin-right: 14px;
+    .previous-btn,
+    .next-btn {
+      cursor: pointer;
+      font-size: 13px;
+      margin: 11px 35px 11px 0px;
+      font-weight: 700;
+      &.disabled {
+        color: #007bff;
+        cursor: not-allowed;
+      }
+    }
+  }
+  .mat-header-cell {
+    color: #8f9095;
+  }
+  .mat-header-cell {
+    font-size: 13px;
+    font-weight: bold;
+    font-family: -webkit-body;
+  }
+  .mat-cell,
+  .mat-footer-cell {
+    color: #8f9095;
+  }
+  .mat-cell,
+  .mat-footer-cell {
+    font-size: 13px;
+    font-weight: bold;
+  }
+  .text-emphasized {
+    font-weight: 700 !important;
+    margin: 10px 7px 16px 9px;
+  }
+}
+
+.main-avoidscroll {
+  height: 100vh;
+}

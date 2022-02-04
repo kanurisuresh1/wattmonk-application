@@ -1,0 +1,395 @@
+<div class="container" style="padding-left: 0px">
+  <div class="designreportcard dropdown-card">
+    <mat-form-field appearance="outline">
+      <input
+        matInput
+        placeholder="Search"
+        [(ngModel)]="searchinvertermodel"
+        (keydown.enter)="searchinputinverter()"
+        autocomplete="off"
+      />
+      <span style="position: relative; top: -3px; margin-right: 7px" matSuffix
+        ><img
+          src="../../../../../assets/search.svg"
+          width="15px"
+          height="15px"
+          *ngIf="!searchinvertermodel.length"
+        />
+        <img
+          src="../../../../../assets/close (1).svg"
+          width="15px"
+          height="14px"
+          style="cursor: pointer"
+          (click)="clearinputfields()"
+          class="cursor"
+          *ngIf="searchinvertermodel.length"
+        />
+      </span>
+    </mat-form-field>
+    <div class="row" style="float: right">
+      <button
+        class="primarymatbutton"
+        mat-raised-button
+        (click)="openAddInverterModel()"
+      >
+        + Inverter Model
+      </button>
+    </div>
+  </div>
+</div>
+<!-- <p>modulemodelentry works!</p> -->
+
+<div class="row" style="width: 100%; margin-left: 0px">
+  <div class="col-12 mt-5 border" *ngIf="isoverviewloading">
+    <div
+      class="row bg-light"
+      style="height: 60px; display: flex; align-items: center"
+    >
+      <div class="col d-flex justify-content-center">
+        <ngx-skeleton-loader
+          count="1"
+          class="d-block"
+          [theme]="{
+            'border-radius': '8px',
+            'background-color': '#DBDAD8',
+            height: '12px',
+            width: '55px',
+            'margin-top': '1.1rem'
+          }"
+        >
+        </ngx-skeleton-loader>
+      </div>
+      <div class="col d-flex justify-content-center">
+        <ngx-skeleton-loader
+          count="1"
+          class="d-block"
+          [theme]="{
+            'border-radius': '8px',
+            'background-color': '#DBDAD8',
+            height: '12px',
+            width: '55px',
+            'margin-top': '1.1rem'
+          }"
+        >
+        </ngx-skeleton-loader>
+      </div>
+      <div class="col d-flex justify-content-center">
+        <ngx-skeleton-loader
+          count="1"
+          class="d-block"
+          [theme]="{
+            'border-radius': '8px',
+            'background-color': '#DBDAD8',
+            height: '12px',
+            width: '55px',
+            'margin-top': '1.1rem'
+          }"
+        >
+        </ngx-skeleton-loader>
+      </div>
+      <div class="col d-flex justify-content-center">
+        <ngx-skeleton-loader
+          count="1"
+          class="d-block"
+          [theme]="{
+            'border-radius': '8px',
+            'background-color': '#DBDAD8',
+            height: '12px',
+            width: '55px',
+            'margin-top': '1.1rem'
+          }"
+        >
+        </ngx-skeleton-loader>
+      </div>
+      <div class="col d-flex justify-content-center">
+        <ngx-skeleton-loader
+          count="1"
+          class="d-block"
+          [theme]="{
+            'border-radius': '8px',
+            'background-color': '#DBDAD8',
+            height: '12px',
+            width: '55px',
+            'margin-top': '1.1rem'
+          }"
+        >
+        </ngx-skeleton-loader>
+      </div>
+      <div class="col d-flex justify-content-center">
+        <ngx-skeleton-loader
+          count="1"
+          class="d-block"
+          [theme]="{
+            'border-radius': '8px',
+            'background-color': '#DBDAD8',
+            height: '12px',
+            width: '55px',
+            'margin-top': '1.1rem'
+          }"
+        >
+        </ngx-skeleton-loader>
+      </div>
+      <div class="col d-flex justify-content-center">
+        <ngx-skeleton-loader
+          count="1"
+          class="d-block"
+          [theme]="{
+            'border-radius': '8px',
+            'background-color': '#DBDAD8',
+            height: '12px',
+            width: '55px',
+            'margin-top': '1.1rem'
+          }"
+        >
+        </ngx-skeleton-loader>
+      </div>
+    </div>
+    <div
+      class="row bg-white"
+      *ngFor="let number of [0, 1]"
+      style="height: 60px; display: flex; align-items: center"
+    >
+      <div class="col d-flex justify-content-center">
+        <ngx-skeleton-loader
+          count="1"
+          class="d-block"
+          [theme]="{
+            'border-radius': '8px',
+            'background-color': '#DBDAD8',
+            height: '12px',
+            width: '55px',
+            'margin-top': '1.1rem'
+          }"
+        >
+        </ngx-skeleton-loader>
+      </div>
+      <div class="col d-flex justify-content-center">
+        <ngx-skeleton-loader
+          count="1"
+          class="d-block"
+          [theme]="{
+            'border-radius': '8px',
+            'background-color': '#DBDAD8',
+            height: '12px',
+            width: '55px',
+            'margin-top': '1.1rem'
+          }"
+        >
+        </ngx-skeleton-loader>
+      </div>
+      <div class="col d-flex justify-content-center">
+        <ngx-skeleton-loader
+          count="1"
+          class="d-block"
+          [theme]="{
+            'border-radius': '8px',
+            'background-color': '#DBDAD8',
+            height: '12px',
+            width: '55px',
+            'margin-top': '1.1rem'
+          }"
+        >
+        </ngx-skeleton-loader>
+      </div>
+      <div class="col d-flex justify-content-center">
+        <ngx-skeleton-loader
+          count="1"
+          class="d-block"
+          [theme]="{
+            'border-radius': '8px',
+            'background-color': '#DBDAD8',
+            height: '12px',
+            width: '55px',
+            'margin-top': '1.1rem'
+          }"
+        >
+        </ngx-skeleton-loader>
+      </div>
+      <div class="col d-flex justify-content-center">
+        <ngx-skeleton-loader
+          count="1"
+          class="d-block"
+          [theme]="{
+            'border-radius': '8px',
+            'background-color': '#DBDAD8',
+            height: '12px',
+            width: '55px',
+            'margin-top': '1.1rem'
+          }"
+        >
+        </ngx-skeleton-loader>
+      </div>
+      <div class="col d-flex justify-content-center">
+        <ngx-skeleton-loader
+          count="1"
+          class="d-block"
+          [theme]="{
+            'border-radius': '8px',
+            'background-color': '#DBDAD8',
+            height: '12px',
+            width: '55px',
+            'margin-top': '1.1rem'
+          }"
+        >
+        </ngx-skeleton-loader>
+      </div>
+      <div class="col d-flex justify-content-center">
+        <ngx-skeleton-loader
+          count="1"
+          class="d-block"
+          [theme]="{
+            'border-radius': '8px',
+            'background-color': '#DBDAD8',
+            height: '12px',
+            width: '55px',
+            'margin-top': '1.1rem'
+          }"
+        >
+        </ngx-skeleton-loader>
+      </div>
+    </div>
+  </div>
+  <div
+    infiniteScroll
+    [infiniteScrollDistance]="1"
+    [scrollWindow]="false"
+    [infiniteScrollThrottle]="100"
+    (scrolled)="ontableScroll()"
+    class="archivetable scroll mt-2"
+    *ngIf="!isoverviewloading"
+  >
+    <ng-container *ngIf="allinvertermodels.length">
+      <table
+        mat-table
+        [dataSource]="allinvertermodels"
+        class="table-spacing"
+        style="background: #fff"
+      >
+        <ng-container matColumnDef="Id">
+          <th mat-header-cell *matHeaderCellDef class="heading w-5">S.No</th>
+          <td
+            mat-cell
+            *matCellDef="let element; let i = index"
+            style="padding-left: 28px; width: 10%"
+            [ngStyle]="
+              element.name == null ||
+              element.phase == null ||
+              element.ratedacvoltage == null ||
+              element.rateoutputpower == null ||
+              element.numberofmpptchannels == null ||
+              element.currentpermppta == null ||
+              element.maximuminputvoltage == null ||
+              element.nominalinputvoltage == null ||
+              element.startupvoltage == null ||
+              element.maximuminputcurrent == null ||
+              element.maximumoutputcurrent == '' ||
+              element.cecefficiency == null ||
+              element.maximumocpdrating == null ||
+              element.invertermake == null ||
+              !element.cataloguesuploaded
+                ? { 'border-left': '4px solid red' }
+                : { 'border-left': '4px solid green' }
+            "
+          >
+            {{ i + 1 }}
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef class="heading w-15">
+            Inverter Model Name
+          </th>
+          <td mat-cell *matCellDef="let element" style="width: 25%">
+            {{ (element.name | titlecase) || defaultvalue }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="type">
+          <th mat-header-cell *matHeaderCellDef class="heading w-15">
+            Rate Output Power
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.rateoutputpower || defaultvalue }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="phase">
+          <th mat-header-cell *matHeaderCellDef class="heading w-15">Phase</th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.phase || defaultvalue }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="rated">
+          <th mat-header-cell *matHeaderCellDef class="heading w-15">
+            Rated AC Voltage
+          </th>
+          <td mat-cell *matCellDef="let element" style="width: 15%">
+            {{ element.ratedacvoltage || defaultvalue }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="invertermakename">
+          <th mat-header-cell *matHeaderCellDef class="heading w-15">
+            Inverter Make Name
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.invertermake?.name || defaultvalue }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="edit">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            class="heading"
+            style="text-align-last: center; text-align: -webkit-center"
+          >
+            Actions
+          </th>
+          <td
+            mat-cell
+            *matCellDef="let element"
+            style="text-align-last: center; text-align: -webkit-center"
+          >
+            <img
+              style="width: 13px; cursor: pointer"
+              matTooltip="Edit Module Model"
+              (click)="editInverterModel(element)"
+              src="../../../../../assets/editnew.svg"
+            />
+            &nbsp;
+            <!-- <span style="padding-left: 7px; cursor: pointer;"> <img style="width: 13px;"
+                    matTooltip="Delete Module Make" src="../../../../../assets/delete.svg"></span> -->
+          </td>
+        </ng-container>
+
+        <tr
+          mat-header-row
+          class="table-hr"
+          *matHeaderRowDef="tableColumns"
+        ></tr>
+        <tr mat-row *matRowDef="let row; columns: tableColumns"></tr>
+      </table>
+    </ng-container>
+    <ng-container *ngIf="allinvertermodels.length == 0 && !isoverviewloading">
+      <div style="width: 100%; justify-content: center; margin-top: 20%">
+        <div class="col-12 text-center">
+          <img
+            src="../../../../../assets/sad.svg"
+            width="100%"
+            alt=""
+            style="height: 30px; width: 30px"
+          />
+          <h2 class="mb-0 listplaceholder" style="margin-top: 0px !important">
+            No Data Found
+          </h2>
+        </div>
+      </div>
+    </ng-container>
+    <mat-spinner
+      *ngIf="scrolling"
+      style="position: absolute; left: 49%; bottom: 1%"
+      [diameter]="35"
+    ></mat-spinner>
+  </div>
+</div>

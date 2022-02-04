@@ -1,0 +1,53 @@
+.comingsoonimage {
+  position: absolute;
+  bottom: 34%;
+  left: 34%;
+  width: 30%;
+}
+.comingsoontext {
+  position: absolute;
+  left: 43%;
+  top: 30%;
+}
+.Withdraw {
+  table {
+    width: 100%;
+  }
+  .mat-cell,
+  .mat-header-cell {
+    flex: 1;
+    overflow: hidden;
+    word-wrap: break-word;
+  }
+
+  .mat-header-row {
+    background: #e6e6e6;
+  }
+
+  .mat-header-cell {
+    color: #000;
+    font-size: 13px;
+    font-weight: 400;
+  }
+
+  .mat-header-cell {
+    color: #7a7d8b;
+  }
+  .mat-header-cell {
+    font-size: 13px;
+
+    color: #000;
+  }
+  .mat-cell,
+  .mat-cell,
+  .mat-footer-cell {
+    font-size: 11px;
+  }
+  .text-emphasized {
+    font-weight: 700 !important;
+    margin: 10px 7px 16px 9px;
+  }
+  ::ng-deep .mat-paginator {
+    padding-bottom: 4% !important;
+  }
+}

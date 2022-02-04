@@ -1,0 +1,255 @@
+<div *ngIf="isLoading" class="progress-loader">
+  <div id="pause" class="d-flex align-items-center justify-content-center">
+    <div
+      id="spinner"
+      style="background: #fff; padding: 25px; border-radius: 5px; width: 17rem"
+      class="row"
+    >
+      <div class="loading-message bkgg col-9">{{ loadingmessage }}</div>
+      <div class="col-3" style="top: 5px">
+        <div class="snippet" data-title=".dot-pulse">
+          <div class="stage">
+            <div class="dot-pulse"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="hidescrolly" mat-dialog-content>
+  <div class="container">
+    <div class="row">
+      <div class="col-11" *ngIf="!this.data.isEditMode">
+        <h4 class="dialogformtitle">Add Broadcast</h4>
+      </div>
+      <div class="col-11" *ngIf="this.data.isEditMode">
+        <h4 class="dialogformtitle">Edit Broadcast</h4>
+      </div>
+
+      <div class="col-1">
+        <button mat-icon-button (click)="onCloseClick()">
+          <img class="dialogclose" src="../../../../../assets/close.svg" />
+        </button>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-12">
+        <form
+          [formGroup]="addAnnouncementDialogForm"
+          (submit)="onAddannouncement($event)"
+        >
+          <div class="row">
+            <div class="col-md-6 form-group" style="margin-top: 20px">
+              <mat-form-field appearance="fill" class="fullwidth">
+                <mat-label>Type</mat-label>
+                <mat-select
+                  [(ngModel)]="gettype"
+                  [formControl]="type"
+                  (selectionChange)="selectChangeType($event)"
+                  required
+                >
+                  <mat-option value="announcement">Broadcast </mat-option>
+                  <mat-option value="alert">Notice </mat-option>
+                </mat-select>
+                <mat-error *ngIf="type.invalid">{{
+                  showAnnouncementError(type)
+                }}</mat-error>
+              </mat-form-field>
+            </div>
+
+            <div class="col-md-6 form-group">
+              <mat-form-field appearance="fill" style="width: 100% !important">
+                <mat-label>Message</mat-label>
+                <textarea
+                  rows="3"
+                  [(ngModel)]="getannouncement"
+                  maxlength="200"
+                  cols="40"
+                  matInput
+                  [formControl]="announcement"
+                  placeholder="Ex. It makes me feel..."
+                  required
+                ></textarea>
+                <mat-error *ngIf="announcement.invalid">{{
+                  showAnnouncementError(announcement)
+                }}</mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group formradiogroup">
+                <h5>Status*</h5>
+                <mat-radio-group
+                  [(ngModel)]="getstatus"
+                  aria-label="project type"
+                  [formControl]="status"
+                  required
+                >
+                  <div class="row">
+                    <div class="col">
+                      <mat-radio-button value="true">Active</mat-radio-button>
+                    </div>
+                    <div class="col">
+                      <mat-radio-button value="false"
+                        >Inactive</mat-radio-button
+                      >
+                    </div>
+                  </div>
+                </mat-radio-group>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <!-- <div class="form-group" style="padding-top: 15px;">
+                      <label for="colorcode" style="font-size: 10px;">Choose Color</label>
+                      <input style="height: 40px;width: 100px;border-radius: 20px;" class="ml-5" [(colorPicker)]='colorcode'  [style.background]='colorcode' (cpSliderDragStart)="onEventLog('cpSliderDragStart', $event)">
+                    </div> -->
+              <div class="form-group">
+                <div class="row" style="padding-top: 15px">
+                  <label
+                    for="colorcode"
+                    style="font-size: 12px; padding-top: 10px"
+                    >BG Color:</label
+                  >
+                  <div
+                    style="
+                      height: 40px;
+                      width: 40px;
+                      border-radius: 20px;
+                      margin-left: 40px;
+                      border: solid black 1px;
+                    "
+                    [(colorPicker)]="colorcode"
+                    [style.background]="colorcode"
+                    (cpSliderDragStart)="onEventLog($event)"
+                  ></div>
+                </div>
+              </div>
+              <!-- <mat-error class="custom-mat-error" [hidden]="displayerror" *ngIf="projecttype.invalid">
+                    {{getErrorMessage(projecttype)}}
+                  </mat-error> -->
+            </div>
+            <div class="col-md-3">
+              <div class="form-group">
+                <div class="row" style="padding-top: 15px">
+                  <label
+                    for="textcolor"
+                    style="font-size: 12px; padding-top: 10px"
+                    >Text Color:</label
+                  >
+                  <div
+                    style="
+                      height: 40px;
+                      width: 40px;
+                      border-radius: 20px;
+                      margin-left: 40px;
+                      border: solid black 1px;
+                    "
+                    [(colorPicker)]="textcolor"
+                    [style.background]="textcolor"
+                    (cpSliderDragStart)="chooseTextColor($event)"
+                  ></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row mt5">
+            <div class="col-md-6">
+              <mat-form-field appearance="fill" class="fullwidth">
+                <mat-label>User Type</mat-label>
+                <mat-select
+                  [(ngModel)]="getusertype"
+                  [formControl]="usertype"
+                  (selectionChange)="selectChangeUsertype($event)"
+                  required
+                >
+                  <mat-option *ngIf="getClients" value="clients"
+                    >Clients</mat-option
+                  >
+                  <ng-container *ngFor="let usertypes of usetypeselectdropdwon">
+                    <mat-option
+                      *ngIf="allselectdUser"
+                      [value]="usertypes.value"
+                    >
+                      {{ usertypes.viewValue }}
+                    </mat-option>
+                  </ng-container>
+                </mat-select>
+                <mat-error *ngIf="usertype.invalid">{{
+                  showAnnouncementError(usertype)
+                }}</mat-error>
+              </mat-form-field>
+            </div>
+            <div
+              class="col-md-6"
+              *ngIf="userdropdown || getusertype === 'specificusers'"
+            >
+              <mat-form-field appearance="fill" class="fullwidth">
+                <mat-label>Users</mat-label>
+                <mat-select
+                  [(ngModel)]="getusers"
+                  panelClass="addAnnouncement"
+                  [formControl]="users"
+                  multiple
+                >
+                  <!-- <mat-option #allSelected (click)="selectAllUsers()" [value]="0">Select All</mat-option> -->
+                  <mat-checkbox
+                    class="mat-option"
+                    [indeterminate]="isIndeterminate()"
+                    [checked]="isChecked()"
+                    (click)="$event.stopPropagation()"
+                    (change)="toggleSelection($event)"
+                  >
+                    Select All
+                  </mat-checkbox>
+                  <mat-option
+                    *ngFor="let getalluserlist of allUserList"
+                    [value]="getalluserlist.id"
+                  >
+                    {{ getalluserlist.firstname }} {{ getalluserlist.lastname }}
+                  </mat-option>
+                </mat-select>
+                <mat-error *ngIf="users.invalid">{{
+                  showAnnouncementError(users)
+                }}</mat-error>
+              </mat-form-field>
+            </div>
+            <div
+              class="col-md-6"
+              *ngIf="groupdropdown || getusertype === 'usergroup'"
+            >
+              <mat-form-field appearance="fill" class="fullwidth">
+                <mat-label>Group</mat-label>
+                <mat-select
+                  [(ngModel)]="getusergroup"
+                  [formControl]="usergroup"
+                >
+                  <mat-option
+                    *ngFor="let getUsersGroupList of UsersGroupList"
+                    [value]="getUsersGroupList.id"
+                  >
+                    {{ getUsersGroupList.name }}
+                  </mat-option>
+                </mat-select>
+                <mat-error *ngIf="usergroup.invalid">{{
+                  showAnnouncementError(usergroup)
+                }}</mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<mat-dialog-actions align="end">
+  <button
+    mat-raised-button
+    style="width: 128px"
+    (click)="onAddannouncement($event)"
+  >
+    {{ saveOrEdit() }}
+  </button>
+</mat-dialog-actions>

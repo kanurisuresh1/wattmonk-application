@@ -1,0 +1,55 @@
+<!-- <h1 mat-dialog-title>Hi {{data.name}}</h1> -->
+<div mat-dialog-content>
+  <div class="container">
+    <div class="row justify-content-end">
+      <button mat-icon-button (click)="onCloseClick()">
+        <img class="popupclose" src="../../../../../assets/close.svg" />
+      </button>
+    </div>
+    <div class="row justify-content-center">
+      <h4 class="popuptitle">Welcome, Let's get you started!!</h4>
+    </div>
+    <div class="row justify-content-center">
+      <h5 class="popupinformation">
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+        tempor incididunt ut labore et dolore magna aliqua.
+      </h5>
+    </div>
+    <div class="row justify-content-center mt-2">
+      <div class="col-4">
+        <button mat-stroked-button class="welcomepopupbutton">
+          <img src="../../../../../assets/prelim.svg" />
+          <p>Add Design</p>
+        </button>
+      </div>
+      <div class="col-4">
+        <button mat-stroked-button class="welcomepopupbutton">
+          <img src="../../../../../assets/survey.svg" />
+          <p>Add Survey</p>
+        </button>
+      </div>
+    </div>
+    <div class="row justify-content-center mt-4 mb-4">
+      <div class="col-4">
+        <button mat-stroked-button class="welcomepopupbutton">
+          <img src="../../../../../assets/team.svg" />
+          <p>Build Team</p>
+        </button>
+      </div>
+      <div class="col-4">
+        <button mat-stroked-button class="welcomepopupbutton">
+          <img src="../../../../../assets/contractor.svg" />
+          <p>Add Contractor</p>
+        </button>
+      </div>
+    </div>
+    <!-- <mat-form-field>
+    <mat-label>Favorite Animal</mat-label>
+    <input matInput [(ngModel)]="data.animal">
+  </mat-form-field> -->
+  </div>
+</div>
+<!-- <div mat-dialog-actions> -->
+<!-- <button mat-button (click)="onCloseClick()">Close</button> -->
+<!-- <button mat-button [mat-dialog-close]="data.animal" cdkFocusInitial>Ok</button> -->
+<!-- </div> -->

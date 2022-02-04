@@ -1,0 +1,160 @@
+<div class="main-content" style="display: none">
+  <img class="comingsoonimage" src="../../../../../assets/comingsoon.png" />
+  <h2 class="comingsoontext">Coming Soon</h2>
+</div>
+
+<div class="main-content">
+  <div class="col-12 topactionbar">
+    <button
+      style="font-weight: 600"
+      mat-raised-button
+      (click)="openAddNewAppDialog()"
+    >
+      +Add New App
+    </button>
+  </div>
+  <div class="container-fluid mt-5" style="padding-left: 40px">
+    <div class="row" *ngIf="placeholder">
+      <div
+        class="col-lg-4 col-md-6 col-sm-12 mb-4"
+        *ngFor="let number of [0, 1, 2]"
+      >
+        <div class="skeletoncard">
+          <ngx-skeleton-loader
+            class="d-block"
+            [theme]="{
+              'border-radius': '5px',
+              'background-color': '#DBDAD9',
+              height: '8px',
+              width: '56%',
+              'margin-bottom': '0px'
+            }"
+          >
+          </ngx-skeleton-loader>
+          <div class="row pt-3">
+            <div class="col-8">
+              <p class="para">App ID</p>
+              <ngx-skeleton-loader
+                class="d-block"
+                [theme]="{
+                  'border-radius': '5px',
+                  'background-color': '#DBDAD9',
+                  height: '8px',
+                  width: '80%',
+                  'margin-bottom': '0px'
+                }"
+              >
+              </ngx-skeleton-loader>
+            </div>
+            <div class="col-4">
+              <p class="para">Version</p>
+              <ngx-skeleton-loader
+                class="d-block"
+                [theme]="{
+                  'border-radius': '5px',
+                  'background-color': '#DBDAD9',
+                  height: '8px',
+                  width: '42px',
+                  'margin-bottom': '0px'
+                }"
+              >
+              </ngx-skeleton-loader>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-8">
+              <p class="para">Region Mode</p>
+              <ngx-skeleton-loader
+                class="d-block"
+                [theme]="{
+                  'border-radius': '5px',
+                  'background-color': '#DBDAD9',
+                  height: '8px',
+                  width: '80%',
+                  'margin-bottom': '0px'
+                }"
+              >
+              </ngx-skeleton-loader>
+            </div>
+            <div class="col-4">
+              <p class="para">Mode</p>
+              <ngx-skeleton-loader
+                class="d-block"
+                [theme]="{
+                  'border-radius': '5px',
+                  'background-color': '#DBDAD9',
+                  height: '8px',
+                  width: '39px',
+                  'margin-bottom': '0px'
+                }"
+              >
+              </ngx-skeleton-loader>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="!placeholder">
+      <div
+        class="row appsusercard"
+        style="
+          min-height: 60vh;
+          max-height: 65vh;
+          overflow-x: hidden;
+          overflow-y: auto;
+        "
+        *ngIf="userobjects.length > 0"
+      >
+        <div
+          class="col-lg-4 col-md-6 col-sm-12 mb-3"
+          *ngFor="let user of userobjects"
+        >
+          <mat-card
+            class="card"
+            (click)="openAppDetailPageDialog(user, $event)"
+          >
+            <mat-card-header>
+              <p class="heading">{{ user.name }}</p>
+            </mat-card-header>
+            <mat-card-content>
+              <div class="row pt-3">
+                <div class="col-8">
+                  <p class="mb-0 para">App ID</p>
+                  <p class="card-content" style="height: 40px">
+                    {{ user.appid }}
+                  </p>
+                </div>
+                <div class="col-4">
+                  <p class="mb-0 para">Version</p>
+                  <p class="card-content">{{ user.version }}</p>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-8">
+                  <p class="mb-0 para">Region Mode</p>
+                  <p class="mb-0 card-content">{{ user.region }}</p>
+                </div>
+                <div class="col-4">
+                  <p class="mb-0 para">Mode</p>
+                  <p class="mb-0 card-content">{{ user.mode | titlecase }}</p>
+                </div>
+              </div>
+            </mat-card-content>
+          </mat-card>
+        </div>
+      </div>
+      <div
+        class="col-12 d-flex justify-content-center align-items-center"
+        style="height: 55vh"
+        *ngIf="userobjects.length == 0"
+      >
+        <img
+          src="../../../../../assets/Report-Work Status Placholder.jpg"
+          width="500px"
+          height="400px"
+        />
+      </div>
+    </div>
+  </div>
+</div>

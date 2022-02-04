@@ -1,0 +1,161 @@
+.comingsoonimage {
+  position: absolute;
+  bottom: 34%;
+  left: 34%;
+  width: 30%;
+}
+.comingsoontext {
+  position: absolute;
+  left: 43%;
+  top: 30%;
+}
+.transaction {
+  table {
+    width: 100%;
+    box-shadow: none;
+    height: 100%;
+  }
+  .mat-table {
+    overflow-y: scroll;
+  }
+  .mat-cell,
+  .mat-header-cell {
+    flex: 1;
+    overflow: hidden;
+    word-wrap: break-word;
+  }
+
+  .mat-header-row {
+    background: #e6e6e6;
+  }
+
+  .mat-header-cell {
+    color: #000;
+    font-size: 13px;
+    font-weight: 400;
+  }
+
+  .mat-header-cell {
+    color: #7a7d8b;
+  }
+  .mat-header-cell {
+    font-size: 13px;
+
+    color: #000;
+  }
+  .mat-cell,
+  .mat-cell,
+  .mat-footer-cell {
+    font-size: 11px;
+  }
+  .text-emphasized {
+    font-weight: 700 !important;
+    margin: 10px 7px 16px 9px;
+  }
+  ::ng-deep .mat-paginator {
+    padding-bottom: 4% !important;
+  }
+}
+.scroll-container {
+  height: 75vh;
+  max-width: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
+  box-shadow: none;
+}
+.scroll-containernew {
+  overflow-x: hidden;
+  overflow-y: auto;
+  margin: 1.5rem 0px 0px 0px;
+  width: 100%;
+}
+.vd {
+  // vertical-align: bottom;
+  border: 1px solid black;
+  border-radius: 5px;
+  background-color: #edc773;
+  height: 100%;
+  width: 60px;
+  text-align: center;
+  font-size: smaller;
+  text-align: center;
+
+  margin-left: auto;
+  margin-right: 60px;
+  padding: 0px;
+  display: inline-block;
+}
+.vd-skeleton {
+  text-align: center;
+  font-size: smaller;
+  text-align: center;
+
+  margin-left: auto;
+  margin-right: 60px;
+  padding: 0px;
+  display: inline-block;
+}
+.truncate {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.btns {
+  width: 50%;
+  margin: 0;
+  padding: 3px;
+}
+.filtermenu {
+  position: relative;
+  top: 1px;
+  height: 39px;
+  margin-left: 25px;
+  border-radius: 5px;
+}
+
+.heading {
+  font-size: 13px;
+  font-weight: 600;
+}
+.content {
+  font-size: 12px;
+  font-weight: 500;
+}
+.greycolor {
+  color: #aaaaaa;
+}
+
+.line {
+  width: 96%;
+  margin: 0 0 0 10px;
+}
+.overflow {
+  height: 80px;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.w-5 {
+  width: 4% !important;
+}
+
+.w-10 {
+  width: 12% !important;
+}
+
+.w-15 {
+  width: 13% !important;
+}
+
+.w-20 {
+  width: 20% !important;
+  padding-right: 1.5rem !important;
+}
+
+.archivetable {
+  overflow-x: hidden;
+  overflow-y: auto;
+  margin: 1.5rem 0px 0px 0px;
+  width: 100%;
+}

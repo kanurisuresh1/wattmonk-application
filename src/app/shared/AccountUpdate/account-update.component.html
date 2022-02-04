@@ -1,0 +1,40 @@
+<div *ngIf="isLoading" class="progress-loader">
+  <div id="pause" class="d-flex align-items-center justify-content-center">
+    <div
+      id="spinner"
+      style="background: #fff; padding: 25px; border-radius: 5px"
+      class="row"
+    >
+      <div class="loading-message bkgg col-9">{{ loadingMessage }}</div>
+      <div class="col-3" style="top: 5px">
+        <div class="snippet" data-title=".dot-pulse">
+          <div class="stage">
+            <div class="dot-pulse"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div>
+  <div class="d-flex justify-content-center">
+    <img src="../../../assets/reload.svg" width="70px" height="70px" />
+  </div>
+  <p class="col-8 subtitle">
+    You have been converted from
+    {{ data.convertToPrepaid ? "Postpaid to Prepaid" : "Prepaid to Postpaid"
+    }}<span *ngIf="signOut"
+      >, you will be auto logged out to update it. Please login back
+      again.</span
+    >
+  </p>
+  <div class="d-flex justify-content-center mt-3">
+    <button
+      style="width: 100px !important"
+      mat-raised-button
+      (click)="logout()"
+    >
+      Ok
+    </button>
+  </div>
+</div>

@@ -1,0 +1,46 @@
+@import "../../../../shared/loader/loader.component.scss";
+.g-overlay {
+  min-width: 320px;
+}
+.spinnertext {
+  margin-top: 16px !important;
+  color: #3c78d8;
+}
+
+.spinnercard {
+  width: 26%;
+  position: absolute;
+  left: 34%;
+  top: 36%;
+}
+.search {
+  flex: 0 0 40%;
+
+  &__input {
+    font-family: inherit;
+    font-size: inherit;
+    color: inherit;
+    background-color: #f4f2f2;
+    border: none;
+    outline: none;
+    padding: 0.7em 2em;
+    border-radius: 10px;
+    width: 90%;
+    transition: all 0.2s;
+
+    &:focus {
+      outline: none;
+      width: 100%;
+      background-color: #dbdada;
+    }
+  }
+}
+
+.contractorfilter {
+  .input-group-text {
+    font-size: 14px;
+  }
+  .form-control {
+    font-size: 12px;
+  }
+}

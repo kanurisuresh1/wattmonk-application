@@ -1,0 +1,116 @@
+@import "../../../../shared/loader/loader.component.scss";
+.bg-yellow {
+  background-color: #edc773;
+}
+
+.button {
+  background: transparent;
+  border: none;
+  border-radius: 50%;
+  min-width: 25px;
+  height: 25px;
+  padding: 0 8px;
+}
+
+.buttonminus {
+  background: lightgrey;
+  span {
+    font-size: 36px;
+    position: relative;
+    top: -9px;
+    font-weight: 400;
+  }
+}
+
+.buttonplus {
+  background-color: #edc773;
+  span {
+    font-size: 27px;
+    position: relative;
+    top: -7px;
+  }
+}
+
+.cards {
+  width: 100%;
+  text-align: left;
+  background: none;
+  border: none;
+  border-radius: 6px;
+  padding: 10px 7px;
+
+  p {
+    font-size: 14px;
+    font-weight: 500;
+  }
+}
+
+.cards:hover {
+  background: white;
+}
+
+.cards:focus {
+  background: white;
+}
+
+.fixed-height {
+  height: 67vh;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.font-weight {
+  font-weight: 500;
+}
+
+.bg-red {
+  color: red;
+}
+
+.spinnercard {
+  width: 320px;
+  position: absolute;
+  top: 43%;
+  left: 42%;
+}
+
+::-webkit-scrollbar {
+    width: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #f1f1f1; 
+    border-radius: 8px;
+  }
+   ::-webkit-scrollbar-thumb {
+    background: #888; 
+    border-radius: 8px;
+  }
+
+  .cust-mat-tab-nav-bar{
+    .mat-tab-label-active {
+        color: #212529 !important;
+        background-color: #EDC773 !important;
+        text-decoration: none;
+    }
+    
+    a:hover {
+        color: #212529 !important;
+        text-decoration: none !important;
+    }
+    //.mat-tab-nav-bar.mat-primary .mat-ink-bar {
+     
+  }
+     
+  .mat-ink-bar {
+    background-color: #EDC773 !important;
+}
+.companylist{
+    /*overflow-x: hidden;
+    overflow-y: auto;
+    margin: 1.5rem 0px 0px 0px;
+    width: 100%;*/
+    height: 65vh;
+    margin-top: 0.8rem;
+    overflow-x: hidden;
+    overflow-y: auto;
+}

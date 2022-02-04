@@ -1,0 +1,182 @@
+<!-- <div *ngIf="isLoading" class="overlay">
+  <mat-progress-bar class="commonprogressbar" mode="indeterminate"></mat-progress-bar>
+</div> -->
+<!-- <div *ngIf="isLoading" class="overlay">
+  <mat-card class="spinnercard" align-items-center>
+      <div class="row">
+          <div class="col-3">
+              <mat-progress-spinner diameter="50" color="primary" mode="indeterminate" strokeWidth="5">
+              </mat-progress-spinner>
+          </div>
+          <div class="col d-flex align-items-center">
+              <h4 class="spinnertext mb-0">{{loadingmessage}}</h4>
+          </div>
+      </div>
+  </mat-card>
+</div> -->
+<div *ngIf="isLoading" class="progress-loader">
+  <div id="pause" class="d-flex align-items-center justify-content-center">
+    <div
+      id="spinner"
+      style="background: #fff; padding: 25px; border-radius: 5px; width: 17rem"
+      class="row"
+    >
+      <div class="loading-message bkgg col-9">{{ loadingmessage }}</div>
+      <div class="col-3" style="top: 5px">
+        <div class="snippet" data-title=".dot-pulse">
+          <div class="stage">
+            <div class="dot-pulse"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="container">
+  <div class="row">
+    <div
+      class="col-9 mb-3"
+      style="padding-left: 15px"
+      *ngIf="!this.data.isEditMode"
+    >
+      <h1 class="dialogformtitle">Add Group</h1>
+    </div>
+    <div
+      class="col-9 mb-3"
+      style="padding-left: 15px"
+      *ngIf="this.data.isEditMode"
+    >
+      <h1 class="dialogformtitle">Edit Group</h1>
+    </div>
+    <div class="col-3" style="padding-right: 0px">
+      <button class="float-right" mat-icon-button (click)="onCloseClick()">
+        <img
+          class="material-icons"
+          src="../../../assets/cut.svg"
+          style="width: 15px"
+        />
+        <!-- <img class="dialogclose;" style="width: 60%;" src="../../../../../assets/close1.svg" /> -->
+      </button>
+    </div>
+  </div>
+</div>
+<div mat-dialog-content>
+  <div class="container">
+    <form
+      class="addgroupcard addgroupdialogcontent"
+      [formGroup]="addteamDialogForm"
+      (submit)="onAddMember($event)"
+    >
+      <div class="row">
+        <div class="form-group col">
+          <p>Name*</p>
+          <mat-form-field appearance="outline" class="fieldwidth">
+            <input matInput [formControl]="groupname" required />
+            <mat-error *ngIf="groupname.invalid">{{
+              getErrorMessage(groupname)
+            }}</mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="form-group col">
+          <p>Members*</p>
+          <mat-form-field appearance="outline" class="fullwidth">
+            <mat-select
+              style="padding: 3px"
+              [formControl]="membersctrl"
+              (selectionChange)="selectmembers($event)"
+            >
+              <mat-option>
+                <ngx-mat-select-search
+                  [formControl]="memberSearch"
+                  placeholderLabel="Search"
+                >
+                </ngx-mat-select-search>
+              </mat-option>
+              <!-- <mat-select-trigger>
+              </mat-select-trigger> -->
+              <mat-option *ngFor="let user of membersList" [value]="user">
+                {{ user.name }}
+              </mat-option>
+            </mat-select>
+            <mat-chip-list #memberschipList aria-label="Members selection">
+              <mat-chip
+                *ngFor="let user of selectedmembers; let i = index"
+                [selectable]="selectable"
+                [removable]="removable"
+                (removed)="removemember(i)"
+              >
+                {{ user }}
+                <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+              </mat-chip>
+            </mat-chip-list>
+            <mat-error *ngIf="membersctrl.invalid">{{
+              getErrorMessage(membersctrl)
+            }}</mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="form-group col">
+          <p>Clients*</p>
+          <mat-form-field appearance="outline" class="fullwidth">
+            <mat-select
+              style="padding: 3px"
+              [formControl]="clientsctrl"
+              (selectionChange)="selectclient($event)"
+            >
+              <mat-option>
+                <ngx-mat-select-search
+                  [formControl]="clientSearch"
+                  placeholderLabel="Search"
+                >
+                </ngx-mat-select-search>
+              </mat-option>
+              <!-- <mat-select-trigger >
+              </mat-select-trigger> -->
+              <mat-option *ngFor="let user of companyList" [value]="user">
+                {{ user.company }}
+              </mat-option>
+            </mat-select>
+            <mat-chip-list #clientchipList aria-label="Clients selection">
+              <mat-chip
+                *ngFor="let user of selectedclients; let i = index"
+                [selectable]="selectable"
+                [removable]="removable"
+                (removed)="removeclient(i)"
+              >
+                {{ user }}
+                <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+              </mat-chip>
+            </mat-chip-list>
+            <mat-error *ngIf="clientsctrl.invalid">{{
+              getErrorMessage(clientsctrl)
+            }}</mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="form-group col">
+          <p>Description*</p>
+          <mat-form-field appearance="outline" class="fullwidth">
+            <textarea
+              style="min-height: 94px; resize: none"
+              matInput
+              placeholder="Start typing here..."
+              [formControl]="description"
+            ></textarea>
+
+            <!-- <input matInput placeholder="" [formControl]="description" style="height:100px;" required> -->
+            <mat-error *ngIf="description.invalid">{{
+              getErrorMessage(description)
+            }}</mat-error>
+          </mat-form-field>
+          <button mat-raised-button class="fullwidth mb-3" type="submit">
+            Confirm
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

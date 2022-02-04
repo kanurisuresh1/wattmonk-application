@@ -1,0 +1,191 @@
+<!-- <div *ngIf="isLoading" class="overlay">
+    <mat-card class="spinnercard" align-items-center>
+        <div class="row">
+            <div class="col-3">
+                <mat-progress-spinner diameter="50" color="primary" mode="indeterminate" strokeWidth="5">
+                </mat-progress-spinner>
+            </div>
+            <div class="col d-flex align-items-center">
+                <h4 class="spinnertext mb-0">{{loadingmessage}}</h4>
+            </div>
+        </div>
+    </mat-card>
+  </div> -->
+<div *ngIf="isLoading" class="progress-loader">
+  <div id="pause" class="d-flex align-items-center justify-content-center">
+    <div id="spinner" style="background: #fff; padding: 25px; border-radius: 5px; width: 17rem" class="row">
+      <div class="loading-message bkgg col-9">{{ loadingmessage }}</div>
+      <div class="col-3" style="top: 5px">
+        <div class="snippet" data-title=".dot-pulse">
+          <div class="stage">
+            <div class="dot-pulse"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="container designreportcard">
+  <div class="row">
+    <div class="col-md-3 col-lg-3 px-0 bg-yellow">
+      <div class="col-12 py-3 ">
+        <h2 class="font-weight-bold">Add Checklist</h2>
+        <mat-form-field appearance="outline" style="width: 100%;">
+          <input matInput placeholder="search" [(ngModel)]='searchdata' (keydown.enter)="searchComapny()">
+          <span style="position: relative; top: -3px; margin-right: 7px;" matSuffix><img
+              src="../../../../../assets/search.svg" width="15px" height="15px" *ngIf="!searchdata?.length">
+
+            <img src="../../../../../assets/close (1).svg" width="15px" height="14px" (click)="clearinputfields()"
+              class="cursor" *ngIf="searchdata?.length">
+          </span>
+        </mat-form-field>
+      </div>
+      <div class="col-12 companylist  " infiniteScroll [infiniteScrollDistance]="1" [scrollWindow]="false"
+        [infiniteScrollThrottle]="100" (scrolled)="onClientListScroll()">
+        <!--<button class="cards" *ngFor="let user of clientList; let i = index" (click)="ClientNameUpdate(user)">
+                    <p class="card-title capitalize mb-0" *ngIf="user.company">{{user.company}}</p>
+                    <p class="card-title capitalize mb-0" *ngIf="!user.company">{{user.firstname}} {{user.lastname}}</p>
+                </button>-->
+        <div class="row companybtn">
+          <mat-button-toggle-group class="col-12" #group="matButtonToggleGroup" [(ngModel)]="selectedToggleButtonVal"
+            *ngFor="let user of clientList; let i = index" (change)="onValChange(group.value)">
+            <mat-button-toggle value="{{user?.company}}" (click)="ClientNameUpdate(user)" *ngIf="user?.company">
+              {{user?.company}}</mat-button-toggle>
+            <mat-button-toggle value="{{user?.firstname}} {{user?.lastname}}" (click)="ClientNameUpdate(user)"
+              *ngIf="!user.company">{{user?.firstname}} {{user?.lastname}}</mat-button-toggle>
+          </mat-button-toggle-group>
+        </div>
+      </div>
+      <mat-spinner *ngIf="scrolling" style="position: absolute; left: 40%; bottom: 4% " [diameter]="35"></mat-spinner>
+    </div>
+    <div class="col-md-9 col-lg-9 py-3">
+      <div class="col-12 px-0">
+        <div class="row">
+          <div class="col-9 d-flex align-items-center">
+            <h4 class="mb-0 font-weight-bold" *ngIf="checklistcreatedTitle">Checklist Created</h4>
+          </div>
+          <div class="col-9 d-flex align-items-center">
+            <h1 class="mb-0 font-weight-bold" *ngIf="this.clientName != null">{{this.clientName}}</h1>
+          </div>
+          <div class="col-3">
+            <button mat-icon-button class="float-right" (click)="onCloseClick()">
+              <img class="dialogclose" src="../../../../../assets/close.svg" />
+            </button>
+          </div>
+        </div>
+        <div *ngIf="this.clientName != null">
+          <div class="row p-3 d-flex justify-content-between">
+            <nav mat-tab-nav-bar class="cust-mat-tab-nav-bar">
+              <a mat-tab-link *ngFor="let link of links;let i = index"
+                (click)="activeLink = link.value;ClientNameUpdate(this.client,link.value)"
+                [active]="activeLink == link.value" [disabled]="link.disabled"> {{link.name}} </a>
+            </nav>
+            <button mat-raised-button (click)="openAddInputField()"
+              *ngIf="(!isPermitCheckList && activeLink == 'permit') || (!isprelimChecklist && activeLink == 'prelim') || (!isGuidelines && activeLink == 'guidelines')">+
+              Add Row </button>
+          </div>
+
+          <div class="fixed-height" *ngIf="!isPermitCheckList && activeLink == 'permit'">
+            <div class="col-12 mt-3" *ngFor="let item of inputCriteriafield; let i = index">
+              <div class="row">
+                <div class="col-7 pl-0 d-flex align-items-center">
+                  <p class="mb-0 font-weight">{{item.name}}</p>
+                </div>
+                <div class="col-5 d-flex justify-content-end">
+                  <button class="button buttonminus" mat-raised-button (click)="removeInputField(i)">
+                    <span>-</span> </button>
+                </div>
+                <hr class="w-100 mt-2 mb-0 mr-2">
+                <mat-form-field appearance="outline" class="fullwidth mt-2 mr-2">
+                  <input matInput placeholder="Add your comments here" [ngModel]='criteriadata'
+                    (ngModelChange)="changeInputFieldValue($event, i)">
+                </mat-form-field>
+                <!-- <p class="bg-red font-weight" *ngIf="error[i]">Name must contain only alphabets.</p> -->
+              </div>
+            </div>
+          </div>
+          <div class="fixed-height" *ngIf="activeLink == 'prelim' && !isprelimChecklist">
+            <div class="col-12 mt-3" *ngFor="let item of inputCriteriafield; let i = index">
+              <div class="row">
+                <div class="col-7 pl-0 d-flex align-items-center">
+                  <p class="mb-0 font-weight">{{item.name}}</p>
+                </div>
+                <div class="col-5 d-flex justify-content-end">
+                  <button class="button buttonminus" mat-raised-button (click)="removeInputField(i)">
+                    <span>-</span> </button>
+                </div>
+                <hr class="w-100 mt-2 mb-0 mr-2">
+                <mat-form-field appearance="outline" class="fullwidth mt-2 mr-2">
+                  <input matInput placeholder="Add your comments here" [ngModel]='criteriadata'
+                    (ngModelChange)="changeInputFieldValue($event, i)">
+                </mat-form-field>
+                <!-- <p class="bg-red font-weight" *ngIf="error[i]">Name must contain only alphabets.</p> -->
+              </div>
+            </div>
+          </div>
+          <div class="fixed-height" *ngIf="activeLink == 'guidelines' && !isGuidelines">
+            <div class="col-12 mt-3" *ngFor="let item of inputCriteriafield; let i = index">
+              <div class="row">
+                <div class="col-7 pl-0 d-flex align-items-center">
+                  <p class="mb-0 font-weight">{{item.name}}</p>
+                </div>
+                <div class="col-5 d-flex justify-content-end">
+                  <button class="button buttonminus" mat-raised-button (click)="removeInputField(i)">
+                    <span>-</span> </button>
+                </div>
+                <hr class="w-100 mt-2 mb-0 mr-2">
+                <mat-form-field appearance="outline" class="fullwidth mt-2 mr-2">
+                  <input matInput placeholder="Add your comments here" [ngModel]='criteriadata'
+                    (ngModelChange)="changeInputFieldValue($event, i)">
+                </mat-form-field>
+                <!-- <p class="bg-red font-weight" *ngIf="error[i]">Name must contain only alphabets.</p> -->
+              </div>
+            </div>
+          </div>
+          <div class="mt-3 fixed-height" *ngIf="isPermitCheckList && activeLink == 'permit'">
+            <div class="row py-2 mr-3 cursor-grab" *ngFor="let item of permitChecklist; let i = index">
+              <div class="col-8">
+                <p class="mb-1 font-weight-bold">{{item}}
+                </p>
+              </div>
+              <hr class="w-100 mt-2 mb-0 ml-2">
+            </div>
+          </div>
+          <div class="mt-3 fixed-height" *ngIf="isprelimChecklist && activeLink == 'prelim'">
+            <div class="row py-2 mr-3 cursor-grab" *ngFor="let item of prelimChecklist; let i = index">
+              <div class="col-8">
+                <p class="mb-1 font-weight-bold">{{item}}
+                </p>
+              </div>
+              <hr class="w-100 mt-2 mb-0 ml-2">
+            </div>
+          </div>
+          <div class="mt-3 fixed-height" *ngIf="isGuidelines && activeLink == 'guidelines'">
+            <div class="row py-2 mr-3 cursor-grab" *ngFor="let item of guildelines; let i = index">
+              <div class="col-8">
+                <p class="mb-1 font-weight-bold">{{item}}
+                </p>
+              </div>
+              <hr class="w-100 mt-2 mb-0 ml-2">
+            </div>
+          </div>
+          <div class="col-12 d-flex justify-content-end mt-2" *ngIf="(!isPermitCheckList && activeLink == 'permit') 
+                || (!isprelimChecklist && activeLink == 'prelim') || (!isGuidelines && activeLink == 'guidelines')">
+            <button mat-raised-button (click)="addClientListDetail()">Save</button>
+
+            <button style="background: red; color: #fff; margin-left: 10px;" class="mr-2" mat-raised-button
+              (click)="onCloseClick()">Cancel</button>
+
+          </div>
+        </div>
+        <div class="d-flex justify-content-center align-items-center" style="height: 70vh;"
+          *ngIf="this.clientName == null">
+          <div class="text-center">
+            <img src="../../../../../assets/sad.svg" width="35px" height="35px">
+            <p class="font-weight-bold">Yet to break the ice</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

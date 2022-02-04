@@ -1,0 +1,23 @@
+@mixin font-family {
+  div,
+  p,
+  h1,
+  h2,
+  h3,
+  h4,
+  span,
+  i,
+  li,
+  ul,
+  b,
+  strong {
+    font-family: "Montserrat", sans-serif;
+  }
+}
+body {
+  background: WHITE;
+}
+.cometchat-conversation-screen-conatiner {
+  width: 85% !important;
+}
+@import "../../../../node_modules/@ctrl/ngx-emoji-mart/picker";

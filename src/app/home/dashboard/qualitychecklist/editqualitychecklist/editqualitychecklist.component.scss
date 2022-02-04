@@ -1,0 +1,74 @@
+@import "../../../../shared/loader/loader.component.scss";
+.fixed-height {
+  height: 40vh;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.button-close {
+  background: transparent;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.cursor-grab {
+  cursor: -webkit-grab;
+  cursor: grab;
+}
+
+.cursor-grab:active {
+  cursor: -webkit-grabbing;
+  cursor: grabbing;
+}
+
+.bg-red {
+  color: red;
+  font-size: 0.7rem;
+}
+
+.font-weight {
+  font-weight: 500;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 8px;
+}
+::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 8px;
+}
+.mat-error {
+  font-size: x-small !important;
+}
+.spinnercard {
+  width: 320px;
+  position: absolute;
+  top: 43%;
+  left: 42%;
+}
+.cust-mat-tab-nav-bar{
+  .mat-tab-label-active {
+      color: #212529 !important;
+      background-color: #EDC773 !important;
+      text-decoration: none;
+  }
+  
+  a:hover {
+      color: #212529 !important;
+      text-decoration: none !important;
+  }
+  .mat-tab-link{
+    min-width: 140px !important;
+  }   
+}
+
+::ng-deep .mat-tab-group.mat-primary .mat-ink-bar {
+  background-color: #EDC773 !important;
+  width: 140px !important;
+}

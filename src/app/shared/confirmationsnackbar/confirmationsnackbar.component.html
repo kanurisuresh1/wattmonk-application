@@ -1,0 +1,31 @@
+<div class="row align-items-center confirmationsnackbar">
+  <div class="col-1">
+    <img src="../../../assets/question.svg" />
+  </div>
+  <div class="col-6 infomessage">{{ data.message }}</div>
+  <div class="col-2 offset-1 infobutton">
+    <button class="primarybutton" mat-button (click)="actionConfirmed()">
+      {{ data.positive }}
+    </button>
+  </div>
+  <div class="col-1 infobutton">
+    <button class="secondarybutton" mat-button (click)="snackBarRef.dismiss()">
+      {{ data.negative }}
+    </button>
+  </div>
+</div>
+<!-- <div class="row align-items-center confirmationsnackbar">
+  <div class="col-12 infomessage"><img src="../../../assets/question.svg"/> {{ data.message }}</div>
+</div>
+<div class="row align-items-center confirmationsnackbar">
+  <div class="col-4 offset-2 infobutton">
+    <button class="primarybutton" mat-button (click)="actionConfirmed()">
+      {{ data.positive }}
+    </button>
+  </div>
+  <div class="col-4 infobutton">
+    <button class="secondarybutton" mat-button (click)="snackBarRef.dismiss()">
+      {{ data.negative }}
+    </button>
+  </div>
+</div> -->

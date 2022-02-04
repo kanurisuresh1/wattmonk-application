@@ -1,0 +1,28 @@
+.smallcolumn {
+  float: left;
+  width: 30%;
+  padding: 10px;
+  height: 14vh; /* Should be removed. Only for demonstration */
+}
+
+.threefourthcolumn {
+  float: left;
+  width: 70%;
+  padding: 10px;
+  height: 14vh; /* Should be removed. Only for demonstration */
+}
+
+/* Create two equal columns that floats next to each other */
+.column {
+  float: left;
+  width: 50%;
+  padding: 10px;
+  height: 76vh; /* Should be removed. Only for demonstration */
+}
+
+/* Clear floats after the columns */
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}

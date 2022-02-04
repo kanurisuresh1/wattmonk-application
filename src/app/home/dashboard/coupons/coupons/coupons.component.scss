@@ -1,0 +1,282 @@
+.comingsoonimage {
+  position: absolute;
+  bottom: 34%;
+  left: 34%;
+  width: 30%;
+}
+
+.comingsoontext {
+  position: absolute;
+  left: 43%;
+  top: 30%;
+}
+// changed by anand
+
+.mat-accordion .mat-header-row {
+  padding-left: 1.5rem;
+  padding-right: 2rem;
+  border-bottom: none;
+}
+
+.mat-expansion-panel-header.mat-row {
+  border-bottom: none;
+}
+
+//copied from https://github.com/angular/material2/blob/master/src/lib/table/table.scss
+$mat-header-row-height: 56px;
+$mat-row-height: 48px;
+$mat-row-horizontal-padding: 24px;
+
+.mat-table {
+  width: 100%;
+}
+
+.mat-header-row {
+  min-height: $mat-header-row-height;
+}
+
+.mat-row {
+  min-height: $mat-row-height;
+}
+
+.mat-row,
+.mat-header-row {
+  display: flex;
+  border-bottom-width: 1px;
+  border-bottom-style: solid;
+  align-items: center;
+  padding: 0 $mat-row-horizontal-padding;
+  box-sizing: border-box;
+
+  // Workaround for https://goo.gl/pFmjJD in IE 11. Adds a pseudo
+  // element that will stretch the row the correct height. See:
+  // https://connect.microsoft.com/IE/feedback/details/802625
+  &::after {
+    display: inline-block;
+    min-height: inherit;
+    content: "";
+  }
+}
+
+.mat-cell,
+.mat-header-cell {
+  flex: 1;
+  overflow: hidden;
+  word-wrap: break-word;
+}
+
+table tr.mat-header-row {
+  background: #e6e6e6;
+}
+
+table th.mat-header-cell {
+  color: #000;
+  font-size: 13px;
+  font-weight: 400;
+}
+
+// ::ng-deep thead {
+//   text-align: center !important;
+// }
+// ::ng-deep tbody {
+//   text-align: center !important;
+// }
+
+.data-content {
+  margin-left: 16px;
+}
+.listcolumn {
+  margin-top: 16px;
+  padding-left: 0px;
+}
+.listcard {
+  height: 65vh;
+  overflow: hidden;
+}
+.listitems-viewport {
+  height: 400px;
+  width: 100%;
+}
+.listcard .mat-card-title {
+  margin-top: 10px;
+  font-size: 1.1em;
+}
+.even {
+  background-color: #ecf0f9ab;
+}
+.odd {
+  background-color: #ffffff;
+}
+.itemcard {
+  margin-bottom: 8px;
+  padding: 10px !important;
+  box-shadow: none !important;
+  border-radius: 8px !important;
+  // border-bottom: 1px solid #cccccc;
+
+  .mat-card-content {
+    margin-bottom: 0px;
+  }
+}
+.itemcard :hover {
+  cursor: pointer;
+}
+.itemcard .mat-card-header {
+  margin-bottom: 8px;
+}
+.itemcard .headerrow {
+  width: 100%;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+.itemcard .headercol {
+  padding-left: 0px;
+  padding-right: 0px;
+}
+.itemcard .contentrow {
+  margin-left: 10px;
+  margin-right: 10px;
+}
+.itemcard .contentcol {
+  padding-left: 0px;
+  padding-right: 0px;
+}
+.itemcard .mat-card-title {
+  font-size: 0.9em;
+  font-weight: 600;
+  margin: 0px;
+  margin-bottom: 0px !important;
+}
+.itemcard .mat-card-subtitle {
+  font-size: 0.7em;
+  margin: 0px;
+  background-color: #0984e3;
+  padding: 4px 10px;
+  border-radius: 3px;
+  text-align: center;
+  height: 28px;
+  color: #fff;
+}
+.itemcard .actiondetail {
+  font-size: 0.8em;
+  color: #0984e3;
+  display: table;
+}
+.itemcard .timedetail {
+  font-size: 0.9em;
+  color: #0984e3;
+  display: block;
+  font-weight: 600;
+  margin-bottom: 0px;
+  text-align: right;
+}
+.itemcard .blockdetail {
+  font-size: 0.7em;
+  margin: 0px;
+  background-color: #95afc0;
+  padding: 4px 10px;
+  border-radius: 3px;
+  text-align: center;
+  height: 28px;
+  color: #fff;
+}
+.itemcard .silentdetail {
+  color: #636e72;
+  font-style: italic;
+  font-size: 0.7em;
+  text-align: right;
+  margin-right: 10px;
+}
+.itemcard .chipdetail {
+  background-color: #95afc0;
+  font-size: 0.7em;
+  padding: 2px 10px;
+  border-radius: 12px;
+  text-align: center;
+  height: 24px;
+  color: #fff;
+  margin-bottom: 0px;
+}
+.itemcard .mat-card-footer {
+  margin: 0px;
+}
+.itemcard .footerrow {
+  margin-left: 10px;
+  margin-right: 10px;
+}
+.itemcard .footercol {
+  padding-left: 0px;
+  padding-right: 0px;
+}
+.itemcard .footercol .row {
+  margin-left: 0px !important;
+  margin-right: 0px !important;
+}
+.itemcard .assigneedetails {
+  font-size: 0.7em;
+  margin-bottom: 0px;
+  text-align: right;
+}
+.listplaceholder {
+  font-size: 1em;
+  color: #aaaaaa;
+  font-style: italic;
+  font-weight: 600;
+  margin-top: 6% !important;
+}
+
+.conoverviewbutton {
+  border-color: #d9d9d9;
+  background-color: #ffffff;
+  border-width: 1px;
+  width: 100%;
+  border-radius: 0;
+  border-style: solid;
+  color: #2b313f;
+  text-align: right !important;
+}
+.overviewsection .col {
+  padding-left: 0;
+}
+.conoverviewbutton img {
+  width: 26%;
+  position: absolute;
+  left: 16px;
+  top: 16px;
+}
+.conoverviewbutton h1 {
+  margin-top: 0.6em;
+  margin-bottom: 0;
+}
+
+.conoverviewbutton h4 {
+  font-size: 0.7rem;
+  padding-top: 14px;
+  margin-bottom: 4px;
+}
+
+.brandarea .logo {
+  width: 36px;
+  margin-left: 8px;
+  padding-right: 0px !important;
+  padding-left: 0px !important;
+  max-width: none !important;
+}
+
+.brandarea .logo img {
+  width: 36px !important;
+}
+
+.brandarea .initials {
+  padding: 9px;
+  margin-left: 6px;
+  margin-right: 0px !important;
+}
+
+.mat-tab-group.mat-primary .mat-ink-bar,
+.mat-tab-nav-bar.mat-primary .mat-ink-bar {
+  background-color: #fff;
+}
+::ng-deep .mat-paginator {
+  padding-bottom: 4% !important;
+}

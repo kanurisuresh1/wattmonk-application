@@ -1,0 +1,124 @@
+<div class="main-content">
+  <img class="comingsoonimage" src="../../../../../assets/comingsoon.png" />
+  <h2 class="comingsoontext">Coming Soon</h2>
+</div>
+<div class="main-content Withdraw" style="display: none">
+  <div class="row">
+    <div class="col">
+      <h1 class="text-emphasized">Withdrawals</h1>
+      <div class="row mt-4">
+        <div class="col-9">
+          <form [formGroup]="Withdraw">
+            <mat-form-field appearance="fill">
+              <mat-label>From Date</mat-label>
+              <input
+                matInput
+                [max]="maxFromDate"
+                placeholder="DD/MM/YYYY"
+                [matDatepicker]="picker3"
+                (dateChange)="getwithdFromDate($event)"
+                [formControl]="withdrawFromDate"
+                required
+                readonly
+              />
+              <mat-datepicker-toggle
+                matSuffix
+                [for]="picker3"
+              ></mat-datepicker-toggle>
+              <mat-datepicker #picker3></mat-datepicker>
+            </mat-form-field>
+            <mat-form-field class="pl-3" appearance="fill">
+              <mat-label>To Date</mat-label>
+              <input
+                matInput
+                [max]="maxToDate"
+                [min]="minToDate"
+                placeholder="DD/MM/YYYY"
+                [matDatepicker]="picker4"
+                (dateChange)="getwithdrawUptoDate($event)"
+                [formControl]="withdrawtoDate"
+                required
+                readonly
+              />
+              <mat-datepicker-toggle
+                matSuffix
+                [for]="picker4"
+              ></mat-datepicker-toggle>
+              <mat-datepicker #picker4></mat-datepicker>
+              <mat-error *ngIf="withdrawFromDate && withdrawtoDate.invalid"
+                >{{ getErrorMessage(withdrawtoDate) }}
+              </mat-error>
+            </mat-form-field>
+          </form>
+        </div>
+
+        <div class="col-3 text-right">
+          <mat-form-field>
+            <mat-label>Filter</mat-label>
+            <input
+              matInput
+              (keyup)="applyFilter($event)"
+              placeholder="Ex. ium"
+            />
+          </mat-form-field>
+        </div>
+      </div>
+
+      <!-- Table -->
+
+      <mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+        <ng-container matColumnDef="created_at">
+          <mat-header-cell *matHeaderCellDef> DATE </mat-header-cell>
+          <mat-cell *matCellDef="let element">
+            {{ element.created_at | date: "dd MMM yyyy" }}
+          </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="firstname">
+          <mat-header-cell *matHeaderCellDef> NAME </mat-header-cell>
+          <mat-cell *matCellDef="let element">
+            {{ element.user.firstname | titlecase }}
+          </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="servicetype">
+          <mat-header-cell *matHeaderCellDef> SERVICE </mat-header-cell>
+          <mat-cell *matCellDef="let element">
+            {{ element.servicetype | titlecase }}
+          </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="usertype">
+          <mat-header-cell *matHeaderCellDef> USERTYPE </mat-header-cell>
+          <mat-cell *matCellDef="let element">
+            {{ element.user.usertype | titlecase }}
+          </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="status">
+          <mat-header-cell *matHeaderCellDef> STATUS </mat-header-cell>
+          <mat-cell *matCellDef="let element">
+            {{ element.status | titlecase }}
+          </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="amount">
+          <mat-header-cell *matHeaderCellDef> AMOUNT </mat-header-cell>
+          <mat-cell *matCellDef="let element">
+            {{ element.amount | currency: "USD" }}
+          </mat-cell>
+        </ng-container>
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+      </mat-table>
+      <mat-paginator
+        [pageSizeOptions]="[10, 20]"
+        showFirstLastButtons
+      ></mat-paginator>
+
+      <div
+        class="row statisticssection"
+        *ngIf="dataSource.filteredData.length === 0"
+      >
+        <div class="col">
+          <div class="alert alert-danger">No Data found!</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

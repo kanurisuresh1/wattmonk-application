@@ -1,0 +1,254 @@
+<div class="container-fluid" *ngIf="!isoverviewloading">
+  <div class="row justify-content-end pt-1 pr-4">
+    <mat-select class="dropdown-toggle" placeholder="Select Month" [multiple]="false" class="form-control"
+      style="border: 0px; width: 10.5rem; margin-right: 31px">
+      <mat-option value="item.name" (click)="designstatuscheckboxvalue(item.name, i)"
+        *ngFor="let item of designstatusmonth; let i = index">
+        <div class="d-flex justify-content-between">
+          <span class="text-secondary tag-font">{{ item.name }}</span>
+          <input type="checkbox" [checked]="item.checked" class="mt-3" />
+        </div>
+      </mat-option>
+    </mat-select>
+    <div ngbDropdown class="d-inline-block">
+      <div>
+        <button class="text-dark downloadbtn" mat-button [matMenuTriggerFor]="picker">
+          <img src="../../../../../assets/download.svg" width="14px;" height="14px" />
+          Download Report
+        </button>
+        <mat-menu #picker="matMenu">
+          <mat-card class="demo-inline-calendar-card" (click)="$event.stopPropagation()">
+            <mat-calendar [startAt]="calenderstartDate" (selectedChange)="calenderValue($event)"></mat-calendar>
+          </mat-card>
+        </mat-menu>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container-fluid cardspostition">
+  <div class="col-12" *ngIf="isoverviewloading">
+    <div class="row">
+      <div class="col-12 pl-1 pb-4">
+        <ngx-skeleton-loader class="d-block" [theme]="{
+            'border-radius': '5px',
+            'background-color': '#DBDAD9',
+            height: '8px',
+            width: '12rem',
+            'margin-bottom': '0px'
+          }">
+        </ngx-skeleton-loader>
+      </div>
+      <div class="col-12">
+        <div class="row">
+          <div class="col-9" style="height: 57vh; overflow-x: hidden; overflow-y: auto">
+            <div class="row">
+              <div class="col-lg-4 col-md-6 col-sm-12 pl-1" *ngFor="let number of [0, 1, 2]">
+                <div class="p-3 mb-3 skeletoncard">
+                  <div class="col-12 p-0">
+                    <ngx-skeleton-loader class="d-block" [theme]="{
+                        'border-radius': '5px',
+                        'background-color': '#DBDAD9',
+                        height: '8px',
+                        width: '85%',
+                        'margin-bottom': '0px'
+                      }">
+                    </ngx-skeleton-loader>
+                    <div class="row pl-3 pt-3">
+                      <img src="../../../../../assets/email grey.svg" width="15px" height="15px" class="mr-1" />
+                      <ngx-skeleton-loader class="d-block" [theme]="{
+                          'border-radius': '5px',
+                          'background-color': '#DBDAD9',
+                          height: '8px',
+                          width: '5rem',
+                          'margin-bottom': '4px'
+                        }">
+                      </ngx-skeleton-loader>
+                    </div>
+                    <div class="row pl-3">
+                      <img src="../../../../../assets/maps grey.svg" width="15px" height="15px" class="mr-1" />
+                      <ngx-skeleton-loader class="d-block" [theme]="{
+                          'border-radius': '5  px',
+                          'background-color': '#DBDAD9',
+                          height: '8px',
+                          width: '5rem',
+                          'margin-bottom': '4px'
+                        }">
+                      </ngx-skeleton-loader>
+                    </div>
+                  </div>
+                  <div class="row pt-5">
+                    <div class="col-3">
+                      <ngx-skeleton-loader class="d-block" [theme]="{
+                          'border-radius': '5px',
+                          'background-color': '#DBDAD9',
+                          height: '8px',
+                          width: '100%'
+                        }">
+                      </ngx-skeleton-loader>
+                    </div>
+                    <div class="col-3">
+                      <ngx-skeleton-loader class="d-block" [theme]="{
+                          'border-radius': '5px',
+                          'background-color': '#DBDAD9',
+                          height: '8px',
+                          width: '100%'
+                        }">
+                      </ngx-skeleton-loader>
+                    </div>
+                    <div class="col-3">
+                      <ngx-skeleton-loader class="d-block" [theme]="{
+                          'border-radius': '5px',
+                          'background-color': '#DBDAD9',
+                          height: '8px',
+                          width: '100%'
+                        }">
+                      </ngx-skeleton-loader>
+                    </div>
+                    <div class="col-3">
+                      <ngx-skeleton-loader class="d-block" [theme]="{
+                          'border-radius': '5px',
+                          'background-color': '#DBDAD9',
+                          height: '8px',
+                          width: '100%'
+                        }">
+                      </ngx-skeleton-loader>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-3 px-2">
+            <div class="totalpanel skeletoncard">
+              <h3>Total</h3>
+              <ng-container *ngFor="let data of totalDesignPanel; let i = index">
+                <div class="d-flex justify-content-between">
+                  <p class="d-flex align-items-center tag-font">
+                    <span class="icon" style="background-color: darkgray"><img
+                        [src]="'../../../../../assets/' + data.icon + '.svg'" alt="" /></span>
+                    {{ data.label }}
+                  </p>
+                  <ngx-skeleton-loader class="d-block" [theme]="{
+                      'border-radius': '5px',
+                      'background-color': '#DBDAD9',
+                      height: '8px',
+                      width: '25px',
+                      'margin-bottom': '0px'
+                    }">
+                  </ngx-skeleton-loader>
+                </div>
+                <hr class="mt-0 mb-2" style="color: 1px solid rgb(212, 211, 211)" *ngIf="data.label != 'PE Stamp'" />
+              </ng-container>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="pl-2" *ngIf="!isoverviewloading">
+    <h2 style="font-weight: bold">{{ designstatusmonthyear }}</h2>
+    <div class="row">
+      <div class="col-9" infiniteScroll [infiniteScrollDistance]="1" [scrollWindow]="false"
+        [infiniteScrollThrottle]="100" (scrolled)="onScroll()"
+        style="height: 62vh; overflow-x: hidden; overflow-y: auto">
+        <div class="row" *ngIf="designstatusdataresult.length > 0">
+          <div class="col-lg-4 col-md-4 col-sm-9 pl-1 mb-3" *ngFor="let item of designstatusdataresult">
+            <div class="card">
+              <p class="h5" style="height: 1.5rem">{{ item.clientname }}</p>
+              <div class="row">
+                <div class="col-1">
+                  <img src="../../../../../assets/Email.svg" width="12px" alt="Email" class="mr-2" />
+                </div>
+                <div class="col-10 pl-0">
+                  <p class="mb-1 font-small">
+                    {{
+                    item.email.length > 23
+                    ? (item.email | slice: 0:20) + "..."
+                    : item.email
+                    }}
+                  </p>
+                </div>
+              </div>
+              <div class="row p-height">
+                <div class="col-1">
+                  <img *ngIf="item.address.length > 0" src="../../../../../assets/Location.svg" width="10px" alt="Email"
+                    class="mr-2 align-self-start" />
+                </div>
+                <div class="col-10 pl-0">
+                  <p class="mb-1 font-small">{{ item.address }}</p>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-3">
+                  <p class="col-3 mb-0" style="
+                      font-weight: bold;
+                      inline-size: max-content;
+                      max-width: fit-content;
+                    " matTooltipPosition="above" matTooltip="Permit" [matTooltipClass]="'tooltip-pd'">
+                    {{ item.totalpermit }}
+                  </p>
+                </div>
+                <div class="col-3">
+                  <p class="col-3 mb-0" style="
+                      font-weight: bold;
+                      inline-size: max-content;
+                      max-width: fit-content;
+                    " matTooltipPosition="above" matTooltip="PE Stamp" [matTooltipClass]="'tooltip-pd'">
+                    {{ item.totalpestamp }}
+                  </p>
+                </div>
+                <div class="col-3">
+                  <p class="col-3 mb-0" style="
+                      font-weight: bold;
+                      inline-size: max-content;
+                      max-width: fit-content;
+                    " matTooltipPosition="above" matTooltip="Prelim" [matTooltipClass]="'tooltip-pd'">
+                    {{ item.totalprelim }}
+                  </p>
+                </div>
+                <div class="col-3">
+                  <p class="col-3 mb-0" style="
+                      font-weight: bold;
+                      inline-size: max-content;
+                      max-width: fit-content;
+                    " matTooltipPosition="above" matTooltip="Survey" [matTooltipClass]="'tooltip-pd'">
+                    {{ item.totalsurvey }}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div *ngIf="designstatusdataresult.length == 0" class="col-12 pt-5">
+          <img src="../../../../../assets/Report-Work Status Placholder.jpg" width="400px" height="300px"
+            class="d-flex m-auto" />
+        </div>
+      </div>
+      <mat-spinner *ngIf="scrolling" style="position: absolute; left: 40%; bottom: 4%" [diameter]="35"></mat-spinner>
+      <div class="col-3 px-2">
+        <div class="totalpanel bg-yellow">
+          <h3>Total</h3>
+          <ng-container *ngIf="totalDesignPanel.length">
+            <ng-container *ngFor="let data of totalDesignPanel; let i = index">
+              <div class="d-flex justify-content-between">
+                <p class="d-flex align-items-center tag-font text-dark">
+                  <span class="icon" style="background-color: #3e372d"><img
+                      [src]="'../../../../../assets/' + data.icon + '.svg'" alt="" /></span>
+                  {{ data.label }}
+                </p>
+                <p class="font-small text-dark font-weight-bold d-flex align-self-center">
+                  {{ data.length }}
+                </p>
+              </div>
+              <hr class="mt-0 mb-2" style="color: 1px solid rgb(212, 211, 211)" *ngIf="data.label != 'PE Stamp'" />
+            </ng-container>
+          </ng-container>
+          <ng-container *ngIf="totalDesignPanel.length == 0">
+            <h3 style="text-align: center">No Data Found</h3>
+          </ng-container>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

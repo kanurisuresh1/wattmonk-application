@@ -1,0 +1,54 @@
+<mat-progress-bar
+  *ngIf="isLoading"
+  style="
+    position: absolute;
+    display: block;
+    width: 100%;
+    top: 0;
+    left: 0;
+    background-color: rgba(255, 255, 255, 0.5);
+  "
+  mode="indeterminate"
+  value="40"
+></mat-progress-bar>
+
+<div class="main-content">
+  <img
+    class="chatplaceholderimage"
+    *ngIf="placeholder"
+    src="./../../../../../assets/emptyinbox.png"
+    style="width: 37%"
+  />
+  <div class="row" *ngIf="placeholder">
+    <div
+      class="col"
+      style="
+        width: 36%;
+        position: absolute;
+        right: 28.7%;
+        bottom: 11.5%;
+        font-weight: 600;
+        font-style: oblique;
+        font-size: 11px;
+      "
+    >
+      It seems that chat not created
+    </div>
+  </div>
+  <div class="row">
+    <div class="col">
+      <button mat-icon-button class="float-right">
+        <img
+          class="dialogclose"
+          (click)="onCloseClick()"
+          src="../../../../../assets/close1.svg"
+        />
+      </button>
+    </div>
+  </div>
+  <div class="chatconversations">
+    <cometchat-conversations-screen
+      #conversationscreen
+    ></cometchat-conversations-screen>
+  </div>
+</div>

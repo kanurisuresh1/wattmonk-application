@@ -1,0 +1,142 @@
+.activitybar {
+  background-color: #f7f1e2;
+  position: fixed;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  z-index: 1004;
+  box-shadow: 0 16px 38px -12px rgba(0, 0, 0, 0.56),
+    0 4px 25px 0 rgba(0, 0, 0, 0.12), 0 8px 10px -5px rgba(0, 0, 0, 0.2);
+  transition: width 0.6s;
+}
+
+.activitybar .hidden {
+  display: none;
+}
+
+.activitybar-open {
+  min-width: 24%;
+  max-width: 60%;
+}
+
+.activitybar-close {
+  width: 0px;
+}
+
+.activitybar .symbolimage {
+  width: 24px;
+  height: 24px;
+}
+
+.activitybar .recordname {
+  margin-left: 2px;
+  font-size: 16px;
+  font-weight: 600;
+  white-space: nowrap;
+  width: 240px;
+  height: 24px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-bottom: 0px;
+  margin-top: 4px;
+}
+
+.activitybar .toprow {
+  // margin: 0px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #cccccc;
+}
+
+.activitybar .activityrow {
+  border-bottom: 1px solid #cccccc;
+}
+
+.activitybar .activitycol {
+  padding-top: 8px;
+  padding-bottom: 8px;
+}
+
+.activityitems-viewport {
+  height: 86vh;
+  width: 100%;
+}
+
+.activitybar .activitiesheader {
+  font-size: 1.2em;
+  font-weight: 600;
+  color: #3c78d8;
+  margin-bottom: 0px;
+  padding-bottom: 24px;
+  padding-left: 16px;
+}
+
+.activitycol {
+  background: #ffffff;
+  margin: 10px;
+  border-radius: 5px;
+}
+
+.activitycol .date {
+  font-size: 0.7em;
+  color: #666666;
+}
+
+.activitycol .activitystatus {
+  font-size: 0.8em;
+  font-weight: 600;
+  color: #666666;
+  margin-bottom: 0px;
+}
+
+.activitycol .activityuser {
+  font-size: 0.8em;
+  color: #000;
+}
+
+.activitycol .updatedat {
+  font-size: 0.6em;
+  color: #666666;
+  font-style: italic;
+  text-align: right;
+  margin-bottom: 0px;
+}
+
+.chipdetail {
+  background-color: #95afc0;
+  font-size: 0.6em;
+  padding: 4px 10px;
+  border-radius: 12px;
+  text-align: center;
+  height: 28px;
+  color: #fff;
+  margin-bottom: 0px;
+  display: -webkit-inline-box;
+  vertical-align: text-bottom;
+}
+
+.rounded-circle {
+  background: #edc773;
+}
+
+.stepper {
+  .line {
+    width: 2px;
+    background-color: lightgrey !important;
+  }
+  .lead {
+    font-size: 1.1rem;
+  }
+  .cards {
+    position: relative;
+    left: -107%;
+  }
+}
+.circle {
+  height: 25px;
+  width: 25px;
+  background-color: rgb(233, 188, 104);
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

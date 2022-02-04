@@ -1,0 +1,182 @@
+.designdialogcontent {
+  max-height: 80vh;
+  height: 80vh;
+  margin-bottom: 20px;
+}
+.designdialogcontent .mat-expansion-panel-header-title {
+  font-size: 12px;
+  font-weight: 600;
+}
+.designdialogcontent .mat-expansion-panel-header {
+  padding: 0 14px;
+  height: 44px !important;
+}
+.designdialogcontent .mat-expansion-panel-body {
+  padding: 0 14px 2px;
+}
+// .designdialogcontent textarea {
+//   min-height: 42px !important;
+//   height: 42px !important;
+// }
+.designform {
+  width: 100%;
+}
+.designrow {
+  margin-left: 14px;
+  margin-right: 14px;
+}
+.designrow p {
+  font-size: 0.8em;
+  color: #000000;
+  font-weight: 600;
+}
+.designform .formradiogroup {
+  width: 100%;
+}
+
+.architectureuploadcol {
+  padding-left: 0px;
+  padding-right: 0px;
+}
+
+.prioritybutton {
+  margin-top: 0.5rem;
+  font-size: 0.7em;
+}
+
+.pdfselectionpreview img {
+  width: 40px;
+}
+
+.pdfselectionpreview p {
+  margin-bottom: 0px;
+  color: #000000;
+  font-size: 0.7rem;
+}
+
+.pdfpreviewcol {
+  padding-left: 0px;
+  padding-right: 0px;
+}
+.back {
+  border: red;
+  margin-top: 6px;
+  background: bottom;
+}
+.valid {
+  color: #000000;
+}
+.invalid {
+  color: red;
+}
+.loader {
+  width: 100px;
+  left: 45%;
+  height: 100px;
+  top: 50%;
+}
+
+.spinnertext {
+  margin-top: 16px !important;
+  color: #3c78d8;
+}
+
+.spinnercard {
+  width: 26%;
+  position: absolute;
+  left: 34%;
+  top: 36%;
+}
+.word {
+  font-kerning: normal;
+}
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+.list-border {
+  padding: 10px 0 10px 0px;
+}
+.delete-btn {
+  cursor: pointer;
+}
+
+// .mat-form-field-autofill-control{
+//   width: 200% !important;
+//   max-width: 200% !important;
+// }
+
+// .mat-form-field-autofill-control{
+//   width: 200% !important;
+//   max-width: 200% !important;
+// }
+
+// .pac-container {
+//   box-sizing: content-box;
+//   padding-right: 4px;
+// }
+
+.file-icon {
+  width: 20px !important;
+}
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+.list-border {
+  padding: 10px 0 10px 0px;
+}
+.delete-btn {
+  cursor: pointer;
+}
+
+.sectiontitle {
+  font-weight: 500 !important;
+  background-color: #dee8f8;
+  border-radius: 2px;
+  width: 100%;
+  margin-bottom: 0px !important;
+  padding: 2px 8px;
+}
+
+.locationform {
+  width: 100%;
+}
+
+.locationform .designrow div {
+  padding: 0px;
+}
+
+.locationform .designrow p {
+  font-size: 0.8em;
+  color: #000000;
+  font-weight: 600;
+}
+.locationform .formradiogroup {
+  width: 260px;
+}
+.locationform mat-form-field {
+  width: 260px;
+}
+
+.mat-dialog-actions {
+  display: initial !important;
+}

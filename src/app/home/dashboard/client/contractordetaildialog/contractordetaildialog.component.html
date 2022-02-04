@@ -1,0 +1,728 @@
+<!-- <div mat-dialog-content>
+  <div class="container detailsdialog">
+    <div class="row">
+      <div class="col-1">
+        <p class="initials">
+          {{
+            initials
+            }}
+        </p>
+      </div>
+      <div class="col-8">
+        <h4 class="title">
+          {{ data.user.company }}
+        </h4>
+      </div>
+      <div class="col-3">
+        <button mat-icon-button (click)="onEditClick()">
+          <img class="dialogclose" src="../../../../../assets/edit.svg" />
+        </button>
+        <span class="tableactionbutton">
+          <button mat-icon-button (click)="onDeleteClick()">
+            <img class="dialogclose" src="../../../../../assets/delete.svg" />
+          </button>
+        </span>
+        <span class="tableactionbutton">
+          <button  mat-icon-button (click)="onCloseClick()">
+            <img class="dialogclose" src="../../../../../assets/close.svg" />
+          </button>
+        </span>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        <p class="subtitle">Admin Details</p>
+        <div class="row subbody">
+          <div class="col">
+            <p class="contentvalue">{{ data.user.firstname }} {{ data.user.lastname }}</p>
+            <p class="contentvalue" *ngIf="data.user.address != null">{{ data.user.address }}, {{ data.user.country }}
+            </p>
+            <p class="contentvalue" *ngIf="data.user.address == null">No address found</p>
+            <p class="contentvalue">lic# {{ data.user.registrationnumber }}</p>
+          </div>
+          <div class="col">
+            <p class="contentvalue">{{ data.user.email }}</p>
+            <p class="contentvalue">({{data.user.callingcode}})-{{ data.user.phone }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row mt-5">
+      <div class="col">
+        <div class="row">
+          <div class="col">
+            <div class="row">
+              <div class="col-9">
+                <p class="statstitle">Design Jobs</p>
+              </div>
+              <div class="col-3">
+                <p class="contentvalue text-right">Total 0</p>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col">
+                <p class="statsborder"></p>
+              </div>
+            </div>
+            <div  *ngIf="isloading" class="row">
+              <div class="col statsbox">
+                <p class="contentvalue text-center"  > {{jobcount.new.length}}</p>
+                <p class="contentheader text-center">New</p>
+              </div>
+              <div class="col statsbox">
+                <p class="contentvalue text-center"> {{jobcount.ongoing.length}} </p>
+                <p class="contentheader text-center">Ongoing</p>
+              </div>
+              <div class="col statsbox">
+                <p class="contentvalue text-center"> </p>
+                <p class="contentheader text-center">Overdue</p>
+              </div>
+              <div class="col statsbox">
+                <p class="contentvalue text-center">{{jobcount.review.length}}</p>
+                <p class="contentheader text-center">Review</p>
+              </div>
+              <div class="col statsbox">
+                <p class="contentvalue text-center"> {{jobcount.delivered.length}}</p>
+                <p class="contentheader text-center">Delivered</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row mt-5">
+          <div class="col">
+            <div class="row">
+              <div class="col-9">
+                <p class="statstitle">Survey Jobs</p>
+              </div>
+              <div class="col-3">
+                <p class="contentvalue text-right">Total 0</p>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col">
+                <p class="statsborder"></p>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col statsbox">
+                <p class="contentvalue text-center"> -- </p>
+                <p class="contentheader text-center">New</p>
+              </div>
+              <div class="col statsbox">
+                <p class="contentvalue text-center"> -- </p>
+                <p class="contentheader text-center">Ongoing</p>
+              </div>
+              <div class="col statsbox">
+                <p class="contentvalue text-center"> -- </p>
+                <p class="contentheader text-center">Overdue</p>
+              </div>
+              <div class="col statsbox">
+                <p class="contentvalue text-center"> -- </p>
+                <p class="contentheader text-center">Review</p>
+              </div>
+              <div class="col statsbox">
+                <p class="contentvalue text-center"> -- </p>
+                <p class="contentheader text-center">Delivered</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row mt-5">
+          <div class="col">
+            <div class="row">
+              <div class="col-9">
+                <p class="statstitle">Team</p>
+              </div>
+              <div class="col-3">
+                <p class="contentvalue text-right">Total 0</p>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col">
+                <p class="statsborder"></p>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col statsbox">
+                <p class="contentvalue"> -- </p>
+                <p class="contentheader">Admins</p>
+              </div>
+              <div class="col statsbox">
+                <p class="contentvalue text-center"> -- </p>
+                <p class="contentheader text-center">BDs</p>
+              </div>
+              <div class="col statsbox">
+                <p class="contentvalue text-center"> -- </p>
+                <p class="contentheader text-center">Designers</p>
+              </div>
+              <div class="col statsbox">
+                <p class="contentvalue text-center"> -- </p>
+                <p class="contentheader text-center">Surveyors</p>
+              </div>
+              <div class="col statsbox">
+                <p class="contentvalue text-center"> -- </p>
+                <p class="contentheader text-center">Analysts</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> -->
+
+<!-- <div mat-dialog-content>  
+
+  <div class="d-flex justify-content-end">
+    <span class="tableactionbutton">
+      <button  mat-icon-button (click)="onCloseClick()">
+        <img class="dialogclose" src="../../../../../assets/close.svg" />
+      </button>
+    </span>
+  </div>
+  
+  <div class="container">
+    <div class="row bg-white border-curve">
+        <div class="col-5 py-4 pl-4">
+            <div class="row">
+                <div class="col-5 pr-0">
+                    <img src="../../../../../assets/user img.jpg" width="100%" height="167px" class="border-curve"> 
+                </div>
+                <div class="col-7 pl-1">
+                    <div class="col-12" style="height: 54px;">
+                      <p class=" h4 m-0">{{ data.user.firstname }} {{ data.user.lastname }}</p>
+                      <h4 class="title m-0">{{ data.user.company }}</h4>
+                    </div>
+                    <div class="row mt-2 ml-0">
+                        <div class="col-2 mt-2 d-flex justify-content-center px-0">
+                          <mat-icon>person</mat-icon>
+                        </div>
+                        <div class="col-10 pl-0">
+                            <p class="mb-0 text-secondary ">Email</p>
+                            <p class="contentvalue">{{ data.user.email }}</p>
+                        </div>
+                    </div>
+                    <div class="row mt-2 ml-0">
+                        <div class="col-2 mt-2 d-flex justify-content-center px-0">
+                          <mat-icon> call</mat-icon>
+                        </div>
+                        <div class="col-10 pl-0">
+                            <p class="mb-0 text-secondary">Phone</p>
+                            <p class="mb-0 contentvalue">({{data.user.callingcode}})-{{ data.user.phone }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-5 py-4 pl-2">
+            <button class="primarymatbutton ml-2" mat-raised-button >{{data.user.paymentmode}}</button>
+            <div class="row ml-0" style="margin-top: 26px;">
+              <div class="col-1 px-0 pt-2 d-flex justify-content-center">
+                <mat-icon> place</mat-icon>
+              </div>
+              <div class="col-11 pl-0">
+                  <p class="mb-0 text-secondary ">Location</p>
+                  <p class="contentvalue px-0" *ngIf="data.user.address != null ">{{ data.user.address }}, {{ data.user.country }}</p>
+                  <p class="contentvalue px-0" *ngIf="data.user.address == null">No address found</p>
+              </div>
+            </div>
+          <div class="row mt-2 ml-0">
+              <div class="col-1 px-0 pt-2 d-flex justify-content-center">
+                <mat-icon>event_available</mat-icon>
+              </div>
+              <div class="col-11 pl-0">
+                  <p class="mb-0 text-secondary">Join Date</p>
+                  <p class="mb-0">{{data.user.createdondate}}</p>
+              </div>
+          </div>
+        </div>
+        <div class="col-2 pt-4">
+            <div class="" style="height: 85px;">
+              <div class="pt-2" *ngIf="data.user.paymentmode == 'Prepaid'">
+                <p class="text-secondary text-center mb-0" style="font-size: 12px;">Current Wallet Balance</p>
+                <h2 class="text-center mb-5" style="font-size: 30px;">{{data.user.amount}}</h2>
+              </div>
+            </div>
+              <div class="d-flex justify-content-end pt-5 pr-4">
+                <button class=" mt-3" mat-icon-button (click)="onEditClick()">
+                  <img class=" mr-2" src="../../assets/edit.svg" width="15px" height="15px">Edit</button>
+              </div>   
+        </div>
+    </div>
+    <div class="row pt-3">
+      <div class="col-4">
+        <div class="row bg-white border-curve">
+          <div class="col-12 py-3 px-4 d-flex justify-content-between">
+            <p class="h5">Our Team</p>
+            <p class="text-secondary">Total team {{data.user.totalteams}}</p>
+          </div>
+          <div class="col-12 px-2" *ngFor="let user of teammembersdetail.teammember">
+            <mat-card class="user-card border-curve">
+              <mat-card-content>
+                <div class="row py-3 d-flex align-items-center">
+                  <div class="col-3 pr-0">
+                    <img class="rounded-circle" src="../../../../../assets/user.jpg" width="50px" height="50px">
+                  </div>
+                  <div class="col-9 pl-0 my-auto">
+                    <p class="h6 mb-0">{{user.firstname}} {{user.lastname}}</p>
+                    <p class="mb-0 contentvalue">{{user.email}}</p>
+                    <div class="row ml-1 text-secondary" *ngIf = "user.phone != null">
+                      <mat-icon> call</mat-icon>
+                      <p class="title">{{user.phone}}</p>
+                    </div>    
+                  </div>
+                </div>
+              </mat-card-content>
+            </mat-card>
+          </div>
+        </div>
+      </div>
+      <div class="col-8 pr-0">
+        <div class="col-12 pb-3 bg-white border-curve">
+          <div class="row py-3 px-4 d-flex justify-content-between ">
+            <p class="h5">Service</p>
+            <p class="text- secondary">Total Service 150</p>
+          </div> -->
+
+
+
+
+
+<div mat-dialog-content>
+  <div class="d-flex justify-content-end">
+    <span class="tableactionbutton">
+      <button mat-icon-button (click)="onCloseClick()">
+        <img class="dialogclose" src="../../../../../assets/close.svg" />
+      </button>
+    </span>
+  </div>
+  <div *ngIf="isdetailloading">
+    <div class="row" style="margin: 10px 30px 10px 30px;">
+
+      <div class="col-12 border pt-3 pb-3" style="border-radius:'15px'; background-color:#EEEDEB">
+        <div class="row">
+          <div class="col-2">
+            <ngx-skeleton-loader count="1" class="d-block"
+              [theme]="{ 'border-radius': '8px','background-color': '#DBDAD8', height: '13rem', width: '100%','margin-top': '5px'}">
+            </ngx-skeleton-loader>
+          </div>
+          <div class="col-3">
+
+            <ngx-skeleton-loader class="d-block"
+              [theme]="{ 'border-radius': '5px','background-color': '#DBDAD8', height: '9px', width: '90%', 'margin': '10px 0 7px 0'}">
+            </ngx-skeleton-loader>
+            <ngx-skeleton-loader class="d-block"
+              [theme]="{ 'border-radius': '5px','background-color': '#DBDAD8', height: '9px', width: '20%', 'margin-bottom': '20px'}">
+            </ngx-skeleton-loader>
+            <ngx-skeleton-loader class="d-block"
+              [theme]="{ 'border-radius': '5px','background-color': '#DBDAD8', height: '9px', width: '90%', 'margin-bottom': '10px 0 7px 0'}">
+            </ngx-skeleton-loader>
+            <ngx-skeleton-loader class="d-block"
+              [theme]="{ 'border-radius': '5px','background-color': '#DBDAD8', height: '9px', width: '20%', 'margin-bottom': '20px'}">
+            </ngx-skeleton-loader>
+            <ngx-skeleton-loader class="d-block"
+              [theme]="{ 'border-radius': '5px','background-color': '#DBDAD8', height: '9px', width: '90%', 'margin-bottom': '10px 0 7px 0'}">
+            </ngx-skeleton-loader>
+            <ngx-skeleton-loader class="d-block"
+              [theme]="{ 'border-radius': '5px','background-color': '#DBDAD8', height: '9px', width: '20%', 'margin-bottom': '20px'}">
+            </ngx-skeleton-loader>
+
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+  <div *ngIf="isdetailloading">
+    <div class="row" style="margin: 10px 30px 10px 30px; justify-content: space-between;">
+      <div class="col-5 py-3" style="border-radius:'15px'; background-color:#EEEDEB; margin-top:5px;">
+        <p class="card-title mb-1" style="font-weight: 600;">Service Charges</p>
+        <div class="row" *ngFor="let number of [0,1,2]">
+          <div class="col-2">
+            <ngx-skeleton-loader count="1" appearance="circle" [theme]="{ 'background-color': '#d8d8d8'}">
+            </ngx-skeleton-loader>
+          </div>
+          <div class="col-10">
+            <ngx-skeleton-loader
+              [theme]="{ 'border-radius': '5px','background-color': '#E6E5E5', height: '10px', width: '44%', 'margin': '10px 0 7px 0'}">
+            </ngx-skeleton-loader>
+            <ngx-skeleton-loader
+              [theme]="{ 'border-radius': '5px','background-color': '#E6E5E5', height: '10px', width: '65%', 'margin-bottom': '40px'}">
+            </ngx-skeleton-loader>
+          </div>
+        </div>
+      </div>
+      <div class="col-6 py-3" style="border-radius:'15px'; background-color:#EEEDEB; margin-top:5px;">
+        <p class="card-title mb-1" style="font-weight: 600;">Service </p>
+        <div class="row px-3">
+          <div class="col-1">
+            <div class="row" *ngFor="let data of [0,1,2,3,4,5]">
+              <ngx-skeleton-loader count="1" class="d-block"
+                [theme]="{ 'border-radius': '8px','background-color': '#DBDAD8', height: '12px', width: '64px','margin-top': '1.1rem'}">
+              </ngx-skeleton-loader>
+            </div>
+          </div>
+          <div class="col-8">
+            <div class="col-12 d-flex" style="justify-content: space-between;">
+              <div class="col-2" style="margin: 0 20px 0 20px;">
+                <ngx-skeleton-loader count="1"
+                  [theme]="{ 'background-color': '#DBDAD8', height: '54px', width: '30px', 'border-radius': 'initial','margin-right': '100px', 'margin-top': '200px'}">
+                </ngx-skeleton-loader>
+              </div>
+              <div class="col-2" style="margin: 0 20px 0 20px;">
+                <ngx-skeleton-loader count="1"
+                  [theme]="{ 'background-color': '#DBDAD8', height: '100px', width: '30px', 'border-radius': 'initial','margin-right': '100px','margin-top': '153px'}">
+                </ngx-skeleton-loader>
+              </div>
+              <div class="col-2" style="margin: 0 20px 0 20px;">
+                <ngx-skeleton-loader count="1"
+                  [theme]="{ 'background-color': '#DBDAD8', height: '150px', width: '30px', 'border-radius': 'initial','margin-right': '100px','margin-top': '100px'}">
+                </ngx-skeleton-loader>
+              </div>
+              <div class="col-2" style="margin: 0 20px 0 20px;">
+                <ngx-skeleton-loader count="1"
+                  [theme]="{ 'background-color': '#DBDAD8', height: '100px', width: '30px', 'border-radius': 'initial','margin-right': '100px','margin-top': '150px'}">
+                </ngx-skeleton-loader>
+              </div>
+              <div class="col-2" style="margin: 0 20px 0 20px;">
+                <ngx-skeleton-loader count="1"
+                  [theme]="{ 'background-color': '#DBDAD8', height: '180px', width: '30px', 'border-radius': 'initial','margin-top': '70px'}">
+                </ngx-skeleton-loader>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div class="row" style="margin: 10px 30px 10px 30px; justify-content: space-between;">
+      <div class="col-5 py-3" style="border-radius:'15px'; background-color:#EEEDEB; margin-top:5px;">
+        <p class="card-title mb-1" style="font-weight: 600;">Our Team</p>
+        <div class="row" *ngFor="let number of [0,1]">
+          <div class="col-2">
+            <ngx-skeleton-loader count="1" appearance="circle" [theme]="{ 'background-color': '#d8d8d8'}">
+            </ngx-skeleton-loader>
+          </div>
+          <div class="col-10">
+            <ngx-skeleton-loader
+              [theme]="{ 'border-radius': '5px','background-color': '#E6E5E5', height: '10px', width: '44%', 'margin': '10px 0 7px 0'}">
+            </ngx-skeleton-loader>
+            <ngx-skeleton-loader
+              [theme]="{ 'border-radius': '5px','background-color': '#E6E5E5', height: '10px', width: '65%', 'margin-bottom': '40px'}">
+            </ngx-skeleton-loader>
+
+          </div>
+        </div>
+
+      </div>
+
+      <div class="col-6 py-3" style="border-radius:'15px'; background-color:#EEEDEB; margin-top:5px;">
+        <p class="card-title mb-1" style="font-weight: 600;">Team Overview</p>
+        <div>
+          <ngx-skeleton-loader count="3" appearance="circle"
+            [theme]="{width: '100px', height: '100px', 'border-radius': '10px','background-color': '#DBDAD8' }">
+          </ngx-skeleton-loader>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+
+  <div class="container" *ngIf="!isdetailloading">
+    <div class="row bg-white border-curve">
+      <div class="col-md-6 col-sm-12 py-4 pl-4">
+        <div class="row">
+          <div class="col-5 pr-0">
+            <div *ngIf="data.user.logo != null">
+              <img src={{data.user.logo.url}} width="100%" height="197px" class="border-curve">
+            </div>
+            <div *ngIf="data.user.logo == null" class="photo mb-4">
+              <p class="fontweight">{{this.genericService.getInitials(data.user.firstname, data.user.lastname)}}</p>
+            </div>
+          </div>
+          <div class="col-7 pl-1">
+            <div class="col-12" style="height: 54px;">
+              <p class=" h4 m-0">{{ data.user.firstname }} {{ data.user.lastname }}</p>
+              <h4 class="title m-0">{{ data.user.company }}</h4>
+            </div>
+            <div class="row ml-0" style="margin-top: 2.55rem;">
+              <div class="col-2 mt-2 d-flex justify-content-center px-0">
+                <mat-icon>person</mat-icon>
+              </div>
+              <div class="col-10 pl-0">
+                <p class="mb-0 text-secondary ">Email</p>
+                <a class=" h6 text-decoration-none text-dark" href="mailto:{{ data.user.email }}">{{ data.user.email
+                  }}</a>
+              </div>
+            </div>
+            <div class="row ml-0" style="margin-top: 1.75rem;">
+              <div class="col-2 mt-2 d-flex justify-content-center px-0">
+                <mat-icon> call</mat-icon>
+              </div>
+              <div class="col-10 pl-0">
+                <p class="mb-0 text-secondary">Phone</p>
+                <a class=" h6 text-decoration-none text-dark"
+                  href="tel:{{data.user.callingcode}}+{{ data.user.phone }}">
+                  <p class="mb-0 contentvalue">({{data.user.callingcode}})-{{ data.user.phone }}</p>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3 py-4 pl-2">
+        <div class="clientchip">{{ data.user.paymentmode }}</div>
+        <!-- <button class="primarymatbutton ml-2" mat-button>{{data.user.paymentmode}}</button> -->
+        <!-- <mat-menu #menu="matMenu">
+                      <button mat-menu-item *ngIf="data.user.paymentmode == 'Prepaid'">Postpaid</button>
+                      <button mat-menu-item *ngIf="data.user.paymentmode ==  'Postpaid'">Prepaid</button>
+                    </mat-menu> -->
+        <div class="col-12 pl-2 pt-2" *ngIf="data.user.paymentmodeupdateddate != null">
+          <p class="mb-0 text-secondary" *ngIf="data.user.ispaymentmodeprepay">Updated to Prepaid upon</p>
+          <p class="mb-0 text-secondary" *ngIf="!data.user.ispaymentmodeprepay">Updated to Postpaid on</p>
+          <p class="h6 contentvalue px-0">{{clientDetail.paymentmodeupdateddate | date:'dd MMM yy'}}</p>
+        </div>
+        <div class="row ml-0"
+          [ngStyle]="data.user.paymentmodeupdateddate !=null ? {'margin-top': '0.91rem'}: {'margin-top': '3.72rem'}"
+          style="height: 60px;">
+          <div class="col-1 pt-2 d-flex justify-content-center">
+            <mat-icon> place</mat-icon>
+          </div>
+          <div class="col-10 pl-2">
+            <p class="mb-0 text-secondary ">Address</p>
+            <p class=" h6 contentvalue px-0" *ngIf="data.user.address != null ">{{(data.user.address.length > 41)?
+              (data.user.address | slice : 0 : 43)+'...': (data.user.address)}}</p>
+            <p class=" h6 contentvalue px-0" *ngIf="data.user.address == null">No address found</p>
+          </div>
+        </div>
+        <div class="row mt-2 ml-0">
+          <div class="col-1 pt-2 d-flex justify-content-center">
+            <mat-icon>event_available</mat-icon>
+          </div>
+          <div class="col-10 pl-2">
+            <p class="mb-0 text-secondary">Join Date</p>
+            <p class=" h6 mb-0">{{clientDetail.created_at | date:'dd MMM yy'}}</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3 pt-4">
+        <div class="d-flex justify-content-end pt-2" style="height: 10rem;" *ngIf="data.user.paymentmode == 'Prepaid'">
+          <div style="margin-right: 18px;">
+            <p class="text-secondary text-center mb-0" style="font-size: 12px;">Current Wallet Balance</p>
+            <h2 class="text-center mb-5" style="font-size: 30px;">{{data.user.amount}}</h2>
+          </div>
+        </div>
+        <div class="d-flex justify-content-end pr-4">
+          <button class="" mat-icon-button (click)="onEditClick()">
+            <img class=" mr-2" src="../../../../../assets/penclient.svg" width="15px" height="15px"></button>
+          <button mat-icon-button (click)=" blockContractor(data.user,$event)">
+            <img src="../../../../../assets/Blockclient.svg" width="16px">
+          </button>
+        </div>
+        <div class="row ml-0" *ngIf="!data.user.ispaymentmodeprepay"
+          [ngStyle]="data.user.paymentmodeupdateddate == null ? {'margin-top': '1px'}: '' ">
+          <div class="col-11 pl-0" [ngStyle]="data.user.paymentmodeupdateddate != null ? '' : { 'margin-top': '53px'} ">
+            <p class="mb-0 text-secondary ">Billing Cycle</p>
+            <p class=" h6 mb-0">30 Days</p>
+          </div>
+          <div class="col-11 pl-0" style="margin-top: 0.88rem;">
+            <p class="mb-0 text-secondary">Billing Date</p>
+            <p class=" h6 mb-0">05/May/2021</p>
+          </div>
+
+          <div class="col-11 pl-0 mt-1 pt-4" *ngIf="data.user.paymentmodeupdateddate !=null">
+            <p class="mb-0 text-secondary">Remaining Balance</p>
+            <p class=" h6 mb-0">{{data.user.amount}}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row pt-3">
+      <div class="col-4">
+        <!-- <div class="row pb-3 mb-2 bg-white border-curve">
+                    <div class="col-12 py-3 px-4 d-flex justify-content-between">
+                      <p class="h5">Service Charges</p>
+                      <img src ="../../../../../assets/penclient.svg" width="15px" height="15px" style="margin-top: 5px;" (click)="openClientpricedialog(data.user)" >                      
+                    </div>
+                    <div class="col-12 px-2" >
+                      <mat-card class="user-card border-curve">
+                        <mat-card-content>
+                          <div class="row py-3 d-flex align-items-center">
+                            <div class="col-10 ">
+                              <span class="dollarsign fontweight mr-1">$</span>
+                              <span class="h6 mb-0" *ngIf="data.user.prelimdesigndiscount != null" >{{data.user.prelimdesigndiscount}}</span>
+                              <span class="h6 mb-0"*ngIf="data.user.prelimdesigndiscount == null">0</span>
+                              <p class="mb-0 contentvalue fontweight">Site Assessment (Shade Analysis)</p>
+                            </div>
+                            
+                          </div>
+                        </mat-card-content>
+                      </mat-card>
+                      <mat-card class="user-card border-curve">
+                        <mat-card-content>
+                          <div class="row py-3 d-flex align-items-center">
+                            <div class="col-10 ">
+                              <span class="dollarsign fontweight mr-1">$</span>
+                              <span class="h6 mb-0" *ngIf="data.user.proposaldesigndiscount != null">{{data.user.proposaldesigndiscount}}</span>
+                              <span class="h6 mb-0" *ngIf="data.user.proposaldesigndiscount == null">0</span>
+                              <p class="mb-0 contentvalue fontweight">Solar Sales Proposal</p>
+                            </div>
+                            
+                          </div>
+                        </mat-card-content>
+                      </mat-card>
+                      <mat-card class="user-card border-curve">
+                        <mat-card-content>
+                          <div class="row py-3 d-flex align-items-center">
+                            <div class="col-10 ">
+                              <span class="dollarsign fontweight mr-1">$</span>
+                              <span class="h6 mb-0" *ngIf="data.user.permitdesigndiscount != null">{{data.user.permitdesigndiscount}}</span>
+                              <span class="h6 mb-0" *ngIf="data.user.permitdesigndiscount == null">0</span>
+                              <p class="mb-0 contentvalue fontweight">Permit Design (PV)</p>
+                            </div>
+                           
+                          </div>
+                        </mat-card-content>
+                      </mat-card>
+                    </div>
+                  </div> -->
+        <div class="row pb-3 bg-white border-curve" *ngIf="teammemberslist.length > 0">
+          <div class="col-12 py-3 px-4 d-flex justify-content-between">
+            <p class="h5">Our Team</p>
+            <p class="text-secondary">Total team {{teammemberslist.length}}
+            </p>
+          </div>
+          <div class="container px-0" style="height: 20rem; overflow-y: scroll; overflow-x: hidden;">
+            <div class="col-12 px-2" *ngFor="let user of teammemberslist">
+              <mat-card class="user-card border-curve">
+                <mat-card-content>
+                  <div class="row py-3 d-flex align-items-center">
+                    <div class="col-3 pr-0">
+                      <img class="rounded-circle" src="../../../../../assets/user.jpg" width="50px" height="50px">
+                    </div>
+                    <div class="col-9 pl-0 my-auto">
+                      <p class="h6 mb-0">{{user.firstname}} {{user.lastname}}</p>
+                      <p class="mb-0 contentvalue">{{user.email}}</p>
+                      <div class="row ml-1 text-secondary" *ngIf="user.phone != null">
+                        <mat-icon> call</mat-icon>
+                        <p class="title">{{user.phone}}</p>
+                      </div>
+                    </div>
+                  </div>
+                </mat-card-content>
+              </mat-card>
+            </div>
+          </div>
+        </div>
+        <div class="row" *ngIf="teammemberslist.length == 0" style="height: 300px; padding: 5rem; background: white; ">
+          <img src="../../../../../assets/teamclient.png" width="100%">
+        </div>
+      </div>
+      <div class="col-8 pr-0">
+        <div *ngIf="clientDetail.totalservices == 0">
+          <img src="../../../../../assets/serviceclient.png" width="100%">
+        </div>
+        <div class="col-12 pb-3 bg-white border-curve" *ngIf="clientDetail.totalservices > 0">
+          <div class="row py-3 px-4 d-flex justify-content-between ">
+            <p class="h5">Service</p>
+            <p class="text- secondary">Total Service {{clientDetail.totalservices}}</p>
+          </div>
+
+          <div class="col-12">
+            <google-chart #chart [type]="mytype" [data]="mydata" [options]="options" [width]="width" [height]="height">
+            </google-chart>
+          </div>
+        </div>
+        <div class="col-12 bg-white mt-2 border-curve ">
+          <div class="row py-3 px-4 d-flex justify-content-between ">
+            <p class="h5">Team Overview</p>
+            <!-- <p class="text- secondary">Total Service 37</p> -->
+          </div>
+          <div class="row px-2 pb-3">
+            <div class="cards mb-2" *ngFor="let data of overviewData; let i =index"
+              (click)="overviewFilter(data.roleName ,i)">
+              <button mat-button class="teamoverviewbutton">
+                <img class="overviewsectionicon"
+                  *ngIf="data.roleName !='Team Head' && data.roleName !='Master Electrician'"
+                  src="../../../../../assets/{{data.roleName | lowercase}}.svg" />
+                <img class="overviewsectionicon" *ngIf="data.roleName =='Team Head'"
+                  src="../../../../../assets/team head.png" />
+                <img class="overviewsectionicon" *ngIf="data.roleName =='Master Electrician'"
+                  src="../../../../../assets/master electrician.png" />
+                <h1>{{data.roleCount}}</h1>
+                <h4>{{data.roleName}}</h4>
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="col-12 bg-white mt-2 border-curve ">
+          <div class="py-3 pl-3 d-flex justify-content-between ">
+            <p class="h5">Notice</p>
+          </div>
+          <div class="col-12 pb-3 pl-0 logincard">
+            <form [formGroup]="addNoticeForm">
+              <div class="col-5">
+                <p>Subject</p>
+                <mat-form-field appearance="outline" class="fullwidth">
+                  <input autocomplete="off" matInput [formControl]="subject">
+                  <mat-error *ngIf="subject.invalid">{{getSubjectErrorMessage()}}</mat-error>
+                </mat-form-field>
+              </div>
+              <div class="col-5">
+                <p>Message</p>
+                <mat-form-field appearance="outline" class="fullwidth">
+                  <textarea autocomplete="off" style="resize: none; height: 65px;" matInput
+                    [formControl]="noticeMessage"></textarea>
+                  <mat-error *ngIf="noticeMessage.invalid">{{getMessageErrorMessage()}}</mat-error>
+                </mat-form-field>
+              </div>
+              <div class="row px-3">
+                <div class="col-7 client-notice-ui">
+                  <mat-radio-group [(ngModel)]="selectedStatus" [formControl]="noticeStatus">
+                    <mat-radio-button value="active" class="mr-2">Active</mat-radio-button>
+                    <mat-radio-button value="inactive">Inactive</mat-radio-button>
+                  </mat-radio-group>
+                </div>
+                <div class="col-5 d-flex justify-content-end">
+                  <button mat-raised-button class="mr-2" (click)="addNoticeMessage()"
+                    *ngIf="!noticeMessageEdit">Save</button>
+                  <button mat-raised-button class="mr-2" (click)="updateNoticeMessage()"
+                    *ngIf="noticeMessageEdit">Update</button>
+                  <button class="text-dark" style="border-color:black;" mat-stroked-button
+                    (click)="clearNoticeMessage()">Cancel</button>
+                </div>
+              </div>
+            </form>
+            <hr class="my-5" *ngIf="clientNoticeMessage.data.length">
+            <div class="col-12">
+              <div class="row my-5" *ngFor="let item of clientNoticeMessage.data; let i = index">
+                <div class="col-9 d-flex">
+                  <p class="mb-0 mr-2 noticeheading">{{i+1}}.</p>
+                  <div>
+                    <p class="mb-0 noticeheading">{{item.subject}}</p>
+                    <p class="mb-0 text-justify fontweight text-secondary">{{item.message}}</p>
+                  </div>
+
+                </div>
+                <div class="col-3 d-flex justify-content-end" style="height: 44px;">
+                  <div class="activenotice m-auto" style="background-color: rgb(109, 187, 26);" *ngIf="item.active">
+                    Active</div>
+                  <div class="activenotice m-auto" style="background-color: rgb(246, 77, 10);" *ngIf="!item.active">
+                    Inactive</div>
+                  <button mat-icon-button (click)="editNoticeMessage(i)">
+                    <img src="../../../../../assets/editnew.svg" width="15px">
+                  </button>
+                  <button mat-icon-button (click)="deleteNoticeMessage(i)">
+                    <img src="../../../../../assets/deletenew.svg" width="15px">
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,138 @@
+@import "../../../../shared/loader/loader.component.scss";
+
+.designdialogcontent {
+  max-height: 80vh;
+  height: 80vh;
+}
+.designdialogcontent .mat-expansion-panel-header-title {
+  font-size: 12px;
+  font-weight: 600;
+}
+.designdialogcontent .mat-expansion-panel-header {
+  padding: 0 14px;
+  height: 44px !important;
+}
+.designdialogcontent .mat-expansion-panel-body {
+  padding: 0 14px 2px;
+}
+// .designdialogcontent textarea {
+//   min-height: 42px !important;
+//   height: 42px !important;
+// }
+.designform {
+  width: 98%;
+  margin-left: 10px;
+}
+.designrow {
+  margin-left: 14px;
+  margin-right: 14px;
+}
+.designrow p {
+  font-size: 0.8em;
+  color: #000000;
+  font-weight: 600;
+}
+
+.architectureuploadcol {
+  padding-left: 0px;
+  padding-right: 0px;
+}
+
+.prioritybutton {
+  margin-top: 0.5rem;
+  font-size: 0.7em;
+}
+
+.pdfselectionpreview img {
+  width: 40px;
+}
+
+.pdfselectionpreview p {
+  margin-bottom: 0px;
+  color: #000000;
+  font-size: 0.7rem;
+}
+
+.pdfpreviewcol {
+  padding-left: 0px;
+  padding-right: 0px;
+}
+.back {
+  border: red;
+  margin-top: 6px;
+  background: bottom;
+}
+.valid {
+  color: #000000;
+}
+.invalid {
+  color: red;
+}
+.loader {
+  width: 100px;
+  left: 45%;
+  height: 100px;
+  top: 50%;
+}
+
+.spinnertext {
+  margin-top: 16px !important;
+  color: #3c78d8;
+}
+
+.spinnercard {
+  width: 26%;
+  position: absolute;
+  left: 34%;
+  top: 36%;
+}
+.word {
+  font-kerning: normal;
+}
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+.list-border {
+  padding: 10px 0 10px 0px;
+}
+.delete-btn {
+  cursor: pointer;
+}
+
+.mat-dialog-content {
+  display: block;
+  margin: 0 -24px;
+  padding: 0 24px;
+  max-height: 100%;
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.logincard {
+  label {
+    margin-bottom: -5px;
+    color: #3c4257;
+    font-size: 12px;
+  }
+}
+::ng-deep .mat-select-panel {
+  position: absolute !important;
+  top: 42px !important;
+}
+
+.companyLogoError {
+  position: relative;
+  top: -24px;
+  left: 10px;
+  font-size: 9px;
+}

@@ -1,0 +1,123 @@
+<!-- <div *ngIf="isLoading" class="overlay">
+    <mat-card class="spinnercard" align-items-center>
+        <div class="row">
+            <div class="col-3">
+                <mat-progress-spinner diameter="50" color="primary" mode="indeterminate" strokeWidth="5">
+                </mat-progress-spinner>
+            </div>
+            <div class="col">
+                <h4 class="spinnertext">{{loadingmessage}}</h4>
+            </div>
+        </div>
+    </mat-card>
+  </div> -->
+<div *ngIf="isLoading" class="progress-loader">
+  <div id="pause" class="d-flex align-items-center justify-content-center">
+    <div
+      id="spinner"
+      style="background: #fff; padding: 25px; border-radius: 5px; width: 19rem"
+      class="row"
+    >
+      <div class="loading-message bkgg col-9">{{ loadingmessage }}</div>
+      <div class="col-3" style="top: 5px">
+        <div class="snippet" data-title=".dot-pulse">
+          <div class="stage">
+            <div class="dot-pulse"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div mat-dialog-content style="overflow-y: hidden">
+  <div class="container">
+    <div class="row">
+      <div class="col-11">
+        <h4 class="dialogformtitle">Assign Survey Request</h4>
+      </div>
+      <div class="col-1">
+        <button mat-icon-button (click)="onCloseClick()">
+          <img class="dialogclose" src="../../../../../assets/close.svg" />
+        </button>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        <h4 class="dialoginfoheader">{{ data.survey.address }}</h4>
+      </div>
+    </div>
+    <div class="row mt-4 mb-4">
+      <div class="col">
+        <div class="surveyorslist">
+          <cdk-virtual-scroll-viewport
+            *ngIf="surveyors && surveyors.length > 0"
+            orientation="horizontal"
+            itemSize="50"
+            class="surveyorslist-viewport"
+          >
+            <div
+              *cdkVirtualFor="let surveyor of surveyors; let i = index"
+              class="style"
+            >
+              <button
+                mat-button
+                class="surveyoritem"
+                matBadge="{{ surveyor.jobcount }}"
+                matBadgePosition="after"
+                (click)="setSelectedAssignee(surveyor, i)"
+              >
+                <div *ngIf="surveyor.contractorlogo != null" class="logo">
+                  <img src="{{ surveyor.contractorlogo.logo.url }}" />
+                </div>
+                <div *ngIf="surveyor.contractorlogo == null" class="initials">
+                  <p>
+                    {{
+                      genericService.getInitials(
+                        surveyor.firstname,
+                        surveyor.lastname
+                      )
+                    }}
+                  </p>
+                </div>
+
+                <div class="selectionbackground" *ngIf="surveyor.isDisplayed">
+                  <img src="../../../../../assets/whitetick.svg" />
+                </div>
+              </button>
+              <div class="size namedetails">
+                <P>{{ surveyor.firstname }} {{ surveyor.lastname }}</P>
+              </div>
+            </div>
+            <!-- <button mat-button class="surveyoritem" matBadge="{{surveyor.jobcount}}"
+                            matBadgePosition="after" (click)="setSelectedAssignee(surveyor, i)">
+                            <div *ngIf="surveyor.contractorlogo != null" class="logo">
+                                <img src="{{surveyor.contractorlogo.logo.url}}" />
+                            </div>
+                            <div *ngIf="surveyor.contractorlogo == null" class="initials">
+                                <p>{{genericService.getInitials(surveyor.firstname, surveyor.lastname)}}</p>
+                                </div>
+                               
+                            <div class="selectionbackground" *ngIf="surveyor.isDisplayed">
+                                <img src="../../../../../assets/whitetick.svg" />
+                            </div>
+                            <div>
+                                <P>{{surveyor.firstname}} {{surveyor.lastname}}</P>
+                            </div>
+
+
+                        </button> -->
+          </cdk-virtual-scroll-viewport>
+        </div>
+        <div *ngIf="surveyors && surveyors.length == 0"></div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-3">
+        <button mat-raised-button (click)="assignUserToSurvey()">
+          Confirm
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

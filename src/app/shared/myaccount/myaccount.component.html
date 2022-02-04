@@ -1,0 +1,130 @@
+<!-- <li class="nav-item dropdown"> -->
+<div class="notificationresult blur" style="right: 240px; background: #fff">
+  <div class="myprofile-content">
+    <div class="userHeader d-flex">
+      <div class="col-2 px-0 image d-flex">
+        <div class="m-auto" *ngIf="loggedinUser.logo != null">
+          <img *ngIf="loggedinUser.logo != null" src="{{ loggedinUser.logo.url }}" width="100%" height="100%" />
+        </div>
+        <div *ngIf="loggedinUser.logo == null" style="justify-content: center; align-self: center">
+          <p style="margin-left: 20px">{{ userinitials }}</p>
+        </div>
+      </div>
+      <div class="col-7 info">
+        {{ loggedinUser.firstname | titlecase }}
+        {{ loggedinUser.lastname | titlecase }}
+        <p style="font-size: 12px">
+          {{ userrole }}
+          <!-- {{userrole ? userrole : loggedinUser.role.name}} -->
+          <!-- {{ (loggedinUser.role.name == 'ContractorSuperAdmin' ? 'Super Admin' : (loggedinUser.role.name == 'WattmonkAdmin' ? 'Admin' : (loggedinUser.role.name == 'ContractorAdmin' ? 'Admin' : loggedinUser.role.name ) ))}} -->
+        </p>
+      </div>
+      <div class="col-3 d-flex justify-content-between">
+        <span (click)="changepasDialog()" class="profileIcons pb-1 cursor" [ngStyle]="
+            (loggedinUser.parent.isonboardingcompleted && isClient) || !isClient
+              ? { visibility: 'visible' }
+              : { visibility: 'hidden' }
+          ">
+          <img class="material-icons" src="../../../assets/key.svg" style="width: 15px" />
+        </span>
+
+        <span (click)="editprofileDialog()" class="profileIcons pb-1 cursor" [ngStyle]="
+            (loggedinUser.parent.isonboardingcompleted && isClient) || !isClient
+              ? { visibility: 'visible' }
+              : { visibility: 'hidden' }
+          ">
+          <img class="material-icons" src="../../../assets/edit (2).svg" style="width: 15px" />
+        </span>
+        <span class="profileIcons pb-1 cursor" (click)="onCloseClick()">
+          <img class="material-icons" src="../../../assets/cut.svg" style="width: 15px" />
+        </span>
+      </div>
+    </div>
+    <div class="userDetails">
+      <p class="title mb-0">Email</p>
+      <p class="subtitle">{{ loggedinUser.email }}</p>
+      <p class="title mb-0">Phone</p>
+      <p class="subtitle" *ngIf="loggedinUser.phone != null">
+        {{ loggedinUser.phone }}
+      </p>
+      <p class="subtitle" *ngIf="loggedinUser.phone == null">N/A</p>
+      <a href="https://www.google.com/maps" target="_blank">
+        <p class="title mb-0">Address</p>
+        <p class="subtitle">{{ loggedinUser.address }}</p>
+      </a>
+      <p class="title mb-0" *ngIf="
+          loggedinUser.parent.company &&
+          loggedinUser.parent.usertype == 'company'
+        ">
+        Company
+      </p>
+      <p class="subtitle">{{ loggedinUser.parent?.company }}</p>
+      <p class="title text-center" *ngIf="loggedinUser.parent.paymentmodeupdateddate != null && isClientAdmins">
+        {{
+        loggedinUser.parent.ispaymentmodeprepay
+        ? "Updated to prepaid on"
+        : "Updated to postpaid on"
+        }}
+        <span class="subtitle">{{ loggedinUser.parent.paymentmodeupdateddate | date: "dd MMM yy" }}
+        </span>
+      </p>
+    </div>
+
+    <hr class="solid" [ngStyle]="
+        isWalletDetails ? { visibility: 'visible' } : { visibility: 'hidden' }
+      " />
+    <br />
+    <ng-container>
+      <div class="walletDetails" *ngIf="
+          !loggedinUser.parent.ispaymentmodeprepay &&
+          loggedinUser.parent.amount > 0 &&
+          loggedinUser.parent.id != 232
+        ">
+        <div class="d-flex justify-content-between" *ngIf=" isClientAdmins">
+          <p class="title mb-0">Remaining Balance</p>
+          <p style="font-size: 14px !important" class="font-weight-bold mb-0">
+            ${{ loggedinUser.parent.amount }}
+          </p>
+        </div>
+      </div>
+      <div class="walletDetails" [ngStyle]="
+          isWalletDetails ? { visibility: 'visible' } : { visibility: 'hidden' }
+        ">
+        <div class="row">
+          <div class="col-9">
+            <p class="title">User Current Balance</p>
+          </div>
+          <div class="col-3 text-right">
+            <p style="font-size: 14px !important" class="font-weight-bold mb-0">
+              ${{ loggedinUser.parent.amount }}
+            </p>
+          </div>
+          <div class="col-12 mt-2 mb-4 d-flex justify-content-center">
+            <img style="width: 150px" src="../../../assets/wallet_1.svg" alt="" />
+          </div>
+        </div>
+      </div>
+    </ng-container>
+    <div class="sidebarButtons">
+      <button (click)="AddWalletDialog()" class="addcash" mat-stroked-button [ngStyle]="
+          addCash
+            ? {
+                visibility: 'visible',
+                'margin-top': '1%',
+                'margin-bottom': '10px'
+              }
+            : { visibility: 'hidden', 'margin-top': '0' }
+        ">
+        <span>Add Wallet</span>
+      </button>
+      <button class="logoutButton" mat-stroked-button (click)="handleusersignout()" [ngClass]="[
+          loggedinUser.parent.ispaymentmodeprepay && isClientAdmins
+            ? 'mt-2'
+            : 'mt-0'
+        ]">
+        <span>Sign out</span>
+      </button>
+    </div>
+  </div>
+</div>
+<!-- </li> -->

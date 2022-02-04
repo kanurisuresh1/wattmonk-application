@@ -1,0 +1,2106 @@
+<form class="designform" [formGroup]="designerinfoFormGroup">
+  <div class="row">
+    <div class="col-10">
+      <h5 style="margin-bottom: 0px; margin-top: 8px; margin-left: 12px;">Site Details</h5>
+    </div>
+  </div>
+  <div class="row mt-1" style="margin-left: 16px; margin-right: 16px; margin-bottom: 24px;">
+    <div class="col-6" *ngIf="location.latitude!=null && !housephotoexist && housephotocorrect.value">
+      <h5 style="margin-bottom: 0px; margin-top: 8px;">House Photo</h5>
+      <div #housephoto>
+        <agm-map [latitude]="location.latitude" [longitude]="location.longitude" [mapTypeId]="'satellite'"
+          [zoom]="location.zoom">
+
+        </agm-map>
+        <div id="download">
+          <img #canvas>
+          <a #downloadLink></a>
+        </div>
+      </div>
+      <ng-container style="align-items: center;">
+        <mat-slide-toggle [checked]="housephotocorrect.value" [formControl]="housephotocorrect" class="slidetoggletext">
+          House image correct
+        </mat-slide-toggle>
+      </ng-container>
+    </div>
+    <div class="col-6"
+      [ngStyle]="isEditMode ? {'margin-right': '16px','margin-top':'20px'} : {'margin-right': '0px','margin-top':'20px'}"
+      *ngIf="location.latitude==null || !housephotocorrect.value">
+      <div class="row architectureuploadrow">
+        <div class="col align-items-center architectureuploadcol">
+          <div class="custom-dropzone" style="width: 400px; height: 400px!important;" ngx-dropzone
+            (change)="onHousePhotoSelect($event)" accept="image/*">
+            <ngx-dropzone-label>
+              <div>
+                <img class="addimage" src="../../../../../assets/add.svg">
+                <h5>Drag and drop or click to browse the photos of your House.</h5>
+              </div>
+            </ngx-dropzone-label>
+            <div>
+              <ngx-dropzone-image-preview *ngIf="uploadedhousephoto!=undefined" class="imagepreview"
+                ngProjectAs="ngx-dropzone-preview" [file]="uploadedhousephoto" [removable]="true"
+                (removed)="onHousePhotoRemove(uploadedhousephoto)">
+              </ngx-dropzone-image-preview>
+            </div>
+          </div>
+          <!-- <mat-error class="formerror uploadmargin" [hidden]="attachmentdatasheetcataloguefileuploaded">You have to upload file.</mat-error> -->
+        </div>
+      </div>
+      <ng-container style="align-items: center;">
+        <mat-slide-toggle [checked]="housephotocorrect.value" [formControl]="housephotocorrect" class="slidetoggletext">
+          House image correct
+        </mat-slide-toggle>
+      </ng-container>
+    </div>
+    <div class="col-6" *ngIf="location.latitude!=null && !vicinitymapexist && vicinitymapcorrect.value">
+      <h5 style="margin-bottom: 0px; margin-top: 8px;">Vicinity Map</h5>
+      <div #vicinitymap>
+        <agm-map [latitude]="location.latitude" [longitude]="location.longitude" [mapTypeId]="'roadmap'" [zoom]="18">
+          <agm-marker class="agm-marker" [latitude]="location.latitude" [longitude]="location.longitude"></agm-marker>
+        </agm-map>
+        <div id="download">
+          <img #canvas>
+          <a #downloadLink></a>
+        </div>
+      </div>
+      <ng-container style="align-items: center;">
+        <mat-slide-toggle [checked]="vicinitymapcorrect.value" [formControl]="vicinitymapcorrect"
+          class="slidetoggletext">
+          Vicinity map correct
+        </mat-slide-toggle>
+      </ng-container>
+    </div>
+
+    <div class="col-6"
+      [ngStyle]="isEditMode ? {'margin-right': '16px','margin-top':'20px'} : {'margin-right': '0px','margin-top':'20px'}"
+      *ngIf="location.latitude==null || !vicinitymapcorrect.value">
+      <div class="row architectureuploadrow">
+        <div class="col align-items-center architectureuploadcol">
+          <div class="custom-dropzone" style="width: 400px; height: 400px!important;" ngx-dropzone [multiple]="false"
+            (change)="onVicinitySelect($event)" accept="image/*">
+            <ngx-dropzone-label>
+              <div>
+                <img class="addimage" src="../../../../../assets/add.svg">
+                <h5>Drag and drop or click to browse the Vicinity Map.</h5>
+              </div>
+            </ngx-dropzone-label>
+            <div>
+              <ngx-dropzone-image-preview *ngIf="uploadedvicinity!=undefined" class="imagepreview"
+                ngProjectAs="ngx-dropzone-preview" [file]="uploadedvicinity" [removable]="true"
+                (removed)="onVicinityRemove(uploadedvicinity)">
+              </ngx-dropzone-image-preview>
+            </div>
+          </div>
+          <!-- <mat-error class="formerror uploadmargin" [hidden]="attachmentdatasheetcataloguefileuploaded">You have to upload file.</mat-error> -->
+        </div>
+      </div>
+      <ng-container style="align-items: center;">
+        <mat-slide-toggle [checked]="vicinitymapcorrect.value" [formControl]="vicinitymapcorrect"
+          class="slidetoggletext">
+          Vicinity map correct
+        </mat-slide-toggle>
+      </ng-container>
+    </div>
+    <div class="col-6" *ngIf="housephotoexist">
+      <div class="row">
+        <h5 style="margin-bottom: 0px; margin-top: 8px;">House Photo</h5>
+      </div>
+      <img style="width: 400px;" src="{{housephotourl}}" />
+    </div>
+    <div class="col-6" *ngIf="vicinitymapexist">
+      <div class="row">
+        <h5 style="margin-bottom: 0px; margin-top: 8px;">Vicinity Map</h5>
+      </div>
+      <img style="width: 400px;" src="{{vicinitymapurl}}" />
+    </div>
+  </div>
+  <div class="row mt-1" style="margin-left: 16px; margin-right: 16px;">
+    <div class="col">
+      <mat-form-field appearance="fill" class="fullwidth">
+        <mat-label>Exposure Category</mat-label>
+        <mat-select required [formControl]="exposurecategory">
+          <mat-option value="A">A</mat-option>
+          <mat-option value="B">B</mat-option>
+          <mat-option value="C">C</mat-option>
+          <mat-option value="D">D</mat-option>
+        </mat-select>
+        <mat-error *ngIf="exposurecategory.invalid">{{getErrorMessage(exposurecategory)}}</mat-error>
+      </mat-form-field>
+    </div>
+    <div class="col">
+      <mat-form-field appearance="fill" class="fullwidth">
+        <mat-label>MSP Location</mat-label>
+        <mat-select required [formControl]="mainservicepanellocation">
+          <mat-option value="north">North</mat-option>
+          <mat-option value="south">South</mat-option>
+          <mat-option value="east">East</mat-option>
+          <mat-option value="west">West</mat-option>
+        </mat-select>
+        <mat-error *ngIf="mainservicepanellocation.invalid">{{getErrorMessage(mainservicepanellocation)}}
+        </mat-error>
+      </mat-form-field>
+    </div>
+    <div class="col">
+      <mat-form-field appearance="fill" class="fullwidth">
+        <mat-label>Total No. Of Attachments</mat-label>
+        <input type="tel" autocomplete="off" maxlength="3" min="1" matInput placeholder="eg. 44"
+          [formControl]="numberofattachments" required>
+        <mat-error *ngIf="numberofattachments.invalid">{{getErrorMessage(numberofattachments)}}</mat-error>
+      </mat-form-field>
+    </div>
+    <div class="col">
+      <mat-form-field appearance="fill" class="fullwidth">
+        <mat-label>Panel Height</mat-label>
+        <input autocomplete="off" matInput placeholder='eg. 4' [formControl]="panelheight">
+        <mat-error *ngIf="panelheight.invalid">{{getErrorMessage(panelheight)}}</mat-error>
+      </mat-form-field>
+    </div>
+  </div>
+  <div class="row mt-1" style="margin-left: 15px; margin-right: 15px;">
+    <div class="col-2">
+      <mat-form-field appearance="fill" class="fullwidth">
+        <mat-label>Select Legend</mat-label>
+        <mat-select [formControl]="legend" required style="font-size: 0.8em;">
+          <mat-option value="ri">RI</mat-option>
+          <mat-option value="ma">MA</mat-option>
+          <mat-option value="sc">SC</mat-option>
+          <mat-option value="groundmount">Ground Mount</mat-option>
+          <mat-option value="battery">Battery</mat-option>
+          <mat-option value="doubleinv">Double INV"</mat-option>
+          <mat-option value="farmerselectricutility">Farmers electric utility</mat-option>
+          <mat-option value="bpubveccpsutility">BPUB, TVEC & CPS utility</mat-option>
+          <mat-option value="otherstate">Other State</mat-option>
+        </mat-select>
+        <mat-error *ngIf="legend.invalid">
+          {{getErrorMessage(legend)}}</mat-error>
+      </mat-form-field>
+    </div>
+    <div class="col-2">
+      <mat-form-field appearance="fill" class="fullwidth">
+        <mat-label>Select NEC</mat-label>
+        <mat-select [formControl]="nec" required style="font-size: 0.8em;">
+          <mat-option value="nectwenty">NEC 2020 </mat-option>
+          <mat-option value="necseventeen">NEC 2017</mat-option>
+          <mat-option value="necfourteen">NEC 2014</mat-option>
+        </mat-select>
+        <mat-error *ngIf="nec.invalid">
+          {{getErrorMessage(nec)}}</mat-error>
+      </mat-form-field>
+    </div>
+    <div class="col">
+      <div class="form-group formradiogroup fullwidth"
+        [ngClass]="[ showbackfeedrule.invalid ? 'formradiogroup-invalid' : '']">
+        <h5>Do you want to show 120% backfeed rule calculation? </h5>
+        <mat-radio-group name="showbackfeedrule" aria-label="showbackfeedrule" [formControl]="showbackfeedrule"
+          required>
+          <div class="row">
+            <div class="col">
+              <mat-radio-button value="true">Yes</mat-radio-button>
+            </div>
+            <div class="col">
+              <mat-radio-button value="false">No</mat-radio-button>
+            </div>
+          </div>
+        </mat-radio-group>
+      </div>
+      <mat-error class="custom-mat-error" [hidden]="displayerror" *ngIf="showbackfeedrule.invalid">
+        {{getErrorMessage(showbackfeedrule)}}
+      </mat-error>
+    </div>
+    <div class="col">
+      <mat-form-field appearance="fill" class="fullwidth">
+        <mat-label>Governing Codes</mat-label>
+        <textarea style="min-height: 61px;" matInput placeholder="Start typing here..." [formControl]="governingcode"
+          required></textarea>
+      </mat-form-field>
+    </div>
+  </div>
+  <div class="row mt-3" *ngIf="ambientdetailsnull">
+    <div class="col-10">
+      <h5 style="margin-bottom: 0px; margin-top: 8px; margin-left: 12px;">Ambient Temp Details</h5>
+    </div>
+  </div>
+  <div class="row mt-3" style="margin-left: 32px; margin-right: 16px;" *ngIf="ambientdetailsnull">
+    <form [formGroup]="ambienttempFormGroup">
+      <div class="row">
+        <div class="col-2">
+          <mat-form-field appearance="fill" class="fullwidth">
+            <mat-label>Record low temp</mat-label>
+            <input autocomplete="off" [formControl]="recordlowtemp" matInput required>
+            <mat-error *ngIf="recordlowtemp.invalid">{{getErrorMessage(recordlowtemp)}}</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-2">
+          <mat-form-field appearance="fill" class="fullwidth">
+            <mat-label>Ambient high temp</mat-label>
+            <input autocomplete="off" [formControl]="ambienthightemp" matInput required>
+            <mat-error *ngIf="ambienthightemp.invalid">{{getErrorMessage(ambienthightemp)}}</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-2">
+          <mat-form-field appearance="fill" class="fullwidth">
+            <mat-label>Conductor temp rate</mat-label>
+            <input autocomplete="off" [formControl]="conductortemprate" matInput required>
+            <mat-error *ngIf="conductortemprate.invalid">{{getErrorMessage(conductortemprate)}}</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-2">
+          <mat-form-field appearance="fill" class="fullwidth">
+            <mat-label>Snow load</mat-label>
+            <input autocomplete="off" [formControl]="snowload" matInput required>
+            <mat-error *ngIf="snowload.invalid">{{getErrorMessage(snowload)}}</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-2">
+          <mat-form-field appearance="fill" class="fullwidth">
+            <mat-label>Wind Speed</mat-label>
+            <input autocomplete="off" [formControl]="windspeed" matInput required>
+            <mat-error *ngIf="windspeed.invalid">{{getErrorMessage(windspeed)}}</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-2">
+          <mat-form-field appearance="fill" class="fullwidth">
+            <mat-label>Select Snow load </mat-label>
+            <mat-select [formControl]="snowloadkey" required style="font-size: 0.8em;">
+              <mat-option value="seventen">7-10</mat-option>
+              <mat-option value="sevensixteen">7-16</mat-option>
+            </mat-select>
+            <mat-error *ngIf="snowloadkey.invalid">
+              {{getErrorMessage(snowloadkey)}}</mat-error>
+          </mat-form-field>
+        </div>
+
+      </div>
+    </form>
+  </div>
+
+  <div class="row mt-3">
+    <div class="col-10">
+      <h5 style="margin-bottom: 0px; margin-top: 8px; margin-left: 12px;">Solar Model</h5>
+    </div>
+  </div>
+  <div class="row mt-3" style="margin-left: 32px; margin-right: 16px;">
+    <form [formGroup]="solarmoduleFormGroup">
+      <div class="row">
+        <div class="col">
+          <mat-form-field appearance="fill" class="fullwidth">
+            <mat-label>Number of cells</mat-label>
+            <input [formControl]="numberofcells" matInput required>
+            <mat-error *ngIf="numberofcells.invalid">{{getErrorMessage(numberofcells)}}</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col">
+          <mat-form-field appearance="fill" class="fullwidth">
+            <mat-label>Isc</mat-label>
+            <input [formControl]="isc" matInput required>
+            <mat-error *ngIf="isc.invalid">{{getErrorMessage(isc)}}</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col">
+          <mat-form-field appearance="fill" class="fullwidth">
+            <mat-label>Voc</mat-label>
+            <input [formControl]="voc" matInput required>
+            <mat-error *ngIf="voc.invalid">{{getErrorMessage(voc)}}</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col">
+          <mat-form-field appearance="fill" class="fullwidth">
+            <mat-label>Ipmax</mat-label>
+            <input [formControl]="ipmax" matInput required>
+            <mat-error *ngIf="ipmax.invalid">{{getErrorMessage(ipmax)}}</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col">
+          <mat-form-field appearance="fill" class="fullwidth">
+            <mat-label>Vpmax</mat-label>
+            <input [formControl]="vpmax" matInput required>
+            <mat-error *ngIf="vpmax.invalid">{{getErrorMessage(vpmax)}}</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col">
+          <mat-form-field appearance="fill" class="fullwidth">
+            <mat-label>Tempcoef of voc</mat-label>
+            <input [formControl]="tempcoefofvoc" matInput required>
+            <mat-error *ngIf="tempcoefofvoc.invalid">{{getErrorMessage(tempcoefofvoc)}}</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col">
+          <mat-form-field appearance="fill" class="fullwidth">
+            <mat-label>Fuserating</mat-label>
+            <input [formControl]="fuserating" matInput required>
+            <mat-error *ngIf="fuserating.invalid">{{getErrorMessage(fuserating)}}</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col">
+          <mat-form-field appearance="fill" class="fullwidth">
+            <mat-label>Length</mat-label>
+            <input [formControl]="modulelength" matInput required>
+            <mat-error *ngIf="modulelength.invalid">{{getErrorMessage(modulelength)}}</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col">
+          <mat-form-field appearance="fill" class="fullwidth">
+            <mat-label>Width</mat-label>
+            <input [formControl]="width" matInput required>
+            <mat-error *ngIf="width.invalid">{{getErrorMessage(width)}}</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col">
+          <mat-form-field appearance="fill" class="fullwidth">
+            <mat-label>Area*</mat-label>
+            <input [formControl]="area" matInput>
+            <mat-error *ngIf="area.invalid">{{getErrorMessage(area)}}</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col">
+          <mat-form-field appearance="fill" class="fullwidth">
+            <mat-label>Weight</mat-label>
+            <input [formControl]="weight" matInput required>
+            <mat-error *ngIf="weight.invalid">{{getErrorMessage(weight)}}</mat-error>
+          </mat-form-field>
+        </div>
+
+      </div>
+    </form>
+  </div>
+
+  <div class="row mt-3" *ngIf="invertermodeldetailsnull">
+    <div class="col-10">
+      <h5 style="margin-bottom: 0px; margin-top: 8px; margin-left: 12px;">Inverter Model</h5>
+    </div>
+  </div>
+  <div class="row mt-3" style="margin-left: 32px; margin-right: 16px;" *ngIf="invertermodeldetailsnull">
+    <form [formGroup]="invertermodelFormGroup">
+      <div class="row">
+        <div class="col">
+          <mat-form-field appearance="fill" class="fullwidth">
+            <mat-label>Name</mat-label>
+            <input [formControl]="name" matInput readonly>
+            <!-- <mat-error *ngIf="invertermodel.phase.invalid">{{getErrorMessage(invertermodel.phase)}}</mat-error> -->
+          </mat-form-field>
+        </div>
+        <div class="col">
+          <mat-form-field appearance="fill" class="fullwidth">
+            <mat-label>Phase</mat-label>
+            <mat-select matInput [formControl]="phase" required>
+              <mat-option value="1"> 1 </mat-option>
+              <mat-option value="2"> 2 </mat-option>
+              <mat-option value="3"> 3 </mat-option>
+            </mat-select>
+            <mat-error *ngIf="phase.invalid">{{getErrorMessage(phase)}}</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col">
+          <mat-form-field appearance="fill" class="fullwidth">
+            <mat-label>Ratedacvoltage</mat-label>
+            <input [formControl]="ratedacvoltage" matInput required>
+            <mat-error *ngIf="ratedacvoltage.invalid">{{getErrorMessage(ratedacvoltage)}}</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col">
+          <mat-form-field appearance="fill" class="fullwidth">
+            <mat-label>Rateoutputpower</mat-label>
+            <input [formControl]="rateoutputpower" matInput required>
+            <mat-error *ngIf="rateoutputpower.invalid">{{getErrorMessage(rateoutputpower)}}</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col">
+          <mat-form-field appearance="fill" class="fullwidth">
+            <mat-label>Number of mppt channels</mat-label>
+            <input [formControl]="numberofmpptchannels" matInput required>
+            <mat-error *ngIf="numberofmpptchannels.invalid">{{getErrorMessage(numberofmpptchannels)}}
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col">
+          <mat-form-field appearance="fill" class="fullwidth">
+            <mat-label>Currentpermppta</mat-label>
+            <input [formControl]="currentpermppta" matInput required>
+            <mat-error *ngIf="currentpermppta.invalid">{{getErrorMessage(currentpermppta)}}</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col">
+          <mat-form-field appearance="fill" class="fullwidth">
+            <mat-label>Maximum input voltage</mat-label>
+            <input [formControl]="maximuminputvoltage" matInput required>
+            <mat-error *ngIf="maximuminputvoltage.invalid">{{getErrorMessage(maximuminputvoltage)}}</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col">
+          <mat-form-field appearance="fill" class="fullwidth">
+            <mat-label>Nominal input voltage*</mat-label>
+            <input [formControl]="nominalinputvoltage" matInput>
+            <mat-error *ngIf="nominalinputvoltage.invalid">{{getErrorMessage(nominalinputvoltage)}}</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col">
+          <mat-form-field appearance="fill" class="fullwidth">
+            <mat-label>Startup voltage</mat-label>
+            <input [formControl]="startupvoltage" matInput required>
+            <mat-error *ngIf="startupvoltage.invalid">{{getErrorMessage(startupvoltage)}}</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col">
+          <mat-form-field appearance="fill" class="fullwidth">
+            <mat-label>Maximum input current*</mat-label>
+            <input [formControl]="maximuminputcurrent" matInput>
+            <mat-error *ngIf="maximuminputcurrent.invalid">{{getErrorMessage(maximuminputcurrent)}}</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col">
+          <mat-form-field appearance="fill" class="fullwidth">
+            <mat-label>Maximum output current</mat-label>
+            <input [formControl]="maximumoutputcurrent" matInput required>
+            <mat-error *ngIf="maximumoutputcurrent.invalid">{{getErrorMessage(maximumoutputcurrent)}}
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col">
+          <mat-form-field appearance="fill" class="fullwidth">
+            <mat-label>Cecefficiency</mat-label>
+            <input [formControl]="cecefficiency" matInput required>
+            <mat-error *ngIf="cecefficiency.invalid">{{getErrorMessage(cecefficiency)}}</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col">
+          <mat-form-field appearance="fill" class="fullwidth">
+            <mat-label>Maximum ocpd rating*</mat-label>
+            <input [formControl]="maximumocpdrating" matInput>
+            <mat-error *ngIf="maximumocpdrating.invalid">{{getErrorMessage(maximumocpdrating)}}</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-8">
+          <div class="form-group formradiogroup fullwidth">
+            <h5>Datasheet available</h5>
+            <mat-radio-group aria-label="project type" [formControl]="datasheetavailable" required>
+              <div class="row">
+                <div class="col">
+                  <mat-radio-button value=true>Yes</mat-radio-button>
+                </div>
+                <div class="col">
+                  <mat-radio-button value=false>No</mat-radio-button>
+                </div>
+              </div>
+            </mat-radio-group>
+          </div>
+          <mat-error *ngIf="datasheetavailable.invalid">{{getErrorMessage(datasheetavailable)}}</mat-error>
+        </div>
+      </div>
+    </form>
+  </div>
+  <ng-container *ngIf="extrainvertermodeldata.length>0">
+    <div class="row mt-3">
+      <div class="col-10">
+        <h5 style="margin-bottom: 0px; margin-top: 8px; margin-left: 12px;">Inverter Model</h5>
+      </div>
+    </div>
+    <div class="row mt-3" style="margin-left: 32px; margin-right: 16px;"
+      *ngFor="let invertermodel of extrainvertermodeldata">
+      <form [formGroup]="invertermodelFormGroup">
+        <div class="row">
+          <div class="col">
+            <mat-form-field appearance="fill" class="fullwidth">
+              <mat-label>Name</mat-label>
+              <input [value]="invertermodel.invertermodel.name" matInput required disabled>
+              <!-- <mat-error *ngIf="invertermodel.phase.invalid">{{getErrorMessage(invertermodel.phase)}}</mat-error> -->
+            </mat-form-field>
+          </div>
+          <div class="col">
+            <mat-form-field appearance="fill" class="fullwidth">
+              <mat-label>Phase</mat-label>
+              <mat-select [formControlName]="invertermodel.phase" matInput required>
+                <mat-option value="1"> 1 </mat-option>
+                <mat-option value="2"> 2 </mat-option>
+                <mat-option value="3"> 3 </mat-option>
+              </mat-select>
+              <!-- <mat-error *ngIf="invertermodel.phase.invalid">{{getErrorMessage(invertermodel.phase)}}</mat-error> -->
+            </mat-form-field>
+          </div>
+          <div class="col">
+            <mat-form-field appearance="fill" class="fullwidth">
+              <mat-label>Ratedacvoltage</mat-label>
+              <input [formControlName]="invertermodel.ratedacvoltage" matInput required>
+              <!-- <mat-error *ngIf="invertermodel.ratedacvoltage.invalid">{{getErrorMessage(invertermodel.ratedacvoltage)}}</mat-error> -->
+            </mat-form-field>
+          </div>
+          <div class="col">
+            <mat-form-field appearance="fill" class="fullwidth">
+              <mat-label>Rateoutputpower</mat-label>
+              <input [formControlName]="invertermodel.rateoutputpower" matInput required>
+              <!--   <mat-error *ngIf="invertermodel.rateoutputpower.invalid">{{getErrorMessage(invertermodel.rateoutputpower)}}</mat-error> -->
+            </mat-form-field>
+          </div>
+          <div class="col">
+            <mat-form-field appearance="fill" class="fullwidth">
+              <mat-label>Number of mppt channels</mat-label>
+              <input [formControlName]="invertermodel.numberofmpptchannels" matInput required>
+              <!-- <mat-error *ngIf="invertermodel.numberofmpptchannels.invalid">{{getErrorMessage(invertermodel.numberofmpptchannels)}}
+                      </mat-error> -->
+            </mat-form-field>
+          </div>
+          <div class="col">
+            <mat-form-field appearance="fill" class="fullwidth">
+              <mat-label>Currentpermppta</mat-label>
+              <input [formControlName]="invertermodel.currentpermppta" matInput required>
+              <!--  <mat-error *ngIf="invertermodel.currentpermppta.invalid">{{getErrorMessage(invertermodel.currentpermppta)}}</mat-error> -->
+            </mat-form-field>
+          </div>
+          <div class="col">
+            <mat-form-field appearance="fill" class="fullwidth">
+              <mat-label>Maximum input voltage</mat-label>
+              <input [formControlName]="invertermodel.maximuminputvoltage" matInput required>
+              <!-- <mat-error *ngIf="invertermodel.maximuminputvoltage.invalid">{{getErrorMessage(invertermodel.maximuminputvoltage)}}</mat-error> -->
+            </mat-form-field>
+          </div>
+          <div class="col">
+            <mat-form-field appearance="fill" class="fullwidth">
+              <mat-label>Nominal input voltage*</mat-label>
+              <input [formControlName]="invertermodel.nominalinputvoltage" matInput>
+              <!-- <mat-error *ngIf="nominalinputvoltage.invalid">{{getErrorMessage(invertermodel.nominalinputvoltage)}}</mat-error> -->
+            </mat-form-field>
+          </div>
+          <div class="col">
+            <mat-form-field appearance="fill" class="fullwidth">
+              <mat-label>Startup voltage</mat-label>
+              <input [formControlName]="invertermodel.startupvoltage" matInput required>
+              <!--  <mat-error *ngIf="invertermodel.startupvoltage.invalid">{{getErrorMessage(invertermodel.startupvoltage)}}</mat-error> -->
+            </mat-form-field>
+          </div>
+          <div class="col">
+            <mat-form-field appearance="fill" class="fullwidth">
+              <mat-label>Maximum input current*</mat-label>
+              <input [formControlName]="invertermodel.maximuminputcurrent" matInput>
+              <!--  <mat-error *ngIf="invertermodel.maximuminputcurrent.invalid">{{getErrorMessage(invertermodel.maximuminputcurrent)}}</mat-error> -->
+            </mat-form-field>
+          </div>
+          <div class="col">
+            <mat-form-field appearance="fill" class="fullwidth">
+              <mat-label>Maximum output current</mat-label>
+              <input [formControlName]="invertermodel.maximumoutputcurrent" matInput required>
+              <!-- <mat-error *ngIf="invertermodel.maximumoutputcurrent.invalid">{{getErrorMessage(invertermodel.maximumoutputcurrent)}}
+                      </mat-error> -->
+            </mat-form-field>
+          </div>
+          <div class="col">
+            <mat-form-field appearance="fill" class="fullwidth">
+              <mat-label>Cecefficiency</mat-label>
+              <input [formControlName]="invertermodel.cecefficiency" matInput required>
+              <mat-error *ngIf="invertermodel.cecefficiency.invalid">{{getErrorMessage(invertermodel.cecefficiency)}}
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div class="col">
+            <mat-form-field appearance="fill" class="fullwidth">
+              <mat-label>Maximum ocpd rating*</mat-label>
+              <input [formControlName]="invertermodel.maximumocpdrating" matInput>
+              <!-- <mat-error *ngIf="invertermodel.maximumocpdrating.invalid">{{getErrorMessage(invertermodel.maximumocpdrating)}}</mat-error> -->
+            </mat-form-field>
+          </div>
+          <div class="col-8">
+            <div class="form-group formradiogroup fullwidth">
+              <h5>Datasheet available</h5>
+              <mat-radio-group aria-label="project type" [formControlName]="invertermodel.datasheetavailable" required>
+                <div class="row">
+                  <div class="col">
+                    <mat-radio-button value=true>Yes</mat-radio-button>
+                  </div>
+                  <div class="col">
+                    <mat-radio-button value=false>No</mat-radio-button>
+                  </div>
+                </div>
+              </mat-radio-group>
+            </div>
+            <!--   <mat-error *ngIf="invertermodel.datasheetavailable.invalid">{{getErrorMessage(invertermodel.datasheetavailable)}}</mat-error> -->
+          </div>
+        </div>
+      </form>
+    </div>
+  </ng-container>
+  <div class="row mt-1">
+    <div class="col">
+      <div class="row">
+        <div class="col-10">
+          <h5 style="margin-bottom: 0px; margin-top: 8px; margin-left: 12px;">Attachment Details</h5>
+        </div>
+        <div class="col-2">
+          <button mat-raised-button class="float-right" (click)="hidebominputform = false">
+            + Add
+          </button>
+        </div>
+      </div>
+      <div class="row" *ngIf="!hidebominputform">
+        <div class="col-2">
+          <mat-form-field appearance="fill" class="fullwidth" style="margin-left: 30px;">
+            <mat-label>Description</mat-label>
+            <input autocomplete="off" matInput placeholder="eg. Inverter" [formControl]="bomdescription" required>
+            <mat-error *ngIf="bomdescription.invalid">{{getErrorMessage(bomdescription)}}</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-2">
+          <mat-form-field appearance="fill" class="fullwidth" style="margin-left: 20px;">
+            <mat-label>Quantity of 1 attachment</mat-label>
+            <input autocomplete="off" type="tel" maxlength="5" min="1" matInput placeholder="eg. 23"
+              [formControl]="bomquantity" required>
+            <mat-error *ngIf="bomquantity.invalid">{{getErrorMessage(bomquantity)}}</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-2" style="padding-left: 40px; padding-right: 6px;">
+          <div class="row">
+            <button style="margin-top: 10px; margin-left: 15px;" mat-raised-button color="warn"
+              (click)="hidebominputform = true">
+              Cancel
+            </button>
+            <button style="margin-top: 10px; margin-left: 7px;" mat-raised-button color="warn"
+              (click)="adddatatobominput($event)">
+              Save
+            </button>
+          </div>
+        </div>
+      </div>
+      <table mat-table [dataSource]="bomdataSource" class="mat-elevation-z2 mt-2 mb-2 designerinputtable">
+        <ng-container matColumnDef="id">
+          <th mat-header-cell *matHeaderCellDef> ID. </th>
+          <td mat-cell *matCellDef="let element"> {{element.id}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="description">
+          <th mat-header-cell *matHeaderCellDef> Description </th>
+          <td mat-cell *matCellDef="let element"> {{element.description}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="quantity">
+          <th mat-header-cell *matHeaderCellDef> Quantity of 1 Attachment </th>
+          <td mat-cell *matCellDef="let element"> {{element.quantity}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="edit">
+          <th mat-header-cell *matHeaderCellDef>Edit</th>
+          <td mat-cell *matCellDef="let element"><span class="tableactionbutton">
+              <button mat-icon-button (click)="editBOMDetails($event, element)">
+                <img class="dialogclose" src="../../../../../../assets/edit.svg" />
+              </button>
+              <button mat-icon-button (click)="openBOMConfirmationDialog($event, element.id)">
+                <img class="dialogclose" src="../../../../../assets/delete.svg" />
+              </button>
+            </span>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="bomdisplayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: bomdisplayedColumns;"></tr>
+      </table>
+    </div>
+  </div>
+  <div class="row mt-1" *ngIf="rooftypeboth==true">
+    <div class="col">
+      <div class="row">
+        <div class="col-10">
+          <h5 style="margin-bottom: 0px; margin-top: 8px; margin-left: 12px;">Pitch Roof Attachment Details</h5>
+        </div>
+        <div class="col-2">
+          <button mat-raised-button class="float-right" (click)="hidepitchbominputform = false">
+            + Add
+          </button>
+        </div>
+      </div>
+      <div class="row" *ngIf="!hidepitchbominputform">
+        <div class="col-2">
+          <mat-form-field appearance="fill" class="fullwidth" style="margin-left: 30px;">
+            <mat-label>Description</mat-label>
+            <input autocomplete="off" matInput placeholder="eg. Inverter" [formControl]="pitchbomdescription" required>
+            <mat-error *ngIf="pitchbomdescription.invalid">{{getErrorMessage(pitchbomdescription)}}</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-2">
+          <mat-form-field appearance="fill" class="fullwidth" style="margin-left: 20px;">
+            <mat-label>Quantity of 1 attachment</mat-label>
+            <input autocomplete="off" type="tel" maxlength="5" min="1" matInput placeholder="eg. 23"
+              [formControl]="pitchbomquantity" required>
+            <mat-error *ngIf="pitchbomquantity.invalid">{{getErrorMessage(pitchbomquantity)}}</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-2" style="padding-left: 40px; padding-right: 6px;">
+          <div class="row">
+            <button style="margin-top: 10px; margin-left: 15px;" mat-raised-button color="warn"
+              (click)="hidepitchbominputform = true">
+              Cancel
+            </button>
+            <button style="margin-top: 10px; margin-left: 7px;" mat-raised-button color="warn"
+              (click)="adddatatopitchbominput($event)">
+              Save
+            </button>
+          </div>
+        </div>
+      </div>
+      <table mat-table [dataSource]="pitchbomdataSource" class="mat-elevation-z2 mt-2 mb-2 designerinputtable">
+        <ng-container matColumnDef="id">
+          <th mat-header-cell *matHeaderCellDef> ID. </th>
+          <td mat-cell *matCellDef="let element"> {{element.id}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="description">
+          <th mat-header-cell *matHeaderCellDef> Description </th>
+          <td mat-cell *matCellDef="let element"> {{element.description}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="quantity">
+          <th mat-header-cell *matHeaderCellDef> Quantity of 1 Attachment </th>
+          <td mat-cell *matCellDef="let element"> {{element.quantity}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="edit">
+          <th mat-header-cell *matHeaderCellDef>Edit</th>
+          <td mat-cell *matCellDef="let element"><span class="tableactionbutton">
+              <button mat-icon-button (click)="editPitchBOMDetails($event, element)">
+                <img class="dialogclose" src="../../../../../../assets/edit.svg" />
+              </button>
+              <button mat-icon-button (click)="openBOMConfirmationDialog($event, element.id)">
+                <img class="dialogclose" src="../../../../../assets/delete.svg" />
+              </button>
+            </span>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="pitchbomdisplayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: pitchbomdisplayedColumns;"></tr>
+      </table>
+    </div>
+  </div>
+  <div class="row mt-1">
+    <div class="col">
+      <div class="row">
+        <div class="col-10">
+          <h5 style="margin-bottom: 0px; margin-top: 8px; margin-left: 12px;" *ngIf="!rooftypeboth">Roof Details
+          </h5>
+          <h5 style="margin-bottom: 0px; margin-top: 8px; margin-left: 12px;" *ngIf="rooftypeboth">Pitch Roof
+          </h5>
+        </div>
+        <div class="col-2">
+          <button mat-raised-button class="float-right" (click)="hideroofinputform = false">
+            + Add
+          </button>
+        </div>
+      </div>
+      <div class="row" *ngIf="!hideroofinputform">
+        <div class="col-2">
+          <mat-form-field appearance="fill" class="fullwidth" style="margin-left: 30px;">
+            <mat-label># of Modules</mat-label>
+            <input type="hidden" [formControl]="roofinputid">
+            <input autocomplete="off" type="tel" maxlength="5" min="1" matInput placeholder="eg. 2"
+              [formControl]="modulescount" required>
+            <mat-error *ngIf="modulescount.invalid">{{getErrorMessage(modulescount)}}</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-2">
+          <mat-form-field appearance="fill" class="fullwidth" style="margin-left: 20px;">
+            <mat-label *ngIf="generateddesign.rooftype=='pitch'">Roof Tilt</mat-label>
+            <mat-label *ngIf="generateddesign.rooftype=='flat'">Array Tilt</mat-label>
+            <input autocomplete="off" type="tel" maxlength="5" min="1" matInput placeholder="eg. 23"
+              [formControl]="tilt" required>
+            <mat-error *ngIf="tilt.invalid">{{getErrorMessage(tilt)}}</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-2" style="margin-right: 0px;">
+          <mat-form-field appearance="fill" class="fullwidth">
+            <mat-label>Azimuth</mat-label>
+            <input autocomplete="off" type="tel" maxlength="5" min="1" matInput placeholder="eg. 90"
+              [formControl]="azimuth" required>
+            <mat-error *ngIf="azimuth.invalid">{{getErrorMessage(azimuth)}}</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-2" style="margin-right: 0px;">
+          <mat-form-field appearance="fill" class="fullwidth">
+            <mat-label>Roof Area</mat-label>
+            <input autocomplete="off" type="text" matInput placeholder="eg. 200" [formControl]="roofarea" required
+              appTwoDigitDecimaNumber>
+            <mat-error *ngIf="roofarea.invalid">{{getErrorMessage(roofarea)}}</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-2" style="padding-left: 40px; padding-right: 6px;">
+          <div class="row">
+            <button style="margin-top: 10px; margin-left: 15px;" mat-raised-button color="warn"
+              (click)="hideroofinputform = true">
+              Cancel
+            </button>
+            <button style="margin-top: 10px; margin-left: 7px;" mat-raised-button color="warn"
+              (click)="adddatatoroofinput($event)">
+              Save
+            </button>
+          </div>
+        </div>
+      </div>
+      <table mat-table [dataSource]="dataSource" class="mat-elevation-z2 mt-2 mb-2 designerinputtable">
+        <ng-container matColumnDef="id">
+          <th mat-header-cell *matHeaderCellDef> Roof No. </th>
+          <td mat-cell *matCellDef="let element"> {{element.id}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="numberofmodules">
+          <th mat-header-cell *matHeaderCellDef> # of Modules </th>
+          <td mat-cell *matCellDef="let element"> {{element.numberofmodules}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="tilt">
+          <th mat-header-cell *matHeaderCellDef> {{tiltvalue}} </th>
+          <td mat-cell *matCellDef="let element"> {{element.tilt}}&#xb0;</td>
+        </ng-container>
+
+        <ng-container matColumnDef="azimuth">
+          <th mat-header-cell *matHeaderCellDef> Azimuth </th>
+          <td mat-cell *matCellDef="let element"> {{element.azimuth}}&#xb0;</td>
+        </ng-container>
+
+        <ng-container matColumnDef="roofarea">
+          <th mat-header-cell *matHeaderCellDef> Roof Area </th>
+          <td mat-cell *matCellDef="let element"> {{element.roofarea | number:'2.2-2'}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="edit">
+          <th mat-header-cell *matHeaderCellDef>Edit</th>
+          <td mat-cell *matCellDef="let element"><span class="tableactionbutton">
+              <button mat-icon-button (click)="editRoofDetails(element)">
+                <img class="dialogclose" src="../../../../../../assets/edit.svg" />
+              </button>
+            </span>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="row mt-1" *ngIf="rooftypeboth==true">
+    <div class="col">
+      <div class="row">
+        <div class="col-10">
+          <h5 style="margin-bottom: 0px; margin-top: 8px; margin-left: 12px;">Flat Roof</h5>
+        </div>
+        <div class="col-2">
+          <button mat-raised-button class="float-right" (click)="hideflatroofinputform = false">
+            + Add
+          </button>
+        </div>
+      </div>
+      <div class="row" *ngIf="!hideflatroofinputform">
+        <div class="col-2">
+          <mat-form-field appearance="fill" class="fullwidth" style="margin-left: 30px;">
+            <mat-label># of Modules</mat-label>
+            <input type="hidden" [formControl]="flatroofinputid">
+            <input autocomplete="off" type="tel" maxlength="5" min="1" matInput placeholder="eg. 2"
+              [formControl]="flatmodulescount" required>
+            <mat-error *ngIf="flatmodulescount.invalid">{{getErrorMessage(flatmodulescount)}}</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-2">
+          <mat-form-field appearance="fill" class="fullwidth" style="margin-left: 20px;">
+            <mat-label>Array Tilt</mat-label>
+            <input autocomplete="off" type="tel" maxlength="5" min="1" matInput placeholder="eg. 23"
+              [formControl]="flattilt" required>
+            <mat-error *ngIf="flattilt.invalid">{{getErrorMessage(flattilt)}}</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-2" style="margin-right: 0px;">
+          <mat-form-field appearance="fill" class="fullwidth">
+            <mat-label>Azimuth</mat-label>
+            <input autocomplete="off" type="tel" maxlength="5" min="1" matInput placeholder="eg. 90"
+              [formControl]="flatazimuth" required>
+            <mat-error *ngIf="flatazimuth.invalid">{{getErrorMessage(flatazimuth)}}</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-2" style="margin-right: 0px;">
+          <mat-form-field appearance="fill" class="fullwidth">
+            <mat-label>Roof Area</mat-label>
+            <input autocomplete="off" type="tel" maxlength="5" min="1" matInput placeholder="eg. 200"
+              [formControl]="flatroofarea" required>
+            <mat-error *ngIf="flatroofarea.invalid">{{getErrorMessage(flatroofarea)}}</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-2" style="padding-left: 40px; padding-right: 6px;">
+          <div class="row">
+            <button style="margin-top: 10px; margin-left: 15px;" mat-raised-button color="warn"
+              (click)="hideflatroofinputform = true">
+              Cancel
+            </button>
+            <button style="margin-top: 10px; margin-left: 7px;" mat-raised-button color="warn"
+              (click)="adddatatoflatroofinput($event)">
+              Save
+            </button>
+          </div>
+        </div>
+      </div>
+      <table mat-table [dataSource]="flatroofdataSource" class="mat-elevation-z2 mt-2 mb-2 designerinputtable">
+        <ng-container matColumnDef="id">
+          <th mat-header-cell *matHeaderCellDef> Roof No. </th>
+          <td mat-cell *matCellDef="let element"> {{element.id}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="numberofmodules">
+          <th mat-header-cell *matHeaderCellDef> # of Modules </th>
+          <td mat-cell *matCellDef="let element"> {{element.numberofmodules}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="tilt">
+          <th mat-header-cell *matHeaderCellDef> Array Tilt </th>
+          <td mat-cell *matCellDef="let element"> {{element.tilt}}&#xb0;</td>
+        </ng-container>
+
+        <ng-container matColumnDef="azimuth">
+          <th mat-header-cell *matHeaderCellDef> Azimuth </th>
+          <td mat-cell *matCellDef="let element"> {{element.azimuth}}&#xb0;</td>
+        </ng-container>
+
+        <ng-container matColumnDef="roofarea">
+          <th mat-header-cell *matHeaderCellDef> Roof Area </th>
+          <td mat-cell *matCellDef="let element"> {{element.roofarea | number:'2.2-2'}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="edit">
+          <th mat-header-cell *matHeaderCellDef>Edit</th>
+          <td mat-cell *matCellDef="let element"><span class="tableactionbutton">
+              <button mat-icon-button (click)="editflatRoofDetails(element)">
+                <img class="dialogclose" src="../../../../../../assets/edit.svg" />
+              </button>
+            </span>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="flatroofdisplayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: flatroofdisplayedColumns;"></tr>
+      </table>
+    </div>
+  </div>
+  <!-- <div class="row mt-1">
+      <div class="col-12">
+         <div class="row">
+          <div class="col-10">
+              <h5 style="margin-bottom: 0px; margin-top: 8px; margin-left: 12px;">Design Orientations</h5>
+          </div>
+          <div class="col-2">
+              <button mat-raised-button class="float-right" (click)="hidedesignorientationsform = false">
+                  + Add
+              </button>
+          </div>
+      </div>  
+      </div>
+      <div class="col-12">
+         <div class="row" *ngIf="!hidedesignorientationsform">
+          <div class="col-2" >
+              <mat-form-field appearance="fill" class="fullwidth" style="margin-left: 30px;">
+                  <mat-label>Orientation</mat-label>
+                  <mat-select [formControl]="orientation" required style="font-size: 0.8em;">
+                      <mat-option  value="portrait">Portrait</mat-option>
+                      <mat-option  value="landscape">Landscape</mat-option>
+                  </mat-select>
+                  <mat-error *ngIf="orientation.invalid">
+                      {{getErrorMessage(orientation)}}</mat-error>
+              </mat-form-field>
+          </div>
+          <div class="col-2" style="padding-left: 0px; padding-right: 6px;">
+              <mat-form-field appearance="fill" class="fullwidth" style="margin-left: 30px;">
+                  <mat-label>Quantity</mat-label>
+                  <input autocomplete="off" type="tel" max="50" min="1" matInput placeholder="eg. 2"
+                      [formControl]="quantity" required>
+                  <mat-error *ngIf="quantity.invalid">{{getErrorMessage(quantity)}}</mat-error>
+              </mat-form-field>
+          </div>
+          <div class="col-2" style="padding-left: 0px; padding-right: 6px;">
+              <mat-form-field appearance="fill" class="fullwidth" style="margin-left: 30px;">
+                  <mat-label>Array Size</mat-label>
+                  <mat-select [formControl]="arraysize" required style="font-size: 0.8em;">
+                      <mat-option *ngFor="let data of arraysizeoptions"  [value]="data">{{data}}</mat-option>
+                  </mat-select>
+                  <mat-error *ngIf="arraysize.invalid">
+                      {{getErrorMessage(arraysize)}}</mat-error>
+              </mat-form-field>
+          </div>
+          <div class="col" >
+              <div class="row">
+                  <button style="margin-top: 10px; margin-left: 45px;" mat-raised-button color="warn"
+                      (click)="hidedesignorientationsform = true">
+                      Cancel
+                  </button>
+                  <button style="margin-top: 10px; margin-left: 7px;" mat-raised-button color="warn"
+                      (click)="adddesignorientations($event)">
+                      Save
+                  </button>
+              </div>
+          </div>
+         </div> 
+      </div>
+         <table mat-table [dataSource]="designorientationsSource" class="mat-elevation-z2 mt-2 mb-2 designerinputtable">
+          <ng-container matColumnDef="tableid">
+              <th mat-header-cell *matHeaderCellDef> Sr. No </th>
+              <td mat-cell *matCellDef="let element"> {{element.tableid}} </td>
+          </ng-container>  
+          <ng-container matColumnDef="orientation">
+              <th mat-header-cell *matHeaderCellDef> Orientation. </th>
+              <td mat-cell *matCellDef="let element"> {{element.orientation | titlecase}} </td>
+          </ng-container>
+          <ng-container matColumnDef="quantity">
+              <th mat-header-cell *matHeaderCellDef> Quantity </th>
+              <td mat-cell *matCellDef="let element"> {{element.quantity}}</td>
+          </ng-container>
+          <ng-container matColumnDef="arraysize">
+              <th mat-header-cell *matHeaderCellDef> Array Size</th>
+              <td mat-cell *matCellDef="let element"> {{element.arraysize}}</td>
+          </ng-container>
+          <ng-container matColumnDef="edit">
+              <th mat-header-cell *matHeaderCellDef>Edit</th>
+              <td mat-cell *matCellDef="let element"><span class="tableactionbutton">
+                      <button mat-icon-button (click)="editdesignorentations($event, element)">
+                          <img class="dialogclose" src="../../../../../../assets/edit.svg" />
+                      </button>
+                      <button mat-icon-button (click)="openBOMConfirmationDialog($event, element.id)">
+                          <img class="dialogclose" src="../../../../../assets/delete.svg" />
+                      </button>
+                  </span>
+              </td>
+          </ng-container>
+          <tr mat-header-row *matHeaderRowDef="designorientationsColoums"></tr>
+          <tr mat-row *matRowDef="let row; columns: designorientationsColoums;"></tr>
+      </table>
+      
+  </div> -->
+  <!-- <div class="row mt-1">
+      <div class="col">
+          <div class="row">
+              <div class="col-10">
+                  <h5 style="margin-bottom: 0px; margin-top: 8px; margin-left: 12px;">Electrical Details</h5>
+              </div>
+              <div class="col-2">
+                  <button mat-raised-button class="float-right" (click)="hideelectricalinputform = false">
+                      + Add
+                  </button>
+              </div>
+          </div>
+          <div class="row" *ngIf="!hideelectricalinputform">
+              <div class="col-1" style="padding-right: 6px;">
+                  <mat-form-field appearance="fill" class="fullwidth" style="margin-left: 30px;">
+                      <mat-label>Typical</mat-label>
+                      <input autocomplete="off" type="tel" maxlength="5" min="1" matInput placeholder="eg. 2"
+                          [formControl]="typical" required>
+                      <mat-error *ngIf="typical.invalid">{{getErrorMessage(typical)}}</mat-error>
+                  </mat-form-field>
+              </div>
+              <div class="col-2" style="padding-left: 0px; padding-right: 6px;">
+                  <mat-form-field appearance="fill" class="fullwidth" style="margin-left: 30px;">
+                      <mat-label>Initial Conductor Location</mat-label>
+                      <mat-select [formControl]="initialconductorlocation" required style="font-size: 0.8em;">
+                          <mat-option *ngFor="let data of initialfinalconductorlocation"  [value]="data">{{data}}</mat-option>
+                      </mat-select>
+                      <mat-error *ngIf="initialconductorlocation.invalid">
+                          {{getErrorMessage(initialconductorlocation)}}</mat-error>
+                  </mat-form-field>
+              </div>
+              <div class="col-2" style="padding-left: 0px; padding-right: 6px;">
+                  <mat-form-field appearance="fill" class="fullwidth" style="margin-left: 30px;">
+                      <mat-label>Final Conductor Location</mat-label>
+                      <mat-select [formControl]="finalconductorlocation" required style="font-size: 0.8em;">
+                          <mat-option *ngFor="let data of initialfinalconductorlocation"  [value]="data">{{data}}</mat-option>
+                      </mat-select>
+                      <mat-error *ngIf="finalconductorlocation.invalid">{{getErrorMessage(finalconductorlocation)}}
+                      </mat-error>
+                  </mat-form-field>
+              </div>
+              <div class="col-2" style="padding-left: 0px; padding-right: 6px;">
+                  <mat-form-field appearance="fill" class="fullwidth" style="margin-left: 30px;">
+                      <mat-label># Of Parallel Circuits</mat-label>
+                      <input autocomplete="off" type="tel" maxlength="5" min="1" matInput placeholder="eg. 2"
+                          [formControl]="parallelcircuits" required>
+                      <mat-error *ngIf="parallelcircuits.invalid">{{getErrorMessage(parallelcircuits)}}</mat-error>
+                  </mat-form-field>
+              </div>
+              <div class="col-1" style="padding-left: 0px; padding-right: 6px;">
+                  <mat-slide-toggle style="font-size: 10px; margin-top: 10px;  margin-left: 30px;" color="primary"
+                      [formControl]="ocpd">
+                      OCPD</mat-slide-toggle>
+              </div>
+              <div class="col-1" style="padding-left: 0px; padding-right: 6px;">
+                  <mat-form-field appearance="fill" class="fullwidth" style="margin-left: 30px;">
+                      <mat-label>Max Current</mat-label>
+                      <input autocomplete="off" type="tel" maxlength="5" min="1" matInput placeholder="eg. 90"
+                          [formControl]="maxcurrent" required>
+                      <mat-error *ngIf="maxcurrent.invalid">{{getErrorMessage(maxcurrent)}}</mat-error>
+                  </mat-form-field>
+              </div>
+              <div class="col-1" style="padding-left: 0px; padding-right: 6px;">
+                  <mat-form-field appearance="fill" class="fullwidth" style="margin-left: 30px;">
+                      <mat-label>Length</mat-label>
+                      <input autocomplete="off" type="tel" maxlength="5" min="1" matInput placeholder="eg. 200"
+                          [formControl]="length" required>
+                      <mat-error *ngIf="length.invalid">{{getErrorMessage(length)}}</mat-error>
+                  </mat-form-field>
+              </div>
+              <div class="col-2">
+                  <mat-form-field appearance="fill" class="fullwidth" style="margin-left: 12px;">
+                      <mat-label>Term temp rating</mat-label>
+                      <mat-select [formControl]="termtemprating" required style="font-size: 0.8em;">
+                          <mat-option value="75">75</mat-option>
+                          <mat-option value="90">90</mat-option>
+                      </mat-select>
+                      <mat-error *ngIf="termtemprating.invalid">{{getErrorMessage(termtemprating)}}</mat-error>
+                  </mat-form-field>
+              </div>
+              <div class="col-2" style="padding-left: 0px; padding-right: 6px;">
+                  <div class="row float-right" style="margin-right: 8px;">
+                      <button style="margin-top: 10px;" mat-raised-button color="warn"
+                          (click)="hideelectricalinputform = true">
+                          Cancel
+                      </button>
+                      <button style="margin-top: 10px; margin-left: 10px;" mat-raised-button color="warn"
+                          (click)="adddatatoelectricalinput($event)">
+                          Save
+                      </button>
+                  </div>
+              </div>
+          </div>
+          <div class="row" *ngIf="ELECTRICAL_DATA.length!=0">
+              <div class="col text-right">
+                  <button class="prominentbutton float-right" mat-icon-button
+                        (click)="downloadDesign()"> <img src="../../../../../assets/download.svg"
+                          width="24px" /></button>
+              </div>
+          </div>
+          <div class="row">
+          <div class="col" style="overflow-x: scroll;margin-right: 32px;margin-left: 32px;
+          padding-left: 1px;">
+          <table mat-table [dataSource]="electricaldataSource" class="mat-elevation-z2 mt-2 mb-2 electricalinputtable">
+              <ng-container matColumnDef="id">
+                  <th mat-header-cell *matHeaderCellDef> ID </th>
+                  <td mat-cell *matCellDef="let element"> {{element.tableid}} </td>
+              </ng-container>
+              <ng-container matColumnDef="typical">
+                  <th mat-header-cell *matHeaderCellDef> TYPICAL </th>
+                  <td mat-cell *matCellDef="let element"> {{element.typical}} </td>
+              </ng-container>
+              <ng-container matColumnDef="initialconductorlocation">
+                  <th mat-header-cell *matHeaderCellDef> INITIAL COND. LOC. </th>
+                  <td mat-cell *matCellDef="let element"> {{element.initialconductorlocation}}</td>
+              </ng-container>
+              <ng-container matColumnDef="finalconductorlocation">
+                  <th mat-header-cell *matHeaderCellDef> FINAL COND. LOC. </th>
+                  <td mat-cell *matCellDef="let element"> {{element.finalconductorlocation}}</td>
+              </ng-container>
+              <ng-container matColumnDef="conductor">
+                  <th mat-header-cell *matHeaderCellDef> CONDUCTOR </th>
+                  <td mat-cell *matCellDef="let element"> {{element.conductor1}} | {{element.conductor2}} | {{element.conductor3}}</td>
+              </ng-container>
+              <ng-container matColumnDef="conduit">
+                  <th mat-header-cell *matHeaderCellDef> CONDUIT </th>
+                  <td mat-cell *matCellDef="let element"> {{element.conduit}}</td>
+              </ng-container>
+              <ng-container matColumnDef="parallelcircuits">
+                  <th mat-header-cell *matHeaderCellDef> # OF PARALLEL CIRCUIT </th>
+                  <td mat-cell *matCellDef="let element"> {{element.parallelcircuits}}</td>
+              </ng-container>
+              <ng-container matColumnDef="currentcarryingconductorsinconduit">
+                  <th mat-header-cell *matHeaderCellDef> CURRENT CARR. COND. </th>
+                  <td mat-cell *matCellDef="let element"> {{element.currentcarryingconductorinconduit}}</td>
+              </ng-container>
+              <ng-container matColumnDef="conduitfillpercent">
+                  <th mat-header-cell *matHeaderCellDef> CONDUIT FILL PERC. </th>
+                  <td mat-cell *matCellDef="let element"> {{element.conduitfillpercent}}</td>
+              </ng-container>
+              <ng-container matColumnDef="ocpd">
+                  <th mat-header-cell *matHeaderCellDef> OCPD </th>
+                  <td mat-cell *matCellDef="let element"> {{element.ocpdvalue}}</td>
+              </ng-container>
+              <ng-container matColumnDef="conduitfillfactor">
+                  <th mat-header-cell *matHeaderCellDef> CONDUIT FILL FACT. </th>
+                  <td mat-cell *matCellDef="let element"> {{element.conduitfillfactor}}</td>
+              </ng-container>
+              <ng-container matColumnDef="egc">
+                  <th mat-header-cell *matHeaderCellDef> EGC </th>
+                  <td mat-cell *matCellDef="let element"> {{element.egc1}} | {{element.egc2}}</td>
+              </ng-container>
+              <ng-container matColumnDef="tempcorrfactor">
+                  <th mat-header-cell *matHeaderCellDef> TEMP. CORR. FACTOR </th>
+                  <td mat-cell *matCellDef="let element"> {{element.tempcorrfactor1}} | {{element.tempcorrfactor2}}</td>
+              </ng-container>
+              <ng-container matColumnDef="contcurrent">
+                  <th mat-header-cell *matHeaderCellDef> CONT. CURRENT </th>
+                  <td mat-cell *matCellDef="let element"> {{element.contcurrent}}</td>
+              </ng-container>
+              <ng-container matColumnDef="maxcurrent">
+                  <th mat-header-cell *matHeaderCellDef> MAX CURRENT </th>
+                  <td mat-cell *matCellDef="let element"> {{element.maxcurrent}}</td>
+              </ng-container>
+              <ng-container matColumnDef="baseamp">
+                  <th mat-header-cell *matHeaderCellDef> BASE AMP. </th>
+                  <td mat-cell *matCellDef="let element"> {{element.baseamp}}</td>
+              </ng-container>
+              <ng-container matColumnDef="deratedamp">
+                  <th mat-header-cell *matHeaderCellDef> DEFRATED AMP. </th>
+                  <td mat-cell *matCellDef="let element"> {{element.deratedamp}}</td>
+              </ng-container>
+              <ng-container matColumnDef="termtemprating">
+                  <th mat-header-cell *matHeaderCellDef> TERM TEMP. RATING </th>
+                  <td mat-cell *matCellDef="let element"> {{element.termtemprating}}</td>
+              </ng-container>
+              <ng-container matColumnDef="length">
+                  <th mat-header-cell *matHeaderCellDef> LENGTH </th>
+                  <td mat-cell *matCellDef="let element"> {{element.inputlength}}</td>
+              </ng-container>
+              <ng-container matColumnDef="voltagedrop">
+                  <th mat-header-cell *matHeaderCellDef> VOL. DROP </th>
+                  <td mat-cell *matCellDef="let element"> {{element.voltagedrop}}</td>
+              </ng-container>
+              <ng-container matColumnDef="edit">
+                  <th mat-header-cell *matHeaderCellDef></th>
+                  <td mat-cell *matCellDef="let element; let i = index"><span class="tableactionbutton">
+                          <button mat-icon-button (click)="editelectricalsDetails(element,i)">
+                              <img class="dialogclose" src="../../../../../../assets/edit.svg" />
+                          </button>
+                      </span>
+                      <span class="tableactionbutton">
+                          <button mat-icon-button (click)="deleteElectricalsDetails(i)">
+                              <img class="dialogclose" src="../../../../../../assets/delete.svg" />
+                          </button>
+                      </span>
+                  </td>
+              </ng-container>
+              <tr mat-header-row *matHeaderRowDef="electricaldisplayedColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: electricaldisplayedColumns;"></tr>
+          </table>
+      </div>
+      </div>
+      </div>
+  </div> -->
+  <div class="row mt-1">
+    <div class="col-10">
+      <h5 style="margin-bottom: 0px; margin-top: 8px; margin-left: 12px;">Drafting Files</h5>
+    </div>
+  </div>
+  <div class="row mt-3" style="margin-left: 32px; margin-right: 16px;">
+    <div class="col-6">
+      <div class="row architectureuploadrow">
+        <div class="col align-items-center architectureuploadcol" *ngIf="!siteplanexists">
+          <div class="multiple-dropzone mb-3" style="width: 80%;" ngx-dropzone [multiple]="false"
+            (change)="onSitePlanFileSelect($event)" accept=".jpeg,.jpg,.png">
+            <ngx-dropzone-label>
+              <div>
+                <img class="addimage" src="../../../../../assets/add.svg">
+                <h5>Drag and drop or click to browse the site plan drawing.</h5>
+              </div>
+            </ngx-dropzone-label>
+            <div *ngFor="let f of siteplanlayoutfiles">
+              {{ f.type }}
+              <ngx-dropzone-preview *ngIf="!f.isImage" class="imagepreview" ngProjectAs="ngx-dropzone-preview"
+                [file]="f" [removable]="true" (removed)="onSitePlanFileRemove(f)">
+                <ngx-dropzone-label class="previewlabel">{{ f.name }} ({{ f.type }})
+                </ngx-dropzone-label>
+              </ngx-dropzone-preview>
+              <ngx-dropzone-image-preview *ngIf="f.isImage" class="imagepreview" ngProjectAs="ngx-dropzone-preview"
+                [file]="f" [removable]="true" (removed)="onSitePlanFileRemove(f)">
+              </ngx-dropzone-image-preview>
+            </div>
+          </div>
+          <mat-error class="formerror uploadmargin" [hidden]="siteplanfileuploaded">You have to upload file.
+          </mat-error>
+        </div>
+
+        <div class="col" *ngIf="siteplanexists">
+          <p class="subtitle">Site Plan Drawing</p>
+          <div class="row subbody">
+            <div class="col-3">
+              <p class="contentheader" style="margin: 0px;">
+                <img *ngIf="this.generateddesign.designerdetails.siteplan.ext == '.pdf'"
+                  class="material-icons file-icon" src="./../assets/pdf.svg">
+                <img *ngIf="this.generateddesign.designerdetails.siteplan.ext == '.png'"
+                  class="material-icons file-icon" src="./../assets/png.svg">
+                <img *ngIf="this.generateddesign.designerdetails.siteplan.ext == '.zip'"
+                  class="material-icons file-icon" src="./../assets/zip.svg">
+                <img *ngIf="this.generateddesign.designerdetails.siteplan.ext == '.doc'"
+                  class="material-icons file-icon" src="./../assets/doc.svg">
+                <img *ngIf="this.generateddesign.designerdetails.siteplan.ext == '.docx'"
+                  class="material-icons file-icon" src="./../assets/doc.svg">
+                <img *ngIf="this.generateddesign.designerdetails.siteplan.ext == '.odt'"
+                  class="material-icons file-icon" src="./../assets/pdf.svg">
+                <img *ngIf="this.generateddesign.designerdetails.siteplan.ext == '.rtf'"
+                  class="material-icons file-icon" src="./../assets/rtf.svg">
+                <img *ngIf="this.generateddesign.designerdetails.siteplan.ext == '.txt'"
+                  class="material-icons file-icon" src="./../assets/txt.svg">
+                <img
+                  *ngIf="this.generateddesign.designerdetails.siteplan.ext !== '.png' && this.generateddesign.designerdetails.siteplan.ext !== '.pdf' && this.generateddesign.designerdetails.siteplan.ext !== '.zip' && this.generateddesign.designerdetails.siteplan.ext !== '.doc' && this.generateddesign.designerdetails.siteplan.ext !== '.docx' && this.generateddesign.designerdetails.siteplan.ext !== '.odt' && this.generateddesign.designerdetails.siteplan.ext !== '.rtf' && this.generateddesign.designerdetails.siteplan.ext !== '.txt'"
+                  class="material-icons file-icon" src="./../assets/file.svg">
+
+              </p>
+            </div>
+            <div class="col-7" style="word-break: break-all;margin: auto;padding-right: 0px;">
+              <a href="{{this.generateddesign.designerdetails.siteplan.url}}" target="_blank"
+                class="contentvalue float-right">{{ this.generateddesign.designerdetails.siteplan.name | uppercase
+                }}</a>
+            </div>
+            <div class="col-1" *ngIf="isEditMode">
+              <span class="float-right delete-btn"
+                (click)="onDeletesiteplan(this.generateddesign.designerdetails.siteplan.id)"><img
+                  src="../../../../../assets/delete.svg" class="dialogclose"></span>
+            </div>
+          </div>
+        </div>
+        <mat-form-field class="example-form-field" style="margin-right: 50px;">
+          <mat-label>Scale Site Plan</mat-label>
+          <input autocomplete="off" matInput placeholder='eg. 1/8\"' [formControl]="scalesiteplan" required>
+          <mat-error *ngIf="scalesiteplan.invalid">{{getErrorMessage(scalesiteplan)}}</mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="col-6">
+      <div class="row architectureuploadrow">
+        <div class="col align-items-center architectureuploadcol" *ngIf="!roofplanandmodulesexists">
+          <div class="multiple-dropzone" style="width: 80%;" ngx-dropzone [multiple]="false"
+            (change)="onRoofPlanModulesFileSelect($event)" accept=".jpeg,.jpg,.png">
+            <ngx-dropzone-label>
+              <div>
+                <img class="addimage" src="../../../../../assets/add.svg">
+                <h5>Drag and drop or click to browse the roof plan and modules drawing.</h5>
+              </div>
+            </ngx-dropzone-label>
+            <div *ngFor="let f of roofplanmoduleslayoutfiles">
+              {{ f.type }}
+              <ngx-dropzone-preview *ngIf="!f.isImage" class="imagepreview" ngProjectAs="ngx-dropzone-preview"
+                [file]="f" [removable]="true" (removed)="onRoofPlanModulesFileRemove(f)">
+                <ngx-dropzone-label class="previewlabel">{{ f.name }} ({{ f.type }})
+                </ngx-dropzone-label>
+              </ngx-dropzone-preview>
+              <ngx-dropzone-image-preview *ngIf="f.isImage" class="imagepreview" ngProjectAs="ngx-dropzone-preview"
+                [file]="f" [removable]="true" (removed)="onRoofPlanModulesFileRemove(f)">
+              </ngx-dropzone-image-preview>
+            </div>
+          </div>
+          <mat-error class="formerror uploadmargin" [hidden]="roofplanmodulesfileuploaded">You have to upload file.
+          </mat-error>
+        </div>
+
+        <div class="col" *ngIf="roofplanandmodulesexists">
+          <p class="subtitle">Roof Plan Modules</p>
+          <div class="row subbody">
+            <div class="col-3">
+              <p class="contentheader" style="margin: 0px;">
+                <img *ngIf="this.generateddesign.designerdetails.roofplanandmodules.ext == '.pdf'"
+                  class="material-icons file-icon" src="./../assets/pdf.svg">
+                <img *ngIf="this.generateddesign.designerdetails.roofplanandmodules.ext == '.png'"
+                  class="material-icons file-icon" src="./../assets/png.svg">
+                <img *ngIf="this.generateddesign.designerdetails.roofplanandmodules.ext == '.zip'"
+                  class="material-icons file-icon" src="./../assets/zip.svg">
+                <img *ngIf="this.generateddesign.designerdetails.roofplanandmodules.ext == '.doc'"
+                  class="material-icons file-icon" src="./../assets/doc.svg">
+                <img *ngIf="this.generateddesign.designerdetails.roofplanandmodules.ext == '.docx'"
+                  class="material-icons file-icon" src="./../assets/doc.svg">
+                <img *ngIf="this.generateddesign.designerdetails.roofplanandmodules.ext == '.odt'"
+                  class="material-icons file-icon" src="./../assets/pdf.svg">
+                <img *ngIf="this.generateddesign.designerdetails.roofplanandmodules.ext == '.rtf'"
+                  class="material-icons file-icon" src="./../assets/rtf.svg">
+                <img *ngIf="this.generateddesign.designerdetails.roofplanandmodules.ext == '.txt'"
+                  class="material-icons file-icon" src="./../assets/txt.svg">
+                <img
+                  *ngIf="this.generateddesign.designerdetails.roofplanandmodules.ext !== '.png' && this.generateddesign.designerdetails.roofplanandmodules.ext !== '.pdf' && this.generateddesign.designerdetails.roofplanandmodules.ext !== '.zip' && this.generateddesign.designerdetails.roofplanandmodules.ext !== '.doc' && this.generateddesign.designerdetails.roofplanandmodules.ext !== '.docx' && this.generateddesign.designerdetails.roofplanandmodules.ext !== '.odt' && this.generateddesign.designerdetails.roofplanandmodules.ext !== '.rtf' && this.generateddesign.designerdetails.roofplanandmodules.ext !== '.txt'"
+                  class="material-icons file-icon" src="./../assets/file.svg">
+
+              </p>
+            </div>
+            <div class="col-7" style="word-break: break-all;margin: auto;padding-right: 0px;">
+              <a href="{{this.generateddesign.designerdetails.roofplanandmodules.url}}" target="_blank"
+                class="contentvalue float-right">{{ this.generateddesign.designerdetails.roofplanandmodules.name |
+                uppercase }}</a>
+            </div>
+            <div class="col-1" *ngIf="isEditMode">
+              <span class="float-right delete-btn"
+                (click)="onDeleteRoofplanandmodules(this.generateddesign.designerdetails.roofplanandmodules.id)"><img
+                  src="../../../../../assets/delete.svg" class="dialogclose"></span>
+            </div>
+          </div>
+        </div>
+        <mat-form-field class="example-form-field" style="margin-right: 50px;">
+          <mat-label>Scale Roof Plan</mat-label>
+          <input autocomplete="off" matInput placeholder='eg. 1/8\"' [formControl]="scaleroofplan" required>
+          <mat-error *ngIf="scaleroofplan.invalid">{{getErrorMessage(scaleroofplan)}}</mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="col-6">
+      <div class="row architectureuploadrow">
+        <div class="col align-items-center architectureuploadcol" *ngIf="!stringlayoutandbomexists">
+          <div class="multiple-dropzone" style="width: 80%;" ngx-dropzone [multiple]="false"
+            (change)="onStringLayoutandBomFileSelect($event)" accept=".jpeg,.jpg,.png">
+            <ngx-dropzone-label>
+              <div>
+                <img class="addimage" src="../../../../../assets/add.svg">
+                <h5>Drag and drop or click to browse the string layout & bom drawing.</h5>
+              </div>
+            </ngx-dropzone-label>
+            <div *ngFor="let f of stringlayoutandbomfiles">
+              {{ f.type }}
+              <ngx-dropzone-preview *ngIf="!f.isImage" class="imagepreview" ngProjectAs="ngx-dropzone-preview"
+                [file]="f" [removable]="true" (removed)="onStringLayoutandBomFileRemove(f)">
+                <ngx-dropzone-label class="previewlabel">{{ f.name }} ({{ f.type }})
+                </ngx-dropzone-label>
+              </ngx-dropzone-preview>
+              <ngx-dropzone-image-preview *ngIf="f.isImage" class="imagepreview" ngProjectAs="ngx-dropzone-preview"
+                [file]="f" [removable]="true" (removed)="onStringLayoutandBomFileRemove(f)">
+              </ngx-dropzone-image-preview>
+            </div>
+          </div>
+          <mat-error class="formerror uploadmargin" [hidden]="stringlayoutandbomfileuploaded">You have to upload file.
+          </mat-error>
+        </div>
+        <div class="col" *ngIf="stringlayoutandbomexists">
+          <p class="subtitle">String Layout</p>
+          <div class="row subbody">
+            <div class="col-3">
+              <p class="contentheader" style="margin: 0px;">
+                <img *ngIf="this.generateddesign.designerdetails.stringlayoutandbom.ext == '.pdf'"
+                  class="material-icons file-icon" src="./../assets/pdf.svg">
+                <img *ngIf="this.generateddesign.designerdetails.stringlayoutandbom.ext == '.png'"
+                  class="material-icons file-icon" src="./../assets/png.svg">
+                <img *ngIf="this.generateddesign.designerdetails.stringlayoutandbom.ext == '.zip'"
+                  class="material-icons file-icon" src="./../assets/zip.svg">
+                <img *ngIf="this.generateddesign.designerdetails.stringlayoutandbom.ext == '.doc'"
+                  class="material-icons file-icon" src="./../assets/doc.svg">
+                <img *ngIf="this.generateddesign.designerdetails.stringlayoutandbom.ext == '.docx'"
+                  class="material-icons file-icon" src="./../assets/doc.svg">
+                <img *ngIf="this.generateddesign.designerdetails.stringlayoutandbom.ext == '.odt'"
+                  class="material-icons file-icon" src="./../assets/pdf.svg">
+                <img *ngIf="this.generateddesign.designerdetails.stringlayoutandbom.ext == '.rtf'"
+                  class="material-icons file-icon" src="./../assets/rtf.svg">
+                <img *ngIf="this.generateddesign.designerdetails.stringlayoutandbom.ext == '.txt'"
+                  class="material-icons file-icon" src="./../assets/txt.svg">
+                <img
+                  *ngIf="this.generateddesign.designerdetails.stringlayoutandbom.ext !== '.png' && this.generateddesign.designerdetails.stringlayoutandbom.ext !== '.pdf' && this.generateddesign.designerdetails.stringlayoutandbom.ext !== '.zip' && this.generateddesign.designerdetails.stringlayoutandbom.ext !== '.doc' && this.generateddesign.designerdetails.stringlayoutandbom.ext !== '.docx' && this.generateddesign.designerdetails.stringlayoutandbom.ext !== '.odt' && this.generateddesign.designerdetails.stringlayoutandbom.ext !== '.rtf' && this.generateddesign.designerdetails.stringlayoutandbom.ext !== '.txt'"
+                  class="material-icons file-icon" src="./../assets/file.svg">
+
+              </p>
+            </div>
+            <div class="col-7" style="word-break: break-all;margin: auto;padding-right: 0px;">
+              <a href="{{this.generateddesign.designerdetails.stringlayoutandbom.url}}" target="_blank"
+                class="contentvalue float-right">{{ this.generateddesign.designerdetails.stringlayoutandbom.name |
+                uppercase }}</a>
+            </div>
+            <div class="col-1" *ngIf="isEditMode">
+              <span class="float-right delete-btn"
+                (click)="onDeleteStringlayoutandbom(this.generateddesign.designerdetails.stringlayoutandbom.id)"><img
+                  src="../../../../../assets/delete.svg" class="dialogclose"></span>
+            </div>
+          </div>
+        </div>
+        <mat-form-field class="example-form-field" style="margin-right: 50px;">
+          <mat-label>Scale String Layout</mat-label>
+          <input autocomplete="off" matInput placeholder='eg. 1/8\"' [formControl]="scalestringlayout" required>
+          <mat-error *ngIf="scalestringlayout.invalid">{{getErrorMessage(scalestringlayout)}}</mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="col-6">
+      <div class="row architectureuploadrow">
+        <div class="col align-items-center architectureuploadcol" *ngIf="!singlelinediagramexists">
+          <div class="multiple-dropzone" style="width: 80%;" ngx-dropzone [multiple]="false"
+            (change)="onSingleLineDiagramSelect($event)" accept=".jpeg,.jpg,.png">
+            <ngx-dropzone-label>
+              <div>
+                <img class="addimage" src="../../../../../assets/add.svg">
+                <h5>Drag and drop or click to browse the single line diagram.</h5>
+              </div>
+            </ngx-dropzone-label>
+            <div *ngFor="let f of singlelinediagramfiles">
+              {{ f.type }}
+              <ngx-dropzone-preview *ngIf="!f.isImage" class="imagepreview" ngProjectAs="ngx-dropzone-preview"
+                [file]="f" [removable]="true" (removed)="onSingleLineDiagramRemove(f)">
+                <ngx-dropzone-label class="previewlabel">{{ f.name }} ({{ f.type }})
+                </ngx-dropzone-label>
+              </ngx-dropzone-preview>
+              <ngx-dropzone-image-preview *ngIf="f.isImage" class="imagepreview" ngProjectAs="ngx-dropzone-preview"
+                [file]="f" [removable]="true" (removed)="onSingleLineDiagramRemove(f)">
+              </ngx-dropzone-image-preview>
+            </div>
+          </div>
+          <mat-error class="formerror uploadmargin" [hidden]="singlelinediagramfileuploaded">You have to upload file.
+          </mat-error>
+        </div>
+        <div class="col" *ngIf="singlelinediagramexists">
+          <p class="subtitle">String Layout</p>
+          <div class="row subbody">
+            <div class="col-3">
+              <p class="contentheader" style="margin: 0px;">
+                <img *ngIf="this.generateddesign.designerdetails.singlelinediagram.ext == '.pdf'"
+                  class="material-icons file-icon" src="./../assets/pdf.svg">
+                <img *ngIf="this.generateddesign.designerdetails.singlelinediagram.ext == '.png'"
+                  class="material-icons file-icon" src="./../assets/png.svg">
+                <img *ngIf="this.generateddesign.designerdetails.singlelinediagram.ext == '.zip'"
+                  class="material-icons file-icon" src="./../assets/zip.svg">
+                <img *ngIf="this.generateddesign.designerdetails.singlelinediagram.ext == '.doc'"
+                  class="material-icons file-icon" src="./../assets/doc.svg">
+                <img *ngIf="this.generateddesign.designerdetails.singlelinediagram.ext == '.docx'"
+                  class="material-icons file-icon" src="./../assets/doc.svg">
+                <img *ngIf="this.generateddesign.designerdetails.singlelinediagram.ext == '.odt'"
+                  class="material-icons file-icon" src="./../assets/pdf.svg">
+                <img *ngIf="this.generateddesign.designerdetails.singlelinediagram.ext == '.rtf'"
+                  class="material-icons file-icon" src="./../assets/rtf.svg">
+                <img *ngIf="this.generateddesign.designerdetails.singlelinediagram.ext == '.txt'"
+                  class="material-icons file-icon" src="./../assets/txt.svg">
+                <img
+                  *ngIf="this.generateddesign.designerdetails.singlelinediagram.ext !== '.png' && this.generateddesign.designerdetails.singlelinediagram.ext !== '.pdf' && this.generateddesign.designerdetails.singlelinediagram.ext !== '.zip' && this.generateddesign.designerdetails.singlelinediagram.ext !== '.doc' && this.generateddesign.designerdetails.singlelinediagram.ext !== '.docx' && this.generateddesign.designerdetails.singlelinediagram.ext !== '.odt' && this.generateddesign.designerdetails.singlelinediagram.ext !== '.rtf' && this.generateddesign.designerdetails.singlelinediagram.ext !== '.txt'"
+                  class="material-icons file-icon" src="./../assets/file.svg">
+
+              </p>
+            </div>
+            <div class="col-7" style="word-break: break-all;margin: auto;padding-right: 0px;">
+              <a href="{{this.generateddesign.designerdetails.singlelinediagram.url}}" target="_blank"
+                class="contentvalue float-right">{{ this.generateddesign.designerdetails.singlelinediagram.name |
+                uppercase }}</a>
+            </div>
+            <div class="col-1" *ngIf="isEditMode">
+              <span class="float-right delete-btn"
+                (click)="onDeleteSinglelinediagram(this.generateddesign.designerdetails.singlelinediagram.id)"><img
+                  src="../../../../../assets/delete.svg" class="dialogclose"></span>
+            </div>
+          </div>
+        </div>
+        <!-- <mat-form-field class="example-form-field" style="margin-right: 80px;">
+                  <mat-label>Scale Electrical Line Diagram</mat-label>
+                  <input matInput type="text" [(ngModel)]="scaleelectricallinediagram" required>
+                  <button mat-button *ngIf="scaleelectricallinediagram" matSuffix mat-icon-button aria-label="Clear" (click)="value=''">
+                    <mat-icon>close</mat-icon>
+                  </button>
+                </mat-form-field> -->
+      </div>
+    </div>
+  </div>
+  <div class="row mt-3">
+    <div class="col-10">
+      <h5 style="margin-bottom: 0px; margin-top: 8px; margin-left: 12px;">Catalogue Files</h5>
+    </div>
+  </div>
+  <div class="row mt-3" style="margin-left: 32px; margin-right: 16px;">
+    <div class="col-6" [ngStyle]="isEditMode ? {'margin-right': '16px'} : {'margin-right': '0px'}"
+      *ngIf="!modulescataloguesexist">
+      <div class="row architectureuploadrow">
+        <div class="col align-items-center architectureuploadcol">
+          <div class="multiple-dropzone" style="width: 97%;" ngx-dropzone [multiple]="true"
+            (change)="onSolarModuleSelect($event)" accept=".jpeg,.jpg,.png">
+            <ngx-dropzone-label>
+              <div>
+                <img class="addimage" src="../../../../../assets/add.svg">
+                <h5>Drag and drop or click to browse the solar module catalogue images.</h5>
+              </div>
+            </ngx-dropzone-label>
+            <div *ngFor="let f of solarmodulecataloguefiles">
+              {{ f.type }}
+              <ngx-dropzone-preview *ngIf="!f.isImage" class="imagepreview" ngProjectAs="ngx-dropzone-preview"
+                [file]="f" [removable]="true" (removed)="onSolarModuleRemove(f)">
+                <ngx-dropzone-label class="previewlabel">{{ f.name }} ({{ f.type }})
+                </ngx-dropzone-label>
+              </ngx-dropzone-preview>
+              <ngx-dropzone-image-preview *ngIf="f.isImage" class="imagepreview" ngProjectAs="ngx-dropzone-preview"
+                [file]="f" [removable]="true" (removed)="onSolarModuleRemove(f)">
+              </ngx-dropzone-image-preview>
+            </div>
+          </div>
+          <!--  <mat-error class="formerror uploadmargin" [hidden]="solarmodulecataloguefileuploaded">You have to upload file.
+          </mat-error> -->
+        </div>
+      </div>
+    </div>
+    <div class="col-6" [ngStyle]="isEditMode ? {'margin-right': '16px'} : {'margin-right': '0px'}"
+      *ngIf="!inverterscataloguesexist">
+      <div class="row architectureuploadrow">
+        <div class="col align-items-center architectureuploadcol">
+          <div class="multiple-dropzone" style="width: 97%;" ngx-dropzone [multiple]="true"
+            (change)="onInverterSelect($event)" accept=".jpeg,.jpg,.png">
+            <ngx-dropzone-label>
+              <div>
+                <img class="addimage" src="../../../../../assets/add.svg">
+                <h5>Drag and drop or click to browse the Inverter {{generateddesign.invertermodel.name}} catalogue
+                  images</h5>
+              </div>
+            </ngx-dropzone-label>
+            <div *ngFor="let f of invertercataloguefiles">
+              {{ f.type }}
+              <ngx-dropzone-preview *ngIf="!f.isImage" class="imagepreview" ngProjectAs="ngx-dropzone-preview"
+                [file]="f" [removable]="true" (removed)="onInverterRemove(f)">
+                <ngx-dropzone-label class="previewlabel">{{ f.name }} ({{ f.type }})
+                </ngx-dropzone-label>
+              </ngx-dropzone-preview>
+              <ngx-dropzone-image-preview *ngIf="f.isImage" class="imagepreview" ngProjectAs="ngx-dropzone-preview"
+                [file]="f" [removable]="true" (removed)="onInverterRemove(f)">
+              </ngx-dropzone-image-preview>
+            </div>
+          </div>
+          <!--  <mat-error class="formerror uploadmargin" [hidden]="invertercataloguefileuploaded">You have to upload file.
+          </mat-error> -->
+        </div>
+      </div>
+    </div>
+    <div class="col-6 mt-1" [ngStyle]="isEditMode ? {'margin-right': '16px'} : {'margin-right': '0px'}"
+      *ngIf="!batterycataloguesexist">
+      <div class="row architectureuploadrow">
+        <div class="col align-items-center architectureuploadcol">
+          <div class="multiple-dropzone" style="width: 97%;" ngx-dropzone [multiple]="true"
+            (change)="onBatterySelect($event)" accept=".jpeg,.jpg,.png">
+            <ngx-dropzone-label>
+              <div>
+                <img class="addimage" src="../../../../../assets/add.svg">
+                <h5>Drag and drop or click to browse the battery catalogue images.</h5>
+              </div>
+            </ngx-dropzone-label>
+            <div *ngFor="let f of batterycataloguefiles">
+              {{ f.type }}
+              <ngx-dropzone-preview *ngIf="!f.isImage" class="imagepreview" ngProjectAs="ngx-dropzone-preview"
+                [file]="f" [removable]="true" (removed)="onBatteryRemove(f)">
+                <ngx-dropzone-label class="previewlabel">{{ f.name }} ({{ f.type }})
+                </ngx-dropzone-label>
+              </ngx-dropzone-preview>
+              <ngx-dropzone-image-preview *ngIf="f.isImage" class="imagepreview" ngProjectAs="ngx-dropzone-preview"
+                [file]="f" [removable]="true" (removed)="onBatteryRemove(f)">
+              </ngx-dropzone-image-preview>
+            </div>
+          </div>
+          <!--  <mat-error class="formerror uploadmargin" [hidden]="batterycataloguefileuploaded">You have to upload file.
+          </mat-error> -->
+        </div>
+      </div>
+    </div>
+    <div class="col-6 mt-1" [ngStyle]="isEditMode ? {'margin-right': '16px'} : {'margin-right': '0px'}"
+      *ngIf="!rackingsystemdatacataloguesexist">
+      <div class="row architectureuploadrow">
+        <div class="col align-items-center architectureuploadcol">
+          <div class="multiple-dropzone" style="width: 97%;" ngx-dropzone [multiple]="true"
+            (change)="onRackingSystemDataSelect($event)" accept=".jpeg,.jpg,.png">
+            <ngx-dropzone-label>
+              <div>
+                <img class="addimage" src="../../../../../assets/add.svg">
+                <h5>Drag and drop or click to browse the racking system data sheet catalogue images.
+                </h5>
+              </div>
+            </ngx-dropzone-label>
+            <div *ngFor="let f of rackingsystemdatacataloguefiles">
+              {{ f.type }}
+              <ngx-dropzone-preview *ngIf="!f.isImage" class="imagepreview" ngProjectAs="ngx-dropzone-preview"
+                [file]="f" [removable]="true" (removed)="onRackingSystemDataRemove(f)">
+                <ngx-dropzone-label class="previewlabel">{{ f.name }} ({{ f.type }})
+                </ngx-dropzone-label>
+              </ngx-dropzone-preview>
+              <ngx-dropzone-image-preview *ngIf="f.isImage" class="imagepreview" ngProjectAs="ngx-dropzone-preview"
+                [file]="f" [removable]="true" (removed)="onRackingSystemDataRemove(f)">
+              </ngx-dropzone-image-preview>
+            </div>
+          </div>
+          <!--  <mat-error class="formerror uploadmargin" [hidden]="rackingsystemdatacataloguefileuploaded">You have to upload
+            file.</mat-error> -->
+        </div>
+      </div>
+    </div>
+    <div class="col-6 mt-1" [ngStyle]="isEditMode ? {'margin-right': '16px'} : {'margin-right': '0px'}"
+      *ngIf="!rackingsystemcutcataloguesexist">
+      <div class="row architectureuploadrow">
+        <div class="col align-items-center architectureuploadcol">
+          <div class="multiple-dropzone" style="width: 97%;" ngx-dropzone [multiple]="true"
+            (change)="onRackingSystemCutSelect($event)" accept="image/*">
+            <ngx-dropzone-label>
+              <div>
+                <img class="addimage" src="../../../../../assets/add.svg">
+                <h5>Drag and drop or click to browse the racking system cut sheet catalogue images.</h5>
+              </div>
+            </ngx-dropzone-label>
+            <div *ngFor="let f of rackingsystemcutcataloguefiles">
+              {{ f.type }}
+              <ngx-dropzone-preview *ngIf="!f.isImage" class="imagepreview" ngProjectAs="ngx-dropzone-preview"
+                [file]="f" [removable]="true" (removed)="onRackingSystemCutRemove(f)">
+                <ngx-dropzone-label class="previewlabel">{{ f.name }} ({{ f.type }})
+                </ngx-dropzone-label>
+              </ngx-dropzone-preview>
+              <ngx-dropzone-image-preview *ngIf="f.isImage" class="imagepreview" ngProjectAs="ngx-dropzone-preview"
+                [file]="f" [removable]="true" (removed)="onRackingSystemCutRemove(f)">
+              </ngx-dropzone-image-preview>
+            </div>
+          </div>
+          <!--  <mat-error class="formerror uploadmargin" [hidden]="rackingsystemdatacataloguefileuploaded">You have to upload
+            file.</mat-error> -->
+        </div>
+      </div>
+    </div>
+    <div class="col-6 mt-1" [ngStyle]="isEditMode ? {'margin-right': '16px'} : {'margin-right': '0px'}"
+      *ngIf="!attachmentdatasheetcataloguesexist">
+      <div class="row architectureuploadrow">
+        <div class="col align-items-center architectureuploadcol">
+          <div class="multiple-dropzone" style="width: 97%;" ngx-dropzone [multiple]="true"
+            (change)="onAttachmentdatasheetSelect($event)" accept=".jpeg,.jpg,.png">
+            <ngx-dropzone-label>
+              <div>
+                <img class="addimage" src="../../../../../assets/add.svg">
+                <h5>Drag and drop or click to browse the attachment data sheet catalogue images.</h5>
+              </div>
+            </ngx-dropzone-label>
+            <div *ngFor="let f of attachmentdatasheetcataloguefiles">
+              {{ f.type }}
+              <ngx-dropzone-preview *ngIf="!f.isImage" class="imagepreview" ngProjectAs="ngx-dropzone-preview"
+                [file]="f" [removable]="true" (removed)="onAttachmentdatasheetRemove(f)">
+                <ngx-dropzone-label class="previewlabel">{{ f.name }} ({{ f.type }})
+                </ngx-dropzone-label>
+              </ngx-dropzone-preview>
+              <ngx-dropzone-image-preview *ngIf="f.isImage" class="imagepreview" ngProjectAs="ngx-dropzone-preview"
+                [file]="f" [removable]="true" (removed)="onAttachmentdatasheetRemove(f)">
+              </ngx-dropzone-image-preview>
+            </div>
+          </div>
+          <!--  <mat-error class="formerror uploadmargin" [hidden]="attachmentdatasheetcataloguefileuploaded">You have to
+            upload file.</mat-error> -->
+        </div>
+      </div>
+    </div>
+    <div class="col-6 mt-1" [ngStyle]="isEditMode ? {'margin-right': '16px'} : {'margin-right': '0px'}"
+      *ngIf="!attachmentcutsheetcataloguesexist">
+      <div class="row architectureuploadrow">
+        <div class="col align-items-center architectureuploadcol">
+          <div class="multiple-dropzone" style="width: 97%;" ngx-dropzone [multiple]="true"
+            (change)="onAttachmentcutsheetSelect($event)" accept="image/*">
+            <ngx-dropzone-label>
+              <div>
+                <img class="addimage" src="../../../../../assets/add.svg">
+                <h5>Drag and drop or click to browse the attachment cut sheet catalogue images.</h5>
+              </div>
+            </ngx-dropzone-label>
+            <div *ngFor="let f of attachmentcutsheetcataloguefiles">
+              {{ f.type }}
+              <ngx-dropzone-preview *ngIf="!f.isImage" class="imagepreview" ngProjectAs="ngx-dropzone-preview"
+                [file]="f" [removable]="true" (removed)="onAttachmentcutsheetRemove(f)">
+                <ngx-dropzone-label class="previewlabel">{{ f.name }} ({{ f.type }})
+                </ngx-dropzone-label>
+              </ngx-dropzone-preview>
+              <ngx-dropzone-image-preview *ngIf="f.isImage" class="imagepreview" ngProjectAs="ngx-dropzone-preview"
+                [file]="f" [removable]="true" (removed)="onAttachmentcutsheetRemove(f)">
+              </ngx-dropzone-image-preview>
+            </div>
+          </div>
+          <!--  <mat-error class="formerror uploadmargin" [hidden]="attachmentcutsheetcataloguefileuploaded">You have to
+            upload file.</mat-error> -->
+        </div>
+      </div>
+    </div>
+    <div class="col-6 mt-1" [ngStyle]="isEditMode ? {'margin-right': '16px'} : {'margin-right': '0px'}"
+      *ngIf="!secondrackingsystemdatacataloguesexist && generateddesign.rooftype=='both'">
+      <div class="row architectureuploadrow">
+        <div class="col align-items-center architectureuploadcol">
+          <div class="multiple-dropzone" style="width: 97%;" ngx-dropzone [multiple]="true"
+            (change)="onSecondRackingSystemDataSelect($event)" accept="image/*">
+            <ngx-dropzone-label>
+              <div>
+                <img class="addimage" src="../../../../../assets/add.svg">
+                <h5>Drag and drop or click to browse the racking system data sheet catalogue images.
+                </h5>
+              </div>
+            </ngx-dropzone-label>
+            <div *ngFor="let f of secondrackingsystemdatacataloguefiles">
+              {{ f.type }}
+              <ngx-dropzone-preview *ngIf="!f.isImage" class="imagepreview" ngProjectAs="ngx-dropzone-preview"
+                [file]="f" [removable]="true" (removed)="onSecondRackingSystemDataRemove(f)">
+                <ngx-dropzone-label class="previewlabel">{{ f.name }} ({{ f.type }})
+                </ngx-dropzone-label>
+              </ngx-dropzone-preview>
+              <ngx-dropzone-image-preview *ngIf="f.isImage" class="imagepreview" ngProjectAs="ngx-dropzone-preview"
+                [file]="f" [removable]="true" (removed)="onSecondRackingSystemDataRemove(f)">
+              </ngx-dropzone-image-preview>
+            </div>
+          </div>
+          <!--  <mat-error class="formerror uploadmargin" [hidden]="secondrackingsystemdatacataloguefileuploaded">You have to
+            upload file.</mat-error> -->
+        </div>
+      </div>
+    </div>
+    <div class="col-6 mt-1" [ngStyle]="isEditMode ? {'margin-right': '16px'} : {'margin-right': '0px'}"
+      *ngIf="!secondrackingsystemcutcataloguesexist && generateddesign.rooftype=='both'">
+      <div class="row architectureuploadrow">
+        <div class="col align-items-center architectureuploadcol">
+          <div class="multiple-dropzone" style="width: 97%;" ngx-dropzone [multiple]="true"
+            (change)="onSecondRackingSystemCutSelect($event)" accept="image/*">
+            <ngx-dropzone-label>
+              <div>
+                <img class="addimage" src="../../../../../assets/add.svg">
+                <h5>Drag and drop or click to browse the racking system cut sheet catalogue images.</h5>
+              </div>
+            </ngx-dropzone-label>
+            <div *ngFor="let f of secondrackingsystemcutcataloguefiles">
+              {{ f.type }}
+              <ngx-dropzone-preview *ngIf="!f.isImage" class="imagepreview" ngProjectAs="ngx-dropzone-preview"
+                [file]="f" [removable]="true" (removed)="onSecondRackingSystemCutRemove(f)">
+                <ngx-dropzone-label class="previewlabel">{{ f.name }} ({{ f.type }})
+                </ngx-dropzone-label>
+              </ngx-dropzone-preview>
+              <ngx-dropzone-image-preview *ngIf="f.isImage" class="imagepreview" ngProjectAs="ngx-dropzone-preview"
+                [file]="f" [removable]="true" (removed)="onSecondRackingSystemCutRemove(f)">
+              </ngx-dropzone-image-preview>
+            </div>
+          </div>
+          <!--      <mat-error class="formerror uploadmargin" [hidden]="secondrackingsystemdatacataloguefileuploaded">You have to
+            upload file.</mat-error> -->
+        </div>
+      </div>
+    </div>
+    <div class="col-6" [ngStyle]="isEditMode ? {'margin-right': '16px'} : {'margin-right': '0px'}"
+      *ngIf="!secondattachmentdatasheetcataloguesexist && generateddesign.rooftype=='both'">
+      <div class="row architectureuploadrow">
+        <div class="col align-items-center architectureuploadcol">
+          <div class="multiple-dropzone" style="width: 97%;" ngx-dropzone [multiple]="true"
+            (change)="onSecondAttachmentdatasheetSelect($event)" accept="image/jpeg,image/jpg">
+            <ngx-dropzone-label>
+              <div>
+                <img class="addimage" src="../../../../../assets/add.svg">
+                <h5>Drag and drop or click to browse the attachment data sheet catalogue images.</h5>
+              </div>
+            </ngx-dropzone-label>
+            <div *ngFor="let f of secondattachmentdatasheetcataloguefiles">
+              {{ f.type }}
+              <ngx-dropzone-preview *ngIf="!f.isImage" class="imagepreview" ngProjectAs="ngx-dropzone-preview"
+                [file]="f" [removable]="true" (removed)="onSecondAttachmentdatasheetRemove(f)">
+                <ngx-dropzone-label class="previewlabel">{{ f.name }} ({{ f.type }})
+                </ngx-dropzone-label>
+              </ngx-dropzone-preview>
+              <ngx-dropzone-image-preview *ngIf="f.isImage" class="imagepreview" ngProjectAs="ngx-dropzone-preview"
+                [file]="f" [removable]="true" (removed)="onSecondAttachmentdatasheetRemove(f)">
+              </ngx-dropzone-image-preview>
+            </div>
+          </div>
+          <!--  <mat-error class="formerror uploadmargin" [hidden]="secondattachmentdatasheetcataloguefileuploaded">You have
+            to upload file.</mat-error> -->
+        </div>
+      </div>
+    </div>
+    <div class="col-6 mt-1" [ngStyle]="isEditMode ? {'margin-right': '16px'} : {'margin-right': '0px'}"
+      *ngIf="!secondattachmentcutsheetcataloguesexist && generateddesign.rooftype=='both'">
+      <div class="row architectureuploadrow">
+        <div class="col align-items-center architectureuploadcol">
+          <div class="multiple-dropzone" style="width: 97%;" ngx-dropzone [multiple]="true"
+            (change)="onSecondAttachmentcutsheetSelect($event)" accept="image/*">
+            <ngx-dropzone-label>
+              <div>
+                <img class="addimage" src="../../../../../assets/add.svg">
+                <h5>Drag and drop or click to browse the attachment cut sheet catalogue images.</h5>
+              </div>
+            </ngx-dropzone-label>
+            <div *ngFor="let f of secondattachmentcutsheetcataloguefiles">
+              {{ f.type }}
+              <ngx-dropzone-preview *ngIf="!f.isImage" class="imagepreview" ngProjectAs="ngx-dropzone-preview"
+                [file]="f" [removable]="true" (removed)="onSecondAttachmentcutsheetRemove(f)">
+                <ngx-dropzone-label class="previewlabel">{{ f.name }} ({{ f.type }})
+                </ngx-dropzone-label>
+              </ngx-dropzone-preview>
+              <ngx-dropzone-image-preview *ngIf="f.isImage" class="imagepreview" ngProjectAs="ngx-dropzone-preview"
+                [file]="f" [removable]="true" (removed)="onSecondAttachmentcutsheetRemove(f)">
+              </ngx-dropzone-image-preview>
+            </div>
+          </div>
+          <!-- <mat-error class="formerror uploadmargin" [hidden]="secondattachmentcutsheetcataloguefileuploaded">You have to
+            upload file.</mat-error> -->
+        </div>
+      </div>
+    </div>
+
+    <ng-container *ngIf="otherinverterscatalogueexist.length>0">
+      <div class="col-6" [ngStyle]="isEditMode ? {'margin-right': '16px'} : {'margin-right': '0px'}"
+        *ngFor="let catalogue of otherinverterscatalogueexist ;let i = index">
+        <div class="row architectureuploadrow">
+          <div class="col align-items-center architectureuploadcol">
+            <div class="multiple-dropzone" style="width: 97%;" ngx-dropzone [multiple]="true"
+              (change)="onOtherInverterSelect($event,i)" accept=".jpeg,.jpg,.png">
+              <ngx-dropzone-label>
+                <div>
+                  <img class="addimage" src="../../../../../assets/add.svg">
+                  <h5>Drag and drop or click to browse the Inverter {{catalogue.invertermodelname}} catalogue images.
+                  </h5>
+                </div>
+              </ngx-dropzone-label>
+              <div *ngFor="let f of catalogue.cataloguefile">
+                {{ f.type }}
+                <ngx-dropzone-preview *ngIf="!f.isImage" class="imagepreview" ngProjectAs="ngx-dropzone-preview"
+                  [file]="f" [removable]="true" (removed)="onOtherInverterRemove(f,i)">
+                  <ngx-dropzone-label class="previewlabel">{{ f.name }} ({{ f.type }})
+                  </ngx-dropzone-label>
+                </ngx-dropzone-preview>
+                <ngx-dropzone-image-preview *ngIf="f.isImage" class="imagepreview" ngProjectAs="ngx-dropzone-preview"
+                  [file]="f" [removable]="true" (removed)="onOtherInverterRemove(f,i)">
+                </ngx-dropzone-image-preview>
+              </div>
+            </div>
+            <!--  <mat-error class="formerror uploadmargin" [hidden]="catalogue.fileuploaded">You have to upload file.
+            </mat-error> -->
+          </div>
+        </div>
+      </div>
+    </ng-container>
+
+    <div class="col-6 mt-1" [ngStyle]="isEditMode ? {'margin-right': '16px'} : {'margin-right': '0px'}">
+      <div class="row architectureuploadrow">
+        <div class="col align-items-center architectureuploadcol">
+          <div class="multiple-dropzone" style="width: 97%;" ngx-dropzone [multiple]="false"
+            (change)="onOtherSelect($event)" accept="image/*">
+            <ngx-dropzone-label>
+              <div>
+                <img class="addimage" src="../../../../../assets/add.svg">
+                <h5>Drag and drop or click to browse any other images.</h5>
+              </div>
+            </ngx-dropzone-label>
+            <div *ngFor="let f of otherdocumentscataloguefiles">
+              {{ f.type }}
+              <ngx-dropzone-preview *ngIf="!f.isImage" class="imagepreview" ngProjectAs="ngx-dropzone-preview"
+                [file]="f" [removable]="true" (removed)="onOtherRemove(f)">
+                <ngx-dropzone-label class="previewlabel">{{ f.name }} ({{ f.type }})
+                </ngx-dropzone-label>
+              </ngx-dropzone-preview>
+              <ngx-dropzone-image-preview *ngIf="f.isImage" class="imagepreview" ngProjectAs="ngx-dropzone-preview"
+                [file]="f" [removable]="true" (removed)="onOtherRemove(f)">
+              </ngx-dropzone-image-preview>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row mt-1">
+    <div class="col-10">
+      <h5 style="margin-bottom: 0px; margin-top: 8px; margin-left: 12px;">Site placard House Photo</h5>
+    </div>
+  </div>
+  <div class="row mt-3" style="margin-left: 32px; margin-right: 16px;">
+    <div class="col-6 mt-1" [ngStyle]="isEditMode ? {'margin-right': '16px'} : {'margin-right': '0px'}"
+      *ngIf="!issiteplacardhouseimageexist">
+      <div class="row architectureuploadrow">
+        <div class="col align-items-center architectureuploadcol">
+          <div class="multiple-dropzone" style="width: 97%;" ngx-dropzone [multiple]="false"
+            (change)="onHouseImageSelect($event)" accept="image/*">
+            <ngx-dropzone-label>
+              <div>
+                <img class="addimage" src="../../../../../assets/add.svg">
+                <h5>Drag and drop or click to browse house image.</h5>
+              </div>
+            </ngx-dropzone-label>
+            <div *ngFor="let f of playcardhouseimagefiles">
+              {{ f.type }}
+              <ngx-dropzone-preview *ngIf="!f.isImage" class="imagepreview" ngProjectAs="ngx-dropzone-preview"
+                [file]="f" [removable]="true" (removed)="onHouseImageRemove(f)">
+                <ngx-dropzone-label class="previewlabel">{{ f.name }} ({{ f.type }})
+                </ngx-dropzone-label>
+              </ngx-dropzone-preview>
+              <ngx-dropzone-image-preview *ngIf="f.isImage" class="imagepreview" ngProjectAs="ngx-dropzone-preview"
+                [file]="f" [removable]="true" (removed)="onHouseImageRemove(f)">
+              </ngx-dropzone-image-preview>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col" *ngIf="issiteplacardhouseimageexist">
+      <p class="subtitle">Site Placrad House Image</p>
+      <div class="row subbody">
+        <div class="col-3">
+          <p class="contentheader" style="margin: 0px;">
+            <img *ngIf="this.generateddesign.designerdetails.siteplacard.ext == '.pdf'" class="material-icons file-icon"
+              src="./../assets/pdf.svg">
+            <img *ngIf="this.generateddesign.designerdetails.siteplacard.ext == '.png'" class="material-icons file-icon"
+              src="./../assets/png.svg">
+            <img *ngIf="this.generateddesign.designerdetails.siteplacard.ext == '.zip'" class="material-icons file-icon"
+              src="./../assets/zip.svg">
+            <img *ngIf="this.generateddesign.designerdetails.siteplacard.ext == '.doc'" class="material-icons file-icon"
+              src="./../assets/doc.svg">
+            <img *ngIf="this.generateddesign.designerdetails.siteplacard.ext == '.docx'"
+              class="material-icons file-icon" src="./../assets/doc.svg">
+            <img *ngIf="this.generateddesign.designerdetails.siteplacard.ext == '.odt'" class="material-icons file-icon"
+              src="./../assets/pdf.svg">
+            <img *ngIf="this.generateddesign.designerdetails.siteplacard.ext == '.rtf'" class="material-icons file-icon"
+              src="./../assets/rtf.svg">
+            <img *ngIf="this.generateddesign.designerdetails.siteplacard.ext == '.txt'" class="material-icons file-icon"
+              src="./../assets/txt.svg">
+            <img
+              *ngIf="this.generateddesign.designerdetails.siteplacard.ext !== '.png' && this.generateddesign.designerdetails.siteplacard.ext !== '.pdf' && this.generateddesign.designerdetails.siteplacard.ext !== '.zip' && this.generateddesign.designerdetails.siteplacard.ext !== '.doc' && this.generateddesign.designerdetails.siteplacard.ext !== '.docx' && this.generateddesign.designerdetails.siteplacard.ext !== '.odt' && this.generateddesign.designerdetails.siteplacard.ext !== '.rtf' && this.generateddesign.designerdetails.siteplacard.ext !== '.txt'"
+              class="material-icons file-icon" src="./../assets/file.svg">
+
+          </p>
+        </div>
+        <div class="col-7" style="word-break: break-all;margin: auto;padding-right: 0px;">
+          <a href="{{this.generateddesign.designerdetails.siteplacard.url}}" target="_blank"
+            class="contentvalue float-right">{{ this.generateddesign.designerdetails.siteplacard.name | uppercase
+            }}</a>
+        </div>
+        <div class="col-1" *ngIf="isEditMode">
+          <span class="float-right delete-btn"
+            (click)="onDeletesiteplacard(this.generateddesign.designerdetails.siteplacard.id)"><img
+              src="../../../../../assets/delete.svg" class="dialogclose"></span>
+        </div>
+      </div>
+    </div>
+    <div class="col-6 mt-1" [ngStyle]="isEditMode ? {'margin-right': '16px'} : {'margin-right': '0px'}"
+      *ngIf="!issiteplacarddirectionimageexist">
+      <div class="row architectureuploadrow">
+        <div class="col align-items-center architectureuploadcol">
+          <div class="multiple-dropzone" style="width: 97%;" ngx-dropzone [multiple]="false"
+            (change)="onPlacradDirectionSelect($event)" accept="image/*">
+            <ngx-dropzone-label>
+              <div>
+                <img class="addimage" src="../../../../../assets/add.svg">
+                <h5>Drag and drop or click to browse direction image for site placard.</h5>
+              </div>
+            </ngx-dropzone-label>
+            <div *ngFor="let f of playcarddirectionimagefile">
+              {{ f.type }}
+              <ngx-dropzone-preview *ngIf="!f.isImage" class="imagepreview" ngProjectAs="ngx-dropzone-preview"
+                [file]="f" [removable]="true" (removed)="onPlacradDirectionRemove(f)">
+                <ngx-dropzone-label class="previewlabel">{{ f.name }} ({{ f.type }})
+                </ngx-dropzone-label>
+              </ngx-dropzone-preview>
+              <ngx-dropzone-image-preview *ngIf="f.isImage" class="imagepreview" ngProjectAs="ngx-dropzone-preview"
+                [file]="f" [removable]="true" (removed)="onPlacradDirectionRemove(f)">
+              </ngx-dropzone-image-preview>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col" *ngIf="issiteplacarddirectionimageexist">
+      <p class="subtitle">Site Placrad Direction Image</p>
+      <div class="row subbody">
+        <div class="col-3">
+          <p class="contentheader" style="margin: 0px;">
+            <img *ngIf="this.generateddesign.designerdetails.siteplacarddirectionimage.ext == '.pdf'"
+              class="material-icons file-icon" src="./../assets/pdf.svg">
+            <img *ngIf="this.generateddesign.designerdetails.siteplacarddirectionimage.ext == '.png'"
+              class="material-icons file-icon" src="./../assets/png.svg">
+            <img *ngIf="this.generateddesign.designerdetails.siteplacarddirectionimage.ext == '.zip'"
+              class="material-icons file-icon" src="./../assets/zip.svg">
+            <img *ngIf="this.generateddesign.designerdetails.siteplacarddirectionimage.ext == '.doc'"
+              class="material-icons file-icon" src="./../assets/doc.svg">
+            <img *ngIf="this.generateddesign.designerdetails.siteplacarddirectionimage.ext == '.docx'"
+              class="material-icons file-icon" src="./../assets/doc.svg">
+            <img *ngIf="this.generateddesign.designerdetails.siteplacarddirectionimage.ext == '.odt'"
+              class="material-icons file-icon" src="./../assets/pdf.svg">
+            <img *ngIf="this.generateddesign.designerdetails.siteplacarddirectionimage.ext == '.rtf'"
+              class="material-icons file-icon" src="./../assets/rtf.svg">
+            <img *ngIf="this.generateddesign.designerdetails.siteplacarddirectionimage.ext == '.txt'"
+              class="material-icons file-icon" src="./../assets/txt.svg">
+            <img
+              *ngIf="this.generateddesign.designerdetails.siteplacarddirectionimage.ext !== '.png' && this.generateddesign.designerdetails.siteplacarddirectionimage.ext !== '.pdf' && this.generateddesign.designerdetails.siteplacarddirectionimage.ext !== '.zip' && this.generateddesign.designerdetails.siteplacard.ext !== '.doc' && this.generateddesign.designerdetails.siteplacarddirectionimage.ext !== '.docx' && this.generateddesign.designerdetails.siteplacarddirectionimage.ext !== '.odt' && this.generateddesign.designerdetails.siteplacarddirectionimage.ext !== '.rtf' && this.generateddesign.designerdetails.siteplacarddirectionimage.ext !== '.txt'"
+              class="material-icons file-icon" src="./../assets/file.svg">
+
+          </p>
+        </div>
+        <div class="col-7" style="word-break: break-all;margin: auto;padding-right: 0px;">
+          <a href="{{this.generateddesign.designerdetails.siteplacarddirectionimage.url}}" target="_blank"
+            class="contentvalue float-right">{{ this.generateddesign.designerdetails.siteplacarddirectionimage.name |
+            uppercase
+            }}</a>
+        </div>
+        <div class="col-1" *ngIf="isEditMode">
+          <span class="float-right delete-btn"
+            (click)="onDeletesiteplacarddirection(this.generateddesign.designerdetails.siteplacarddirectionimage.id)"><img
+              src="../../../../../assets/delete.svg" class="dialogclose"></span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <div class="row mt-2 pb-2">
+    <div class="col">
+      <button mat-raised-button class="prominentbutton float-right mr-2" (click)="onSaveDesignerDetails()">Save</button>
+    </div>
+  </div>
+</form>

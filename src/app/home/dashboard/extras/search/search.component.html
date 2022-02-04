@@ -1,0 +1,919 @@
+<!-- <div *ngIf="isLoading" class="overlay  ">
+  <mat-progress-bar class="commonprogressbar" mode="indeterminate"></mat-progress-bar>
+</div> -->
+<div *ngIf="isLoading" class="progress-loader">
+  <div id="pause" class="d-flex align-items-center justify-content-center">
+    <div id="spinner" style="background: #fff; padding: 35px; border-radius: 5px" class="row">
+      <div class="loading-message bkgg col-9">{{ loadingmessage }}</div>
+      <div class="col-3" style="top: 5px">
+        <div class="snippet" data-title=".dot-pulse">
+          <div class="stage">
+            <div class="dot-pulse"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div *ngIf="isDownloading" class="downloadoverlay">
+  <mat-card class="spinnercard" align-items-center>
+    <div class="row">
+      <div class="col">
+        <h4 class="spinnertext">{{ downloadmessage }}</h4>
+      </div>
+      <div class="col-4">
+        <h4 class="spinnertext">{{ loadingpercentage }} %</h4>
+      </div>
+    </div>
+  </mat-card>
+</div>
+<div class="main-content search">
+  <div class="container">
+    <!-- <div class="row mb-2">
+          <div class="col">
+            <button mat-button class="bluebutton" (click)="handleBack()">
+              Back
+            </button>
+          </div>
+        </div> -->
+    <div class="row align-items-center pl-4 pr-4 searchheaderrow">
+      <button mat-button class="backbutton mr-4" (click)="handleBack()">
+        <img src="../../../../../assets/back.svg" />
+      </button>
+      <i class="material-icons">search</i>
+      <mat-form-field class="searchfield" appearance="fill">
+        <input matInput #searchinputfield="matInput" placeholder="Search here" [formControl]="searchfield" required
+          (keydown.enter)="inputDataSearch()" autofocus />
+      </mat-form-field>
+      <button mat-button (click)="clearfield()">Clear</button>
+    </div>
+    <div class="row resultsrow" *ngIf="!placeholder">
+      <!-- <div class="col listcolumn">
+            <mat-card class="listcard" >
+              <mat-card-header>
+                <mat-card-title>{{recordsCount}} Survey</mat-card-title>
+              </mat-card-header>
+              <mat-card-content >
+                <cdk-virtual-scroll-viewport itemSize="50" class="listitems-viewport">
+                  <mat-card [ngClass]="[ i%2 == 0 ? 'itemcard even' : 'itemcard odd']"
+                    *cdkVirtualFor="let record of searchrecords.survey; let i = index"
+                    (click)="openDetailDialog(record, $event,i)">
+                    <mat-card-header>
+                      <div class="row align-items-center headerrow">
+                        <div class="col-8 headercol">
+                          <mat-card-title *ngIf="record.type == 'design'">{{record.name}}
+                            <span class="chipdetail" style="background-color: #FC427B;">Design</span>
+                              <span class="chipdetail" style="background-color: #FC427B;">{{record.requesttype | titlecase}}</span>
+                            <span class="chipdetail" *ngIf="record.status == 'outsourced' && isClient">{{genericService.getDesignStatusName(record.status)}}</span>
+                              <span class="chipdetail" style="background-color: #fa983a;" *ngIf="record.isoutsourced == 'true'">Outsourced</span>
+                              <span class="chipdetail" style="background-color: #1289A7;"
+                          *ngIf="record.status == 'created'">Unassigned</span>
+                            <span class="chipdetail" style="background-color: #3c78d8;"
+                              *ngIf="record.status == 'designassigned' || record.status == 'designcompleted' || record.status == 'reviewassigned' || record.status == 'reviewpassed'">{{genericService.getDesignStatusName(record.status)}}</span>
+                            <span class="chipdetail" style="background-color: rgb(109, 187, 26);"
+                              *ngIf="record.status == 'requestaccepted' || record.status == 'delivered'">{{genericService.getDesignStatusName(record.status)}}</span>
+                            <span class="chipdetail" style="background-color: rgb(246, 77, 10);"
+                              *ngIf="record.status == 'requestdeclined' || record.status == 'reviewfailed'">{{genericService.getDesignStatusName(record.status)}}</span>
+                          </mat-card-title>
+                          <mat-card-title *ngIf="record.type == 'survey'">{{record.name}}
+                            <span class="chipdetail" style="background-color: #FC427B;">Survey</span>
+                            <span class="chipdetail" *ngIf="isClient">{{genericService.getSurveyStatusName(record.status)}}</span>
+                        <span class="chipdetail" style="background-color: #1289A7;" *ngIf="record.status == 'created'">Unassigned</span>
+                        <span class="chipdetail" style="background-color: #3c78d8;" *ngIf="record.status == 'assigned'">{{genericService.getSurveyStatusName(record.status)}}</span>
+                        <span class="chipdetail" style="background-color: rgb(109, 187, 26);" *ngIf="record.status == 'completed'">{{genericService.getSurveyStatusName(record.status)}}</span>
+                        <span class="chipdetail" style="background-color: rgb(246, 77, 10);" *ngIf="genericService.isDatePassed(record.datetime)">Overdue</span>
+                          </mat-card-title>
+                        </div>
+                      </div>
+                    </mat-card-header>
+                    <mat-card-content>
+                      <div class="row contentrow">
+                        <div class="col-8 contentcol">
+                          <a class="actiondetail" href="mailto:{{record.email}}"
+                            (click)="$event.stopPropagation()">{{ record.email }}</a>
+                          <a class="actiondetail" href="https://maps.google.com/?q={{record.address}}" target="_blank"
+                            (click)="$event.stopPropagation()">{{ record.address }}</a>
+                        </div>
+                      </div>
+                      <p class="silentdetail">Updated {{ genericService.formatDateInTimeAgo(record.updated_at) }}</p>
+                    </mat-card-content>
+                    <mat-card-footer>
+                      <div class="row footerrow align-items-center">
+                        <div class="col-8 footercol">
+                          <div class="row align-items-center">
+                            <p class="chipdetail">{{record.createdby.company}}</p>
+                            <p class="chipdetail ml-1" *ngIf="record.type == 'design'">{{record.requesttype | titlecase}}</p>
+                            <p class="chipdetail ml-1" *ngIf="record.type == 'survey'">Survey</p>
+                            <p class="chipdetail ml-1">{{genericService.getJobTypeName(record.jobtype)}}</p>
+                            <p class="chipdetail ml-1">{{record.source | titlecase}}</p>
+                          </div>
+                        </div>
+                      </div>
+                    </mat-card-footer>
+                  </mat-card>
+                </cdk-virtual-scroll-viewport>
+              </mat-card-content>
+            </mat-card>
+          </div> -->
+      <div class="col listcolumn">
+        <mat-tab-group mat-stretch-tabs style="width: 100%">
+          <mat-tab *ngIf="
+              this.loggedInUser.role.id != role.Peengineer &&
+              this.loggedInUser.role.id != role.Surveyor &&
+              !isPesuperadmin
+            ">
+            <ng-template matTabLabel>Designs </ng-template>
+            <mat-card class="listcard">
+              <p *ngIf="searchedDesigns.length == 0">No Design found</p>
+              <mat-card-content>
+                <cdk-virtual-scroll-viewport itemSize="50" class="listitems-viewport">
+                  <mat-card [ngClass]="applyCardCss(i,record)" *cdkVirtualFor="
+                      let record of searchedDesigns;
+                      let i = index
+                    " (click)="openDetailDialog(record, $event, i)">
+                    <mat-card-header>
+                      <div class="row align-items-center headerrow">
+                        <div class="col-10 headercol">
+                          <img style="width: 24px; margin-right: 8px" *ngIf="record.isonpriority"
+                            src="../../../../../assets/redflag.svg" />
+                          <mat-card-title>{{ record.name }}
+                            <span class="chipdetail ml-1" *ngIf="
+                                record.requesttype == 'permit' &&
+                                genericService.specificclient
+                              " style="background-color: #0652dd">Design</span>
+                            <span class="chipdetail ml-1" *ngIf="
+                                record.requesttype == 'permit' &&
+                                !genericService.specificclient
+                              " style="background-color: #0652dd">Permit</span>
+                            <span class="chipdetail ml-1" *ngIf="record.status == 'outsourced' && isClient">{{
+                              record.designcurrentstatus }}</span>
+                            <span class="chipdetail ml-1" *ngIf="
+                                (record.requirementtype == 'assessment' ||
+                                  record.requirementtype == 'proposal') &&
+                                record.requesttype == 'prelim'
+                              " style="background-color: rgb(204, 153, 0)">{{ record.requirementtype | titlecase
+                              }}</span>
+                            <span class="chipdetail ml-1" style="background-color: #1289a7"
+                              *ngIf="record.status == 'created'">Unassigned</span>
+                            <span class="chipdetail ml-1" style="background-color: #a212a7"
+                              *ngIf="record.archived">Archive</span>
+                            <span class="chipdetail ml-1" style="background-color: #3c78d8" *ngIf="
+                                record.status == 'designassigned' ||
+                                record.status == 'reviewassigned'
+                              ">{{ record.designcurrentstatus }}</span>
+                            <span class="chipdetail ml-1" style="background-color: rgb(109, 187, 26)" *ngIf="
+                                record.status == 'requestaccepted' ||
+                                record.status == 'designcompleted' ||
+                                record.status == 'reviewpassed' ||
+                                record.status == 'delivered'
+                              ">{{ record.designcurrentstatus }}</span>
+                            <span class="chipdetail ml-1" style="background-color: rgb(246, 77, 10)" *ngIf="
+                                record.status == 'requestdeclined' ||
+                                record.status == 'reviewfailed'
+                              ">{{ record.designcurrentstatus }}</span>
+                            <!-- <span class="chipdetail ml-1" style="background-color: rgb(234, 32, 39)" *ngIf="
+                                record.isoverdue &&
+                                record.projecttype != 'commercial'
+                              ">Overdue</span> -->
+                            <span class="chipdetail ml-1" style="background-color: rgb(183, 21, 64)"
+                              *ngIf="record.isinrevisionstate">Revision</span>
+                            <span class="chipdetail ml-1 ml-1" style="background-color: rgb(62, 110, 53)" *ngIf="
+                                record.unhold &&
+                                record.status != 'requestdeclined'
+                              ">Un Hold</span>
+                          </mat-card-title>
+                        </div>
+                        <div class="col headercol">
+                          <button class="float-right" mat-icon-button (click)="activitybarToggle(record, $event)">
+                            <img src="../../../../../assets/activitylist.png" width="24px" />
+                          </button>
+                          <button *ngIf="
+                              (record.status != 'created' || record.isinrevisionstate) &&
+                              (record.unreadmessagecount == 0 ||
+                                record.unreadmessagecount == null)
+                            " class="float-right" mat-icon-button (click)="onChatButtonClick(record, $event)">
+                            <img src="../../../../../assets/chat.svg" width="24px" />
+                          </button>
+                          <button *ngIf="
+                              (record.status != 'created' ||
+                                record.status != 'requestaccepted' ||
+                                record.status != 'requestdeclined' || record.isinrevisionstate) &&
+                              record.unreadmessagecount > 0
+                            " class="float-right" mat-icon-button (click)="onChatButtonClick(record, $event)">
+                            <img src="../../../../../assets/newchat.svg" width="24px" />
+                          </button>
+                        </div>
+                      </div>
+                    </mat-card-header>
+                    <mat-card-content>
+                      <div class="row contentrow">
+                        <div class="col-8 contentcol">
+                          <a class="actiondetail" href="mailto:{{ record.email }}" (click)="$event.stopPropagation()">{{
+                            record.email }}</a>
+                          <a class="actiondetail" href="https://maps.google.com/?q={{
+                              record.address
+                            }}" target="_blank" (click)="$event.stopPropagation()">{{ record.address }}</a>
+                          <p class="actiondetail silentdetail" *ngIf="record.createdby.company != null">
+                            {{ record.createdby?.company }}
+                          </p>
+                        </div>
+                        <div class="col contentcol">
+                          <div *ngIf="record.status == 'outsourced'" class="leftovertimerclass float-right">
+                            <p>{{ record.designacceptanceremainingtime }}</p>
+                          </div>
+
+                          <div *ngIf="
+                              (record.status == 'designassigned' ||
+                                record.status == 'designcompleted') &&
+                              !isUserDesigner
+                            ">
+                            <p class="assigneedetails">Assigned to</p>
+                            <p class="assigneedetails" style="font-weight: 600">
+                              {{ record.designassignedto?.firstname }}
+                              {{ record.designassignedto?.lastname }}
+                            </p>
+                          </div>
+
+                          <div *ngIf="
+                              (record.status == 'reviewassigned' ||
+                                record.status == 'reviewpassed') &&
+                              !isUserAnalyst
+                            ">
+                            <p class="assigneedetails">Assigned to</p>
+                            <p class="assigneedetails" style="font-weight: 600">
+                              {{ record.reviewassignedto?.firstname }}
+                              {{ record.reviewassignedto?.lastname }}
+                            </p>
+                          </div>
+                          <!-- <p style="float: right;" class="timedetail" *ngIf="record.isoverdue && record.projecttype !='commercial'">Late by {{ record.lateby
+                            }}</p> -->
+                        </div>
+                      </div>
+                      <p class="silentdetail" *ngIf="
+                          record.status != 'delivered' &&
+                          record.expecteddeliverydate
+                        ">
+                        {{ record.expecteddeliverydate | date: "dd MMM yy" }}
+                      </p>
+                      <p class="silentdetail" *ngIf="
+                          record.status == 'delivered' &&
+                          record.actualdelivereddate
+                        ">
+                        {{ record.actualdelivereddate | date: "dd MMM yy" }}
+                      </p>
+                    </mat-card-content>
+                    <mat-card-footer>
+                      <div class="row footerrow align-items-center">
+                        <div class="col-6 footercol">
+                          <div class="row align-items-center">
+                            <p class="chipdetail ml-1" *ngIf="record.requesttype == 'permit'">
+                              {{ record.formattedjobtype }}
+                            </p>
+                            <!-- <p class="chipdetail ml-1 ml-1">{{record.source | titlecase}}</p> -->
+                          </div>
+                        </div>
+                        <div class="col-12 footercol">
+                          <!-- <div style="width: 82px;"
+                            *ngIf="(record.status == 'designassigned' || record?.status == 'reviewassigned' || record?.status == 'reviewfailed') && (job?.taskstatus == 'pending' && job?.designid == record?.id)"
+                            class="leftovertimerclass float-right">
+                            <p>{{ record.designremainingtime }}</p>
+                            <p>{{ display }}</p>
+                          </div>
+                          <button
+                            *ngIf="!disablestartbutton && ((isUserDesigner && (record?.status == 'designassigned' || record?.status == reviewfailed)) || (isUserAnalyst && record?.status == 'reviewassigned'))"
+                            class="prominentbutton float-right ml-1" mat-button
+                            (click)="startTimer($event,record)">Start</button> -->
+
+                          <!-- Delivered Section icons buttons -->
+                          <button *ngIf="!isClient && record.status == 'delivered'" class="prominentbutton float-right"
+                            mat-icon-button (click)="downloadprelimDesign(record, $event)">
+                            <img src="../../../../../assets/download.svg" width="24px" />
+                          </button>
+
+                          <button *ngIf="isClient && record.status == 'delivered'" class="prominentbutton float-right"
+                            mat-icon-button (click)="downloadDesign(record, null, $event)">
+                            <img src="../../../../../assets/download.svg" width="24px" />
+                          </button>
+
+                          <button *ngIf="!isClient && record.status == 'delivered'" class="prominentbutton float-right"
+                            mat-icon-button (click)="shareDesign(record, $event)">
+                            <img src="../../../../../assets/mail1.svg" width="24px" />
+                          </button>
+                          <button *ngIf="isClient && record.status == 'delivered'" class="prominentbutton float-right"
+                            mat-icon-button (click)="shareDesign(record, $event)">
+                            <img src="../../../../../assets/mail1.svg" width="24px" />
+                          </button>
+                          <button *ngIf="
+                              record.status == 'delivered' &&
+                              record.requesttype == 'prelim'
+                            " class="prominentbutton float-right" mat-icon-button (click)="ShareOnWhatsapp($event)">
+                            <a href="https://web.whatsapp.com/send?text=find the attachment in the link-    {{
+                                record?.prelimdesign?.url
+                              }}" target="_blank"><img src="../../../../../assets/whatsapp.svg" width="24px" />
+                            </a>
+                          </button>
+
+                          <button *ngIf="
+                              record.status == 'delivered' &&
+                              record.requesttype == 'permit'
+                            " class="prominentbutton float-right" mat-icon-button (click)="ShareOnWhatsapp($event)">
+                            <a href="https://web.whatsapp.com/send?text=find the attachment in the link-    {{
+                                record?.permitdesign?.url
+                              }}" target="_blank">
+                              <img src="../../../../../assets/whatsapp.svg" width="24px" />
+                            </a>
+                          </button>
+
+                          <!-- <button *ngIf="!isClient && record.status == 'delivered'&& record.prelimdesign" class="prominentbutton float-right" mat-icon-button
+                          (click)="ShareOnWhatsapp($event)">
+                          <a href="https://web.whatsapp.com/send?text=find the attachment in the link-    {{ record.prelimdesign.url}}"
+                            target="_blank">
+                            <img src="../../../../../assets/whatsapp.svg" width="24px" /> </a></button>
+
+                            <button *ngIf="!isClient && record.status == 'delivered'&& record.permitdesign" class="prominentbutton float-right" mat-icon-button
+                            (click)="ShareOnWhatsapp($event)">
+                            <a href="https://web.whatsapp.com/send?text=find the attachment in the link-    {{ record.permitdesign.url}}"
+                              target="_blank">
+                              <img src="../../../../../assets/whatsapp.svg" width="24px" /> </a></button> -->
+                          <!--/button-->
+
+                          <button *ngIf="
+                              (record.status == 'outsourced' ||
+                                record.status == 'requestaccepted' ||
+                                record.status == 'designassigned' ||
+                                record.status == 'designcompleted' ||
+                                record.status == 'reviewassigned' ||
+                                record.status == 'reviewfailed' ||
+                                record.status == 'reviewpassed') &&
+                              !isClient
+                            " class="prominentbutton secondarybutton float-right ml-1" mat-button (click)="
+                              declineDesignRequest(record, $event, i, 'onhold')
+                            ">
+                            On Hold
+                          </button>
+
+                          <!-- review assigning button -->
+                          <button *ngIf="
+                              !isClient &&
+                              isButtonShow &&
+                              (record.status == 'reviewassigned' ||
+                                record.status == 'reviewpassed' ||
+                                record.status == 'reviewfailed')
+                            " class="prominentbutton float-right" mat-button
+                            (click)="openAssignQCDialog(record, $event, i)">
+                            Reassign Review
+                          </button>
+                          <!-- <button  *ngIf="((!isClient && !isUserDesigner &&  record.reviewassignedto?.id != loggedInUser.id ) && (record.status == 'reviewassigned' || record.status == 'reviewfailed' || record.status == 'designcompleted'))" class="prominentbutton float-right" mat-button
+                            (click)="selfAssignQC(record, $event, i)">Self Assign Review</button>  -->
+                          <!-- <button *ngIf=" !isClient && isButtonShow && (record.status == 'designcompleted')" class="prominentbutton float-right" mat-button
+                            (click)="openAssignQCDialog(record, $event, i)">Assign  Review</button> -->
+                          <!-- review assigning button end -->
+
+                          <button *ngIf="
+                              (isClient || isWattmonkUser) &&
+                              record.status == 'delivered'
+                            " class="prominentbutton float-right" mat-button (click)="resendDesign(record, $event)">
+                            Send for Revision
+                          </button>
+                          <button *ngIf="
+                              !isClient &&
+                              !isUserDesigner &&
+                              record.reviewassignedto?.id != loggedInUser.id &&
+                              (record.status == 'reviewassigned' ||
+                                record.status == 'reviewfailed' ||
+                                record.status == 'designcompleted')
+                            " class="prominentbutton float-right" mat-button (click)="selfAssignQC(record, $event, i)">
+                            Self Assign Review
+                          </button>
+                          <button *ngIf="
+                              !isClient &&
+                              record.status == 'designcompleted' &&
+                              !isUserDesigner
+                            " class="prominentbutton float-right" mat-button
+                            (click)="openAssignQCDialog(record, $event, i)">
+                            Assign Review
+                          </button>
+                          <button *ngIf="
+                              record.status == 'reviewpassed' &&
+                              !isClient &&
+                              !isUserAnalyst
+                            " class="prominentbutton float-right" mat-button
+                            (click)="deliverDesign(record, $event, i)">
+                            Deliver
+                          </button>
+
+                          <button *ngIf="
+                              record.status == 'created' ||
+                              (record.status == 'requestaccepted' &&
+                                !isClient &&
+                                !isUserDesigner)
+                            " class="prominentbutton float-right" mat-button (click)="
+                              openAssignDesignerDialog(record, $event, i)
+                            ">
+                            Assign
+                          </button>
+                          <button *ngIf="record.status == 'outsourced' && !isClient" class="prominentbutton float-right"
+                            mat-button (click)="acceptDesignRequest(record, $event, i)">
+                            Accept
+                          </button>
+                          <button *ngIf="
+                              record.status == 'designassigned' &&
+                              !isClient &&
+                              !isUserDesigner
+                            " class="prominentbutton float-right" mat-button (click)="
+                              openAssignDesignerDialog(record, $event, i)
+                            ">
+                            Reassign
+                          </button>
+                          <button *ngIf="
+                              isUnhold && record.status == 'requestdeclined'
+                            " class="prominentbutton float-right" mat-button (click)="
+                              openReAssignDesignerDialog(
+                                record,
+                                $event,
+                                i,
+                                'unhold'
+                              )
+                            ">
+                            Un Hold
+                          </button>
+
+                          <button *ngIf="
+                             
+                              israisesurveyrequest &&
+                              record.status == 'delivered' &&
+                              !record.issurveyraised &&
+                              record.requesttype == 'prelim'
+                            " class="prominentbutton float-right" mat-button (click)="raisesurvey(record, $event)">
+                            Raise Survey Request
+                          </button>
+                          <button *ngIf="
+                              ((!record.createdby.parent.ispaymentmodeprepay &&
+                                isWattmonkUser) ||
+                                isClient) &&
+                              israisepermitrequest &&
+                              record.status == 'delivered' &&
+                              !record.ispermitraised &&
+                              record.requesttype == 'prelim'
+                            " class="prominentbutton float-right" mat-button (click)="raisepermit(record, $event)">
+                            Raise Permit Request
+                          </button>
+                          <button *ngIf="((!record.createdby.parent.ispaymentmodeprepay &&
+                          isWattmonkUser) || isClient) &&
+                              israisepestamprequest &&
+                              record.status == 'delivered' &&
+                              !record.ispestampraised &&
+                              record.requesttype == 'permit'
+                            " class="prominentbutton float-right" mat-button
+                            (click)="raisePestampRequest(record, $event)">
+                            Raise Pestamp Request
+                          </button>
+
+                          <button *ngIf="
+                              record.issurveyraised &&
+                              record.status == 'delivered' && !isUserAnalyst
+                            " class="prominentbutton float-right request-raised" mat-button
+                            (click)="raisesurvey(record, $event)">
+                            Survey Request Raised
+                          </button>
+                          <button *ngIf="
+                              record.ispermitraised &&
+                              record.status == 'delivered' && !isUserAnalyst
+                            " class="prominentbutton float-right request-raised" mat-button
+                            (click)="raisepermit(record, $event)">
+                            Permit Request Raised
+                          </button>
+
+                          <button *ngIf="
+                              record.ispestampraised &&
+                              record.status == 'delivered' && !isUserAnalyst
+                            " class="prominentbutton float-right request-raised" mat-button
+                            (click)="raisePestampRequest(record, $event)">
+                            Pestamp Request Raised
+                          </button>
+                        </div>
+                      </div>
+                      <!-- <div class="row"
+                        *ngIf="(record?.taskoverdue || ((totalminutes > prelimdesigner || totalminutes > prelimanalyst || totalminutes > permitdesigner || totalminutes > permitanalyst) && job?.designid == record.id)) && (isWattmonkUser"
+                        style="justify-content: center;"> -->
+                      <div class="row"
+                        *ngIf="(record?.taskoverdue || record?.newtasktimings?.isjobtimeexceeded) && (isWattmonkUser || isUserDesigner || isUserAnalyst)"
+                        style="justify-content: center;">
+                        <div style="background-color: red;height: 20px;width: 15%;">
+                          <p style="color: white;text-align: -webkit-center;"><b>Task Exceeded Time</b></p>
+                        </div>
+                      </div>
+                    </mat-card-footer>
+                  </mat-card>
+                </cdk-virtual-scroll-viewport>
+              </mat-card-content>
+            </mat-card>
+          </mat-tab>
+          <mat-tab *ngIf="
+              this.loggedInUser.role.id != role.Peengineer &&
+              this.loggedInUser.role.id != role.Designer &&
+              this.loggedInUser.role.id != role.Analyst &&
+              !isPesuperadmin
+            ">
+            <ng-template matTabLabel>Surveys </ng-template>
+            <mat-card class="listcard">
+              <p *ngIf="searchrecords.survey.length == 0">No Surveys found</p>
+              <mat-card-content>
+                <cdk-virtual-scroll-viewport itemSize="50" class="listitems-viewport">
+                  <mat-card [ngClass]="[i % 2 == 0 ? 'itemcard even' : 'itemcard odd']" *cdkVirtualFor="
+                      let record of searchrecords.survey;
+                      let i = index
+                    " (click)="openDetailDialog(record, $event, i)">
+                    <mat-card-header>
+                      <div class="row align-items-center headerrow">
+                        <div class="col-8 headercol">
+                          <mat-card-title *ngIf="record.type == 'design'">{{ record.name }}
+                            <span class="chipdetail" style="background-color: #fc427b">Design</span>
+                            <span class="chipdetail" style="background-color: #fc427b">{{ record.requesttype | titlecase
+                              }}</span>
+                            <span class="chipdetail" *ngIf="record.status == 'outsourced' && isClient">{{
+                              genericService.getDesignStatusName(
+                              record.status
+                              )
+                              }}</span>
+                            <span class="chipdetail" style="background-color: #fa983a"
+                              *ngIf="record.isoutsourced == 'true'">Outsourced</span>
+                            <span class="chipdetail" style="background-color: #1289a7"
+                              *ngIf="record.status == 'created'">Unassigned</span>
+                            <span class="chipdetail ml-1" style="background-color: #a212a7"
+                              *ngIf="record.archived">Archive</span>
+                            <span class="chipdetail" style="background-color: #3c78d8" *ngIf="
+                                record.status == 'designassigned' ||
+                                record.status == 'designcompleted' ||
+                                record.status == 'reviewassigned' ||
+                                record.status == 'reviewpassed'
+                              ">{{
+                              genericService.getDesignStatusName(
+                              record.status
+                              )
+                              }}</span>
+                            <span class="chipdetail" style="background-color: rgb(109, 187, 26)" *ngIf="
+                                record.status == 'requestaccepted' ||
+                                record.status == 'delivered'
+                              ">{{
+                              genericService.getDesignStatusName(
+                              record.status
+                              )
+                              }}</span>
+                            <span class="chipdetail" style="background-color: rgb(246, 77, 10)" *ngIf="
+                                record.status == 'requestdeclined' ||
+                                record.status == 'reviewfailed'
+                              ">{{
+                              genericService.getDesignStatusName(
+                              record.status
+                              )
+                              }}</span>
+                          </mat-card-title>
+                          <mat-card-title *ngIf="record.type == 'survey'">{{ record.name }}
+                            <span class="chipdetail" style="background-color: #fc427b">Survey</span>
+                            <span class="chipdetail" *ngIf="isClient">{{record.status}}</span>
+                            <span class="chipdetail" style="background-color: #1289a7"
+                              *ngIf="record.status == 'created'">Unassigned</span>
+                            <span class="chipdetail" style="background-color: #3c78d8"
+                              *ngIf="record.status == 'assigned'">{{
+                              genericService.getSurveyStatusName(
+                              record.status
+                              )
+                              }}</span>
+                            <span class="chipdetail" style="background-color: rgb(109, 187, 26)"
+                              *ngIf="record.status == 'completed'">{{
+                              genericService.getSurveyStatusName(
+                              record.status
+                              )
+                              }}</span>
+                            <span class="chipdetail" style="background-color: rgb(246, 77, 10)" *ngIf="
+                                genericService.isDatePassed(record.datetime)
+                              ">Overdue</span>
+                          </mat-card-title>
+                        </div>
+                        <div class="col headercol">
+                          <button class="float-right" mat-icon-button
+                            (click)="surveyactivitybarToggle(record, $event)"><img
+                              src="../../../../../assets/activitylist.png" width="24px" /></button>
+                          <button *ngIf="
+                              (record.status != 'created' ||
+                                record.status != 'requestaccepted' ||
+                                record.status != 'requestdeclined') &&
+                              (record.unreadmessagecount == 0 ||
+                                record.unreadmessagecount == null)
+                            " class="float-right" mat-icon-button (click)="onChatButtonClick(record, $event)">
+                            <img src="../../../../../assets/chat.svg" width="24px" />
+                          </button>
+                          <button *ngIf="
+                              (record.status != 'created' ||
+                                record.status != 'requestaccepted' ||
+                                record.status != 'requestdeclined') &&
+                              record.unreadmessagecount > 0
+                            " class="float-right" mat-icon-button (click)="onChatButtonClick(record, $event)">
+                            <img src="../../../../../assets/newchat.svg" width="24px" />
+                          </button>
+                        </div>
+                      </div>
+                    </mat-card-header>
+                    <mat-card-content>
+                      <div class="row contentrow">
+                        <div class="col-8 contentcol">
+                          <a class="actiondetail" href="mailto:{{ record.email }}" (click)="$event.stopPropagation()">{{
+                            record.email }}</a>
+                          <a class="actiondetail" href="https://maps.google.com/?q={{
+                              record.address
+                            }}" target="_blank" (click)="$event.stopPropagation()">{{ record.address }}</a>
+                        </div>
+                      </div>
+                      <p class="silentdetail">
+                        Updated
+                        {{
+                        genericService.formatDateInTimeAgo(record.updated_at)
+                        }}
+                      </p>
+                    </mat-card-content>
+                    <mat-card-footer>
+                      <div class="row footerrow align-items-center">
+                        <div class="col-6 footercol">
+                          <div class="row align-items-center">
+                            <p class="chipdetail">
+                              {{ record.createdby?.company }}
+                            </p>
+                            <p class="chipdetail ml-1" *ngIf="record.type == 'design'">
+                              {{ record.requesttype | titlecase }}
+                            </p>
+                            <p class="chipdetail ml-1" *ngIf="record.type == 'survey'">
+                              Survey
+                            </p>
+                            <p class="chipdetail ml-1">
+                              {{
+                              genericService.getJobTypeName(record.jobtype)
+                              }}
+                            </p>
+                            <!-- <p class="chipdetail ml-1">{{record.source | titlecase}}</p> -->
+                          </div>
+                        </div>
+                        <div class="col-6 footercol">
+                          <!-- <button *ngIf="record.status == 'created' && loggedInUser.parent.usertype=='company'"   class="prominentbutton float-right" mat-button (click)="openAssignSurveyorDialog(record, $event)">Assign</button>
+                      <button *ngIf="record.status == 'created' && loggedInUser.parent.usertype !='company'" (click)="startSurvey($event)" class="prominentbutton float-right" mat-button >Start Survey</button> -->
+                          <button (click)="startSurvey($event)" class="prominentbutton float-right" mat-button>
+                            Start Survey
+                          </button>
+                        </div>
+                      </div>
+                    </mat-card-footer>
+                  </mat-card>
+                </cdk-virtual-scroll-viewport>
+              </mat-card-content>
+            </mat-card>
+          </mat-tab>
+          <mat-tab *ngIf="
+              this.loggedInUser.role.id != role.Designer &&
+              this.loggedInUser.role.id != role.Surveyor &&
+              this.loggedInUser.role.id != role.Analyst
+            ">
+            <ng-template matTabLabel>PE Stamps </ng-template>
+
+            <mat-card class="listcard">
+              <p *ngIf="searchedPestamp.length == 0">No PE Stamps found</p>
+              <mat-card-content>
+                <cdk-virtual-scroll-viewport itemSize="50" class="listitems-viewport">
+                  <mat-card [ngClass]="[i % 2 == 0 ? 'itemcard even' : 'itemcard odd']" *cdkVirtualFor="
+                      let record of searchedPestamp;
+                      let i = index
+                    " (click)="openDetailDialog(record, $event, i, 'pestamp')">
+                    <mat-card-header>
+                      <div class="row align-items-center headerrow">
+                        <div class="col-10 headercol">
+                          <mat-card-title>{{ record.personname }}
+                            <span class="chipdetail ml-1" *ngIf="record.status == 'outsourced' && isClient">{{
+                              record.pestampcurrentstatus }}</span>
+                            <span class="chipdetail ml-1" style="background-color: #1289a7"
+                              *ngIf="record.status == 'created'">Unassigned</span>
+                            <span class="chipdetail ml-1" style="background-color: #a212a7"
+                              *ngIf="record.archived">Archive</span>
+                            <span class="chipdetail ml-1" style="background-color: #3c78d8" *ngIf="record.status == 'assigned' ||
+                              record.status == 'pesuperadminassigned'">{{ record.pestampcurrentstatus }}</span>
+                            <span class="chipdetail ml-1" style="background-color: rgb(109, 187, 26)" *ngIf="
+                                record.status == 'accepted' ||
+                                record.status == 'completed' ||
+                                record.status == 'delivered'
+                              ">{{ record.pestampcurrentstatus }}</span>
+                            <span class="chipdetail ml-1" style="background-color: rgb(246, 77, 10)"
+                              *ngIf="record.status == 'rdeclined'">{{ record.pestampcurrentstatus }}</span>
+                            <!-- <span class="chipdetail ml-1" style="background-color: rgb(234, 32, 39);"
+                          *ngIf="record.isoverdue">Overdue</span> -->
+                            <span class="chipdetail ml-1" style="background-color: rgb(246, 77, 10)"
+                              *ngIf="record.status == 'declined'">{{ record.pestampcurrentstatus }}</span>
+                            <span class="chipdetail ml-1" style="background-color: rgb(183, 21, 64)"
+                              *ngIf="record.isinrevisionstate">Revision</span>
+                            <span class="chipdetail ml-1" style="background-color: rgb(109, 187, 26)" *ngIf="
+                                record.acceptedbypeengineer == true &&
+                                record.status == 'assigned' && isUserPeengineer
+                              ">Accepted</span>
+                          </mat-card-title>
+                        </div>
+                        <div class="col headercol">
+                          <button class="float-right" mat-icon-button
+                            (click)="pestampactivitybarToggle(record, $event)"><img
+                              src="../../../../../assets/activitylist.png" width="24px" /></button>
+                          <button
+                            *ngIf="(record.status != 'created') &&  (record.unreadmessagecount == 0  || record.unreadmessagecount == null)"
+                            class="float-right" mat-icon-button (click)="pestampChatButtonClick(record, $event)"><img
+                              src="../../../../../assets/chat.svg" width="24px" /></button>
+                          <button *ngIf="(record.status != 'created') && record.unreadmessagecount > 0"
+                            class="float-right" mat-icon-button (click)="pestampChatButtonClick(record, $event)"><img
+                              src="../../../../../assets/newchat.svg" width="24px" /></button>
+                        </div>
+                      </div>
+                    </mat-card-header>
+                    <mat-card-content>
+                      <div class="row contentrow">
+                        <div class="col-8 contentcol">
+                          <a class="actiondetail" href="mailto:{{ record.email }}" (click)="$event.stopPropagation()">{{
+                            record.email }}</a>
+                          <a *ngIf="this.loggedInUser.role.id != role.Peengineer" class="actiondetail"
+                            href="tel:{{ record.contactnumber }}" (click)="$event.stopPropagation()">{{
+                            record.contactnumber }}</a>
+                          <a class="actiondetail" href="https://maps.google.com/?q={{
+                              record.deliveryaddress
+                            }}" target="_blank" (click)="$event.stopPropagation()">{{ record.deliveryaddress }}</a>
+                          <p class="actiondetail silentdetail" *ngIf="record.createdby?.company != null">
+                            {{ record.createdby?.company }}
+                          </p>
+                        </div>
+                        <div class="col contentcol">
+                          <div>
+                            <p class="assigneedetails">Assigned to</p>
+                            <p class="assigneedetails" style="font-weight: 600">
+                              {{ record.assignedto?.firstname }}
+                              {{ record.assignedto?.lastname }}
+                            </p>
+                          </div>
+                          <!-- <p style="float: right;" class="timedetail" *ngIf="record.isoverdue">Late by {{ record.lateby }}</p> -->
+                          <p *ngIf="
+                              record.expecteddeliverydate &&
+                              record.status != 'delivered'
+                            " class="silentdetail">
+                            {{
+                            record.expecteddeliverydate | date: "dd MMM yy"
+                            }}
+                          </p>
+                          <p *ngIf="record.status == 'delivered'" class="silentdetail">
+                            {{ record.actualdelivereddate | date: "dd MMM yy" }}
+                          </p>
+                        </div>
+                      </div>
+                      <!-- <p class="silentdetail">Updated {{ record.recordupdatedon }}</p> -->
+                    </mat-card-content>
+                    <mat-card-footer>
+                      <div class="row footerrow align-items-center">
+                        <div class="col-6 footercol">
+                          <div class="row align-items-center" *ngIf="
+                              this.loggedInUser.role?.id != role?.Peengineer ||
+                              (isUserPeengineer && record.status == 'delivered')
+                            ">
+                            <!-- <p class="chipdetail ml-1 ml-1">{{record.source | titlecase}}</p> -->
+                            <p class="chipdetail ml-1 ml-1">
+                              {{ record.type | titlecase }}
+                            </p>
+                            <p class="chipdetail ml-1 ml-1">
+                              {{ record.propertytype | titlecase }}
+                            </p>
+                          </div>
+                        </div>
+                        <div class="col-6 footercol">
+                          <button *ngIf="
+                          record.status == 'created' ||
+                          (record.status == 'accepted' &&
+                            !record.acceptedbypesuperadmin &&
+                            !isClient &&
+                            !isPesuperadmin) ||
+                          (record.acceptedbypesuperadmin &&
+                            isPesuperadmin &&
+                            record.peengineerexist && record.status == 'accepted')
+                        " class="prominentbutton float-right" mat-button (click)="
+                              openAssignPEengineerDialog(
+                                record,
+                                $event,
+                                i,
+                                record.type
+                              )
+                            ">
+                            Assign
+                          </button>
+                          <button *ngIf="
+                              record.acceptedbypesuperadmin &&
+                              isPesuperadmin &&
+                              ((record.status == 'accepted') || (record.status == 'assigned' &&
+                              record.assignedto?.id != loggedInUser.id))
+                            " class="prominentbutton float-right" mat-button
+                            (click)="pestampSelfAssign(record, $event)">
+                            Self Assign
+                          </button>
+
+                          <button *ngIf="
+                              ((record.status == 'outsourced' ||
+                                (record.status == 'assigned' &&
+                                  record.acceptedbypeengineer == false &&
+                                  record.declinedbypeengineer == false &&
+                                  isUserPeengineer)) &&
+                                !isClient) ||
+                              (record.status == 'pesuperadminassigned' &&
+                                isPesuperadmin)
+                            " class="prominentbutton secondarybutton float-right ml-1" mat-button
+                            (click)="declinePestampRequest(record, $event, i)">
+                            On Hold
+                          </button>
+                          <button
+                            *ngIf=" ((record.status == 'outsourced' || (record.status == 'assigned' && record.acceptedbypeengineer==false && record.declinedbypeengineer==false && isUserPeengineer)) && !isClient)||(record.status == 'pesuperadminassigned' && isPesuperadmin)"
+                            class="prominentbutton float-right" mat-button
+                            (click)="acceptPestampRequest(record, $event, i)">Accept</button>
+                          <button *ngIf="isClient && record.status == 'declined'" class="prominentbutton float-right"
+                            mat-button (click)="openReAssignpestamp(record, $event, i)">Reassign</button>
+
+                          <!-- If design is delivered -->
+                          <div>
+                            <button class="prominentbutton float-right" mat-button
+                              *ngIf="((!record.createdby.parent.ispaymentmodeprepay && isWattmonkUser) || (isClient)) && record.status == 'delivered'"
+                              (click)="openPeStampResendDialog(record,  $event)">Send for Revision</button>
+                            <button matTooltip="Project Files (.zip)" class="prominentbutton float-right"
+                              mat-icon-button *ngIf="(!isUserPeengineer && !isPesuperadmin)"
+                              (click)="downloadDesign(null ,record,  $event)"> <img
+                                src="../../../../../assets/download.svg" width="24px" /></button>
+                            <button matTooltip="Project Files (.zip)"
+                              *ngIf="(record.status == 'assigned' || record.status=='declined' || record.status == 'pesuperadminassigned' ||(isPesuperadmin &&  record.status != 'delivered'))"
+                              aria-label="Button that displays a tooltip when focused or hovered over"
+                              class="prominentbutton float-right" mat-button (click)="downloadfile(record, $event)"><img
+                                src="../../../../../assets/download.svg" width="24px" /></button>
+                          </div>
+
+                          <!-- <button matTooltip="Project Files (.zip)" *ngIf="(record.status == 'assigned' || record.status == 'accepted') && !isClient" (click)="downloadfile(record, $event)" aria-label="Button that displays a tooltip when focused or hovered over"
+                            class="prominentbutton float-right" mat-button
+                           ><img src="../../../../../assets/download.svg"
+                            width="24px" /></button> -->
+                          <!--
+                      <button *ngIf="(record.status == 'created' || (record.status == 'requestaccepted' && !isClient ))"
+                        class="prominentbutton float-right" mat-button
+                        (click)="openAssignDesignerDialog(record, $event, i)">Assign</button>
+                      <button *ngIf="record.status == 'outsourced' && !isClient "
+                        class="prominentbutton secondarybutton float-right ml-1" mat-button
+                        (click)="declineDesignRequest(record, $event, i)">On Hold</button>
+                      <button *ngIf="record.status == 'outsourced' && !isClient " class="prominentbutton float-right"
+                        mat-button (click)="acceptDesignRequest(record, $event, i)">Accept</button>
+                      <button *ngIf="isClient && record.status == 'requestdeclined'" class="prominentbutton float-right"
+                        mat-button (click)="openReAssignDesignerDialog(record, $event, i)">Reassign</button>
+                      <button *ngIf="isClient && record.status == 'delivered'" class="prominentbutton float-right"
+                        mat-icon-button (click)="downloadDesign(record, $event)"> <img
+                          src="../../../../../assets/download.svg" width="24px" /></button>
+                      <button *ngIf="isClient && record.status == 'delivered'" class="prominentbutton float-right"
+                        mat-icon-button (click)="shareDesign(record, $event)"> <img
+                          src="../../../../../assets/mail1.svg" width="24px" /></button>
+                      <button *ngIf="isClient && record.status == 'delivered' && record.requesttype == 'prelim'"
+                        class="prominentbutton float-right" mat-icon-button (click)="ShareOnWhatsapp($event)">
+                        <a href="https://web.whatsapp.com/send?text=find the attachment in the link-    {{record.prelimdesign.url}}"
+                          target="_blank">
+                          <img src="../../../../../assets/whatsapp.svg" width="24px" /> </a></button>
+                      <button *ngIf="isClient && record.status == 'delivered' && record.requesttype == 'permit'"
+                        class="prominentbutton float-right" mat-icon-button (click)="ShareOnWhatsapp($event)">
+                        <a href="https://web.whatsapp.com/send?text=find the attachment in the link-    {{record.permitdesign.url}}"
+                          target="_blank">
+                          <img src="../../../../../assets/whatsapp.svg" width="24px" /> </a></button>
+                      <button *ngIf="israisepermitrequest && record.status == 'delivered' && !record.issurveyraised && record.requesttype=='prelim'"
+                        class="prominentbutton float-right" mat-button
+                        (click)="raisesurvey(record, $event)">Raise
+                        Survey</button>
+                      <button *ngIf="israisepermitrequest && record.status == 'delivered' && !record.ispestampraised && record.requesttype=='permit'"
+                        class="prominentbutton float-right" mat-button
+                        (click)="raisePestampRequest(record, $event)">Pestamp Request</button>
+                      <button *ngIf="isClient && record.status == 'delivered'" class="prominentbutton float-right"
+                         mat-button (click)="resendDesign(record, $event)">Send for
+                        Revision</button>
+                        <button *ngIf="!isClient && record.status == 'designcompleted'" class="prominentbutton float-right" mat-button
+                        (click)="selfAssignQC(record, $event, i)">Self Assign Review</button>
+                        <button *ngIf="!isClient && record.status == 'designcompleted'" class="prominentbutton float-right" mat-button
+                          (click)="openAssignQCDialog(record, $event, i)">Assign Review</button>
+                          <button *ngIf="record.status == 'reviewpassed' && !isClient" class="prominentbutton float-right"
+                          mat-button (click)="deliverDesign(record, $event, i)">Deliver</button>
+                          -->
+                        </div>
+                      </div>
+                    </mat-card-footer>
+                  </mat-card>
+                </cdk-virtual-scroll-viewport>
+              </mat-card-content>
+            </mat-card>
+          </mat-tab>
+        </mat-tab-group>
+      </div>
+    </div>
+    <div class="row justify-content-center mt-5" *ngIf="placeholder">
+      <div class="col-6">
+        <p class="text-center" style="color: rgb(160, 166, 177)">
+          Look for any requests from our database. Enter a query in the search
+          field above, and results will be displayed as you press enter.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>

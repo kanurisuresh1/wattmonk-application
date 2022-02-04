@@ -1,0 +1,647 @@
+<div class="main-content" style="display: none">
+  <img class="comingsoonimage" src="../../../../../assets/comingsoon.png" />
+  <h2 class="comingsoontext">Coming Soon</h2>
+</div>
+<div class="main-content">
+  <div class="container">
+    <div class="row pb-2">
+      <div class="col-10 pl-3">
+        <div class="row d-flex justify-content-between">
+          <div class="col-5">
+            <div class="row">
+              <div
+                class="col-8 pr-0"
+                *ngIf="!isClient && loggedInUser.role.id != 3"
+              >
+                <div class="col-12 px-0 contractorfilter">
+                  <mat-form-field appearance="outline" class="fullwidth">
+                    <div
+                      class="input-group-text bg-label-color text-white"
+                      style="height: 35px; font-size: 12px"
+                      matPrefix
+                    >
+                      Filters
+                    </div>
+                    <mat-select
+                      style="height: 35px; font-size: 12px"
+                      #list
+                      [multiple]="false"
+                      [(value)]="blockfilterplaceholder"
+                      (selectionChange)="filtervalue($event)"
+                      placeholder="User Type"
+                      class="form-control border-0"
+                    >
+                      <mat-option value="blocked">Blocked</mat-option>
+                      <mat-option value="unblocked">Unblocked</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div
+                class="col-4 px-0 border-left"
+                *ngIf="!isClient && loggedInUser.role.id != 3"
+              >
+                <mat-select
+                  class="form-control border-0"
+                  style="height: 35px; font-size: 12px"
+                  [(value)]="paymenttypefilterstatus"
+                  (selectionChange)="filtervalue($event)"
+                  placeholder="Payment Mode"
+                  aria-label="statusfilter"
+                  required
+                >
+                  <mat-option value="prepaid">Prepaid</mat-option>
+                  <mat-option value="postpaid">Postpaid</mat-option>
+                </mat-select>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-8 pt-2">
+                <div
+                  class="d-flex justify-content-between align-items-center chipcard"
+                  style="
+                    width: 7.6rem;
+                    margin-left: 4.5rem;
+                    height: 35px;
+                    font-size: 12px;
+                  "
+                  *ngIf="blockfilterstatus != null"
+                >
+                  <p class="mb-0" *ngIf="!blockfilterstatus">Unblocked</p>
+                  <p class="mb-0" *ngIf="blockfilterstatus">Blocked</p>
+                  <img
+                    src="../../../../../assets/close (1).svg"
+                    width="10px"
+                    height="10px"
+                    class="chipclose"
+                    (click)="clearfiltervalues('blockstatus')"
+                  />
+                </div>
+              </div>
+              <div class="col-4 pt-2">
+                <div
+                  class="d-flex justify-content-between align-items-center chipcard"
+                  style="width: 6.9rem; font-size: 12px"
+                  *ngIf="paymenttypefilterstatus != null"
+                >
+                  <p class="mb-0" *ngIf="paymenttypefilterstatus == 'prepaid'">
+                    Prepaid
+                  </p>
+                  <p class="mb-0" *ngIf="paymenttypefilterstatus == 'postpaid'">
+                    Postpaid
+                  </p>
+                  <img
+                    src="../../../../../assets/close (1).svg"
+                    width="10px"
+                    height="10px"
+                    class="chipclose"
+                    (click)="clearfiltervalues('paymenttype')"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-5">
+            <div class="row">
+              <div
+                class="col-8 px-0"
+                *ngIf="!isClient && loggedInUser.role.id != 3"
+              >
+                <div class="col-12 px-0 contractorfilter">
+                  <mat-form-field appearance="outline" class="fullwidth">
+                    <div
+                      class="input-group-text bg-label-color text-white"
+                      style="padding: 5px 22px; font-size: 12px"
+                      matPrefix
+                    >
+                      Sort
+                    </div>
+                    <mat-select
+                      class="form-control border-0"
+                      style="height: 35px; font-size: 12px"
+                      [(value)]="ordertypefilterstatus"
+                      (selectionChange)="filtervalue($event)"
+                      placeholder="Order Type"
+                      #listDesigner
+                      [multiple]="false"
+                    >
+                      <mat-option value="asc">Ascending</mat-option>
+                      <mat-option value="desc">Descending</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div
+                class="col-4 px-0 border-left"
+                *ngIf="!isClient && loggedInUser.role.id != 3"
+              >
+                <mat-select
+                  class="form-control border-0"
+                  [(value)]="orderbyfilterstatus"
+                  (selectionChange)="filtervalue($event)"
+                  style="height: 35px; font-size: 12px"
+                  placeholder="Order By"
+                  aria-label="statusfilter"
+                  required
+                >
+                  <mat-option value="firstname">First Name</mat-option>
+                  <mat-option value="created_at">Created At</mat-option>
+                </mat-select>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-8 pt-2">
+                <div
+                  class="d-flex justify-content-between align-items-center chipcard"
+                  style="width: 8.2rem; margin-left: 4rem; font-size: 12px"
+                  *ngIf="ordertypefilterstatus != null"
+                >
+                  <p class="mb-0" *ngIf="ordertypefilterstatus == 'asc'">
+                    Ascending
+                  </p>
+                  <p class="mb-0" *ngIf="ordertypefilterstatus == 'desc'">
+                    Descending
+                  </p>
+                  <img
+                    src="../../../../../assets/close (1).svg"
+                    width="10px"
+                    height="10px"
+                    class="chipclose"
+                    (click)="clearfiltervalues('ordertype')"
+                  />
+                </div>
+              </div>
+              <div class="col-4 pt-2">
+                <div
+                  class="d-flex justify-content-between align-items-center chipcard"
+                  style="width: 7.9rem; font-size: 12px"
+                  *ngIf="orderbyfilterstatus != null"
+                >
+                  <p class="mb-0" *ngIf="orderbyfilterstatus == 'firstname'">
+                    First Name
+                  </p>
+                  <p class="mb-0" *ngIf="orderbyfilterstatus == 'created_at'">
+                    Created At
+                  </p>
+                  <img
+                    src="../../../../../assets/close (1).svg"
+                    width="10px"
+                    height="10px"
+                    class="chipclose"
+                    (click)="clearfiltervalues('orderby')"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-2 topactionbar pr-4">
+        <button mat-raised-button (click)="openAddContractorDialog()">
+          Add Client
+        </button>
+      </div>
+    </div>
+    <div class="row d-flex justify-content-end">
+      <div class="col logincard">
+        <mat-form-field
+          appearance="outline"
+          style="width: 23%; justify-content: end"
+        >
+          <input
+            matInput
+            placeholder="Search here"
+            #searchinputfield="matInput"
+            placeholder="Search here"
+            [(ngModel)]="searchfield"
+            (keydown.enter)="fetchSearchData($event)"
+            (keydown.backspace)="fetchSearchData($event)"
+            autofocus
+          />
+          <span
+            style="position: relative; top: -3px; margin-right: 7px"
+            matSuffix
+            ><img
+              src="../../../../../assets/search.svg"
+              (click)="fetchSearchData($event)"
+              width="15px"
+              height="15px"
+          /></span>
+        </mat-form-field>
+        <button
+          style="margin-left: 5px"
+          mat-raised-button
+          (click)="clearfield()"
+          *ngIf="showClearButton"
+        >
+          Clear
+        </button>
+      </div>
+    </div>
+    <!-- <div class="row align-items-center pl-4 pr-4 searchheaderrow" style="padding-left: 13px !important;">
+     
+      <i class="material-icons">search</i>
+      <mat-form-field class="searchfield" appearance="fill">
+        <input matInput #searchinputfield="matInput" placeholder="Search here" [(ngModel)]="searchfield" required
+          (keydown.enter)="fetchSearchData()" autofocus>
+      </mat-form-field>
+      <button mat-button (click)="clearfield()">Clear</button>
+    </div> -->
+
+    <div *ngIf="isoverviewloading">
+      <div
+        class="row"
+        style="
+          margin-left: 11px;
+          height: 65vh;
+          overflow-x: hidden;
+          overflow-y: auto;
+        "
+      >
+        <div
+          class="col-xl-3 col-md-4 col-sm-12 mb-3"
+          *ngFor="let number of [0, 1, 2]"
+        >
+          <div
+            class="col-12 border pt-3 pb-3"
+            style="border-radius: '15px'; background-color: #eeedeb"
+          >
+            <ngx-skeleton-loader
+              count="1"
+              class="d-block"
+              [theme]="{
+                'border-radius': '8px',
+                'background-color': '#DBDAD8',
+                height: '45px',
+                width: '60%',
+                'margin-bottom': '1.9rem'
+              }"
+            >
+            </ngx-skeleton-loader>
+            <ngx-skeleton-loader
+              class="d-block"
+              [theme]="{
+                'border-radius': '5px',
+                'background-color': '#DBDAD8',
+                height: '9px',
+                width: '90%',
+                'margin-bottom': '7px'
+              }"
+            >
+            </ngx-skeleton-loader>
+            <ngx-skeleton-loader
+              class="d-block"
+              [theme]="{
+                'border-radius': '5px',
+                'background-color': '#DBDAD8',
+                height: '9px',
+                width: '40%',
+                'margin-bottom': '7px'
+              }"
+            >
+            </ngx-skeleton-loader>
+            <ngx-skeleton-loader
+              class="d-block"
+              [theme]="{
+                'border-radius': '5px',
+                'background-color': '#DBDAD8',
+                height: '9px',
+                width: '30%'
+              }"
+            >
+            </ngx-skeleton-loader>
+            <div class="col-12 pl-0 mt-3">
+              <ngx-skeleton-loader
+                count="2"
+                [theme]="{
+                  'border-radius': '5px',
+                  'background-color': '#DBDAD8',
+                  height: '9px',
+                  width: '25%',
+                  'margin-right': '12px'
+                }"
+              >
+              </ngx-skeleton-loader>
+            </div>
+            <div class="d-flex justify-content-between pt-2">
+              <div class="col-8 d-flex justify-content-start topactionbar pl-0">
+                <button mat-raised-button>Prepaid</button>
+              </div>
+              <div class="col-4 d-flex justify-content-between p-0 pt-2">
+                <img
+                  src="../../../../../assets/chat black icon.svg"
+                  width="20px"
+                  height="20px"
+                />
+                <img
+                  src="../../../../../assets/disable-Edit.svg"
+                  width="15px"
+                  height="15px"
+                />
+                <img
+                  src="../../../../../assets/Account Deactivate.svg"
+                  width="15px"
+                  height="15px"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="!isoverviewloading && !placeholder">
+      <div class="row">
+        <div
+          infiniteScroll
+          [infiniteScrollDistance]="0.5"
+          [scrollWindow]="false"
+          [infiniteScrollThrottle]="100"
+          (scrolled)="onScroll()"
+          class="designlistitems-viewport"
+        >
+          <div
+            class="col-xl-3 col-md-4 col-sm-12 float-left"
+            *ngFor="let user of clients; let i = index"
+            (click)="openClientDetailDialog(user, $event, i)"
+          >
+            <div
+              class="col-12 detail-card bg-white mb-3 pb-2 pt-3 px-1"
+              style="border-radius: 20px"
+            >
+              <div
+                class="card-body pb-3"
+                style="cursor: pointer; padding: 10px 0px 10px 0px"
+              >
+                <div class="photo" *ngIf="user.logo != null">
+                  <img
+                    style="
+                      object-fit: contain;
+                      height: 100px;
+                      width: 100%;
+                      overflow: hidden;
+                    "
+                    src="{{ user.logo.url }}"
+                  />
+                </div>
+                <div *ngIf="user.logo == null" class="photo">
+                  <img
+                    style="
+                      object-fit: contain;
+                      height: 100px;
+                      width: 100%;
+                      overflow: hidden;
+                    "
+                    src="{../../../../../assets/no-logo.jpeg"
+                  />
+                  <!-- <p>{{this.genericService.getInitials(user.firstname, user.lastname)}}</p> -->
+                </div>
+
+                <div class="" style="padding: 10px 5px 0px 10px">
+                  <p class="card-title mb-0" style="font-weight: 700">
+                    {{ user.firstname }} {{ user.lastname }}
+                  </p>
+                  <p class="card-text">{{ user.email }}</p>
+                </div>
+                <div class="row" style="padding: 0px 5px 0px 10px">
+                  <div style="width: 65px; padding-left: 16px">
+                    <p class="card-title">{{ user.totalteams }}</p>
+                    <p class="card-content">Our Team</p>
+                  </div>
+                  <div class="col-7" style="padding: 0px 5px 0px 10px">
+                    <p class="card-title">{{ user.totalactivedesigns }}</p>
+                    <p class="card-content">Design Request</p>
+                  </div>
+                </div>
+                <div class="row mt-2" style="padding: 0px 5px 0px 10px">
+                  <div class="col-7">
+                    <div class="clientchip">
+                      {{ user.ispaymentmodeprepay ? "Prepaid" : "Postpaid" }}
+                    </div>
+                    <!-- <mat-menu #paymentmodeMenu="matMenu">
+                      <button (click)="switchPaymentModeCustomer(user, i, false,$event)" mat-menu-item></button>
+                    </mat-menu>
+                    <mat-menu #postpaidpaymentmenu="matMenu">
+                      <button (click)="switchPaymentModeCustomer(user, i, true,$event)" mat-menu-item>Prepaid</button>
+                    </mat-menu> -->
+                  </div>
+                  <div class="col-5 d-flex justify-content-end">
+                    <!-- <img src="../../../../../assets/clientchat.svg" width="16px" class="mr-3" /> -->
+                    <img
+                      src="../../../../../assets/penclient.svg"
+                      class="mr-3"
+                      (click)="openEditClientDialog(user, $event)"
+                      width="16px"
+                    />
+                    <img
+                      src="../../../../../assets/Blockclient.svg"
+                      width="16px"
+                      (click)="blockunblockCustomer(user, i, $event)"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <mat-spinner
+            *ngIf="scrolling"
+            style="position: absolute; left: 49%; bottom: 1%"
+            [diameter]="35"
+          >
+          </mat-spinner>
+        </div>
+      </div>
+    </div>
+    <div
+      class="container-fluid d-flex justify-content-center align-items-center"
+      *ngIf="placeholder"
+    >
+      <img src="../../../../../assets/placeholdar.png" width="100%" alt="" />
+    </div>
+  </div>
+</div>
+
+<!-- (click)="$event.stopPropagation()" [matMenuTriggerFor]="postpaidpaymentmenu" -->
+<!-- (click)="$event.stopPropagation()" [matMenuTriggerFor]="paymentmodeMenu" -->
+<!-- <div class="main-content" *ngIf="placeholder">
+  <img class="placeholderimage" src="./../../../../../assets/contractors.png" style="opacity: 0.5;" />
+  <img class="placeholderarrow" src="./../../../../../assets/angledarrow.svg" />
+  <div class="topactionbar"> -->
+<!-- <button mat-raised-button (click)="openAddContractorDialog()">
+      + Add
+    </button> -->
+<!-- </div> -->
+
+<!-- 
+
+<div class="main-content" style="display: none;">
+  <div class="container">
+    <div class="row">
+      <div class="col-3 clientdetails mt-4" *ngFor="let client of clients; let i = index">
+        <mat-card class="maincard mat-elevation-z4">
+          <mat-card-header>
+            <mat-card-title *ngIf="client.usertype == 'individual'"><img style="background-color: #434343; border-radius: 50%; padding: 6px; margin-right: 5px;" src="../../../../../assets/individual.svg" width="32px"/>{{client.firstname | titlecase}} {{client.lastname | titlecase}}</mat-card-title>
+            <mat-card-title *ngIf="client.usertype == 'company'"><img style="background-color: #434343; border-radius: 50%; padding: 6px; margin-right: 5px;" src="../../../../../assets/company.svg" width="36px"/>{{client.company | titlecase}}</mat-card-title>
+            <mat-card-subtitle>
+              <div class="row">
+                <div class="col" style="padding-right: 8px;">
+                  <div class="prepaidpaymentmode" *ngIf="client.ispaymentmodeprepay">
+                    <button mat-button [matMenuTriggerFor]="paymentmodeMenu"><span class="mydot" style="background: #EC8931;"></span>{{client.paymentmode}}</button>
+                    <mat-menu #paymentmodeMenu="matMenu">
+                      <button (click)="switchPaymentModeCustomer(client, i, false)" mat-menu-item>Postpaid</button>
+                    </mat-menu>
+                  </div>
+                  <div class="postpaidpaymentmode" *ngIf="!client.ispaymentmodeprepay">
+                    <button mat-button [matMenuTriggerFor]="paymentmodeMenu"><span class="mydot" style="background: #EB3D6A;"></span>{{client.paymentmode}}</button>
+                    <mat-menu #paymentmodeMenu="matMenu">
+                      <button (click)="switchPaymentModeCustomer(client, i, true)" mat-menu-item>Prepaid</button>
+                    </mat-menu>
+                  </div>
+                </div>
+                <div class="col" style="padding-left: 8px;">
+                  <div class="joininginfo">
+                    <p><span class="mydot" style="background: #87D03F;"></span>{{client.createdondate}}</p>
+                  </div>
+                </div>
+              </div>
+            </mat-card-subtitle>
+          </mat-card-header>
+          <mat-card-content>
+            <div class="row" style="background-color:#434343; margin-left: 0px; margin-right: 0px; border-radius: 8px;">
+              <div class="col text-center" style="border-right: 1px solid rgba(255, 255, 255, 0.15)">
+                <button mat-icon-button (click)="onChatButtonClick(client, $event)">
+                  <img class="dialogclose" src="../../../../../assets/chatwhite.svg" />
+                </button>
+              </div>
+              <div class="col text-center" style="border-right: 1px solid rgba(255, 255, 255, 0.15)">
+                <button mat-icon-button>
+                  <img class="dialogclose" src="../../../../../assets/editwhite.svg" />
+                </button>
+              </div>
+              <div class="col text-center">
+                <button *ngIf="!client.blocked" mat-icon-button (click)="blockunblockCustomer(client, i, true)">
+                  <img class="dialogclose" src="../../../../../assets/deactivate.svg" />
+                </button>
+                <button *ngIf="client.blocked" mat-icon-button (click)="blockunblockCustomer(client, i, false)">
+                  <img class="dialogclose" src="../../../../../assets/unblock.svg" />
+                </button>
+              </div>
+            </div>
+            <hr style="margin-bottom: 0px; margin-top: px;"> 
+            <div class="row" style="margin-top: 8px;">
+              <div class="col">
+                <p class="basicinfo">{{client.firstname | titlecase}} {{client.lastname | titlecase}}</p>
+                <p class="basicinfo">{{client.email}}</p>
+              </div>
+            </div>
+            <hr style="margin-bottom: 4px; margin-top: 8px;">
+            <div class="row">
+              <div class="col numbersinfo" style="border-right: 1px solid rgba(0, 0, 0, 0.1)">
+                <h3>{{client.noofteammember}}</h3>
+                <h6>Team</h6>
+              </div>
+              <div class="col numbersinfo" style="padding-left: 0px;">
+                <h3>{{client.designscount}}</h3>
+                <h6>Design Requests</h6>
+              </div>
+            </div>
+            <hr style="margin-bottom: 0px; margin-top: 6px;">
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </div>
+  </div>
+</div> -->
+
+<!-- <div class="main-content">
+  <img *ngIf="placeholder" class="placeholderimage" src="./../../../../../assets/contractors.png"
+    style="opacity: 0.5;" />
+  <img *ngIf="placeholder" class="placeholderarrow" src="./../../../../../assets/angledarrow.svg" />
+  <div class="topactionbar">
+    <button mat-raised-button (click)="openAddContractorDialog()">
+      + Add
+    </button>
+  </div>
+ 
+
+  <div class="container data-content" [hidden]="placeholder">
+    <div class="row mt-4 statisticssection">
+      <div class="col-9 header">
+        <h4 class="pt-3">Client Superadmins</h4>
+      </div>
+      <div class="col-3 text-right">
+        <mat-form-field>
+          <mat-label>Filter</mat-label>
+          <input matInput (keyup)="applyFilter($event)" placeholder="Ex. ium">
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="row statisticssection">
+      <div class="col">
+        <table mat-table [dataSource]="dataSource" matSort>
+
+          <ng-container matColumnDef="name">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
+            <td mat-cell *matCellDef="let element">{{ element.firstname }} {{ element.lastname }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="company">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>company</th>
+            <td mat-cell *matCellDef="let element">{{ element.company }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="email">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Email</th>
+            <td mat-cell *matCellDef="let element">{{ element.email }}</td>
+          </ng-container>
+
+
+          <ng-container matColumnDef="amount">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>amount</th>
+            <td mat-cell *matCellDef="let element">{{ element.amount }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="prelimdesigndiscount">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Prelim Discount</th>
+            <td mat-cell *matCellDef="let element">{{ element.prelimdesigndiscount }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="permitdesigndiscount">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Permit Discount</th>
+            <td mat-cell *matCellDef="let element">{{ element.permitdesigndiscount }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="manage">
+            <th mat-header-cell *matHeaderCellDef>Manage</th>
+            <td mat-cell *matCellDef="let element" (click)="$event.stopPropagation()">
+              <span class="tableactionbutton">
+                <button mat-icon-button (click)="openEditClientDialog(element)">
+                  <img class="dialogclose" src="../../../../../assets/edit.svg" />
+                </button>
+              </span>
+              <span class="tableactionbutton">
+                <button mat-icon-button (click)="openConfirmationDialog(element)">
+                  <img class="dialogclose" src="../../../../../assets/delete.svg" />
+                </button>
+              </span>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        </table>
+        <mat-paginator [pageSizeOptions]="[10, 20]" showFirstLastButtons></mat-paginator>
+      </div>
+    </div>
+
+    <div class="row statisticssection" *ngIf="dataSource.filteredData.length === 0">
+      <div class="col">
+        <div class="alert alert-danger">
+          No team members found!
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</div> -->

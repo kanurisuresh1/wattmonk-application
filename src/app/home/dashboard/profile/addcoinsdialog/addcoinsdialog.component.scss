@@ -1,0 +1,50 @@
+.form {
+  padding-left: 10px;
+}
+
+.form-field {
+  background-color: lightgray;
+  font-size: 0.9em;
+}
+.bold-heading {
+  font-size: 22px;
+  font-weight: 600;
+}
+
+.paymentimage {
+  width: 60%;
+}
+
+.poweredimage {
+  width: 50%;
+}
+
+.btnamount {
+  width: 24%;
+  font-size: 13px;
+  font-weight: 600;
+  padding-left: 10px;
+  background: transparent;
+  border: 1px solid #e7dbc2;
+}
+.btnamount:focus {
+  background: #e7dbc2;
+}
+
+.greycolor {
+  color: #999999;
+}
+
+.text-position {
+  position: relative;
+  top: -5px;
+}
+
+input.removearrow::-webkit-outer-spin-button,
+input.removearrow::-webkit-inner-spin-button {
+  display: none;
+}
+
+.mr-2 {
+  margin-right: 0.3rem !important;
+}

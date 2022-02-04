@@ -1,0 +1,103 @@
+.designerslist .designerslist-viewport {
+  height: 40vh;
+}
+
+.designerslist .designerslist-viewport .cdk-virtual-scroll-content-wrapper {
+  display: flex;
+  flex-direction: row;
+}
+.style {
+  display: inline-block;
+  font-size: xx-small;
+}
+
+.designerslist .designeritem {
+  width: 74px;
+  height: 74px;
+  background-color: #fff8e5;
+  border-radius: 8px;
+  margin-right: 16px;
+  text-align: center;
+  margin-top: 16px;
+}
+
+.designeritem img {
+  width: 48px;
+  margin-top: 16%;
+}
+
+.designeritem .initials {
+  color: #434343;
+  font-size: 1.5em;
+}
+
+.designeritem .initials p {
+  margin-bottom: 0px;
+}
+
+.namedetails {
+  text-align: center;
+  margin-right: 16px;
+  font-weight: 600;
+}
+
+.selectionbackground {
+  background-color: #6666668a;
+  position: absolute;
+  border-radius: 8px;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+.selectionbackground img {
+  width: 40%;
+  margin-top: 28%;
+}
+
+.search {
+  flex: 0 0 40%;
+  ​ &__input {
+    font-family: inherit;
+    font-size: inherit;
+    color: inherit;
+    background-color: #f4f2f2;
+    border: none;
+    outline: none;
+    padding: 0.7em 2em;
+    border-radius: 100px;
+    width: 90%;
+    transition: all 0.2s;
+    ​ &:focus {
+      outline: none;
+      width: 100%;
+      background-color: #dbdada;
+    }
+  }
+}
+
+/////////////////////////
+//// Search Bar
+.search {
+  flex: 0 0 40%;
+
+  &__input {
+    font-family: inherit;
+    font-size: inherit;
+    color: inherit;
+    background-color: #f4f2f2;
+    border: none;
+    outline: none;
+    padding: 0.7em 2em;
+    border-radius: 100px;
+    width: 90%;
+    transition: all 0.2s;
+
+    &:focus {
+      outline: none;
+      width: 100%;
+      background-color: #dbdada;
+    }
+  }
+}

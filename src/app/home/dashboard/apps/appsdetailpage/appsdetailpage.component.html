@@ -1,0 +1,138 @@
+<div mat-dialog-content class="pb-3">
+  <div class="container-fluid">
+    <div class="col-12">
+      <div class="row">
+        <div class="col-9">
+          <h2 class="heading">{{ data.user.name | titlecase }}</h2>
+          <p class="title">
+            Let's start to Integrate Wattmonk inside app or website
+          </p>
+        </div>
+        <div class="col-3 d-flex justify-content-end">
+          <span class="tableactionbutton">
+            <button mat-icon-button (click)="onCloseClick()">
+              <img class="dialogclose" src="../../../../../assets/close.svg" />
+            </button>
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="container-fluid pl-4">
+    <div class="col-12 mt-3">
+      <!-- <div class="row">
+                <div class="col-8">
+                    <div class="d-flex align-items-center">
+                        <img src="../../../../../assets/security key black.svg" width="25px" height="25px" class="mr-2">
+                        <div class="">
+                            <p class="title para">API Keys</p>
+                            <p class="apikey mb-0">*2 more left</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-4 d-flex justify-content-end">
+                    <button style="font-weight: 600;" mat-raised-button (click)="addsecretkey(data.user.id)">Add Key</button>
+                </div>
+            </div> -->
+    </div>
+    <div class="col-12">
+      <div class="row pt-4">
+        <div class="col-3">
+          <p class="para title">App Id</p>
+          <span class="title" #app_id>{{ data.user.appid }}</span>
+          <img
+            src="../../../../../assets/copyfiles.svg"
+            width="9px"
+            height="10px"
+            class="ml-1 copy-img"
+            *ngIf="!appidcopied"
+            (click)="copyInputMessage(app_id, 'appid')"
+          />
+          <img
+            src="../../../../../assets/tick.svg"
+            width="10px"
+            height="10px"
+            class="ml-1"
+            #apptooltip="matTooltip"
+            matTooltip="copied"
+            *ngIf="appidcopied"
+          />
+        </div>
+        <div class="col-2">
+          <p class="title para">Region Mode</p>
+          <span class="title" #region>{{ data.user.region }}</span>
+        </div>
+        <div class="col-2">
+          <p class="titlte para">Version</p>
+          <p class="title">{{ data.user.version }}</p>
+        </div>
+        <div class="col-5 d-flex justify-content-end">
+          <img
+            src="../../../../../assets/editnew.svg"
+            width="15px"
+            height="15px"
+            class="mr-4 copy-img"
+            (click)="openEditKeyDialog($event)"
+          />
+          <img
+            (click)="DeleteApp($event)"
+            src="../../../../../assets/deletenew.svg"
+            width="15px"
+            height="15px"
+            class="mr-2 copy-img"
+          />
+        </div>
+      </div>
+    </div>
+    <div class="col-12">
+      <p class="title para">Security Key</p>
+      <span class="title" style="word-break: break-all" #security>{{
+        data.user.securitykey
+      }}</span>
+      <img
+        src="../../../../../assets/copyfiles.svg"
+        width="9px"
+        height="10px"
+        class="ml-1 copy-img"
+        (click)="copyInputMessage(security, 'securitykey')"
+        *ngIf="!securitykeycopied"
+      />
+      <img
+        src="../../../../../assets/tick.svg"
+        width="10px"
+        height="10px"
+        class="ml-1"
+        #tooltip="matTooltip"
+        matTooltip="copied"
+        *ngIf="securitykeycopied"
+      />
+    </div>
+
+    <div class="col-12 mt-3">
+      <div class="row pl-3 pt-5">
+        <img
+          src="../../../../../assets/folder black.svg"
+          width="20px"
+          height="20px"
+          class="mr-2"
+        />
+        <p class="title">Document Link</p>
+      </div>
+      <div class="mt-3">
+        <p class="title para">Link Address</p>
+        <span
+          ><a
+            href="https://wattmonk.readme.io/reference/create-site-assessment"
+            target="_blank"
+            class="title text-decoration-none text-dark"
+            #link
+            >https://wattmonk.readme.io/reference/create-site-assessment</a
+          ></span
+        >
+        <!-- <img src="../../../../../assets/copyfiles.svg" width="9px" height="10px"  class="ml-1 copy-img" (click)="copyInputMessage(link, 'link')"> -->
+      </div>
+    </div>
+
+    <!-- <div style="border-bottom: 2px dashed lightgray; margin: 40px 0px 20px;"></div> -->
+  </div>
+</div>

@@ -1,0 +1,144 @@
+<div class="main-content">
+  <div class="row">
+    <div class="col">
+      <button mat-icon-button class="float-right">
+        <!-- <img class="dialogclose"  (click)="onCloseClick()" src="../../../../../assets/close1.svg" /> -->
+        <img
+          class="material-icons"
+          (click)="onCloseClick()"
+          src="../../../assets/cut.svg"
+          style="width: 15px"
+        />
+      </button>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-4">
+      <!-- <div class="row mt-3" style="padding-top: 15px;">
+          <div class="col" style="padding-right: 0px; text-align: center;">
+            <mat-form-field appearance="outline" style="width: 100%;">
+              <input  matInput id="search" type="text" autocomplete="off"
+                  placeholder="search here"  [(ngModel)]="searchTerm"  (ngModelChange)="search()"
+                >
+                <span style="position: relative; top: -3px; margin-right: 7px;" matSuffix>
+                  <img
+                    src="../../../../../assets/search.svg" width="15px" height="15px">
+                  </span>
+              </mat-form-field>
+          </div>
+      </div> -->
+      <div class="row">
+        <div class="col logincard">
+          <mat-form-field appearance="outline" style="width: 100%">
+            <input
+              matInput
+              placeholder="Search here"
+              [(ngModel)]="searchTerm"
+              (ngModelChange)="search()"
+            />
+            <span
+              style="position: relative; top: -3px; margin-right: 7px"
+              matSuffix
+            >
+              <img
+                src="../../../../../assets/search.svg"
+                width="15px"
+                height="15px"
+              />
+            </span>
+          </mat-form-field>
+        </div>
+      </div>
+      <ng-container *ngIf="isdataLoading">
+        <div
+          class="row mt-3 chatcontainer"
+          *ngFor="let number of [0, 1, 2, 3, 4, 5, 6]"
+        >
+          <div class="col-2">
+            <div>
+              <ngx-skeleton-loader
+                count="1"
+                appearance="circle"
+              ></ngx-skeleton-loader>
+            </div>
+          </div>
+          <div class="col-10">
+            <ngx-skeleton-loader
+              class="d-block"
+              [theme]="{ 'border-radius': '5px', height: '10px', width: '80%' }"
+            >
+            </ngx-skeleton-loader>
+          </div>
+        </div>
+      </ng-container>
+      <ng-container *ngIf="!isdataLoading && searchresult.length == 0">
+        <div class="row mt-3">
+          <img
+            class="chatplaceholderimage"
+            *ngIf="placeholder"
+            src="./../../../../../assets/chatplaceholder.webp"
+            style="width: 60%; right: 0%"
+          />
+        </div>
+      </ng-container>
+      <div class="row mt-2" style="max-height: 74vh; overflow: auto">
+        <ng-container *ngIf="searchresult.length">
+          <div
+            *ngFor="let data of searchresult; let i = index"
+            [ngClass]="[
+              i % 2 == 0
+                ? 'col-12 mt-2 even  chatcontainer'
+                : 'col-12 mt-2  odd chatcontainer'
+            ]"
+            (click)="openchatDialog(data)"
+          >
+            <div class="row">
+              <div class="col-2">
+                <div class="photo">
+                  <p>#{{ data.title | slice: 0:1 }}</p>
+                </div>
+              </div>
+              <div class="col-10 chattitle">
+                {{ data.title }}
+              </div>
+            </div>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+    <div class="col-8">
+      <div class="row" *ngIf="placeholder">
+        <div class="col-12">
+          <img
+            class="chatplaceholderimage"
+            *ngIf="placeholder"
+            src="./../../../../../assets/sad.svg"
+            style="width: 20%"
+          />
+        </div>
+        <div
+          class="col-12"
+          style="
+            width: 60%;
+            margin-top: 65%;
+            font-weight: 600;
+            font-style: oblique;
+            font-size: 10px;
+            text-align: center;
+          "
+        >
+          Yet to Break the ice
+        </div>
+      </div>
+
+      <div
+        class="chatconversations"
+        *ngIf="genericService.getSelectedChatGroupID() != '' && !placeholder"
+      >
+        <cometchat-conversations-screen
+          #conversationscreen
+        ></cometchat-conversations-screen>
+      </div>
+    </div>
+  </div>
+</div>

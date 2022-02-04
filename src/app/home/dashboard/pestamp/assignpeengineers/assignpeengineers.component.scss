@@ -1,0 +1,130 @@
+@import "../../../../shared/loader/loader.component.scss";
+.designerslist .designerslist-viewport {
+  height: 40vh;
+}
+
+.style {
+  display: inline-block;
+  font-size: xx-small;
+}
+
+.designeritem {
+  width: 124px;
+  height: 124px;
+  background-color: #f0f0f0;
+  border-radius: 8px;
+  margin-right: 16px;
+  text-align: center;
+  margin-top: 16px;
+}
+
+.designeritem img {
+  width: 48px;
+  margin-top: 16%;
+}
+
+.designeritem .initials {
+  color: #434343;
+  font-size: 2em;
+}
+
+.designeritem .initials p {
+  margin-bottom: 0px;
+  font-weight: 600;
+}
+
+.namedetails {
+  display: none;
+  position: relative;
+  top: 23px;
+  border-radius: 0px 0px 8px 8px;
+  background: #edc773;
+  font-weight: 600;
+  height: 43px;
+  color: #434343;
+  p {
+    height: 11px;
+  }
+  span {
+    font-size: 0.6em;
+    font-weight: 700;
+  }
+}
+
+.designeritem:hover {
+  .initials p {
+    position: relative;
+    top: 21.5px;
+  }
+  .namedetails {
+    display: block;
+  }
+}
+
+.selectionbackground {
+  background-color: #6666668a;
+  position: absolute;
+  border-radius: 8px;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+.selectionbackground img {
+  width: 40%;
+  margin-top: 28%;
+}
+
+.search {
+  flex: 0 0 40%;
+
+  &__input {
+    font-family: inherit;
+    font-size: inherit;
+    color: inherit;
+    background-color: #f4f2f2;
+    border: none;
+    outline: none;
+    padding: 0.7em 2em;
+    border-radius: 100px;
+    width: 90%;
+    transition: all 0.2s;
+    ​ &:focus {
+      outline: none;
+      width: 100%;
+      background-color: #dbdada;
+    }
+  }
+}
+
+/////////////////////////
+//// Search Bar
+.search {
+  flex: 0 0 40%;
+
+  &__input {
+    font-family: inherit;
+    font-size: inherit;
+    color: inherit;
+    background-color: #f4f2f2;
+    border: none;
+    outline: none;
+    padding: 0.7em 2em;
+    border-radius: 100px;
+    width: 90%;
+    transition: all 0.2s;
+
+    &:focus {
+      outline: none;
+      width: 100%;
+      background-color: #dbdada;
+    }
+  }
+}
+
+::ng-deep .mat-badge-medium .mat-badge-content {
+  background-color: #edc773 !important;
+  border-color: #edc773;
+  color: black;
+}

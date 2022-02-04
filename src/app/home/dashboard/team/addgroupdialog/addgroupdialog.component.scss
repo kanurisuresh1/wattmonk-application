@@ -1,0 +1,49 @@
+@import "../../../../shared/loader/loader.component.scss";
+.mediumtext {
+  font-size: 0.7rem;
+}
+.close {
+  margin-top: -88px;
+  margin-left: 290px;
+}
+
+//   .example-chip-list {
+//     width: 100%;
+//   }
+//   .mat-standard-chip {
+//     margin: 1px;
+// }
+// .mat-chip.mat-standard-chip {
+//   background-color: #EDC773;
+//   color: rgba(0, 0, 0, 0.87);
+
+// }
+.mat-standard-chip {
+  transition: box-shadow 280ms cubic-bezier(0.4, 0, 0.2, 1);
+  display: inline-flex;
+  padding: 7px 12px;
+  border-radius: 2px !important;
+  align-items: center;
+  cursor: default;
+  min-height: 32px;
+  height: 1px;
+}
+
+.dialogformtitle {
+  color: black;
+  size: 18px;
+  font-weight: 500 !important;
+}
+.addgroupdialogcontent {
+  p {
+    margin-bottom: 0px;
+    color: #3c4257;
+    font-size: 12px;
+  }
+}
+.spinnercard {
+  width: 320px;
+  position: absolute;
+  top: 43%;
+  left: 42%;
+}

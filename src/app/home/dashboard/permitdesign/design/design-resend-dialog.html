@@ -1,0 +1,392 @@
+<div *ngIf="isLoading" class="overlay">
+  <mat-card class="spinnercard" align-items-center>
+    <div class="row">
+      <div class="col-3">
+        <mat-progress-spinner diameter="50" color="primary" mode="indeterminate" strokeWidth="5"></mat-progress-spinner>
+      </div>
+      <div class="col">
+        <h4 class="spinnertext">{{loadingmessage}}</h4>
+      </div>
+    </div>
+  </mat-card>
+</div>
+<h4 class="dialogformtitle">Send design for revision</h4>
+<div mat-dialog-content class="revisiondialogcontent">
+  <div class="container">
+    <div class="row d-flex">
+      <div class="col-6 align-items-center">
+        <p class="subtitle fullwidth" *ngIf="data.isWattmonkUser">
+          Proof of Request Attachment*
+          <span style="color: red" *ngIf="displayerror && !isAttachmentUploaded">Required</span>
+        </p>
+        <p class="subtitle fullwidth" *ngIf="!data.isWattmonkUser">
+          Upload Attachment
+        </p>
+        <div class="row architectureuploadrow">
+          <div class="col align-items-center architectureuploadcol">
+            <div class="multiple-dropzone fullwidth" ngx-dropzone [multiple]="true"
+              (change)="onAttachmentFileSelect($event)">
+              <ngx-dropzone-label>
+                <div>
+                  <img class="addimage" src="../../../../../assets/add.svg" />
+                  <h5>Drag and drop or click to browse.</h5>
+                </div>
+              </ngx-dropzone-label>
+              <div *ngFor="let f of attachmentfiles">
+                {{ f.type }}
+                <ngx-dropzone-preview *ngIf="!f.isImage" class="imagepreview" ngProjectAs="ngx-dropzone-preview"
+                  [file]="f" [removable]="true" (removed)="onAttachmentFileRemove(f)">
+                  <ngx-dropzone-label class="previewlabel">{{ f.name }} ({{ f.type }})</ngx-dropzone-label>
+                </ngx-dropzone-preview>
+                <ngx-dropzone-image-preview *ngIf="f.isImage" class="imagepreview" ngProjectAs="ngx-dropzone-preview"
+                  [file]="f" [removable]="true" (removed)="onAttachmentFileRemove(f)">
+                </ngx-dropzone-image-preview>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-6">
+        <mat-form-field appearance="fill" class="fullwidth">
+          <mat-label>Reason</mat-label>
+          <textarea style="height: 100px" matInput [formControl]="resendcommentscontrol" required></textarea>
+          <mat-error *ngIf="resendcommentscontrol.invalid">"Field input is required."</mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+    <mat-tab-group mat-align-tabs="center" class="revisiondialogpage" *ngIf="data.ispermitmode">
+      <mat-tab>
+        <ng-template *ngIf="!this.genericService.specificclient" matTabLabel>
+          Permit
+        </ng-template>
+        <ng-template *ngIf="this.genericService.specificclient" matTabLabel>
+          Design
+        </ng-template>
+        <div class="container detailsdialog">
+          <div class="row mt-3">
+            <div class="col-sm-6 col-12">
+              <p class="subtitle fullwidth">Customer and Site Details</p>
+              <div class="row subbody">
+                <div class="col-6">
+                  <p class="contentheader">Company</p>
+                  <p class="contentheader">Name</p>
+                  <p class="contentheader">Email</p>
+                  <p class="contentheader">Created By</p>
+                  <p class="contentheader">Phone Number</p>
+                  <p class="contentheader" *ngIf="data.design.monthlybill != null">
+                    Annual Units
+                  </p>
+                  <p class="contentheader" *ngIf="data.design.solarcapacity != null">
+                    Solar Capacity
+                  </p>
+                  <p class="contentheader" *ngIf="data.design.address != null">
+                    Address
+                  </p>
+                </div>
+                <div class="col-6">
+                  <p class="contentvalue text-right">
+                    {{ data.design.company }}
+                  </p>
+                  <p class="contentvalue text-right">{{ data.design.name }}</p>
+                  <p style="word-wrap: break-word" class="contentvalue text-right">
+                    {{ data.design.email }}
+                  </p>
+                  <p class="contentvalue text-right">
+                    {{ data.design.createdby?.firstname }}
+                    {{data.design.createdby?.lastname }}
+                  </p>
+                  <p style="word-wrap: break-word" class="contentvalue text-right">
+                    {{ data.design?.phonenumber }}
+                  </p>
+                  <p class="contentvalue text-right" *ngIf="data.design.monthlybill != null">
+                    {{ data.design.monthlybill }} kW
+                  </p>
+                  <p class="contentvalue text-right" *ngIf="data.design.solarcapacity != null">
+                    {{ data.design.solarcapacity }} kW
+                  </p>
+                  <p style="word-wrap: break-word" class="contentvalue text-right" *ngIf="data.design.address != null">
+                    {{ data.design.address }}
+                  </p>
+                  <p class="contentvalue text-right" *ngIf="data.design.address == null">
+                    No address found
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-6 col-12">
+              <p class="subtitle fullwidth">Job Details</p>
+              <div class="row subbody">
+                <div class="col-4">
+                  <p class="contentheader">Property</p>
+                  <p class="contentheader">Job Type</p>
+                  <p class="contentheader" *ngIf="data.design.mpurequired !=null">
+                    MPU Required
+                  </p>
+                </div>
+                <div class="col">
+                  <p class="contentvalue text-right">
+                    {{ data.design.projecttype | titlecase }}
+                  </p>
+                  <p class="contentvalue text-right" *ngIf="data.design.jobtype!='pvbattery'">
+                    {{ data.design.jobtype | titlecase }}
+                  </p>
+                  <p class="contentvalue text-right" *ngIf="data.design.jobtype=='pvbattery'">
+                    PV+Battery
+                  </p>
+                  <p class="contentvalue text-right" *ngIf="data.design.mpurequired !=null && !data.design.mpurequired">
+                    No
+                  </p>
+                  <p class="contentvalue text-right" *ngIf="data.design.mpurequired !=null && data.design.mpurequired">
+                    Yes
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-6 col-12 mt-5">
+              <p class="subtitle fullwidth">Module Details</p>
+              <div class="row subbody">
+                <div class="col-4">
+                  <p class="contentheader">Make</p>
+                  <p class="contentheader">Model</p>
+                </div>
+                <div class="col">
+                  <p class="contentvalue text-right">
+                    {{ data.design.solarmake?.name || defaultvalues}}
+                  </p>
+                  <p class="contentvalue text-right">
+                    {{ data.design.solarmodel?.name || defaultvalues}}
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-6 col-12 mt-5">
+              <p class="subtitle fullwidth">Inverter Details</p>
+              <div class="row subbody">
+                <div class="col-4">
+                  <p class="contentheader">Make</p>
+                  <p class="contentheader">Model</p>
+                  <p class="contentheader">Inverters Count</p>
+                </div>
+                <div class="col">
+                  <p class="contentvalue text-right">
+                    {{ data.design.invertermake?.name || defaultvalues}}
+                  </p>
+                  <p class="contentvalue text-right">
+                    {{ data.design.invertermodel?.name || defaultvalues}}
+                  </p>
+                  <p class="contentvalue text-right">
+                    {{ data.design.inverterscount}}
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-6 col-12 mt-5">
+              <p class="subtitle fullwidth">Construction Details</p>
+              <div class="row subbody">
+                <div class="col-4">
+                  <p class="contentheader">New Construction</p>
+                </div>
+                <div class="col">
+                  <p class="contentvalue text-right">
+                    {{
+                    genericService.getBooleanValue(data.design.newconstruction)
+                    }}
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-6 col-12 mt-5"
+              *ngIf="this.data.design.newconstruction && data.design?.architecturaldesign?.length > 0">
+              <p class="subtitle fullwidth">Architectural Design</p>
+              <div class="row subbody list-border" *ngFor="let designfile of data.design.architecturaldesign">
+                <div class="col-4">
+                  <p class="contentheader">
+                    <img *ngIf="designfile.ext == '.pdf'" class="material-icons file-icon" src="./../assets/pdf.svg" />
+                    <img *ngIf="designfile.ext == '.png'" class="material-icons file-icon" src="./../assets/png.svg" />
+                    <img *ngIf="designfile.ext == '.zip'" class="material-icons file-icon" src="./../assets/zip.svg" />
+                    <img *ngIf="designfile.ext == '.doc'" class="material-icons file-icon" src="./../assets/doc.svg" />
+                    <img *ngIf="designfile.ext == '.docx'" class="material-icons file-icon" src="./../assets/doc.svg" />
+                    <img *ngIf="designfile.ext == '.odt'" class="material-icons file-icon" src="./../assets/pdf.svg" />
+                    <img *ngIf="designfile.ext == '.rtf'" class="material-icons file-icon" src="./../assets/rtf.svg" />
+                    <img *ngIf="designfile.ext == '.txt'" class="material-icons file-icon" src="./../assets/txt.svg" />
+                    <img
+                      *ngIf="designfile.ext != '.png' && designfile.ext != '.pdf' && designfile.ext != '.zip' && designfile.ext != '.doc' && designfile.ext != '.docx' && designfile.ext != '.odt' && designfile.ext != '.rtf' && designfile.ext != '.txt'"
+                      class="material-icons file-icon" src="./../assets/file.svg" />
+                  </p>
+                </div>
+                <div class="col">
+                  <a href="{{designfile.url}}" target="_blank" class="contentvalue float-right">{{ designfile.name |
+                    uppercase }}</a>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-6 col-12 mt-5">
+              <p class="subtitle fullwidth">Mounting Details</p>
+              <div class="row subbody">
+                <div class="col-4">
+                  <p class="contentheader">Mounting</p>
+                  <p class="contentheader"
+                    *ngIf="data.design.mountingtype == 'roof' || data.design.mountingtype == 'both'">
+                    Roof
+                  </p>
+                  <p class="contentheader"
+                    *ngIf="data.design.mountingtype == 'ground' || data.design.mountingtype == 'both'">
+                    Tilt for ground mount system
+                  </p>
+                </div>
+                <div class="col">
+                  <p class="contentvalue text-right">
+                    {{ data.design.mountingtype | titlecase }}
+                  </p>
+                  <p class="contentvalue text-right"
+                    *ngIf="data.design.mountingtype == 'roof' || data.design.mountingtype == 'both'">
+                    {{ data.design.rooftype | titlecase}}
+                  </p>
+                  <p class="contentvalue text-right"
+                    *ngIf="data.design.mountingtype == 'ground' || data.design.mountingtype == 'both'">
+                    {{ data.design.tiltofgroundmountingsystem }}
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-12 col-sm-6 mt-5" *ngIf="data.ispermitmode">
+              <p class="subtitle fullwidth">Attachments</p>
+              <div class="row pl-3">
+                <div class="image-container" *ngFor="let item of permitAttachments; index as i">
+                  <img [lightbox]="i" [src]="item.data.thumb"
+                    *ngIf="item.data.ext !='.pdf' && item.data.ext !='.zip' && item.data.ext !='.doc' && item.data.ext !='.docx' && item.data.ext !='.odf' && item.data.ext !='.rtf' && item.data.ext !='.txt'"
+                    class="attachment-img" width="95%" height="95%" />
+                  <a href="{{item.data.thumb}}" target="_blank" *ngIf="item.data.ext =='.pdf'"><img
+                      src="../../../../../assets/pdf.svg" width="70px" height="95px" /></a>
+                  <a href="{{item.data.thumb}}" target="_blank" *ngIf="item.data.ext =='.zip'"><img
+                      src="../../../../../assets/zip.svg" width="70px" height="95px" /></a>
+                  <a href="{{item.data.thumb}}" target="_blank" *ngIf="item.data.ext =='.doc'"><img
+                      src="../../../../../assets/doc.svg" width="70px" height="95px" /></a>
+                  <a href="{{item.data.thumb}}" target="_blank" *ngIf="item.data.ext =='.docx'"><img
+                      src="../../../../../assets/doc.svg" width="70px" height="95px" /></a>
+                  <a href="{{item.data.thumb}}" target="_blank" *ngIf="item.data.ext =='.odt'"><img
+                      src="../../../../../assets/pdf.svg" width="70px" height="95px" /></a>
+                  <a href="{{item.data.thumb}}" target="_blank" *ngIf="item.data.ext =='.rtf'"><img
+                      src="../../../../../assets/rtf.svg" width="70px" height="95px" /></a>
+                  <a href="{{item.data.thumb}}" target="_blank" *ngIf="item.data.ext =='.txt'"><img
+                      src="../../../../../assets/txt.svg" width="70px" height="95px" /></a>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-6 col-12 mt-5">
+              <p class="subtitle fullwidth" *ngIf="!this.genericService.specificclient">
+                Permit Design
+              </p>
+              <p class="subtitle fullwidth" *ngIf="this.genericService.specificclient">
+                Design
+              </p>
+              <div class="row align-items-center">
+                <div class="col">
+                  <!-- <p class="contentheader">View File</p> -->
+                  <img src="../../../../../assets/pdf.svg" width="60px" height="60px" />
+                </div>
+                <div class="col">
+                  <a href="{{data.design.permitdesign.url}}" target="_blank" class="contentvalue float-right"
+                    style="word-break: break-all">{{ data.design.permitdesign.name | titlecase }}</a>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-6 col-12 mt-5 align-items-center" *ngIf="this.data.design.status == 'requestdeclined'">
+              <p class="subtitle fullwidth">Reason</p>
+              <div class="row subbody">
+                <div class="col">
+                  <p class="contentvalue">
+                    {{this.data.design.requestdeclinereason}}
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-6 col-12 mt-5"
+              *ngIf="this.data.design.status == 'requestdeclined' && this.data.design?.requestdeclineattachment?.length > 0">
+              <p class="subtitle fullwidth">On Hold Attachments</p>
+              <div class="row subbody list-border" *ngFor="let attachmentfile of data.design.requestdeclineattachment">
+                <div class="col-2">
+                  <p class="contentheader">
+                    <img *ngIf="attachmentfile.ext == '.pdf'" class="material-icons file-icon"
+                      src="./../assets/pdf.svg" />
+                    <img *ngIf="attachmentfile.ext == '.png'" class="material-icons file-icon"
+                      src="./../assets/png.svg" />
+                    <img *ngIf="attachmentfile.ext == '.zip'" class="material-icons file-icon"
+                      src="./../assets/zip.svg" />
+                    <img *ngIf="attachmentfile.ext == '.doc'" class="material-icons file-icon"
+                      src="./../assets/doc.svg" />
+                    <img *ngIf="attachmentfile.ext == '.docx'" class="material-icons file-icon"
+                      src="./../assets/doc.svg" />
+                    <img *ngIf="attachmentfile.ext == '.odt'" class="material-icons file-icon"
+                      src="./../assets/pdf.svg" />
+                    <img *ngIf="attachmentfile.ext == '.rtf'" class="material-icons file-icon"
+                      src="./../assets/rtf.svg" />
+                    <img *ngIf="attachmentfile.ext == '.txt'" class="material-icons file-icon"
+                      src="./../assets/txt.svg" />
+                    <img
+                      *ngIf="attachmentfile.ext != '.png' && attachmentfile.ext != '.pdf' && attachmentfile.ext != '.zip' && attachmentfile.ext != '.doc' && attachmentfile.ext != '.docx' && attachmentfile.ext != '.odt' && attachmentfile.ext != '.rtf' && attachmentfile.ext != '.txt'"
+                      class="material-icons file-icon" src="./../assets/file.svg" />
+                  </p>
+                </div>
+                <div class="col-10">
+                  <a href="{{attachmentfile.url}}" target="_blank" class="contentvalue float-right">{{
+                    attachmentfile.name | uppercase }}</a>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-6 col-12 mt-5 align-items-center" *ngIf="this.data.design.isinrevisionstate">
+              <p class="subtitle fullwidth">Revision Comments</p>
+              <div class="row subbody">
+                <div class="col">
+                  <p class="contentvalue">
+                    {{this.data.design.revisioncomments}}
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-6 col-12 mt-5"
+              *ngIf="this.data.design.isinrevisionstate && this.data.design?.revisionattachments?.length > 0">
+              <p class="subtitle fullwidth">Revision Attachments</p>
+              <div class="row subbody list-border" *ngFor="let attachmentfile of data.design.revisionattachments">
+                <div class="col-2">
+                  <p class="contentheader">
+                    <img *ngIf="attachmentfile.ext == '.pdf'" class="material-icons file-icon"
+                      src="./../assets/pdf.svg" />
+                    <img *ngIf="attachmentfile.ext == '.png'" class="material-icons file-icon"
+                      src="./../assets/png.svg" />
+                    <img *ngIf="attachmentfile.ext == '.zip'" class="material-icons file-icon"
+                      src="./../assets/zip.svg" />
+                    <img *ngIf="attachmentfile.ext == '.doc'" class="material-icons file-icon"
+                      src="./../assets/doc.svg" />
+                    <img *ngIf="attachmentfile.ext == '.docx'" class="material-icons file-icon"
+                      src="./../assets/doc.svg" />
+                    <img *ngIf="attachmentfile.ext == '.odt'" class="material-icons file-icon"
+                      src="./../assets/pdf.svg" />
+                    <img *ngIf="attachmentfile.ext == '.rtf'" class="material-icons file-icon"
+                      src="./../assets/rtf.svg" />
+                    <img *ngIf="attachmentfile.ext == '.txt'" class="material-icons file-icon"
+                      src="./../assets/txt.svg" />
+                    <img
+                      *ngIf="attachmentfile.ext != '.png' && attachmentfile.ext != '.pdf' && attachmentfile.ext != '.zip' && attachmentfile.ext != '.doc' && attachmentfile.ext != '.docx' && attachmentfile.ext != '.odt' && attachmentfile.ext != '.rtf' && attachmentfile.ext != '.txt'"
+                      class="material-icons file-icon" src="./../assets/file.svg" />
+                  </p>
+                </div>
+                <div class="col-10">
+                  <a href="{{attachmentfile.url}}" target="_blank" class="contentvalue float-right">{{
+                    attachmentfile.name | uppercase }}</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </mat-tab>
+    </mat-tab-group>
+  </div>
+</div>
+<mat-dialog-actions align="end">
+  <button mat-raised-button class="greybutton" (click)="onNoClick()">
+    Cancel
+  </button>
+  <button mat-raised-button (click)="onSubmit()" required>Submit</button>
+</mat-dialog-actions>

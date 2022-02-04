@@ -1,0 +1,208 @@
+<!-- <div *ngIf="isLoading" class="overlay ">
+  <mat-progress-bar class="commonprogressbar" mode="indeterminate"></mat-progress-bar>
+</div> -->
+<!-- <div *ngIf="isLoading" class="overlay">
+  <mat-card class="spinnercard" align-items-center>
+      <div class="row">
+          <div class="col-3">
+              <mat-progress-spinner diameter="50" color="primary" mode="indeterminate" strokeWidth="5">
+              </mat-progress-spinner>
+          </div>
+          <div class="col d-flex align-items-center">
+              <h4 class="spinnertext mb-0">{{loadingmessage}}</h4>
+          </div>
+      </div>
+  </mat-card>
+</div> -->
+<div *ngIf="isLoading" class="progress-loader">
+  <div id="pause" class="d-flex align-items-center justify-content-center">
+    <div id="spinner" style="background: #fff; padding: 25px; border-radius: 5px; width: 17rem" class="row">
+      <div class="loading-message bkgg col-9">{{ loadingmessage }}</div>
+      <div class="col-3" style="top: 5px">
+        <div class="snippet" data-title=".dot-pulse">
+          <div class="stage">
+            <div class="dot-pulse"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="container">
+  <div class="row">
+    <div class="col-9 mb-3" *ngIf="!this.data.isEditMode">
+      <h1 class="dialogformtitle">Add Team Member</h1>
+    </div>
+    <div class="col-9 mb-3" *ngIf="this.data.isEditMode">
+      <h1 class="dialogformtitle">Edit Team Memberr</h1>
+    </div>
+    <div class="col-3 mb-3" style="padding-right: 0px">
+      <button class="float-right" mat-icon-button (click)="onCloseClick()">
+        <img class="material-icons" src="../../../assets/cut.svg" style="width: 15px" />
+        <!-- <img class="dialogclose;" style="width: 60%;" src="../../../../../assets/close1.svg" /> -->
+      </button>
+      <!-- <button class="float-right" style="background-color: #000; width: 24px ; height: 23px;" mat-icon-button
+        (click)="onCloseClick()">
+        <mat-icon class="close-icon" style="color: #fff; font-size: 17px; line-height: 11px;">close</mat-icon>
+      </button> -->
+    </div>
+  </div>
+  <div mat-dialog-content>
+    <div class="container">
+      <div class="row">
+        <form class="addteamcard" [formGroup]="addteamDialogForm" (submit)="onAddMember($event)">
+          <div class="form-group">
+            <!-- <mat-form-field  appearance="fill" class="halfwidth"> -->
+            <!-- <mat-label>Firstname</mat-label> -->
+            <div class="row">
+              <div class="col-md-6 inputSection">
+                <label>First Name*</label>
+                <mat-form-field appearance="outline" class="fullwidth">
+                  <input autocomplete="off" matInput [formControl]="firstname" required />
+                  <mat-error *ngIf="firstname.invalid">{{
+                    getErrorMessage(firstname)
+                    }}</mat-error>
+                </mat-form-field>
+              </div>
+              <div class="col-md-6 inputSection">
+                <label>Last Name*</label>
+                <mat-form-field appearance="outline" class="fullwidth">
+                  <input autocomplete="off" matInput [formControl]="lastname" required />
+                  <mat-error *ngIf="lastname.invalid">{{
+                    getErrorMessage(lastname)
+                    }}</mat-error>
+                </mat-form-field>
+              </div>
+              <div class="col-md-12 inputSection" *ngIf="!data.isEditMode">
+                <label>Work Email*</label>
+                <mat-form-field appearance="outline" class="fullwidth">
+                  <input autocomplete="off" matInput [formControl]="workemail" required />
+                  <mat-error *ngIf="workemail.invalid">{{
+                    getErrorMessage(workemail)
+                    }}</mat-error>
+                </mat-form-field>
+              </div>
+              <div class="col-md-12 inputSection" *ngIf="data.isEditMode">
+                <label>Work Email*</label>
+                <mat-form-field appearance="outline" class="fullwidth">
+                  <input autocomplete="off" matInput [formControl]="workemail" required readonly />
+                  <mat-error *ngIf="workemail.invalid">{{
+                    getErrorMessage(workemail)
+                    }}</mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+            <!-- <mat-error *ngIf="firstname.invalid">{{getErrorMessage(firstname)}}</mat-error> -->
+            <!-- </mat-form-field> -->
+            <!-- <mat-form-field appearance="fill" class="pl-2 halfwidth"> -->
+            <!-- <mat-label>Lastname</mat-label> -->
+
+            <!-- <mat-error *ngIf="lastname.invalid">{{getErrorMessage(lastname)}}</mat-error>
+            </mat-form-field>
+            <mat-form-field appearance="fill" class="halfwidth">
+              <mat-label>Work Email</mat-label> -->
+
+            <!-- <mat-error *ngIf="workemail.invalid">{{getErrorMessage(workemail)}}</mat-error>
+            </mat-form-field> -->
+          </div>
+
+          <div class="form-group">
+            <div class="row">
+              <div class="col-12 inputSection">
+                <label>User Role</label>
+                <mat-radio-group name="role" aria-label="user role" [formControl]="role" (change)="radioChange($event)"
+                  required>
+                  <div class="radioBbuttons">
+                    <ng-container *ngFor="let roleobj of clientroles">
+                      <mat-radio-button [value]="roleobj.role.id">{{ roleobj.displayname }}
+                      </mat-radio-button>
+                    </ng-container>
+                    <!-- <div class="col">
+                  <mat-radio-button  value="3" [disabled]="disablebutton">Design Manager</mat-radio-button>
+                </div>
+                <div class="col" *ngIf="!isClient">
+                  <mat-radio-button  value="8" [disabled]="disablebutton">Designer</mat-radio-button>
+                </div>
+                <div class="col" >
+                  <mat-radio-button  value="9" [disabled]="disablebutton">Surveyor</mat-radio-button>
+                </div>
+                <div class="col" *ngIf="!isClient" >
+                  <mat-radio-button  value="10" [disabled]="disablebutton">Analyst</mat-radio-button>
+                </div>
+                <div class="col"  *ngIf="!isClient">
+                  <mat-radio-button  value="11" [disabled]="disablebutton">PE Engineer</mat-radio-button>
+                </div> -->
+                  </div>
+                </mat-radio-group>
+                <mat-error style="font-size: 8px" [hidden]="displayerror" *ngIf="role.invalid">
+                  {{ getErrorMessage(role) }}</mat-error>
+              </div>
+            </div>
+            <div class="mat-form-field mt-3" *ngIf="this.role.value == '11'">
+              <mat-form-field appearance="fill" class="formfill">
+                <mat-label>Type Of PE Engineer</mat-label>
+                <mat-select [formControl]="peengineertype" [(value)]="petype" style="font-size: 0.8em" required>
+                  <mat-option *ngFor="let pe of pevalues" [value]="pe.role">{{pe.name}}</mat-option>
+                  <!-- <mat-option value="electrical">Electrical</mat-option> -->
+                  <!-- <mat-option value="both">both</mat-option> -->
+                </mat-select>
+                <mat-error *ngIf="peengineertype.invalid">{{
+                  getErrorMessage(peengineertype)
+                  }}</mat-error>
+              </mat-form-field>
+            </div>
+            <div class="row" *ngIf="loggedinUser.role.id != pesuperadminroleid">
+              <div class="col-12 mt-3">
+                <label class="mb-0">Access</label>
+
+                <section class="inputSection mb-0">
+                  <mat-checkbox class="" value="prelim" *ngIf="usersettings.visibilityprelim"
+                    [formControl]="prelimaccess" [disabled]="
+                      role.value == 8 ||
+                      role.value == 9 ||
+                      role.value == 10 ||
+                      role.value == 11
+                    ">{{ usersettings.nameprelim }}</mat-checkbox>
+                  <mat-checkbox class="ml-3" value="survey" *ngIf="usersettings.visibilitysurvey"
+                    [formControl]="surveyaccess" [disabled]="
+                      role.value == 8 ||
+                      role.value == 9 ||
+                      role.value == 10 ||
+                      role.value == 11
+                    ">{{ usersettings.namesurvey }}</mat-checkbox>
+                  <mat-checkbox class="ml-3" value="permit" *ngIf="usersettings.visibilitypermit"
+                    [formControl]="permitccess" [disabled]="
+                      role.value == 8 ||
+                      role.value == 9 ||
+                      role.value == 10 ||
+                      role.value == 11
+                    ">{{ usersettings.namepermit }}</mat-checkbox>
+                  <mat-checkbox class="ml-3" value="pestamp" *ngIf="usersettings.visibilitypestamp"
+                    [formControl]="pestampaccess" [disabled]="
+                      role.value == 8 ||
+                      role.value == 9 ||
+                      role.value == 10 ||
+                      role.value == 11
+                    ">{{ usersettings.namepestamp }}</mat-checkbox>
+                  <mat-checkbox class="ml-3" value="team" *ngIf="usersettings.visibilityteam" [formControl]="teamaccess"
+                    [disabled]="role.value != 5 && role.value != 7 && role.value != 22 && role.value != 30">{{
+                    usersettings.nameteam }}</mat-checkbox>
+                </section>
+                <!--  <mat-error style="font-size: 8px;" [hidden]="displayerror" *ngIf="role.invalid">
+                  {{getErrorMessage(access)}}</mat-error> -->
+              </div>
+            </div>
+          </div>
+          <!-- <div class="form-group mt-3" >
+          <mat-checkbox class="mediumtext" [formControl]="permisson" > Can Create a Design Request</mat-checkbox>
+        </div> -->
+          <div class="form-group mt-4">
+            <button mat-raised-button class="fullwidth" type="submit">
+              Confirm
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

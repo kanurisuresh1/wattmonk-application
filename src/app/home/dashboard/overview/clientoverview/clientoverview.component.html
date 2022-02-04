@@ -1,0 +1,640 @@
+<div *ngIf="isLoading" class="overlay">
+  <mat-card class="spinnercard" align-items-center>
+    <div class="row">
+      <div class="col-3">
+        <mat-progress-spinner
+          diameter="50"
+          color="primary"
+          mode="indeterminate"
+          strokeWidth="5"
+        ></mat-progress-spinner>
+      </div>
+      <div class="col">
+        <h4 class="spinnertext">{{ loadingmessage }}</h4>
+      </div>
+    </div>
+  </mat-card>
+</div>
+
+<div class="main-content">
+  <div class="container">
+    <div class="row">
+      <div class="col-9" style="margin: auto">
+        <div>
+          <mat-vertical-stepper [linear]="isLinear" #stepper>
+            <mat-step>
+              <ng-template matStepLabel
+                >Required Information
+                <button
+                  class="skip-button"
+                  mat-button
+                  (click)="$event.stopPropagation()"
+                  matStepperNext
+                >
+                  Skip
+                </button></ng-template
+              >
+              <div class="row">
+                <form class="form-width" [formGroup]="requiredinformationform">
+                  <div class="form-group formradiogroup pl-3">
+                    <h5>Type of User</h5>
+                    <mat-radio-group
+                      [formControl]="usertype"
+                      (change)="radioChange($event)"
+                    >
+                      <div class="row">
+                        <div class="col">
+                          <mat-radio-button value="company"
+                            >Company</mat-radio-button
+                          >
+                        </div>
+                        <div class="col">
+                          <mat-radio-button value="individual"
+                            >Individual</mat-radio-button
+                          >
+                        </div>
+                      </div>
+                    </mat-radio-group>
+                  </div>
+                  <div class="form-group">
+                    <div class="row">
+                      <div class="col">
+                        <mat-form-field class="fullwidth" appearance="fill">
+                          <mat-label>Billing Address</mat-label>
+                          <input
+                            matInput
+                            placeholder="new brelin"
+                            [formControl]="billingaddress"
+                            required
+                          />
+                          <mat-error *ngIf="billingaddress.invalid">{{
+                            getErrorMessage(billingaddress)
+                          }}</mat-error>
+                        </mat-form-field>
+                      </div>
+                      <div class="col" *ngIf="usertype.value == 'company'">
+                        <mat-form-field class="fullwidth" appearance="fill">
+                          <mat-label>Company name</mat-label>
+                          <input
+                            matInput
+                            placeholder="xyz"
+                            [formControl]="company"
+                            required
+                          />
+                          <mat-error *ngIf="company.invalid">{{
+                            getErrorMessage(company)
+                          }}</mat-error>
+                        </mat-form-field>
+                      </div>
+                      <div class="col" *ngIf="usertype.value == 'company'">
+                        <mat-form-field class="fullwidth" appearance="fill">
+                          <mat-label>Lic No.</mat-label>
+                          <input
+                            matInput
+                            type="number"
+                            placeholder="123"
+                            [formControl]="registrationnumber"
+                            required
+                          />
+                          <mat-error *ngIf="registrationnumber.invalid">{{
+                            getErrorMessage(registrationnumber)
+                          }}</mat-error>
+                        </mat-form-field>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group formradiogroup">
+                    <h5>Payment</h5>
+                    <mat-radio-group [formControl]="payment">
+                      <div class="row">
+                        <div class="col">
+                          <mat-radio-button value="true"
+                            >Prepaid</mat-radio-button
+                          >
+                        </div>
+                        <div class="col">
+                          <mat-radio-button value="false"
+                            >Postpaid</mat-radio-button
+                          >
+                        </div>
+                      </div>
+                    </mat-radio-group>
+                  </div>
+                  <div class="form-group">
+                    <h5 style="margin-top: 2%">Service Charges</h5>
+                    <hr />
+                    <div class="row">
+                      <div class="col-3">
+                        <h4 style="font-size: 13px; -webkit-text-stroke: thin">
+                          Prelim Design
+                        </h4>
+                      </div>
+                      <div
+                        class="col-3"
+                        style="font-size: 13px; -webkit-text-stroke: thin"
+                      >
+                        ${{ genericService.prelimdesigncharges }}
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-3">
+                        <h4 style="font-size: 13px; -webkit-text-stroke: thin">
+                          Permit Design
+                        </h4>
+                      </div>
+                      <div
+                        class="col-3"
+                        style="font-size: 13px; -webkit-text-stroke: thin"
+                      >
+                        ${{ genericService.permitdesigncharges }}
+                      </div>
+                    </div>
+                  </div>
+
+                  <h5 class="payment-text" *ngIf="payment.value == 'true'">
+                    Recharge your wallet right now with more than $500 and get
+                    an additional benefit of $100
+                  </h5>
+                  <button
+                    style="color: #fff; background-color: #fa983a"
+                    mat-raised-button
+                    *ngIf="payment.value == 'true'"
+                    (click)="openAddMoneyToWalletDialog()"
+                  >
+                    Recharge Wallet
+                  </button>
+                  <hr />
+                  <div *ngIf="usertype.value == 'company'">
+                    <mat-label>Upload Company Logo</mat-label>
+                    <div class="group-gap">
+                      <!-- Upload image -->
+                      <div class="avatar-upload" (click)="fileInput.click()">
+                        <div class="avatar-edit">
+                          <input
+                            [formControl]="userlogo"
+                            type="file"
+                            id="imageUpload"
+                            accept=".png, .jpg, .jpeg"
+                            #fileInput
+                            (change)="uploadFile($event)"
+                          />
+                        </div>
+                        <div class="avatar-preview logo-upload">
+                          <div
+                            id="imagePreview"
+                            [style.backgroundImage]="'url(' + imageUrl + ')'"
+                          ></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="form-group mt-4">
+                    <button
+                      mat-raised-button
+                      (click)="onUpdateUserInformation()"
+                      type="submit"
+                    >
+                      Update Information
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </mat-step>
+            <mat-step>
+              <form>
+                <ng-template matStepLabel
+                  >Notifications
+                  <button
+                    class="skip-button"
+                    mat-button
+                    (click)="$event.stopPropagation()"
+                    matStepperNext
+                  >
+                    Skip
+                  </button>
+                </ng-template>
+                <div class="row">
+                  <div class="col-6">
+                    <h4 class="notificationheader">Events</h4>
+                  </div>
+                  <div class="col-3">
+                    <h4 class="notificationheader">Mails</h4>
+                  </div>
+                  <div class="col-3">
+                    <h4 class="notificationheader">Notifications</h4>
+                  </div>
+                </div>
+                <div class="row mt-2">
+                  <div class="col">
+                    <div style="height: 1px; background-color: #a5a9abaa"></div>
+                  </div>
+                </div>
+                <div class="row" style="padding-top: 10px">
+                  <div class="col-6">
+                    <h4 style="font-size: small; font-weight: 400">
+                      Design Generated
+                    </h4>
+                  </div>
+                  <div class="col-3">
+                    <mat-slide-toggle
+                      [color]="color"
+                      [formControl]="requestgeneratedemail"
+                      (change)="togglebutton($event, 'requestgeneratedemail')"
+                    >
+                    </mat-slide-toggle>
+                  </div>
+                  <div class="col-3" style="text-align: center">
+                    <mat-slide-toggle
+                      [color]="color"
+                      [formControl]="requestgeneratednotification"
+                      (change)="
+                        togglebutton($event, 'requestgeneratednotification')
+                      "
+                    >
+                    </mat-slide-toggle>
+                  </div>
+                </div>
+
+                <div class="row" style="padding-top: 10px">
+                  <div class="col-6">
+                    <h4 style="font-size: small; font-weight: 400">
+                      Design Acknowledgement
+                    </h4>
+                  </div>
+                  <div class="col-3">
+                    <mat-slide-toggle
+                      [color]="color"
+                      [formControl]="requestacknowledgementemail"
+                      (change)="
+                        togglebutton($event, 'requestacknowledgementemail')
+                      "
+                    ></mat-slide-toggle>
+                  </div>
+                  <div
+                    class="col-3"
+                    style="text-align: center; align-self: stretch"
+                  >
+                    <mat-slide-toggle
+                      [color]="color"
+                      [formControl]="requestacknowledgementnotification"
+                      (change)="
+                        togglebutton(
+                          $event,
+                          'requestacknowledgementnotification'
+                        )
+                      "
+                    ></mat-slide-toggle>
+                  </div>
+                </div>
+                <div class="row" style="padding-top: 10px">
+                  <div class="col-6">
+                    <h4 style="font-size: small; font-weight: 400">
+                      Design in designing stage
+                    </h4>
+                  </div>
+                  <div class="col-3">
+                    <mat-slide-toggle
+                      [color]="color"
+                      [formControl]="requestindesigningemail"
+                      (change)="togglebutton($event, 'requestindesigningemail')"
+                    >
+                    </mat-slide-toggle>
+                  </div>
+                  <div
+                    class="col-3"
+                    style="text-align: center; align-self: stretch"
+                  >
+                    <mat-slide-toggle
+                      [color]="color"
+                      [formControl]="requestindesigningnotification"
+                      (change)="
+                        togglebutton($event, 'requestindesigningnotification')
+                      "
+                    >
+                    </mat-slide-toggle>
+                  </div>
+                </div>
+                <div class="row" style="padding-top: 10px">
+                  <div class="col-6">
+                    <h4 style="font-size: small; font-weight: 400">
+                      Design into QC
+                    </h4>
+                  </div>
+                  <div class="col-3">
+                    <mat-slide-toggle
+                      [color]="color"
+                      [formControl]="designmovedtoqcemail"
+                      (change)="togglebutton($event, 'designmovedtoqcemail')"
+                    ></mat-slide-toggle>
+                  </div>
+                  <div
+                    class="col-3"
+                    style="text-align: center; align-self: stretch"
+                  >
+                    <mat-slide-toggle
+                      [color]="color"
+                      [formControl]="designmovedtoqcnotification"
+                      (change)="
+                        togglebutton($event, 'designmovedtoqcnotification')
+                      "
+                    ></mat-slide-toggle>
+                  </div>
+                </div>
+                <div class="row" style="padding-top: 10px">
+                  <div class="col-6">
+                    <h4 style="font-size: small; font-weight: 400">
+                      Design review passed.
+                    </h4>
+                  </div>
+                  <div class="col-3">
+                    <mat-slide-toggle
+                      [color]="color"
+                      [formControl]="designreviewpassedemail"
+                      (change)="togglebutton($event, 'designreviewpassedemail')"
+                    >
+                    </mat-slide-toggle>
+                  </div>
+                  <div
+                    class="col-3"
+                    style="text-align: center; align-self: stretch"
+                  >
+                    <mat-slide-toggle
+                      [color]="color"
+                      [formControl]="designreviewpassednotification"
+                      (change)="
+                        togglebutton($event, 'designreviewpassednotification')
+                      "
+                    >
+                    </mat-slide-toggle>
+                  </div>
+                </div>
+                <div class="row" style="padding-top: 10px">
+                  <div class="col-6">
+                    <h4 style="font-size: small; font-weight: 400">
+                      Design review failed
+                    </h4>
+                  </div>
+                  <div class="col-3">
+                    <mat-slide-toggle
+                      [color]="color"
+                      [formControl]="designreviewfailedemail"
+                      (change)="togglebutton($event, 'designreviewfailedemail')"
+                    ></mat-slide-toggle>
+                  </div>
+                  <div
+                    class="col-3"
+                    style="text-align: center; align-self: stretch"
+                  >
+                    <mat-slide-toggle
+                      [color]="color"
+                      [formControl]="designreviewfailednotification"
+                      (change)="
+                        togglebutton($event, 'designreviewfailednotification')
+                      "
+                    ></mat-slide-toggle>
+                  </div>
+                </div>
+                <div class="row" style="padding-top: 10px">
+                  <div class="col-6">
+                    <h4 style="font-size: small; font-weight: 400">
+                      Design delivered
+                    </h4>
+                  </div>
+                  <div class="col-3">
+                    <mat-slide-toggle
+                      [color]="color"
+                      [formControl]="designdeliveredemail"
+                      (change)="togglebutton($event, 'designdeliveredemail')"
+                    ></mat-slide-toggle>
+                  </div>
+                  <div
+                    class="col-3"
+                    style="text-align: center; align-self: stretch"
+                  >
+                    <mat-slide-toggle
+                      [color]="color"
+                      [formControl]="designdeliverednotification"
+                      (change)="
+                        togglebutton($event, 'designdeliverednotification')
+                      "
+                    ></mat-slide-toggle>
+                  </div>
+                </div>
+
+                <!--  <div class="row">
+                  <div class="col-4">
+                    <mat-slide-toggle [color]="color" [formControl]="getemail"
+                      (change)="togglebutton($event,'getemail')">Mails</mat-slide-toggle>
+                  </div>
+                  <div class="col-4">
+                    <mat-slide-toggle [color]="color" [formControl]="getnotification"
+                      (change)="togglebutton($event,'getnotification')">Notifications</mat-slide-toggle>
+                  </div>
+                </div> -->
+                <!-- <div class="row" style="padding-top: 26px; align-items: center;">
+                  <div class="col">
+                    <mat-slide-toggle [color]="color" [formControl]="requestgeneratednotification"
+                      (change)="togglebutton($event,'requestgeneratednotification')">Request Generated
+                    </mat-slide-toggle>
+                    <mat-slide-toggle [color]="color" class="mat-notification-toggle"
+                      [formControl]="requestacknowledgementnotification"
+                      (change)="togglebutton($event,'requestacknowledgementnotification')">Request Acknowledgement
+                    </mat-slide-toggle>
+                    <mat-slide-toggle [color]="color" class="mat-notification-toggle"
+                      [formControl]="requestindesigningnotification"
+                      (change)="togglebutton($event,'requestindesigningnotification')">Request in designing stage
+                    </mat-slide-toggle>
+                    <mat-slide-toggle [color]="color" [formControl]="designcompletednotification"
+                      (change)="togglebutton($event,'designcompletednotification')">Request designing completed.
+                    </mat-slide-toggle>
+                    <mat-slide-toggle [color]="color" class="mat-notification-toggle"
+                      [formControl]="designreviewpassednotification"
+                      (change)="togglebutton($event,'designreviewpassednotification')">Request review passed
+                    </mat-slide-toggle>
+                  </div>
+                  <div class="col">
+                    <mat-slide-toggle [color]="color" [formControl]="designonholdnotification"
+                      (change)="togglebutton($event,'designonholdnotification')">Design on Hold</mat-slide-toggle>
+                    <mat-slide-toggle [color]="color" class="mat-notification-toggle"
+                      [formControl]="designmovedtoqcnotification"
+                      (change)="togglebutton($event,'designmovedtoqcnotification')">Request moved to QC
+                    </mat-slide-toggle>
+                    <mat-slide-toggle [color]="color" class="mat-notification-toggle"
+                      [formControl]="designreviewfailednotification"
+                      (change)="togglebutton($event,'designreviewfailednotification')">Request review failed
+                    </mat-slide-toggle>
+                    <mat-slide-toggle [color]="color" class="mat-notification-toggle"
+                      [formControl]="designdeliverednotification"
+                      (change)="togglebutton($event,'designdeliverednotification')">Request delivered</mat-slide-toggle>
+                  </div>
+                  <div class="col">
+
+
+
+                  </div>
+                </div> -->
+              </form>
+            </mat-step>
+            <mat-step>
+              <ng-template matStepLabel
+                >Build your own team
+                <button
+                  class="skip-button"
+                  mat-button
+                  (click)="$event.stopPropagation()"
+                  matStepperNext
+                >
+                  Skip
+                </button>
+              </ng-template>
+              <div class="topactionbar">
+                <button mat-raised-button (click)="openAddTeamMemberDialog()">
+                  + Add
+                </button>
+              </div>
+              <!--  <div class="row mt-4 statisticssection">
+                <div class="col-9 header">
+                  <h4 class="pt-3">Team</h4>
+                </div>
+                <div class="col-3 text-right">
+                  <mat-form-field>
+                    <mat-label>Filter</mat-label>
+                    <input matInput (keyup)="applyFilter($event)" placeholder="Ex. ium">
+                  </mat-form-field>
+                </div>
+              </div> -->
+              <div class="row statisticssection">
+                <div class="col">
+                  <table mat-table [dataSource]="dataSource" matSort>
+                    <ng-container matColumnDef="name">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                        Name
+                      </th>
+                      <td mat-cell *matCellDef="let element">
+                        {{ element.firstname }} {{ element.lastname }}
+                      </td>
+                    </ng-container>
+
+                    <!-- Role Column -->
+                    <ng-container matColumnDef="role">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                        Role
+                      </th>
+                      <td mat-cell *matCellDef="let element">
+                        {{ element.rolename }}
+                      </td>
+                    </ng-container>
+
+                    <!-- Email Column -->
+                    <ng-container matColumnDef="email">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                        Email
+                      </th>
+                      <td mat-cell *matCellDef="let element">
+                        {{ element.email }}
+                      </td>
+                    </ng-container>
+
+                    <!-- Phone Column -->
+                    <ng-container matColumnDef="phone">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                        Phone
+                      </th>
+                      <td mat-cell *matCellDef="let element">
+                        {{ element.phone }}
+                      </td>
+                    </ng-container>
+
+                    <!-- Action Column -->
+                    <ng-container matColumnDef="manage">
+                      <th mat-header-cell *matHeaderCellDef>Manage</th>
+                      <td
+                        mat-cell
+                        *matCellDef="let element"
+                        (click)="$event.stopPropagation()"
+                      >
+                        <span class="tableactionbutton">
+                          <button
+                            mat-icon-button
+                            (click)="openEditTeamMemberDialog(element)"
+                          >
+                            <img
+                              class="dialogclose"
+                              src="../../../../../assets/edit.svg"
+                            />
+                          </button>
+                        </span>
+                        <span class="tableactionbutton">
+                          <button
+                            mat-icon-button
+                            (click)="openConfirmationDialog(element)"
+                          >
+                            <img
+                              class="dialogclose"
+                              src="../../../../../assets/delete.svg"
+                            />
+                          </button>
+                        </span>
+                      </td>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                    <tr
+                      mat-row
+                      *matRowDef="let row; columns: displayedColumns"
+                      (click)="openTeamMemberDetailDialog(row)"
+                    ></tr>
+                  </table>
+                  <!--  <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator> -->
+                </div>
+              </div>
+            </mat-step>
+            <mat-step>
+              <ng-template matStepLabel>Request for Designs</ng-template>
+              <div class="row">
+                <div class="col-2">
+                  <button
+                    mat-raised-button
+                    (click)="openAddDesignDialog($event)"
+                  >
+                    +Prelim Design
+                  </button>
+                </div>
+                <div class="col-2">
+                  <button mat-raised-button (click)="openAutocadDialog($event)">
+                    +Permit Design
+                  </button>
+                </div>
+              </div>
+            </mat-step>
+          </mat-vertical-stepper>
+        </div>
+      </div>
+      <!-- <div class="col">
+        <mat-card class="card">
+          <mat-card-header>
+            <mat-card-title>Dashboard</mat-card-title>
+            <mat-card-subtitle>Welcome to dashboard</mat-card-subtitle>
+          </mat-card-header>
+          <mat-card-content>
+            <p>
+              A dashboard is a type of graphical user interface which often provides at-a-glance views of key performance indicators relevant to a particular objective or business process.
+            </p>
+          </mat-card-content>
+        </mat-card>
+        <mat-card >
+          <mat-card-header>
+            <mat-card-title>Dashboard</mat-card-title>
+            <mat-card-subtitle>Welcome to dashboard</mat-card-subtitle>
+          </mat-card-header>
+          <mat-card-content>
+            <p>
+              A dashboard is a type of graphical user interface which often provides at-a-glance views of key performance indicators relevant to a particular objective or business process.
+            </p>
+          </mat-card-content>
+        </mat-card>
+      </div> -->
+    </div>
+  </div>
+</div>

@@ -1,0 +1,82 @@
+.sitepreview {
+  text-align: center;
+  margin-top: 20vh;
+  margin-bottom: 20vh;
+}
+
+.siteimage {
+  display: block;
+}
+
+.mainsiteimage {
+  width: 100%;
+  height: 500px;
+  object-fit: contain;
+}
+
+.dottedborder {
+  border: dashed #ccc 1px;
+  padding: 0px;
+}
+
+.locationmarkingboundary {
+  height: 500px;
+  margin: 16px 0px;
+}
+
+.locationlegend {
+  height: 52px;
+  background-color: #fff;
+  cursor: move;
+  transition: box-shadow 200ms cubic-bezier(0, 0, 0.2, 1);
+  box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.14),
+    0 1px 5px 0 rgba(0, 0, 0, 0.12);
+}
+
+.locationlegend .locationlegendtext {
+  margin-bottom: 0;
+  margin-left: 0.6em;
+  font-size: 0.65em;
+  color: #000000;
+  font-weight: 600;
+  width: 100px;
+}
+
+.disabledlegend {
+  height: 52px;
+  background-color: #fff;
+  cursor: move;
+  transition: box-shadow 200ms cubic-bezier(0, 0, 0.2, 1);
+  box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.14),
+    0 1px 5px 0 rgba(0, 0, 0, 0.12);
+}
+
+.disabledlegendtext {
+  margin-bottom: 0 !important;
+  margin-left: 0.6em !important;
+  font-size: 0.65em;
+  color: #999999;
+  font-weight: 600;
+  width: 100px;
+}
+
+.undobutton {
+  display: none;
+  margin-left: 10px;
+  padding: 0px;
+  min-width: 30px;
+}
+
+.hiddenundobutton {
+  display: block;
+  padding: 0px;
+  min-width: 30px;
+}
+
+.undoimage {
+  width: 14px;
+}
+
+agm-map {
+  height: 500px;
+}

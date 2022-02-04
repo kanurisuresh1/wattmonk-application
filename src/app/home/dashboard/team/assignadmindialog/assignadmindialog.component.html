@@ -1,0 +1,43 @@
+<div class="container">
+  <div class="row">
+    <div class="col-8">
+      <h4 class="dialogformtitle">Assign Team Head</h4>
+    </div>
+    <div class="col-4" style="padding-right: 0px">
+      <button mat-icon-button (click)="onCloseClick()" class="float-right">
+        <img class="dialogclose" src="../../../../../assets/close.svg" />
+      </button>
+    </div>
+  </div>
+</div>
+
+<div mat-dialog-content>
+  <form>
+    <div class="form-group salesmanagerformradiogroup">
+      <mat-radio-group
+        name="Admins"
+        aria-label="Admin"
+        [formControl]="selecteduser"
+        required
+      >
+        <div class="row">
+          <div class="col-12" *ngFor="let user of data.teamHead">
+            <mat-radio-button
+              matTooltip="{{ user.email }}"
+              matTooltipPosition="right"
+              value="{{ user.id }}"
+              >{{ user.firstname }} {{ user.lastname }}</mat-radio-button
+            >
+          </div>
+        </div>
+      </mat-radio-group>
+      <mat-error [hidden]="displayerror" *ngIf="selecteduser.invalid">{{
+        getErrorMessage(selecteduser)
+      }}</mat-error>
+      <p *ngIf="data.teamHead == null">No Team head found in our data</p>
+    </div>
+  </form>
+</div>
+<mat-dialog-actions align="end">
+  <button mat-raised-button (click)="assignAdmin()">Assign</button>
+</mat-dialog-actions>

@@ -1,0 +1,14 @@
+<div class="main-content" style="height: 88vh">
+  <button
+    *ngIf="!isadmin"
+    mat-button
+    class="backbutton ml-3"
+    (click)="handleBack()"
+  >
+    <img src="../../../../../assets/back.svg" />
+  </button>
+
+  <cometchat-conversations-screen
+    #conversationscreen
+  ></cometchat-conversations-screen>
+</div>

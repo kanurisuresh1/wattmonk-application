@@ -1,0 +1,261 @@
+<div *ngIf="isLoading" class="overlay">
+  <mat-card class="spinnercard" align-items-center>
+    <div class="row">
+      <div class="col-3">
+        <mat-progress-spinner
+          diameter="50"
+          color="primary"
+          mode="indeterminate"
+          strokeWidth="5"
+        ></mat-progress-spinner>
+      </div>
+      <div class="col">
+        <h4 class="spinnertext">{{ loadingmessage }}</h4>
+      </div>
+    </div>
+  </mat-card>
+</div>
+<div class="container">
+  <div class="row">
+    <div class="col-10">
+      <h4 class="dialogformtitle" *ngIf="!data.isEditMode">Add Module Model</h4>
+      <h4 class="dialogformtitle" *ngIf="data.isEditMode">Edit Module Model</h4>
+    </div>
+    <div class="col-2">
+      <button mat-icon-button (click)="onCloseClick()" class="float-right">
+        <img class="dialogclose" src="../../../../../assets/close.svg" />
+      </button>
+    </div>
+  </div>
+</div>
+
+<div mat-dialog-content>
+  <div class="container">
+    <div class="row">
+      <form [formGroup]="solarmoduleFormGroup">
+        <div class="row">
+          <div class="col">
+            <mat-form-field appearance="fill" class="fullwidth">
+              <mat-label>Module Make</mat-label>
+              <mat-select [formControl]="modulemake" required>
+                <mat-option
+                  *ngFor="let module of modulemakedata"
+                  [value]="module"
+                  >{{ module.name }}</mat-option
+                >
+              </mat-select>
+              <mat-error *ngIf="modulemake.invalid">{{
+                modulemakeerror
+              }}</mat-error>
+            </mat-form-field>
+          </div>
+          <div class="col">
+            <mat-form-field appearance="fill" class="fullwidth">
+              <mat-label>Name</mat-label>
+              <input
+                [formControl]="name"
+                autocomplete="off"
+                matInput
+                required
+              />
+              <mat-error *ngIf="name.invalid">{{
+                getErrorMessage(name)
+              }}</mat-error>
+            </mat-form-field>
+          </div>
+          <div class="col">
+            <mat-form-field appearance="fill" class="fullwidth">
+              <mat-label>Number of cells</mat-label>
+              <input
+                [formControl]="numberofcells"
+                autocomplete="off"
+                matInput
+              />
+              <mat-error *ngIf="numberofcells.invalid">{{
+                getErrorMessage(numberofcells)
+              }}</mat-error>
+            </mat-form-field>
+          </div>
+          <div class="col">
+            <mat-form-field appearance="fill" class="fullwidth">
+              <mat-label>Isc</mat-label>
+              <input [formControl]="isc" autocomplete="off" matInput />
+              <mat-error *ngIf="isc.invalid">{{
+                getErrorMessage(isc)
+              }}</mat-error>
+            </mat-form-field>
+          </div>
+          <div class="col">
+            <mat-form-field appearance="fill" class="fullwidth">
+              <mat-label>Voc</mat-label>
+              <input [formControl]="voc" autocomplete="off" matInput />
+              <mat-error *ngIf="voc.invalid">{{
+                getErrorMessage(voc)
+              }}</mat-error>
+            </mat-form-field>
+          </div>
+          <div class="col">
+            <mat-form-field appearance="fill" class="fullwidth">
+              <mat-label>Ipmax</mat-label>
+              <input [formControl]="ipmax" autocomplete="off" matInput />
+              <mat-error *ngIf="ipmax.invalid">{{
+                getErrorMessage(ipmax)
+              }}</mat-error>
+            </mat-form-field>
+          </div>
+          <div class="col">
+            <mat-form-field appearance="fill" class="fullwidth">
+              <mat-label>Vpmax</mat-label>
+              <input [formControl]="vpmax" autocomplete="off" matInput />
+              <mat-error *ngIf="vpmax.invalid">{{
+                getErrorMessage(vpmax)
+              }}</mat-error>
+            </mat-form-field>
+          </div>
+          <div class="col">
+            <mat-form-field appearance="fill" class="fullwidth">
+              <mat-label>Tempcoef of voc</mat-label>
+              <input
+                [formControl]="tempcoefofvoc"
+                autocomplete="off"
+                matInput
+              />
+              <mat-error *ngIf="tempcoefofvoc.invalid">{{
+                getErrorMessage(tempcoefofvoc)
+              }}</mat-error>
+            </mat-form-field>
+          </div>
+          <div class="col">
+            <mat-form-field appearance="fill" class="fullwidth">
+              <mat-label>Fuserating</mat-label>
+              <input [formControl]="fuserating" autocomplete="off" matInput />
+              <mat-error *ngIf="fuserating.invalid">{{
+                getErrorMessage(fuserating)
+              }}</mat-error>
+            </mat-form-field>
+          </div>
+          <div class="col">
+            <mat-form-field appearance="fill" class="fullwidth">
+              <mat-label>Length</mat-label>
+              <input [formControl]="modulelength" autocomplete="off" matInput />
+              <mat-error *ngIf="modulelength.invalid">{{
+                getErrorMessage(modulelength)
+              }}</mat-error>
+            </mat-form-field>
+          </div>
+          <div class="col">
+            <mat-form-field appearance="fill" class="fullwidth">
+              <mat-label>Width</mat-label>
+              <input [formControl]="width" autocomplete="off" matInput />
+              <mat-error *ngIf="width.invalid">{{
+                getErrorMessage(width)
+              }}</mat-error>
+            </mat-form-field>
+          </div>
+          <div class="col">
+            <mat-form-field appearance="fill" class="fullwidth">
+              <mat-label>Area</mat-label>
+              <input [formControl]="area" autocomplete="off" matInput />
+              <mat-error *ngIf="area.invalid">{{
+                getErrorMessage(area)
+              }}</mat-error>
+            </mat-form-field>
+          </div>
+          <div class="col-6">
+            <mat-form-field appearance="fill" class="fullwidth">
+              <mat-label>Weight</mat-label>
+              <input [formControl]="weight" autocomplete="off" matInput />
+              <mat-error *ngIf="weight.invalid">{{
+                getErrorMessage(weight)
+              }}</mat-error>
+            </mat-form-field>
+          </div>
+          <div class="col-6">
+            <mat-form-field appearance="fill" class="fullwidth">
+              <mat-label>Description</mat-label>
+              <input [formControl]="description" autocomplete="off" matInput />
+              <mat-error *ngIf="description.invalid">{{
+                getErrorMessage(description)
+              }}</mat-error>
+            </mat-form-field>
+          </div>
+          <div class="col-6" style="margin-right: 0px; padding-left: 30px">
+            <div class="row architectureuploadrow">
+              <div class="col align-items-center architectureuploadcol">
+                <div
+                  class="multiple-dropzone"
+                  style="width: 97%"
+                  ngx-dropzone
+                  [multiple]="true"
+                  (change)="onSolarModuleSelect($event)"
+                  accept=".jpeg,.jpg,.png"
+                >
+                  <ngx-dropzone-label>
+                    <div>
+                      <img
+                        class="addimage"
+                        src="../../../../../assets/add.svg"
+                      />
+                      <h5>
+                        Drag and drop or click to browse the solar module
+                        catalogue images.
+                      </h5>
+                    </div>
+                  </ngx-dropzone-label>
+                  <div *ngFor="let f of solarmodulecataloguefiles">
+                    {{ f.type }}
+                    <ngx-dropzone-preview
+                      *ngIf="!f.isImage"
+                      class="imagepreview"
+                      ngProjectAs="ngx-dropzone-preview"
+                      [file]="f"
+                      [removable]="true"
+                      (removed)="onSolarModuleRemove(f)"
+                    >
+                      <ngx-dropzone-label class="previewlabel"
+                        >{{ f.name }} ({{ f.type }})
+                      </ngx-dropzone-label>
+                    </ngx-dropzone-preview>
+                    <ngx-dropzone-image-preview
+                      *ngIf="f.isImage"
+                      class="imagepreview"
+                      ngProjectAs="ngx-dropzone-preview"
+                      [file]="f"
+                      [removable]="true"
+                      (removed)="onSolarModuleRemove(f)"
+                    >
+                    </ngx-dropzone-image-preview>
+                  </div>
+                </div>
+                <mat-error
+                  class="formerror uploadmargin"
+                  [hidden]="solarmodulecataloguefileuploaded"
+                  >You have to upload file.</mat-error
+                >
+              </div>
+            </div>
+          </div>
+          <div
+            class="col-6"
+            *ngIf="data.isEditMode"
+            style="display: flex; overflow-x: auto"
+          >
+            <div
+              class="appliancescontainers d-flex justify-content-center"
+              *ngFor="let item of catalogues; index as i"
+            >
+              <img
+                [lightbox]="i"
+                [src]="item.data.thumb"
+                [gallery]="'catalogues'"
+              />
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<mat-dialog-actions align="end">
+  <button mat-raised-button (click)="saveSingleModuleData()">Save</button>
+</mat-dialog-actions>

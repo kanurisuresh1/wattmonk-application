@@ -1,0 +1,16 @@
+version: 0.2
+phases:
+  install:
+    runtime-versions:
+      nodejs: 12
+    commands:
+      - echo installing angular cli
+      - npm install @angular-devkit/build-angular@0.901.7
+      - npm install -g @angular/cli@9.0.6
+  pre_build:
+    commands: 
+      - npm install
+  build:
+    commands:
+      - echo build process started now
+      - node --max_old_space_size=5048 ./node_modules/@angular/cli/bin/ng build --prod

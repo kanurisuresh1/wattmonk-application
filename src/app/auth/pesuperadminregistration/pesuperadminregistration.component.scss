@@ -1,0 +1,186 @@
+.registerform {
+  width: 100%;
+  h1 {
+    font-weight: 600;
+    font-size: 2em;
+  }
+  p {
+    margin-bottom: 4px;
+    color: #3c4257;
+    font-size: 12px;
+  }
+}
+.blockimages {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 40%;
+}
+.blockcard {
+  margin-top: 20% !important;
+  height: 40%;
+}
+
+.checkboxerror {
+  font-size: 0.8em;
+}
+
+.termsrow span {
+  font-size: 0.7rem;
+}
+
+.mediumtext {
+  font-size: 0.7rem;
+}
+
+.myPanelClass {
+  margin-top: 30px !important;
+}
+
+.actionlink {
+  color: #edc773;
+}
+
+.fontweight {
+  font-weight: 600;
+}
+.background {
+  background: #edc773;
+}
+
+.formpadding {
+  padding: 0% 5.5rem;
+}
+
+::ng-deep .mat-select-panel {
+  position: absolute !important;
+  top: 38px !important;
+}
+
+.footerrow {
+  bottom: 16px;
+  span {
+    font-size: 12px;
+    color: #3c4257;
+  }
+}
+
+.blockimages {
+  width: 16%;
+  margin: 0px 25px 10px 10px;
+}
+.clockimages {
+  width: 14%;
+  margin: 0px 25px 10px 10px;
+}
+
+.infinityimages {
+  width: 14%;
+  margin: 0px 25px 10px 10px;
+}
+
+.cloudimages {
+  width: 14%;
+  margin: 0px 25px 10px 10px;
+}
+
+.blockcard1 {
+  margin-top: 0% !important;
+  height: 22%;
+}
+
+.blockcard {
+  margin-top: 7% !important;
+  height: 22%;
+}
+
+.checkboxerror {
+  font-size: 0.8em;
+}
+
+.termsrow span {
+  font-size: 0.7rem;
+}
+
+.mediumtext {
+  font-size: 0.7rem;
+}
+
+.btnClr {
+  color: #000;
+  &:hover {
+    background-color: #edc67357;
+  }
+}
+
+.signtext {
+  margin: 16px 0px 29px 19px;
+}
+
+.signform {
+  margin: 0px -108px 0px 19px;
+}
+
+.loginbackground {
+  background-color: #fbf9f4;
+}
+
+.brandrow {
+  margin-left: 0px;
+  p {
+    font-weight: 600;
+    font-size: 16px;
+    margin-top: 4%;
+  }
+
+  img {
+    margin-right: 8px;
+  }
+}
+
+.registercard {
+  padding: 48px;
+
+  .mat-card-title {
+    font-size: 24px;
+    font-weight: 600;
+    line-height: 32px;
+  }
+
+  .registerform {
+    padding: 0px 8px;
+    margin-top: 20px;
+
+    p {
+      margin-bottom: 4px;
+      color: #3c4257;
+      font-size: 12px;
+    }
+
+    .mediumtext {
+      font-size: 0.7rem;
+      color: #3c4257;
+    }
+  }
+}
+
+.actionlink {
+  color: rgb(241, 173, 26);
+}
+
+.actionlink:hover {
+  text-decoration: none;
+}
+
+.registrationtext {
+  color: #3c4257;
+  font-size: 13px;
+}
+
+.footerrow {
+  bottom: 16px;
+  span {
+    font-size: 12px;
+    color: #3c4257;
+  }
+}

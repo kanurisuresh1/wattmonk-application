@@ -1,0 +1,34 @@
+<div class="container">
+  <div class="row">
+    <div class="col-10">
+      <h4 class="dialogformtitle" *ngIf="!data.isEditMode">Add Module Make</h4>
+      <h4 class="dialogformtitle" *ngIf="data.isEditMode">Edit Module Make</h4>
+    </div>
+    <div class="col-2">
+      <button mat-icon-button (click)="onCloseClick()" class="float-right">
+        <img class="dialogclose" src="../../../../../assets/close.svg" />
+      </button>
+    </div>
+  </div>
+</div>
+
+<div mat-dialog-content>
+  <div class="container">
+    <form [formGroup]="solarmodulemakeFormGroup">
+      <div class="row">
+        <div class="col-12">
+          <mat-form-field appearance="fill" class="fullwidth">
+            <mat-label>Name</mat-label>
+            <input [formControl]="name" autocomplete="off" matInput required />
+            <mat-error *ngIf="name.invalid">{{
+              getErrorMessage(name)
+            }}</mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+<mat-dialog-actions align="end">
+  <button mat-raised-button (click)="saveSingleModuleMakeData()">Save</button>
+</mat-dialog-actions>
